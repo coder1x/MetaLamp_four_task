@@ -1,0 +1,129 @@
+@import "@styles/glob.scss";
+
+$font: Arial, sans-serif;
+$color-background: #edeef0;
+$color-body: #555;
+$color-h: #555;
+
+html {
+  height: 100%; /* растягиваем страницу на весь экран */
+  width: 100%; /* растягиваем страницу на весь экран */
+  font-size: #{$font-size}px;
+  font-family: $font;
+  font-weight: normal;
+  min-width: $min-wraper;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  min-height: 100%; /* растягиваем тело сайта на весь экран */
+  width: 100%; /* растягиваем тело сайта на весь экран */
+  background: $color-background;
+  color: $color-body;
+}
+
+//---------------------------------- Главные блоки контентной части
+
+h1,
+h2,
+h3 {
+  font-family: $font;
+  font-weight: bold;
+  color: $color-h;
+}
+
+h1 {
+  @include font-rem(24);
+  line-height: 29px;
+}
+
+h2 {
+  @include font-rem(19);
+  line-height: 23px;
+}
+
+h3 {
+  @include font-rem(12);
+  line-height: 15px;
+  text-transform: uppercase;
+}
+
+img {
+  height: auto;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+//-----------------------------------
+
+.visually-hidden:not(:focus):not(:active),
+input[type="checkbox"].visually-hidden,
+input[type="radio"].visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
+.js-focus-visible :focus:not(.focus-visible) {
+  outline: none;
+}
+
+//------------ стиль скроулинга браузера
+
+::-webkit-scrollbar-button {
+  background-repeat: no-repeat;
+  width: 5px;
+  height: 0;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  // цвет полосы
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  background-color: #a6a8b6;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(166, 168, 182, 0.26);
+}
+
+::-webkit-resizer {
+  background-repeat: no-repeat;
+  width: 4px;
+  height: 0;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+//--------------------------------

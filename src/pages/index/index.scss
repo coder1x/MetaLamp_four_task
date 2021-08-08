@@ -1,0 +1,13 @@
+@import "@styles/glob.scss";
+
+$font: Arial, sans-serif;
+
+.page {
+  &__wrap {
+    display: flex;
+    flex-direction: column;
+    min-height: 100px;
+    width: 100%;
+    flex: 1 0 auto;
+  }
+}

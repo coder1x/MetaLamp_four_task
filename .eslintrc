@@ -1,0 +1,49 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 12, // версия ECMAScript
+    "ecmaFeatures": { // объект, указывающий, какие дополнительные языковые функции вы хотите использовать
+      "ts": true
+    },
+    "sourceType": "module" // установите значение «script» (по умолчанию) или «module», если ваш код находится в модулях ECMAScript. 
+  },
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "rules": {
+    "no-unused-vars": "warn", // ругаться на неиспользуемые переменные.
+    "no-debugger": "off", //
+    "no-console": "off", // выключено предупреждение необъявленной console.log (включать стоит когда код идёт в продакшен что бы найти все затерянные консоли)
+    "no-var": 1, //  запретить использовать var
+    "camelcase": 1, // использование camelCase в именовании переменных
+    "no-nested-ternary": 1, // запретить вложенные тернарные операторы
+    "no-template-curly-in-string": 1, // следит что бы в строки правильно внедрялись переменные через ковычки ` `.
+    "no-self-compare": 1, // запрет на сравнивание переменной с самим собой
+    "semi": [ // напоминает что всегда нужно ставить точку с запятой в конце.
+      1
+    ], // 
+    "max-len": [ // длинна строки кода не больше 80 символов
+      "error",
+      {
+        "ignoreUrls": true, // игнорирование URL адресов
+        "ignoreComments": true,
+        "ignoreRegExpLiterals": true,
+        "code": 80
+      }
+    ]
+  },
+  "extends": [
+    // "plugin:@typescript-eslint/recommended",
+    "eslint:recommended"
+    //"airbnb"
+    //"airbnb-base"
+  ],
+  "globals": {},
+  "env": {
+    "es2021": true,
+    "browser": true,
+    "node": true,
+    "commonjs": true,
+    "jquery": true
+  }
+}
