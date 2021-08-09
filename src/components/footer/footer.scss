@@ -1,0 +1,11 @@
+@import "@styles/glob.scss";
+
+$font: Arial, sans-serif;
+
+$color-background: rgb(25, 25, 25);
+
+.footer {
+  width: 100%;
+  background-color: $color-background;
+  min-height: 40px;
+}

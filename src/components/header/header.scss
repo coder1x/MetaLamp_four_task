@@ -1,0 +1,22 @@
+@import "@styles/glob.scss";
+
+$font: Arial, sans-serif;
+$color-background: rgb(25, 25, 25);
+
+.header {
+  width: 100%;
+  background-color: $color-background;
+  padding-left: $size-padding;
+  padding-right: $size-padding;
+  box-sizing: border-box;
+
+  &__wrapper {
+    min-height: 70px;
+    max-width: $max-wraper;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

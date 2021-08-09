@@ -1,0 +1,13 @@
+mixin footer(options)
+  -
+    let modif = options.modif ?? []
+    let addClass = options.class ?? ''
+    let classComp = 'footer'
+    let className = classComp
+    if(modif){
+      for(let item of modif)
+    className += ' '+classComp+'_'+item
+    }
+    if(addClass){
+    className += ' '+addClass}
+  footer(class=className role='contentinfo')

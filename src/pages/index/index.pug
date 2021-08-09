@@ -1,8 +1,9 @@
-doctype html
-html(lang='ru')
-  head
-    title Демонстрация плагина range-slider
-  body.page
-    .page__wrap
-      main.demo-range-slider
-        section.range-slider-base
+extends ../layout/layout.pug
+
+
+block content
+  main.demo-range-slider
+    section.range-slider-base
+      .slider-base-wrap 
+        input(class='slider-base' type='hidden' name='price' value='' tabindex='-1')
+        input(class='slider-base' type='hidden' name='price2' value='' tabindex='-1')
