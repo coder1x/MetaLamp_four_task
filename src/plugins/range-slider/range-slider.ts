@@ -2,27 +2,19 @@
 import { Controller, Model, View } from './mvc/controller/controller';
 
 
-
 // eslint-disable-next-line no-undef
 $.fn.RangeSlider = function (options): JQuery {
 
 
-  // eslint-disable-next-line no-unused-vars
-  return this.each(function (i: number, el: any) {
-
-
-    console.log(el);
-    console.log(i);
-
-    // тут создаём объекты слайдера 
-    // i - будет номером компонента - пропускаем нулевое значение
-    // этот номер можно добавлять к классу компонента что бы создавать 
-    // множество экземпляров. 
-
+  return this.each(function (i: number, el: Element) {
 
 
     if (!$.data(el, 'RangeSlider')) {
-      $.data(el, 'RangeSlider', new Controller(new Model(options), new View()));
+      $.data(
+        el,
+        'RangeSlider',
+        new Controller(new Model(options), new View(el, i))
+      );
     }
 
 

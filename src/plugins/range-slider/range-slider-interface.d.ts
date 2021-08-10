@@ -1,10 +1,12 @@
 
 interface RangeSliderOptions {
-  type: string;
+  type?: string;
+  orientation?: string;
+  theme?: string;
   min: number;
   max: number;
   from: number;
-  to: number;
+  to?: number;
   step: number;
 }
 
@@ -23,3 +25,5 @@ interface RangeSlider extends
 interface JQuery {
   RangeSlider: RangeSlider;
 }
+
+

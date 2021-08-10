@@ -5,14 +5,33 @@ import { View } from '../view/view';
 
 class Controller {
 
-  constructor(model: Model, view: View) {
+  // eslint-disable-next-line no-unused-vars
+  constructor(public model: Model, public view: View) {
 
-    console.log('Controller');
-    console.log(model);
-    console.log(view);
+    this.createListeners();
+  }
 
+
+  createListeners() {
+
+    // сначало делаем запрос в модель что бы получить необходимые данные
+    // затем вызываем Вью для создания дом элементов
+
+
+    this.view.createDomBase(
+      this.handleCreateDomBase,
+      this.model.theme
+    );
 
   }
+
+
+  handleCreateDomBase() {
+    console.log('create Dom Elem');
+
+  }
+
+
 
 }
 

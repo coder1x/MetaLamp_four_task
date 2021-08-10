@@ -1,15 +1,15 @@
 
-
 // eslint-disable-next-line no-unused-vars
 interface RangeSliderOptions {
-  type: string;
+  type?: string;
+  orientation?: string;
+  theme?: string;
   min: number;
   max: number;
   from: number;
-  to: number;
+  to?: number;
   step: number;
 }
-
 
 
 export { RangeSliderOptions };
