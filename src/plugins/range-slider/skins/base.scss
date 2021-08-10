@@ -1,0 +1,41 @@
+.rs-base.range-slider {
+  .range-slider {
+    min-height: 70px;
+
+    &__top {
+      min-height: 20px;
+    }
+
+    &__center {
+      min-height: 30px;
+    }
+
+    &__line {
+      min-height: 10px;
+      background-color: white;
+      background: linear-gradient(to bottom, #ddd -50%, white 150%);
+      border: 1px solid #ccc;
+      border-radius: 12px;
+    }
+
+    &__from {
+      width: 15px;
+      height: 20px;
+      border-color: rgba(0, 0, 0, 0.45);
+      background-color: #939ba7;
+      border-radius: 10px;
+    }
+
+    &__to {
+      width: 15px;
+      height: 20px;
+      border-color: rgba(0, 0, 0, 0.45);
+      background-color: #939ba7;
+      border-radius: 10px;
+    }
+
+    &__bottom {
+      min-height: 20px;
+    }
+  }
+}

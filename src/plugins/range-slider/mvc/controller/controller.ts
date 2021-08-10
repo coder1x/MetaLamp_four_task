@@ -26,8 +26,24 @@ class Controller {
   }
 
 
-  handleCreateDomBase() {
-    console.log('create Dom Elem');
+  handleCreateDomBase = () => {
+    this.view.initDomElem(this.handleInitDomElem);
+  }
+
+  handleInitDomElem = () => {
+    this.view.createHandle(
+      this.handleCreateHandle,
+      {
+        type: this.model.type,
+        from: this.model.from,
+        to: this.model.to
+      });
+  }
+
+  handleCreateHandle = () => {
+
+
+
 
   }
 
