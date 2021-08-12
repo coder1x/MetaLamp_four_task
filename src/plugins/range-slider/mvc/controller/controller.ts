@@ -14,9 +14,14 @@ class Controller {
 
   createListeners() {
 
-    // сначало делаем запрос в модель что бы получить необходимые данные
-    // затем вызываем Вью для создания дом элементов
 
+    this.view.initHandle(
+      {
+        type: this.model.type,
+        from: this.model.from,
+        to: this.model.to
+      }
+    );
 
     this.view.createDomBase(
       this.handleCreateDomBase,
@@ -31,26 +36,20 @@ class Controller {
   }
 
   handleInitDomElem = () => {
-    this.view.createHandle(
-      this.handleCreateHandle,
-      {
-        type: this.model.type,
-        from: this.model.from,
-        to: this.model.to
-      });
+    this.view.createHandle(this.handleCreateHandle);
   }
 
   handleCreateHandle = () => {
 
+    this.view.setActionsHandle(this.handleActionsHandle);
 
+  }
 
+  handleActionsHandle = () => {
 
   }
 
 
-
 }
-
-
 
 export { Controller, Model, View };

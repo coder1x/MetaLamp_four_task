@@ -1,4 +1,5 @@
 @import "skins/base.scss";
+$color-focus: #1f2041;
 
 .range-slider {
   width: 100%;
@@ -24,13 +25,25 @@
   &__from {
     display: flex;
     position: absolute;
-    left: 2px;
+    left: 0px;
+    z-index: 1;
+    cursor: pointer;
+    touch-action: none;
   }
 
   &__to {
     display: flex;
     position: absolute;
-    right: 2px;
+    right: 0px;
+    z-index: 1;
+    cursor: pointer;
+    touch-action: none;
+  }
+
+  &__from:focus,
+  &__to:focus {
+    outline-offset: 4px;
+    outline: 2px solid $color-focus;
   }
 
   &__bottom {

@@ -10,14 +10,19 @@ class View {
   wrapSlider: Element;
   rangeSlider: Element;
   rsTop: Element;
-  rsCenter: Element;
+  rsCenter: HTMLElement;
   rsBottom: Element;
   rsLine: Element;
+  handle: Handle;
 
   // eslint-disable-next-line no-unused-vars
   constructor(public elem: Element, public numElem: Number) {
     this.rsName = 'range-slider';
     this.wrapSlider = this.elem.parentElement;
+  }
+
+  initHandle(options: CreateHandleOptions) {
+    this.handle = new Handle(options);
   }
 
 
@@ -60,16 +65,8 @@ class View {
 
 
 
-  createHandle(
-    handler: Function,
-    options: CreateHandleOptions
-  ) {
-
-    const obj = new Handle(options);
-
-    obj.createHandle(this.rsCenter);
-
-
+  createHandle(handler: Function) {
+    this.handle.createHandle(this.rsCenter);
     handler();
   }
 
@@ -84,7 +81,10 @@ class View {
 
     this.rangeSlider = getElem(this.wrapSlider, 'js-rs-' + this.numElem);
     this.rsTop = getElem(this.rangeSlider, this.rsName + '__top');
-    this.rsCenter = getElem(this.rangeSlider, this.rsName + '__center');
+    this.rsCenter =
+      (getElem(this.rangeSlider, this.rsName + '__center') as HTMLElement);
+
+
     this.rsBottom = getElem(this.rangeSlider, this.rsName + '__bottom');
     this.rsLine = getElem(this.rangeSlider, this.rsName + '__line');
 
@@ -94,8 +94,9 @@ class View {
     handler();
   }
 
-  setActions() {
-
+  setActionsHandle(handler: Function) {
+    this.handle.setActions();
+    handler();
   }
 
 }
