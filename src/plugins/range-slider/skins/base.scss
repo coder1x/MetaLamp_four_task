@@ -26,6 +26,11 @@
       border-radius: 10px;
     }
 
+    &__from:hover,
+    &__to:hover {
+      background: #bec3c9;
+    }
+
     &__to {
       width: 15px;
       height: 20px;

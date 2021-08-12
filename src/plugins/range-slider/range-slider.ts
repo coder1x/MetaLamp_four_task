@@ -26,6 +26,7 @@ $.fn.RangeSlider = function (options): JQuery {
 
 $('.slider-base').RangeSlider({
   type: 'double',
+  //type: 'single',
   min: 0,
   max: 15000,
   from: 5000,

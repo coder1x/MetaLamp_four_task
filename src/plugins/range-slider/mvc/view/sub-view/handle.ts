@@ -40,26 +40,45 @@ class Handle {
   setActions() {
 
     let shiftX = 0;
+    let limitFrom = parseInt(this.elemFrom.style.left);
+    let limitTo = parseInt(this.elemTo.style.left);
 
-    const moveDot = (event: PointerEvent, elem: HTMLElement) => {
+
+    const moveDot = (event: PointerEvent, elem: HTMLElement, type: string) => {
+
+
       const position = this.wrapElem.getBoundingClientRect().left;
       let newLeft = event.clientX - shiftX - position;
 
       if (newLeft < 0) newLeft = 0;
 
-      const rightEdge =
-        this.wrapElem.offsetWidth - elem.offsetWidth;
+      const wrapWidth = this.wrapElem.offsetWidth;
+      const rightEdge = wrapWidth - elem.offsetWidth;
       if (newLeft > rightEdge) newLeft = rightEdge;
 
-      elem.style.left = newLeft + 'px';
+
+
+      if (type == 'From') {
+        limitFrom = Math.trunc(newLeft);
+      }
+      else {
+        limitTo = Math.trunc(newLeft);
+      }
+
+
+
+      if (!(limitFrom > limitTo)) {
+        elem.style.left = newLeft + 'px';
+      }
+
+
     };
 
 
+
+
     const mouseMoveFrom = (event: PointerEvent) => {
-
-      // 
-
-      moveDot(event, this.elemFrom);
+      moveDot(event, this.elemFrom, 'From');
     };
 
 
@@ -69,7 +88,7 @@ class Handle {
     };
 
     const mouseMoveTo = (event: PointerEvent) => {
-      moveDot(event, this.elemTo);
+      moveDot(event, this.elemTo, 'To');
     };
 
 
@@ -95,11 +114,9 @@ class Handle {
     if (this.options.type == 'double') {
       this.elemTo.addEventListener('pointerdown', (event: PointerEvent) => {
 
-        // определяем Левый край точки (From) - 
-        // это будет служить нам границей по левой стороне
-        // активная точка в момент движения получает z-index:2 
-        // а не активная точка получает z-index:1
-        // так мы сможем наплыть сверху и при нажатии будет доступна лишь верхняя точка.
+        this.elemTo.style.zIndex = '2';
+        this.elemFrom.style.zIndex = '1';
+
 
         mouseDown(event, this.elemTo);
         document.addEventListener('pointermove', mouseMoveTo);
@@ -112,11 +129,8 @@ class Handle {
     this.elemFrom.addEventListener('pointerdown', (event: PointerEvent) => {
 
 
-      // определяем Правый край точки (TO) - 
-      // это будет служить нам границей по правой стороне
-      // активная точка в момент движения получает z-index:2 
-      // а не активная точка получает z-index:1
-      // так мы сможем наплыть сверху и при нажатии будет доступна лишь верхняя точка.
+      this.elemTo.style.zIndex = '1';
+      this.elemFrom.style.zIndex = '2';
 
       mouseDown(event, this.elemFrom);
       document.addEventListener('pointermove', mouseMoveFrom);
