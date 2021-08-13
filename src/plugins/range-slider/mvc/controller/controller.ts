@@ -1,5 +1,7 @@
 import { Model } from '../model/model';
 import { View } from '../view/view';
+import { CalcDotPositionOpt } from '../model/model.d';
+import { onChangeFrom, onChangeTo } from './controller.d';
 
 
 
@@ -8,13 +10,13 @@ class Controller {
   // eslint-disable-next-line no-unused-vars
   constructor(public model: Model, public view: View) {
 
+
     this.createListeners();
+    this.init();
   }
 
 
-  createListeners() {
-
-
+  init() {
     this.view.initHandle(
       {
         type: this.model.type,
@@ -33,6 +35,18 @@ class Controller {
 
   }
 
+  createListeners() {
+
+    this.model.onChangeFrom = (data: onChangeFrom) => {
+      this.view.setPositionFrom(data.fromP);
+    };
+    this.model.onChangeTo = (data: onChangeTo) => {
+      this.view.setPositionTo(data.toP);
+    };
+
+  }
+
+
 
   handleCreateDomBase = () => {
     this.view.initDomElem(this.handleInitDomElem);
@@ -42,16 +56,18 @@ class Controller {
     this.view.createHandle(this.handleCreateHandle);
   }
 
-  handleCreateHandle = () => {
+  handleCreateHandle = (fromWidth: number, wrapWidth: number) => {
 
+    this.model.calcPosition(fromWidth, wrapWidth);
     this.view.setActionsHandle(this.handleActionsHandle);
-
   }
 
-  handleActionsHandle = () => {
+  handleActionsHandle = (options: CalcDotPositionOpt) => {
+    this.model.calcDotPosition(options);
+
+
 
   }
-
 
 }
 

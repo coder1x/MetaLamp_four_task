@@ -11,5 +11,14 @@ interface RangeSliderOptions {
   step: number;
 }
 
+interface CalcDotPositionOpt {
+  dotWidth: number,
+  type: string,
+  wrapWidth: number,
+  wrapLeft: number,
+  clientX: number,
+  shiftX: number
+}
 
-export { RangeSliderOptions };
+
+export { RangeSliderOptions, CalcDotPositionOpt };

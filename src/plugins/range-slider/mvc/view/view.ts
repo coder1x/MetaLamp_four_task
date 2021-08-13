@@ -66,9 +66,13 @@ class View {
 
 
   createHandle(handler: Function) {
-    this.handle.createHandle(this.rsCenter);
-    handler();
+    this.handle.createHandle(this.rsCenter, handler);
   }
+
+  // handleDotPosition(fromP: number, toP: number) {
+  //   this.handle.startDotPosition(fromP, toP);
+  // }
+
 
 
   initDomElem(handler: Function) {
@@ -78,26 +82,31 @@ class View {
       return elem.getElementsByClassName(str)[0];
     };
 
-
     this.rangeSlider = getElem(this.wrapSlider, 'js-rs-' + this.numElem);
     this.rsTop = getElem(this.rangeSlider, this.rsName + '__top');
     this.rsCenter =
       (getElem(this.rangeSlider, this.rsName + '__center') as HTMLElement);
 
-
     this.rsBottom = getElem(this.rangeSlider, this.rsName + '__bottom');
     this.rsLine = getElem(this.rangeSlider, this.rsName + '__line');
-
-
-
 
     handler();
   }
 
   setActionsHandle(handler: Function) {
-    this.handle.setActions();
-    handler();
+    this.handle.setActions(handler);
   }
+
+
+  setPositionFrom(fromP: number) {
+    this.handle.setFrom(fromP);
+  }
+
+  setPositionTo(toP: number) {
+    this.handle.setTo(toP);
+  }
+
+
 
 }
 

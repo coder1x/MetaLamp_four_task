@@ -14,7 +14,8 @@ class Handle {
 
   }
 
-  createHandle(wrapElem: HTMLElement) {
+
+  createHandle(wrapElem: HTMLElement, handler: Function) {
 
     const createElem = (teg: string, className: string[]) => {
       const elem = document.createElement(teg);
@@ -34,79 +35,42 @@ class Handle {
     wrapElem.appendChild(this.elemFrom);
 
     this.wrapElem = wrapElem;
+
+
+    handler(
+      this.elemFrom.offsetWidth,
+      this.wrapElem.offsetWidth);
+
   }
 
 
-  setActions() {
+  setFrom(fromP: number) {
+    this.elemFrom.style.left = fromP + '%';
+  }
+
+  setTo(toP: number) {
+    this.elemTo.style.left = toP + '%';
+  }
 
 
-
-    const calcPosition = () => {
-
-      const min = this.options.min;
-      const max = this.options.max;
-      const step = this.options.step;
-      const from = this.options.from;
-      const to = this.options.to;
-
-      const valP = (max - min) / 100; // один процент
-      const stepP = step / valP; // количество процентов в шаге
-      const fromP = from * stepP; // позиция левой точки в процентах
-      const toP = to * stepP; // позиция правой точки
-
-      return { valP, stepP, fromP, toP };
-    };
-
-
-    const pos = calcPosition();
-
-
-    this.elemFrom.style.left = pos.fromP + '%';
-    this.elemTo.style.left = pos.toP + '%';
-
+  setActions(handler: Function) {
 
     let shiftX = 0;
-    let limitFrom = pos.fromP;
-    let limitTo = pos.toP;
-    let fromTo = 0;
-
 
     const moveDot = (event: PointerEvent, elem: HTMLElement, type: string) => {
 
-
-      const dot = elem.offsetWidth * 100 / this.wrapElem.offsetWidth; // ширина точки в процентах
-
-      const position = this.wrapElem.getBoundingClientRect().left;
-      const num = event.clientX - shiftX - position;
-
       const wrapWidth = this.wrapElem.offsetWidth;
-      let percent = num * 100 / wrapWidth;
+      const position = this.wrapElem.getBoundingClientRect().left;
 
-      if (type == 'From') {
-        limitFrom = percent;
-      }
-      else {
-        limitTo = percent;
-      }
-
-      const limitDot = !(limitFrom > limitTo);
-
-      if (percent < 0) percent = 0;
-      if (percent > 100 - dot) percent = 100 - dot;
-
-
-      if (limitDot) {
-        fromTo = percent;
-        elem.style.left = percent + '%';
-      }
-      else {
-        this.elemFrom.style.left = fromTo + '%';
-        this.elemTo.style.left = fromTo + '%';
-      }
-
+      handler({
+        dotWidth: elem.offsetWidth,
+        type: type,
+        wrapWidth: wrapWidth,
+        wrapLeft: position,
+        clientX: event.clientX,
+        shiftX: shiftX
+      });
     };
-
-
 
 
     const mouseMoveFrom = (event: PointerEvent) => {
@@ -170,7 +134,6 @@ class Handle {
       document.addEventListener('pointerup', mouseUpFrom);
     });
     cancellation(this.elemFrom);
-
 
   }
 
