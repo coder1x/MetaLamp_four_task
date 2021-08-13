@@ -19,7 +19,10 @@ class Controller {
       {
         type: this.model.type,
         from: this.model.from,
-        to: this.model.to
+        to: this.model.to,
+        min: this.model.min,
+        max: this.model.max,
+        step: this.model.step
       }
     );
 

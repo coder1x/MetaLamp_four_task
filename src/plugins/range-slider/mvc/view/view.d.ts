@@ -3,7 +3,10 @@
 interface CreateHandleOptions {
   type: string,
   from: number,
-  to: number
+  to: number,
+  min: number,
+  max: number,
+  step: number
 }
 
 

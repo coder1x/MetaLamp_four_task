@@ -39,38 +39,70 @@ class Handle {
 
   setActions() {
 
+
+
+    const calcPosition = () => {
+
+      const min = this.options.min;
+      const max = this.options.max;
+      const step = this.options.step;
+      const from = this.options.from;
+      const to = this.options.to;
+
+      const valP = (max - min) / 100; // один процент
+      const stepP = step / valP; // количество процентов в шаге
+      const fromP = from * stepP; // позиция левой точки в процентах
+      const toP = to * stepP; // позиция правой точки
+
+      return { valP, stepP, fromP, toP };
+    };
+
+
+    const pos = calcPosition();
+
+
+    this.elemFrom.style.left = pos.fromP + '%';
+    this.elemTo.style.left = pos.toP + '%';
+
+
     let shiftX = 0;
-    let limitFrom = parseInt(this.elemFrom.style.left);
-    let limitTo = parseInt(this.elemTo.style.left);
+    let limitFrom = pos.fromP;
+    let limitTo = pos.toP;
+    let fromTo = 0;
 
 
     const moveDot = (event: PointerEvent, elem: HTMLElement, type: string) => {
 
 
-      const position = this.wrapElem.getBoundingClientRect().left;
-      let newLeft = event.clientX - shiftX - position;
+      const dot = elem.offsetWidth * 100 / this.wrapElem.offsetWidth; // ширина точки в процентах
 
-      if (newLeft < 0) newLeft = 0;
+      const position = this.wrapElem.getBoundingClientRect().left;
+      const num = event.clientX - shiftX - position;
 
       const wrapWidth = this.wrapElem.offsetWidth;
-      const rightEdge = wrapWidth - elem.offsetWidth;
-      if (newLeft > rightEdge) newLeft = rightEdge;
-
-
+      let percent = num * 100 / wrapWidth;
 
       if (type == 'From') {
-        limitFrom = Math.trunc(newLeft);
+        limitFrom = percent;
       }
       else {
-        limitTo = Math.trunc(newLeft);
+        limitTo = percent;
       }
 
+      const limitDot = !(limitFrom > limitTo);
+
+      if (percent < 0) percent = 0;
+      if (percent > 100 - dot) percent = 100 - dot;
 
 
-      if (!(limitFrom > limitTo)) {
-        elem.style.left = newLeft + 'px';
+      if (limitDot) {
+        fromTo = percent;
+        elem.style.left = percent + '%';
       }
-
+      else {
+        this.elemFrom.style.left = fromTo + '%';
+        this.elemTo.style.left = fromTo + '%';
+      }
 
     };
 
@@ -101,6 +133,7 @@ class Handle {
       event.preventDefault();
       const position = elem.getBoundingClientRect().left;
       shiftX = event.clientX - position;
+
       elem.setPointerCapture(event.pointerId);
     };
 

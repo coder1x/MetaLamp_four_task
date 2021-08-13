@@ -16,6 +16,7 @@
       background: linear-gradient(to bottom, #ddd -50%, white 150%);
       border: 1px solid #ccc;
       border-radius: 12px;
+      box-sizing: border-box;
     }
 
     &__from {

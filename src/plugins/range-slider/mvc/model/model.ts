@@ -39,6 +39,7 @@ class Model {
     this.min = options.min;
     this.max = options.max;
     this.to = options.to;
+    this.from = options.from;
     this.step = options.step;
   }
 
