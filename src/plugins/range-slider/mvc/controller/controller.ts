@@ -39,9 +39,13 @@ class Controller {
 
     this.model.onChangeFrom = (data: onChangeFrom) => {
       this.view.setPositionFrom(data.fromP);
+      console.log(data.valFrom);
+
     };
     this.model.onChangeTo = (data: onChangeTo) => {
       this.view.setPositionTo(data.toP);
+      console.log(data.valTo);
+
     };
 
   }
@@ -60,6 +64,7 @@ class Controller {
 
     this.model.calcPosition(fromWidth, wrapWidth);
     this.view.setActionsHandle(this.handleActionsHandle);
+    this.view.setActions(this.model.clickLine);
   }
 
   handleActionsHandle = (options: CalcDotPositionOpt) => {

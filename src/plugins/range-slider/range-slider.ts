@@ -28,10 +28,10 @@ $('.slider-base').RangeSlider({
   type: 'double',
   //type: 'single',
   min: 0,
-  max: 15000,
-  from: 5000,
-  to: 10000,
-  step: 1
+  max: 100,
+  from: 25,
+  to: 60,
+  step: 10
 }).data('RangeSlider'); // вернёт объект для одного элемента
 
 

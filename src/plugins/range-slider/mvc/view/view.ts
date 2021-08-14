@@ -12,7 +12,7 @@ class View {
   rsTop: Element;
   rsCenter: HTMLElement;
   rsBottom: Element;
-  rsLine: Element;
+  rsLine: HTMLElement;
   handle: Handle;
 
   // eslint-disable-next-line no-unused-vars
@@ -69,11 +69,6 @@ class View {
     this.handle.createHandle(this.rsCenter, handler);
   }
 
-  // handleDotPosition(fromP: number, toP: number) {
-  //   this.handle.startDotPosition(fromP, toP);
-  // }
-
-
 
   initDomElem(handler: Function) {
     // нужно получить дом элементы базовой разметки. 
@@ -88,9 +83,19 @@ class View {
       (getElem(this.rangeSlider, this.rsName + '__center') as HTMLElement);
 
     this.rsBottom = getElem(this.rangeSlider, this.rsName + '__bottom');
-    this.rsLine = getElem(this.rangeSlider, this.rsName + '__line');
+    this.rsLine =
+      (getElem(this.rangeSlider, this.rsName + '__line') as HTMLElement);
 
     handler();
+  }
+
+  setActions(handler: Function) {
+
+    this.rsLine.addEventListener('click', (event: MouseEvent) => {
+      const elem = (event.target as HTMLElement);
+      handler(event.offsetX, elem.offsetWidth);
+    });
+
   }
 
   setActionsHandle(handler: Function) {

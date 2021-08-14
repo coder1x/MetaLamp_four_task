@@ -19,25 +19,29 @@
       box-sizing: border-box;
     }
 
-    &__from {
+    &__from,
+    &__to {
+      width: 1px;
+      height: 20px;
+      background-color: #939ba7;
+    }
+
+    &__from::before,
+    &__to::before {
+      position: absolute;
+      left: -6px;
+      content: "";
       width: 15px;
       height: 20px;
       border-color: rgba(0, 0, 0, 0.45);
       background-color: #939ba7;
       border-radius: 10px;
+      box-sizing: border-box;
     }
 
     &__from:hover,
     &__to:hover {
       background: #bec3c9;
-    }
-
-    &__to {
-      width: 15px;
-      height: 20px;
-      border-color: rgba(0, 0, 0, 0.45);
-      background-color: #939ba7;
-      border-radius: 10px;
     }
 
     &__bottom {

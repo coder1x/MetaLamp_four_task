@@ -15,7 +15,7 @@ class Model {
   stepP: number;
   private fromP: number;
   private toP: number;
-  dotP: number;
+  dotP: number; // XXXXXXXXXXXXXXXXXXX
   limitFrom: number;
   limitTo: number;
   fromTo: number;
@@ -56,15 +56,21 @@ class Model {
   }
 
   set setFrom(val: number) {
+
+    const valFrom = +(this.min + (val * this.valP)).toFixed(0);
     this.onChangeFrom({
-      fromP: val
+      fromP: val,
+      valFrom
     });
     this.fromP = val;
   }
 
   set setTo(val: number) {
+
+    const valTo = +(this.min + (val * this.valP)).toFixed(0);
     this.onChangeTo({
-      toP: val
+      toP: val,
+      valTo
     });
     this.toP = val;
   }
@@ -80,21 +86,38 @@ class Model {
 
   calcPosition(fromWidth: number, wrapWidth: number) {
 
-    this.dotP = fromWidth * 100 / wrapWidth;
+    this.dotP = fromWidth * 100 / wrapWidth; // XXXXXXXXXXXXXXXXXXX
 
-    this.valP = (this.max - this.min) / 100; // один процент
-    this.stepP = this.step / this.valP; // количество процентов в шаге
-    this.setFrom = this.from * this.stepP; // позиция левой точки в процентах
-    this.setTo = this.to * this.stepP; // позиция правой точки в процентах
+    this.valP = (this.max - this.min) / 100;            // один процент
+    this.stepP = this.step / this.valP;                 // количество процентов в шаге
+    this.setFrom = (this.from - this.min) / this.valP;  // позиция левой точки в процентах
+    this.setTo = (this.to - this.min) / this.valP;      // позиция правой точки в процентах
 
     this.limitFrom = this.getFrom;
     this.limitTo = this.getTo;
   }
 
+  clickLine = (pointX: number, wrapWidth: number) => {
+
+    const oneP = wrapWidth / 100; // один процент от всей школы
+    const pointP = pointX / oneP; // кол. процентов в области где кликнули
+
+    if (pointP > this.getTo) {            // если это значение больше чем To
+      this.setTo = pointP;                // To  на эту точку
+    } else if (pointP > this.getFrom) {   // если меньше To но больше From
+      const To = this.getTo - pointP;     // из To вычетаем Val
+      const From = pointP - this.getFrom; // из Val вычетаем From
+      From > To ? this.setTo = pointP : this.setFrom = pointP; // то число что меньше та точка и ближе
+    } else {                              // Если Val меньше From то подвигать From
+      this.setFrom = pointP;
+    }
+
+  }
+
 
   calcDotPosition(options: CalcDotPositionOpt) {
 
-    this.dotP = options.dotWidth * 100 / options.wrapWidth; // ширина точки в процентах
+    //this.dotP = options.dotWidth * 100 / options.wrapWidth; // ширина точки в процентах
     const num = options.clientX - options.shiftX - options.wrapLeft;
     let percent = num * 100 / options.wrapWidth;
 
@@ -108,7 +131,7 @@ class Model {
     const limitDot = !(this.limitFrom > this.limitTo);
 
     if (percent < 0) percent = 0;
-    if (percent > 100 - this.dotP) percent = 100 - this.dotP;
+    if (percent > 100) percent = 100;
 
 
     if (limitDot) {
