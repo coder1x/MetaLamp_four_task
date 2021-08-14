@@ -10,7 +10,19 @@ interface CreateHandleOptions {
 }
 
 
+interface TipFromTo {
+  valFrom: number,
+  valTo: number,
+  fromX: Number,
+  toX: number
+}
+
+interface CreateHintsOptions {
+  min: number,
+  max: number,
+  valFrom: number,
+  valTo: number,
+}
 
 
-
-export { CreateHandleOptions };
+export { CreateHandleOptions, TipFromTo, CreateHintsOptions };

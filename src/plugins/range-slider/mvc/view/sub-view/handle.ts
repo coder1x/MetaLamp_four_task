@@ -49,7 +49,8 @@ class Handle {
   }
 
   setTo(toP: number) {
-    this.elemTo.style.left = toP + '%';
+    if (this.options.type == 'double')
+      this.elemTo.style.left = toP + '%';
   }
 
 
@@ -111,7 +112,8 @@ class Handle {
     if (this.options.type == 'double') {
       this.elemTo.addEventListener('pointerdown', (event: PointerEvent) => {
 
-        this.elemTo.style.zIndex = '2';
+        if (this.options.type == 'double')
+          this.elemTo.style.zIndex = '2';
         this.elemFrom.style.zIndex = '1';
 
 
@@ -125,8 +127,8 @@ class Handle {
 
     this.elemFrom.addEventListener('pointerdown', (event: PointerEvent) => {
 
-
-      this.elemTo.style.zIndex = '1';
+      if (this.options.type == 'double')
+        this.elemTo.style.zIndex = '1';
       this.elemFrom.style.zIndex = '2';
 
       mouseDown(event, this.elemFrom);

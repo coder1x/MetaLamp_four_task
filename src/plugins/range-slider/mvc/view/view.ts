@@ -1,7 +1,7 @@
 
-import { CreateHandleOptions } from './view.d';
+import { CreateHandleOptions, CreateHintsOptions } from './view.d';
 import { Handle } from './sub-view/handle';
-
+import { Hints } from './sub-view/hints';
 
 
 class View {
@@ -14,6 +14,7 @@ class View {
   rsBottom: Element;
   rsLine: HTMLElement;
   handle: Handle;
+  hints: Hints;
 
   // eslint-disable-next-line no-unused-vars
   constructor(public elem: Element, public numElem: Number) {
@@ -25,6 +26,38 @@ class View {
     this.handle = new Handle(options);
   }
 
+  initHints(handler: Function) {
+    this.hints = new Hints(this.rsTop);
+    handler();
+  }
+
+  createDomHints(handler: Function, options: CreateHintsOptions) {
+
+    this.hints.createTipMinMax(
+      options.min,
+      options.max
+    );
+    this.hints.createTipFromTo(options.valFrom, options.valTo);
+
+    handler();
+  }
+
+  getWidthTipFromTo() {
+    const widthFrom = this.hints.tipFrom.offsetWidth;
+    const widthTo = this.hints.tipTo.offsetWidth ?? 0;
+    return {
+      tipFrom: widthFrom,
+      tipTo: widthTo
+    };
+  }
+
+  setTipFrom(valFrom: number, tipFromX: number) {
+    this.hints.setTipFrom(valFrom, tipFromX);
+  }
+
+  setTipTo(valTo: number, tipToX: number) {
+    this.hints.setTipTo(valTo, tipToX);
+  }
 
   createDomBase(handler: Function, theme: string) {
 

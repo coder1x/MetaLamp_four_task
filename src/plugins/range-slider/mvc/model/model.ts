@@ -19,6 +19,9 @@ class Model {
   limitFrom: number;
   limitTo: number;
   fromTo: number;
+  valFrom: number;
+  valTo: number;
+  wrapWidth: number;
 
   onChangeFrom: Function;
   onChangeTo: Function;
@@ -38,8 +41,8 @@ class Model {
       theme: 'base',    // тема слайдера
       min: 0,           // минимальное значение на школе
       max: 10,          // максимальное значение на школе
-      from: 2,          // позиция первой точки
-      to: 0,            // позиция второй точки
+      from: 1,          // позиция первой точки
+      to: 2,            // позиция второй точки
       step: 1           // с каким шагом будет перемещяться точка
     }, options);
   }
@@ -55,22 +58,24 @@ class Model {
     this.step = options.step;
   }
 
+
+
   set setFrom(val: number) {
 
-    const valFrom = +(this.min + (val * this.valP)).toFixed(0);
+    this.valFrom = +(this.min + (val * this.valP)).toFixed(0);
     this.onChangeFrom({
       fromP: val,
-      valFrom
+      valFrom: this.valFrom
     });
     this.fromP = val;
   }
 
   set setTo(val: number) {
 
-    const valTo = +(this.min + (val * this.valP)).toFixed(0);
+    this.valTo = +(this.min + (val * this.valP)).toFixed(0);
     this.onChangeTo({
       toP: val,
-      valTo
+      valTo: this.valTo
     });
     this.toP = val;
   }
@@ -84,8 +89,26 @@ class Model {
   }
 
 
+  getOptions() {
+    return {
+      type: this.type,
+      orientation: this.orientation,
+      theme: this.theme,
+      min: this.min,
+      max: this.max,
+      to: this.to,
+      from: this.from,
+      step: this.step,
+      fromX: this.getFrom,
+      toX: this.getTo,
+      valFrom: this.valFrom,
+      valTo: this.valTo
+    };
+  }
+
   calcPosition(fromWidth: number, wrapWidth: number) {
 
+    this.wrapWidth = wrapWidth;
     this.dotP = fromWidth * 100 / wrapWidth; // XXXXXXXXXXXXXXXXXXX
 
     this.valP = (this.max - this.min) / 100;            // один процент
@@ -97,12 +120,32 @@ class Model {
     this.limitTo = this.getTo;
   }
 
+
+  calcPositionTipFrom(tipFrom: number) {
+    const tipFromP = ((tipFrom - 4) * 100 / this.wrapWidth) / 2;
+    const tipFromX = this.getFrom - tipFromP;
+    return tipFromX;
+  }
+
+  calcPositionTipTo(tipTo: number) {
+    const tipToP = ((tipTo - 4) * 100 / this.wrapWidth) / 2;
+    const tipToX = this.getTo - tipToP;
+    return tipToX;
+  }
+
+
+
   clickLine = (pointX: number, wrapWidth: number) => {
 
+    this.wrapWidth = wrapWidth;
     const oneP = wrapWidth / 100; // один процент от всей школы
     const pointP = pointX / oneP; // кол. процентов в области где кликнули
 
-    if (pointP > this.getTo) {            // если это значение больше чем To
+
+    if (this.type == 'single') {
+      this.setFrom = pointP;
+    }
+    else if (pointP > this.getTo) {            // если это значение больше чем To
       this.setTo = pointP;                // To  на эту точку
     } else if (pointP > this.getFrom) {   // если меньше To но больше From
       const To = this.getTo - pointP;     // из To вычетаем Val
@@ -111,15 +154,17 @@ class Model {
     } else {                              // Если Val меньше From то подвигать From
       this.setFrom = pointP;
     }
-
+    this.limitTo = this.getTo;
+    this.limitFrom = this.getFrom;
   }
 
 
   calcDotPosition(options: CalcDotPositionOpt) {
 
     //this.dotP = options.dotWidth * 100 / options.wrapWidth; // ширина точки в процентах
+    this.wrapWidth = options.wrapWidth;
     const num = options.clientX - options.shiftX - options.wrapLeft;
-    let percent = num * 100 / options.wrapWidth;
+    let percent = num * 100 / this.wrapWidth;
 
     if (options.type == 'From') {
       this.limitFrom = percent;
@@ -133,8 +178,11 @@ class Model {
     if (percent < 0) percent = 0;
     if (percent > 100) percent = 100;
 
+    const type = this.type == 'single';
 
-    if (limitDot) {
+    if (type) {
+      this.setFrom = percent;
+    } else if (limitDot) {
       this.fromTo = percent;
 
       if (options.type == 'From') {

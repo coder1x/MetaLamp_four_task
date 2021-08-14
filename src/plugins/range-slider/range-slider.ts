@@ -26,11 +26,11 @@ $.fn.RangeSlider = function (options): JQuery {
 
 $('.slider-base').RangeSlider({
   type: 'double',
-  //type: 'single',
+  // type: 'single',
   min: 0,
-  max: 100,
-  from: 25,
-  to: 60,
+  max: 150,
+  from: 30,
+  to: 80,
   step: 10
 }).data('RangeSlider'); // вернёт объект для одного элемента
 

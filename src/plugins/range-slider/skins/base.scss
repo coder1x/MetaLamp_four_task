@@ -6,6 +6,25 @@
       min-height: 20px;
     }
 
+    &__tip-min,
+    &__tip-max {
+      padding: 1px 5px;
+      color: white;
+      background-color: #9f9f9f;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+
+    &__tip-from,
+    &__tip-to {
+      color: white;
+      padding: 1px 5px;
+      font-size: 12px;
+      background-color: #428bca;
+      background: linear-gradient(to bottom, #428bca 0%, #3071a9 100%);
+      border-radius: 3px;
+    }
+
     &__center {
       min-height: 30px;
     }
@@ -21,9 +40,7 @@
 
     &__from,
     &__to {
-      width: 1px;
       height: 20px;
-      background-color: #939ba7;
     }
 
     &__from::before,
@@ -39,8 +56,8 @@
       box-sizing: border-box;
     }
 
-    &__from:hover,
-    &__to:hover {
+    &__from:hover::before,
+    &__to:hover::before {
       background: #bec3c9;
     }
 
