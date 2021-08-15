@@ -2,6 +2,7 @@
 import { CreateHandleOptions, CreateHintsOptions } from './view.d';
 import { Handle } from './sub-view/handle';
 import { Hints } from './sub-view/hints';
+import { Bar } from './sub-view/bar';
 
 
 class View {
@@ -15,6 +16,7 @@ class View {
   rsLine: HTMLElement;
   handle: Handle;
   hints: Hints;
+  bar: Bar;
 
   // eslint-disable-next-line no-unused-vars
   constructor(public elem: Element, public numElem: Number) {
@@ -29,6 +31,20 @@ class View {
   initHints(handler: Function) {
     this.hints = new Hints(this.rsTop);
     handler();
+  }
+
+  initBar(handler: Function) {
+    this.bar = new Bar(this.rsCenter);
+    handler();
+  }
+
+  createDomBar(handler: Function) {
+    this.bar.createDomBar(this.rsLine);
+    handler();
+  }
+
+  setPositionBar(barX: number, widthBar: number) {
+    this.bar.setBar(barX, widthBar);
   }
 
   createDomHints(handler: Function, options: CreateHintsOptions) {

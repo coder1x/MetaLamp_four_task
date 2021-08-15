@@ -17,7 +17,7 @@ class Hints {
   type: string;
   tipPrefix: string;
 
-  // eslint-disable-next-line no-unused-vars
+
   constructor(elem: HTMLElement | Element) {
     this.rsName = 'range-slider';
     this.rsTop = (elem as HTMLElement);

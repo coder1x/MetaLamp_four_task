@@ -154,6 +154,21 @@ class Model {
 
 
 
+  calcPositionBar() {
+    let barX = 0;
+    let widthBar = 0;
+
+    if (this.type == 'double') {
+      barX = this.getFrom;
+      widthBar = this.getTo - this.getFrom;
+    } else {
+      widthBar = this.getFrom;
+    }
+
+    return { barX, widthBar };
+  }
+
+
   clickLine = (pointX: number, wrapWidth: number) => {
 
     this.wrapWidth = wrapWidth;

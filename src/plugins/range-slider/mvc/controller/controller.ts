@@ -8,6 +8,7 @@ import { onChangeFrom, onChangeTo } from './controller.d';
 class Controller {
 
   flagTipCreate: boolean;
+  flagBarCreate: boolean;
 
   // eslint-disable-next-line no-unused-vars
   constructor(public model: Model, public view: View) {
@@ -66,6 +67,8 @@ class Controller {
         this.ubdateTipSingle();
       }
 
+      if (this.flagBarCreate)
+        this.ubdateBar();
     };
     this.model.onChangeTo = (data: onChangeTo) => {
       this.view.setPositionTo(data.toP);
@@ -73,6 +76,9 @@ class Controller {
         this.ubdateTipTo(data.valTo);
         this.ubdateTipSingle();
       }
+
+      if (this.flagBarCreate)
+        this.ubdateBar();
     };
 
   }
@@ -106,13 +112,36 @@ class Controller {
 
   handleCreateDomHints = () => {
 
-    const obj = this.getDataHints();
+    this.view.initBar(this.handleInitBar);
 
+    const obj = this.getDataHints();
     this.ubdateTipFrom(obj.valFrom);
     this.ubdateTipTo(obj.valTo);
     this.ubdateTipSingle();
     this.flagTipCreate = true;
   }
+
+  handleInitBar = () => {
+    this.view.createDomBar(this.handleCreateDomBar);
+  }
+
+  handleCreateDomBar = () => {
+
+    //console.log('Bar создан');
+    this.flagBarCreate = true;
+
+    this.ubdateBar();
+    // Bar создан теперь нужно просчитать координаты и ширину. 
+    // для этого вызовим тут calc из модели. 
+    // нужно будет обнавлять эти события при изменении ползунков. 
+  }
+
+
+  ubdateBar = () => {
+    const obj = this.model.calcPositionBar();
+    this.view.setPositionBar(obj.barX, obj.widthBar);
+  }
+
 
   ubdateTipFrom = (valFrom: number) => {
     const obj = this.view.getWidthTipFromTo();
