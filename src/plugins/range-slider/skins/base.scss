@@ -23,6 +23,16 @@
       background-color: #428bca;
       background: linear-gradient(to bottom, #428bca 0%, #3071a9 100%);
       border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    &__tip-single {
+      color: white;
+      padding: 1px 5px;
+      font-size: 12px;
+      background-color: #428bca;
+      background: linear-gradient(to bottom, #428bca 0%, #3071a9 100%);
+      border-radius: 3px;
     }
 
     &__center {

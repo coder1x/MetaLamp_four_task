@@ -22,7 +22,21 @@ interface CreateHintsOptions {
   max: number,
   valFrom: number,
   valTo: number,
+  type: string,
+  tipPrefix: string,
+}
+
+interface CreateTipFromTo {
+  valFrom: number,
+  valTo: number,
+  type: string,
+  tipPrefix: string,
 }
 
 
-export { CreateHandleOptions, TipFromTo, CreateHintsOptions };
+export {
+  CreateHandleOptions,
+  TipFromTo,
+  CreateHintsOptions,
+  CreateTipFromTo
+};

@@ -35,16 +35,22 @@ class View {
 
     this.hints.createTipMinMax(
       options.min,
-      options.max
+      options.max,
+      options.tipPrefix
     );
-    this.hints.createTipFromTo(options.valFrom, options.valTo);
+    this.hints.createTipFromTo({
+      valFrom: options.valFrom,
+      valTo: options.valTo,
+      type: options.type,
+      tipPrefix: options.tipPrefix
+    });
 
     handler();
   }
 
   getWidthTipFromTo() {
-    const widthFrom = this.hints.tipFrom.offsetWidth;
-    const widthTo = this.hints.tipTo.offsetWidth ?? 0;
+    const widthFrom = this.hints.getWidthFrom();
+    const widthTo = this.hints.getWidthTo();
     return {
       tipFrom: widthFrom,
       tipTo: widthTo
@@ -57,6 +63,14 @@ class View {
 
   setTipTo(valTo: number, tipToX: number) {
     this.hints.setTipTo(valTo, tipToX);
+  }
+
+  setTipSingleX(singleX: number) {
+    this.hints.positionTipSingle(singleX);
+  }
+
+  getWidthTipSingle() {
+    return this.hints.getWidthSingle();
   }
 
   createDomBase(handler: Function, theme: string) {

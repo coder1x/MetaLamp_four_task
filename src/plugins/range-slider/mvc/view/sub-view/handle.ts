@@ -26,16 +26,15 @@ class Handle {
       return elem;
     };
 
+    this.elemFrom = createElem('span', [this.rsName + '__from']);
+    wrapElem.appendChild(this.elemFrom);
+
     if (this.options.type == 'double') {
       this.elemTo = createElem('span', [this.rsName + '__to']);
       wrapElem.appendChild(this.elemTo);
     }
 
-    this.elemFrom = createElem('span', [this.rsName + '__from']);
-    wrapElem.appendChild(this.elemFrom);
-
     this.wrapElem = wrapElem;
-
 
     handler(
       this.elemFrom.offsetWidth,

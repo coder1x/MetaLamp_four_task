@@ -3,25 +3,26 @@ import { RangeSliderOptions, CalcDotPositionOpt } from './model.d';
 
 class Model {
 
-  type: string;
-  orientation: string;
-  theme: string;
-  min: number;
-  max: number;
-  from: number;
-  to: number;
-  step: number;
-  valP: number;
-  stepP: number;
+  private type: string;
+  private orientation: string;
+  private theme: string;
+  private min: number;
+  private max: number;
+  private from: number;
+  private to: number;
+  private step: number;
+  private valP: number;
+  private stepP: number;
   private fromP: number;
   private toP: number;
-  dotP: number; // XXXXXXXXXXXXXXXXXXX
-  limitFrom: number;
-  limitTo: number;
-  fromTo: number;
-  valFrom: number;
-  valTo: number;
-  wrapWidth: number;
+  private dotP: number; // XXXXXXXXXXXXXXXXXXX
+  private limitFrom: number;
+  private limitTo: number;
+  private fromTo: number;
+  private valFrom: number;
+  private valTo: number;
+  private wrapWidth: number;
+  private tipPrefix: string;
 
   onChangeFrom: Function;
   onChangeTo: Function;
@@ -43,11 +44,16 @@ class Model {
       max: 10,          // максимальное значение на школе
       from: 1,          // позиция первой точки
       to: 2,            // позиция второй точки
-      step: 1           // с каким шагом будет перемещяться точка
+      step: 1,          // с каким шагом будет перемещяться точка
+      tipPrefix: '',     // Префикс для подсказок не больше 3 символов.
     }, options);
   }
 
   private createProperties(options: RangeSliderOptions) {
+
+    // тут можно произвести проверку входных данных на ошибки и 
+    // попытаться их исправить
+
     this.type = options.type;
     this.orientation = options.orientation;
     this.theme = options.theme;
@@ -56,28 +62,29 @@ class Model {
     this.to = options.to;
     this.from = options.from;
     this.step = options.step;
+
+    const DTipPrefix = options.tipPrefix.trim(); // убераем пробелы
+    this.tipPrefix = DTipPrefix.substr(0, 3); // префикс МАКС 3 символа.
   }
 
 
-
   set setFrom(val: number) {
-
+    this.fromP = val;
     this.valFrom = +(this.min + (val * this.valP)).toFixed(0);
     this.onChangeFrom({
       fromP: val,
       valFrom: this.valFrom
     });
-    this.fromP = val;
+
   }
 
   set setTo(val: number) {
-
+    this.toP = val;
     this.valTo = +(this.min + (val * this.valP)).toFixed(0);
     this.onChangeTo({
       toP: val,
       valTo: this.valTo
     });
-    this.toP = val;
   }
 
   get getFrom() {
@@ -102,7 +109,8 @@ class Model {
       fromX: this.getFrom,
       toX: this.getTo,
       valFrom: this.valFrom,
-      valTo: this.valTo
+      valTo: this.valTo,
+      tipPrefix: this.tipPrefix,
     };
   }
 
@@ -120,15 +128,26 @@ class Model {
     this.limitTo = this.getTo;
   }
 
+  calcWidthP(width: number) {
+    return (width * 100 / this.wrapWidth) / 2;
+  }
 
   calcPositionTipFrom(tipFrom: number) {
-    const tipFromP = ((tipFrom - 4) * 100 / this.wrapWidth) / 2;
+    const tipFromP = this.calcWidthP(tipFrom - 4);
     const tipFromX = this.getFrom - tipFromP;
     return tipFromX;
   }
 
+  calcPositionTipSingle(widthSingle: number) {
+    const line = (this.getTo - this.getFrom) / 2;
+    const centerFromTo = this.getFrom + line;
+    const tipSingleP = this.calcWidthP(widthSingle);
+    const center = centerFromTo - tipSingleP;
+    return center;
+  }
+
   calcPositionTipTo(tipTo: number) {
-    const tipToP = ((tipTo - 4) * 100 / this.wrapWidth) / 2;
+    const tipToP = this.calcWidthP(tipTo - 4);
     const tipToX = this.getTo - tipToP;
     return tipToX;
   }
@@ -140,7 +159,6 @@ class Model {
     this.wrapWidth = wrapWidth;
     const oneP = wrapWidth / 100; // один процент от всей школы
     const pointP = pointX / oneP; // кол. процентов в области где кликнули
-
 
     if (this.type == 'single') {
       this.setFrom = pointP;

@@ -4,11 +4,12 @@ interface RangeSliderOptions {
   type?: string;
   orientation?: string;
   theme?: string;
-  min: number;
-  max: number;
-  from: number;
+  min?: number;
+  max?: number;
+  from?: number;
   to?: number;
-  step: number;
+  step?: number;
+  tipPrefix?: string;
 }
 
 interface CalcDotPositionOpt {

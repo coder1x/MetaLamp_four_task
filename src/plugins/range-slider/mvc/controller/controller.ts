@@ -51,7 +51,9 @@ class Controller {
       min: obj.min,
       max: obj.max,
       valFrom: obj.valFrom,
-      valTo: obj.valTo
+      valTo: obj.valTo,
+      type: obj.type,
+      tipPrefix: obj.tipPrefix,
     };
   }
 
@@ -59,14 +61,18 @@ class Controller {
 
     this.model.onChangeFrom = (data: onChangeFrom) => {
       this.view.setPositionFrom(data.fromP);
-      if (this.flagTipCreate)
+      if (this.flagTipCreate) {
         this.ubdateTipFrom(data.valFrom);
+        this.ubdateTipSingle();
+      }
 
     };
     this.model.onChangeTo = (data: onChangeTo) => {
       this.view.setPositionTo(data.toP);
-      if (this.flagTipCreate)
+      if (this.flagTipCreate) {
         this.ubdateTipTo(data.valTo);
+        this.ubdateTipSingle();
+      }
     };
 
   }
@@ -90,7 +96,6 @@ class Controller {
 
 
   handleInitHints = () => {
-
     this.view.createDomHints(
       this.handleCreateDomHints,
       this.getDataHints()
@@ -105,6 +110,7 @@ class Controller {
 
     this.ubdateTipFrom(obj.valFrom);
     this.ubdateTipTo(obj.valTo);
+    this.ubdateTipSingle();
     this.flagTipCreate = true;
   }
 
@@ -118,6 +124,12 @@ class Controller {
     const obj = this.view.getWidthTipFromTo();
     const tipToX = this.model.calcPositionTipTo(obj.tipTo);
     this.view.setTipTo(valTo, tipToX);
+  }
+
+  ubdateTipSingle = () => {
+    const widthSingle = this.view.getWidthTipSingle();
+    const position = this.model.calcPositionTipSingle(widthSingle);
+    this.view.setTipSingleX(position);
   }
 
   handleActionsView = (pointX: number, wrapWidth: number) => {
