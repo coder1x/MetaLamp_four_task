@@ -32,7 +32,10 @@ $('.slider-base').RangeSlider({
   from: 200,
   to: 500,
   //tipPrefix: '°C',
-  step: 10
+  grid: true,
+  //gridSnap: true,
+  //gridNum: 8,
+  gridStep: 40,
 }).data('RangeSlider'); // вернёт объект для одного элемента
 
 

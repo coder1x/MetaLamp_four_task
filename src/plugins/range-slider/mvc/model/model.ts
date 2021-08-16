@@ -10,9 +10,7 @@ class Model {
   private max: number;
   private from: number;
   private to: number;
-  private step: number;
   private valP: number;
-  private stepP: number;
   private fromP: number;
   private toP: number;
   private dotP: number; // XXXXXXXXXXXXXXXXXXX
@@ -23,6 +21,10 @@ class Model {
   private valTo: number;
   private wrapWidth: number;
   private tipPrefix: string;
+  private gridSnap: boolean;
+  private gridNum: number;
+  private gridStep: number;
+  private grid: boolean;
 
   onChangeFrom: Function;
   onChangeTo: Function;
@@ -44,8 +46,11 @@ class Model {
       max: 10,          // максимальное значение на школе
       from: 1,          // позиция первой точки
       to: 2,            // позиция второй точки
-      step: 1,          // с каким шагом будет перемещяться точка
-      tipPrefix: '',     // Префикс для подсказок не больше 3 символов.
+      tipPrefix: '',    // Префикс для подсказок не больше 3 символов.
+      grid: false,      // Шкала выключена
+      gridSnap: false,  // точка переходит по ризкам на Шкале
+      gridNum: 4,       // интервал в шкале
+      gridStep: 0       // Шаг шкалы
     }, options);
   }
 
@@ -61,7 +66,11 @@ class Model {
     this.max = options.max;
     this.to = options.to;
     this.from = options.from;
-    this.step = options.step;
+    this.gridSnap = options.gridSnap;
+    this.grid = options.grid;
+
+    this.gridNum = options.gridNum;
+    this.gridStep = options.gridStep;
 
     const DTipPrefix = options.tipPrefix.trim(); // убераем пробелы
     this.tipPrefix = DTipPrefix.substr(0, 3); // префикс МАКС 3 символа.
@@ -105,13 +114,20 @@ class Model {
       max: this.max,
       to: this.to,
       from: this.from,
-      step: this.step,
       fromX: this.getFrom,
       toX: this.getTo,
       valFrom: this.valFrom,
       valTo: this.valTo,
       tipPrefix: this.tipPrefix,
+      grid: this.grid,
+      gridSnap: this.gridSnap,
+      gridNum: this.gridNum,
+      gridStep: this.gridStep,
     };
+  }
+
+  getRange() {
+    return this.max - this.min;
   }
 
   calcPosition(fromWidth: number, wrapWidth: number) {
@@ -119,14 +135,40 @@ class Model {
     this.wrapWidth = wrapWidth;
     this.dotP = fromWidth * 100 / wrapWidth; // XXXXXXXXXXXXXXXXXXX
 
-    this.valP = (this.max - this.min) / 100;            // один процент
-    this.stepP = this.step / this.valP;                 // количество процентов в шаге
+    this.valP = this.getRange() / 100;            // один процент
+    // this.stepP = this.step / this.valP;                 // количество процентов в шаге
     this.setFrom = (this.from - this.min) / this.valP;  // позиция левой точки в процентах
     this.setTo = (this.to - this.min) / this.valP;      // позиция правой точки в процентах
 
     this.limitFrom = this.getFrom;
     this.limitTo = this.getTo;
   }
+
+
+  calcGridNumStep() {
+    let interval = 0;
+    let step = 0;
+
+    if (this.gridStep && this.gridNum == 4) {  // если задан Шаг а интервал по умолчанию стоит
+      step = this.gridStep;
+      interval = this.getRange() / step; // находим новый интервал
+    } else {                                   // делаем только по интервалу
+      interval = this.gridNum;
+      step = this.getRange() / interval; // находим шаг
+    }
+
+    this.gridStep = step;
+    this.gridNum = interval;
+
+    return interval;
+  }
+
+  calcPositionGrid(value: number) {
+    value = value + this.gridStep;
+    const position = ((value - this.min) * 100) / this.getRange();
+    return { value, position };
+  }
+
 
   calcWidthP(width: number) {
     return (width * 100 / this.wrapWidth) / 2;

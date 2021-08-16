@@ -2,11 +2,6 @@
 
 interface CreateHandleOptions {
   type: string,
-  from: number,
-  to: number,
-  min: number,
-  max: number,
-  step: number
 }
 
 
@@ -33,10 +28,17 @@ interface CreateTipFromTo {
   tipPrefix: string,
 }
 
+interface DateGrid {
+  interval: number,
+  min: number,
+  max: number,
+}
+
 
 export {
   CreateHandleOptions,
   TipFromTo,
   CreateHintsOptions,
-  CreateTipFromTo
+  CreateTipFromTo,
+  DateGrid
 };

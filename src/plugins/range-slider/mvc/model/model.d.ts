@@ -8,8 +8,11 @@ interface RangeSliderOptions {
   max?: number;
   from?: number;
   to?: number;
-  step?: number;
+  grid?: boolean;
+  gridSnap?: boolean;
   tipPrefix?: string;
+  gridNum?: number;
+  gridStep?: number;
 }
 
 interface CalcDotPositionOpt {

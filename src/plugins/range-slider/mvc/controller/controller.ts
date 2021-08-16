@@ -38,11 +38,6 @@ class Controller {
     const obj = this.model.getOptions();
     return {
       type: obj.type,
-      from: obj.from,
-      to: obj.to,
-      min: obj.min,
-      max: obj.max,
-      step: obj.step
     };
   }
 
@@ -127,13 +122,43 @@ class Controller {
 
   handleCreateDomBar = () => {
 
-    //console.log('Bar создан');
     this.flagBarCreate = true;
-
     this.ubdateBar();
-    // Bar создан теперь нужно просчитать координаты и ширину. 
-    // для этого вызовим тут calc из модели. 
-    // нужно будет обнавлять эти события при изменении ползунков. 
+
+    this.view.initGrid(this.handleInitGrid);
+
+
+  }
+
+  handleInitGrid = () => {
+    this.handleCreateDomGrid(); // это нужно будет убрать... 
+  }
+
+  getDataMinMax() {
+    const obj = this.model.getOptions();
+    return {
+      min: obj.min,
+      max: obj.max,
+    };
+  }
+
+  handleCreateDomGrid = () => {
+
+    const interval = this.model.calcGridNumStep();
+    const obj2 = this.getDataMinMax();
+
+    this.view.setDataGrid({
+      interval: interval,
+      min: obj2.min,
+      max: obj2.max
+    });
+
+    this.view.createDomGrid(this.getDateGrid);
+
+  }
+
+  getDateGrid = (value: number) => {
+    return this.model.calcPositionGrid(value);
   }
 
 

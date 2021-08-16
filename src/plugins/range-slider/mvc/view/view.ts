@@ -1,8 +1,9 @@
 
-import { CreateHandleOptions, CreateHintsOptions } from './view.d';
+import { CreateHandleOptions, CreateHintsOptions, DateGrid } from './view.d';
 import { Handle } from './sub-view/handle';
 import { Hints } from './sub-view/hints';
 import { Bar } from './sub-view/bar';
+import { Grid } from './sub-view/grid';
 
 
 class View {
@@ -17,6 +18,7 @@ class View {
   handle: Handle;
   hints: Hints;
   bar: Bar;
+  grid: Grid;
 
   // eslint-disable-next-line no-unused-vars
   constructor(public elem: Element, public numElem: Number) {
@@ -36,6 +38,19 @@ class View {
   initBar(handler: Function) {
     this.bar = new Bar(this.rsCenter);
     handler();
+  }
+
+  initGrid(handler: Function) {
+    this.grid = new Grid(this.rsBottom);
+    handler();
+  }
+
+  setDataGrid(options: DateGrid) {
+    this.grid.setData(options);
+  }
+
+  createDomGrid(handler: Function) {
+    this.grid.createDomGrid(handler);
   }
 
   createDomBar(handler: Function) {
