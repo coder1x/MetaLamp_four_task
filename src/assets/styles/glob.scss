@@ -15,7 +15,29 @@ $size-padding: 20px;
 $min-size-padding: 10px;
 
 //-------------------------------
+//-------------------------------
+$Dark-Shade-100: #1f2041;
+$Dark-Shade-75: rgba(31, 32, 65, 0.75);
+$Dark-Shade-50: rgba(31, 32, 65, 0.5);
+$Dark-Shade-25: rgba(31, 32, 65, 0.25);
+$Dark-Shade-5: rgba(31, 32, 65, 0.05);
+$Dark-Shade-1: rgba(31, 32, 65, 0.1);
+$Purple: #bc9cff;
+$Green: #6fcf97;
 
+//-------------------------------
+$color-white: #fff;
+$color-background: #fff;
+$color-h: $Dark-Shade-100;
+$color-label: $Dark-Shade-100;
+$color-body: $Dark-Shade-75;
+$style-text: $Dark-Shade-25;
+$color-border: $Dark-Shade-25;
+$color-border-hover: $Dark-Shade-50;
+$color-input: $Dark-Shade-75;
+$color-button: $Purple;
+
+//-------------------------------
 //-------------------------------
 $font-size: 16;
 

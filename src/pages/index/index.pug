@@ -1,11 +1,21 @@
 extends ../layout/layout.pug
 
+include ../../components/values/values.pug
+include ../../components/hints/hints.pug
+
 
 block content
-  main.demo-range-slider
-    section.range-slider-base
-      .slider-base-wrap 
-        .slider-wrap
-          input(class='slider-base' type='hidden' name='price' value='' tabindex='-1')
-        //- .slider-wrap
-        //-   input(class='slider-base' type='hidden' name='price2' value='' tabindex='-1')
+  main.demo-slider
+    h1.demo-slider__header Fox-Slider
+    section.slider
+        .slider__wrap
+          input(class='slider__base' type='hidden' name='price' value='' tabindex='-1')
+        .panel
+          .panel__values-wrap 
+            +values({
+              label: 'Values',
+            })
+          .panel__hints-wrap 
+            +hints({
+              label: 'Hints',
+            })

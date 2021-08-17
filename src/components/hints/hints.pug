@@ -1,0 +1,22 @@
+include ../toggle-buttons/toggle-buttons.pug
+
+mixin hints(options)
+  -
+    let label = options.label ?? ''
+    let modif = options.modif ?? ''
+    let addClass = options.class ?? ''
+    let flLabel = options.flLabel ?? false
+    let classComp = 'hints'
+    let className = classComp
+    if(modif){
+    className += ' '+classComp+'_'+modif}
+    if(addClass){
+    className += ' '+addClass}
+  fieldset(class=className)
+    - if(!flLabel){
+    legend(class=classComp+'__label')= label
+    -}
+    div(class=classComp+'__minmax-wrap')
+      +toggle-buttons({
+        header: 'min - max',
+      })

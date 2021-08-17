@@ -14,6 +14,7 @@ class Grid {
   evenElements: HTMLElement[][] = [[]];
   lastElem: HTMLElement;
   previousElem: HTMLElement;
+  startWidth: number;
 
 
   constructor(elem: HTMLElement | Element) {
@@ -30,14 +31,11 @@ class Grid {
     return elem;
   }
 
-
   setData(options: DateGrid) {
     this.interval = options.interval;
     this.min = options.min;
     this.max = options.max;
   }
-
-
 
   createDomGrid(handler: Function) {
 
@@ -106,7 +104,6 @@ class Grid {
     }
 
     this.masWidth.push(elemWidth);
-
     this.oddElements[0].shift();
     this.oddElements[0].pop();
 
@@ -136,13 +133,12 @@ class Grid {
     breakIntoPieces(this.oddElements[0]);
 
     this.visibleMark();
-
+    this.getResizeWrap();
   }
 
 
   // скрываем или показываем цифры на шкале.
   visibleMark() {
-
     // находим индекс элементов - для нечётных - показать для чётных скрыть.
     const wrapWidth = this.elemGrid.offsetWidth;
     let i = 0;
@@ -168,7 +164,49 @@ class Grid {
   }
 
 
+  getResizeWrap() {
+    let sleep = 200;
+    let rtime: Date;
+    let timeout = false;
+    this.startWidth = this.elemGrid.offsetWidth;
 
+    (function () {
+      let throttle = function (type: string, name: string, obj = window) {
+        let running = false;
+        let func = function () {
+          if (running) { return; }
+          running = true;
+          requestAnimationFrame(function () {
+            obj.dispatchEvent(new CustomEvent(name));
+            running = false;
+          });
+        };
+        obj.addEventListener(type, func);
+      };
+      throttle("resize", "optimizedResize");
+    })();
+
+    const resizeend = () => {
+      if (Number(new Date()) - Number(rtime) < sleep) {
+        setTimeout(resizeend, sleep);
+      } else {
+        timeout = false;
+        let totalWidth = this.elemGrid.offsetWidth;
+        if (totalWidth != this.startWidth) {
+          this.visibleMark();
+          this.startWidth = totalWidth;
+        }
+      }
+    };
+
+    window.addEventListener("optimizedResize", function () {
+      rtime = new Date();
+      if (timeout === false) {
+        timeout = true;
+        setTimeout(resizeend, sleep);
+      }
+    });
+  }
 
 }
 

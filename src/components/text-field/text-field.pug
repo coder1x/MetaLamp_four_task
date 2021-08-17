@@ -1,0 +1,22 @@
+mixin text-field(options)
+  -
+    let label = options.label ?? ''
+    let placeholder = options.placeholder ?? ''
+    let typeField = options.type ?? ''
+    let name = options.name ?? ''
+    let modif = options.modif ?? ''
+    let addClass = options.class ?? ''
+    let flLabel = options.flLabel ?? false
+    let classComp = 'text-field'
+    let className = classComp
+    if(modif){
+    className += ' '+classComp+'_'+modif}
+    if(addClass){
+    className += ' '+addClass}
+  div(class=className)
+    label(class=classComp+'__label')
+      - if(!flLabel){
+      p(class=classComp+'__label-text')= label
+      -}
+      input(class=classComp+'__input' type=typeField placeholder=placeholder value='' name=name)
+      

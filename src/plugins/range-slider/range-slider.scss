@@ -33,6 +33,10 @@ $color-focus: #1f2041;
     height: 5px;
   }
 
+  &__grid-mark {
+    cursor: pointer;
+  }
+
   &__center {
     width: 100%;
     display: flex;

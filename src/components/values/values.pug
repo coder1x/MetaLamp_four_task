@@ -1,0 +1,42 @@
+include ../text-field/text-field.pug
+
+mixin values(options)
+  -
+    let label = options.label ?? ''
+    let modif = options.modif ?? ''
+    let addClass = options.class ?? ''
+    let flLabel = options.flLabel ?? false
+    let classComp = 'values'
+    let className = classComp
+    if(modif){
+    className += ' '+classComp+'_'+modif}
+    if(addClass){
+    className += ' '+addClass}
+  fieldset(class=className)
+    - if(!flLabel){
+    legend(class=classComp+'__label')= label
+    -}
+    div(class=classComp+'__min-wrap')
+      +text-field({
+        label: 'Min',
+        type: 'text',
+        name: 'min'
+      })
+    div(class=classComp+'__max-wrap')
+      +text-field({
+        label: 'Max',
+        type: 'text',
+        name: 'min'
+      })
+    div(class=classComp+'__from-wrap')
+      +text-field({
+        label: 'From',
+        type: 'text',
+        name: 'min'
+      })
+    div(class=classComp+'__to-wrap')
+      +text-field({
+        label: 'To',
+        type: 'text',
+        name: 'min'
+      })
