@@ -9,6 +9,11 @@ class Grid {
   min: number;
   max: number;
   indent: number;
+  masWidth: number[] = [];
+  oddElements: HTMLElement[][] = [[]];
+  evenElements: HTMLElement[][] = [[]];
+  lastElem: HTMLElement;
+  previousElem: HTMLElement;
 
 
   constructor(elem: HTMLElement | Element) {
@@ -64,6 +69,17 @@ class Grid {
   }
 
 
+  visibleLastElem() {
+    const lastX = this.lastElem.getBoundingClientRect().left;
+    const previousX = this.previousElem.getBoundingClientRect().left +
+      this.previousElem.offsetWidth + this.indent;
+
+    if (previousX >= lastX) {
+      this.previousElem.style.visibility = 'hidden';
+    } else {
+      this.previousElem.style.visibility = 'visible';
+    }
+  }
 
 
   shapingMark() {
@@ -72,62 +88,83 @@ class Grid {
     );
 
 
-    // скрываем предпоследнее число если оно не поместилось.
     const len = gridMarks.length;
     if (len > 1) {
-      const last = gridMarks[len - 1];
-      const previous = (gridMarks[len - 2] as HTMLElement);
-
-      const lastX = last.getBoundingClientRect().left;
-      const previousX = previous.getBoundingClientRect().left +
-        previous.offsetWidth + this.indent;
-
-      if (previousX >= lastX) {
-        const elem = (previous.parentNode as HTMLElement);
-        elem.style.visibility = 'hidden';
-      }
+      this.lastElem = (gridMarks[len - 1] as HTMLElement);
     }
 
 
-    // выравниваем цифры по серидине чёрточки
+    let elemWidth = 0;
+
     for (let item of gridMarks) {
       const mark = (item as HTMLElement);
       const markX = mark.offsetWidth / 2;
       mark.style.left = '-' + markX + 'px';
+
+      elemWidth += mark.offsetWidth + this.indent;
+      this.oddElements[0].push(mark);
     }
 
+    this.masWidth.push(elemWidth);
+
+    this.oddElements[0].shift();
+    this.oddElements[0].pop();
+
+    let evenMas: HTMLElement[] = [];
+    const breakIntoPieces = (mas: HTMLElement[]) => {
+      elemWidth = 0;
+      const newMas = mas.filter((elem, i) => {
+        if (i % 2 == 0) { // каждый второй элемент массива
+          evenMas.push(elem);
+          return false;
+        }
+        else {
+          elemWidth += elem.offsetWidth + this.indent;
+          return true;
+        }
+      });
+
+      if (newMas.length >= 2) {
+        this.oddElements.push(newMas);
+        this.evenElements.push(evenMas);
+        evenMas = [];
+        this.masWidth.push(elemWidth);
+        breakIntoPieces(newMas);
+      }
+    };
+
+    breakIntoPieces(this.oddElements[0]);
 
     this.visibleMark();
+
   }
 
 
+  // скрываем или показываем цифры на шкале.
   visibleMark() {
 
-    // не трогаем предпоследний и последний элемент.
-    // для него нужно отдельную логику можно ту часть которая его скрыла
-    // сделать отдельным методом и в конце вызывать для того что бы определить
-    // вдруг под это число появилось место и его можно показать.. :).. 
-    //-----------------------------------------
+    // находим индекс элементов - для нечётных - показать для чётных скрыть.
+    const wrapWidth = this.elemGrid.offsetWidth;
+    let i = 0;
+    for (; i < this.masWidth.length; i++) {
+      if (this.masWidth[i] <= wrapWidth)
+        break;
+    }
 
+    for (let n = 0; n <= i; n++) { // скрываем все чётные элементы до необходимого уровня.
+      for (let elem of this.evenElements[n]) {
+        elem.style.visibility = 'hidden';
+      }
+    }
 
-    // нужно учитывать для каждого элемента this.indent .. 
+    this.oddElements[i].map((elem) => { // делаем видемыми только нужные.
+      elem.style.visibility = 'visible';
+    });
 
-    // короче нужен многомерный массив
-    // заранее его разбиваем до самого низкого уровня 
-    // записывая в начале ширину всех объектов а дальше индексы элементов
-    // короче в зависемости от ширины врапера и ширины в списке элементов
-    // выбираем то что помещается - таким образом мы можем крутить массив сколько угодно и показывать
-    // всегда только нужные элементы.
-    // для этого скрываем элементы которые не под индексами в массиве
-    // а те индексы что совпадают из массива показываем. 
-    // при определённых разрешениях скрывать промежуточные чёрточки. 
+    const len = this.oddElements[i].length - 1;
+    this.previousElem = this.oddElements[i][len];
 
-
-    // делать промежуточные либо 4 чёрточки либо 2 либо они исчезают
-    // подумать как сделать что бы они так же с числами менялись .. 
-
-
-
+    this.visibleLastElem();
   }
 
 
