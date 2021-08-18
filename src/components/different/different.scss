@@ -1,4 +1,24 @@
 .different {
   border: 1px solid rgba(31, 32, 65, 0.25);
   border-radius: 4px;
+  box-sizing: border-box;
+  padding: 10px;
+  display: grid;
+  align-content: flex-start;
+  height: 100%;
+
+  &__double-wrap {
+    grid-row-start: 1;
+    grid-column-start: 1;
+  }
+
+  &__disabled-wrap {
+    grid-row-start: 1;
+    grid-column-start: 2;
+  }
+
+  &__vertical-wrap {
+    grid-row-start: 1;
+    grid-column-start: 3;
+  }
 }

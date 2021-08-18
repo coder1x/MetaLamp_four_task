@@ -1,4 +1,33 @@
 .grid {
   border: 1px solid rgba(31, 32, 65, 0.25);
   border-radius: 4px;
+  box-sizing: border-box;
+  padding: 10px;
+  display: grid;
+  align-content: flex-start;
+  height: 100%;
+
+  &__grid-wrap {
+    grid-row-start: 1;
+    grid-column-start: 1;
+  }
+
+  &__snap-wrap {
+    grid-row-start: 1;
+    grid-column-start: 2;
+  }
+
+  &__interval-wrap {
+    margin-top: 10px;
+    grid-row-start: 2;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    margin-bottom: 10px;
+  }
+
+  &__step-wrap {
+    grid-row-start: 3;
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
 }

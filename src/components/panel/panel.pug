@@ -1,0 +1,42 @@
+include ../values/values.pug
+include ../hints/hints.pug
+include ../grid/grid.pug
+include ../slider-data/slider-data.pug
+include ../different/different.pug
+include ../code/code.pug
+
+mixin panel(options)
+  -
+    let modif = options.modif ?? ''
+    let addClass = options.class ?? ''
+    let classComp = 'panel'
+    let className = classComp
+    if(modif){
+    className += ' '+classComp+'_'+modif}
+    if(addClass){
+    className += ' '+addClass}
+  div(class=className)
+    .panel__values-wrap 
+      +values({
+        label: 'Values',
+      })
+    .panel__slider-data-wrap 
+      +slider-data({
+        label: 'Slider data',
+      })
+    .panel__grid-wrap 
+      +grid({
+        label: 'Grid',
+      })
+    .panel__different-wrap 
+      +different({
+        label: 'Different',
+      })
+    .panel__hints-wrap 
+      +hints({
+        label: 'Hints',
+      })
+    .panel__code-wrap 
+      +code({
+        label: 'Config code',
+      })

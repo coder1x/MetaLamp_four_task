@@ -1,0 +1,28 @@
+
+mixin code(options)
+  -
+    let label = options.label ?? ''
+    let modif = options.modif ?? ''
+    let addClass = options.class ?? ''
+    let flLabel = options.flLabel ?? false
+    let classComp = 'code'
+    let className = classComp
+    if(modif){
+    className += ' '+classComp+'_'+modif}
+    if(addClass){
+    className += ' '+addClass}
+  fieldset(class=className)
+    - if(!flLabel){
+    legend(class=classComp+'__label')= label
+    -}
+    pre(class=classComp+'__config')
+      code(class=classComp+'__lang-java')
+        |  $('.demo').RangeSliderFox({
+        |    type: 'double',
+        |    min: -120,
+        |    max: 800,
+        |    from: 200,
+        |    to: 500,
+        |    grid: true,
+        |    gridStep: 30,
+        |  });
