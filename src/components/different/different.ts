@@ -1,0 +1,1 @@
+import './different.scss';

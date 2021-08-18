@@ -74,8 +74,12 @@ class Grid {
 
     if (previousX >= lastX) {
       this.previousElem.style.visibility = 'hidden';
+      const wrapE = (this.previousElem.parentNode as HTMLElement);
+      wrapE.style.opacity = '0.4';
     } else {
       this.previousElem.style.visibility = 'visible';
+      const wrapE = (this.previousElem.parentNode as HTMLElement);
+      wrapE.style.opacity = '1';
     }
   }
 
@@ -150,11 +154,15 @@ class Grid {
     for (let n = 0; n <= i; n++) { // скрываем все чётные элементы до необходимого уровня.
       for (let elem of this.evenElements[n]) {
         elem.style.visibility = 'hidden';
+        const wrapE = (elem.parentNode as HTMLElement);
+        wrapE.style.opacity = '0.4';
       }
     }
 
     this.oddElements[i].map((elem) => { // делаем видемыми только нужные.
       elem.style.visibility = 'visible';
+      const wrapE = (elem.parentNode as HTMLElement);
+      wrapE.style.opacity = '1';
     });
 
     const len = this.oddElements[i].length - 1;

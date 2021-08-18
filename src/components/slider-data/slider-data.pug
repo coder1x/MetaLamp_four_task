@@ -1,13 +1,12 @@
-include ../toggle-buttons/toggle-buttons.pug
 include ../text-field/text-field.pug
 
-mixin hints(options)
+mixin slider-data(options)
   -
     let label = options.label ?? ''
     let modif = options.modif ?? ''
     let addClass = options.class ?? ''
     let flLabel = options.flLabel ?? false
-    let classComp = 'hints'
+    let classComp = 'slider-data'
     let className = classComp
     if(modif){
     className += ' '+classComp+'_'+modif}
@@ -17,17 +16,15 @@ mixin hints(options)
     - if(!flLabel){
     legend(class=classComp+'__label')= label
     -}
-    div(class=classComp+'__minmax-wrap')
-      +toggle-buttons({
-        header: 'min - max',
-      })
-    div(class=classComp+'__fromto-wrap')
-      +toggle-buttons({
-        header: 'from - to',
-      })
-    div(class=classComp+'__prefix-wrap')
+    div(class=classComp+'__valfrom-wrap')
       +text-field({
-        label: 'Prefix',
+        label: 'value from',
         type: 'text',
-        name: 'prefix'
+        name: 'valfrom'
+      })
+    div(class=classComp+'__valto-wrap')
+      +text-field({
+        label: 'value to',
+        type: 'text',
+        name: 'valto'
       })

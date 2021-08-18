@@ -1,13 +1,13 @@
 include ../toggle-buttons/toggle-buttons.pug
-include ../text-field/text-field.pug
 
-mixin hints(options)
+
+mixin different(options)
   -
     let label = options.label ?? ''
     let modif = options.modif ?? ''
     let addClass = options.class ?? ''
     let flLabel = options.flLabel ?? false
-    let classComp = 'hints'
+    let classComp = 'different'
     let className = classComp
     if(modif){
     className += ' '+classComp+'_'+modif}
@@ -17,17 +17,15 @@ mixin hints(options)
     - if(!flLabel){
     legend(class=classComp+'__label')= label
     -}
-    div(class=classComp+'__minmax-wrap')
+    div(class=classComp+'__double-wrap')
       +toggle-buttons({
-        header: 'min - max',
+        header: 'double',
       })
-    div(class=classComp+'__fromto-wrap')
+    div(class=classComp+'__disabled-wrap')
       +toggle-buttons({
-        header: 'from - to',
+        header: 'disabled',
       })
-    div(class=classComp+'__prefix-wrap')
-      +text-field({
-        label: 'Prefix',
-        type: 'text',
-        name: 'prefix'
+    div(class=classComp+'__vertical-wrap')
+      +toggle-buttons({
+        header: 'vertical',
       })

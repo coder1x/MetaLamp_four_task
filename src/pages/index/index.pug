@@ -2,11 +2,14 @@ extends ../layout/layout.pug
 
 include ../../components/values/values.pug
 include ../../components/hints/hints.pug
+include ../../components/grid/grid.pug
+include ../../components/slider-data/slider-data.pug
+include ../../components/different/different.pug
 
 
 block content
   main.demo-slider
-    h1.demo-slider__header Fox-Slider
+    h1.demo-slider__header Range Slider Fox
     section.slider
         .slider__wrap
           input(class='slider__base' type='hidden' name='price' value='' tabindex='-1')
@@ -15,7 +18,19 @@ block content
             +values({
               label: 'Values',
             })
+          .panel__slider-data-wrap 
+            +slider-data({
+              label: 'Slider data',
+            })
           .panel__hints-wrap 
             +hints({
               label: 'Hints',
+            })
+          .panel__grid-wrap 
+            +grid({
+              label: 'Grid',
+            })
+          .panel__different-wrap 
+            +different({
+              label: 'Different',
             })

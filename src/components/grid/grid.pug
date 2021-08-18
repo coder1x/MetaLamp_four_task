@@ -1,13 +1,13 @@
 include ../toggle-buttons/toggle-buttons.pug
 include ../text-field/text-field.pug
 
-mixin hints(options)
+mixin grid(options)
   -
     let label = options.label ?? ''
     let modif = options.modif ?? ''
     let addClass = options.class ?? ''
     let flLabel = options.flLabel ?? false
-    let classComp = 'hints'
+    let classComp = 'grid'
     let className = classComp
     if(modif){
     className += ' '+classComp+'_'+modif}
@@ -17,17 +17,23 @@ mixin hints(options)
     - if(!flLabel){
     legend(class=classComp+'__label')= label
     -}
-    div(class=classComp+'__minmax-wrap')
+    div(class=classComp+'__grid-wrap')
       +toggle-buttons({
-        header: 'min - max',
+        header: 'Grid',
       })
-    div(class=classComp+'__fromto-wrap')
+    div(class=classComp+'__snap-wrap')
       +toggle-buttons({
-        header: 'from - to',
+        header: 'Snap',
       })
-    div(class=classComp+'__prefix-wrap')
+    div(class=classComp+'__interval-wrap')
       +text-field({
-        label: 'Prefix',
+        label: 'Interval',
         type: 'text',
-        name: 'prefix'
+        name: 'interval '
+      })
+    div(class=classComp+'__step-wrap')
+      +text-field({
+        label: 'Step',
+        type: 'text',
+        name: 'step'
       })

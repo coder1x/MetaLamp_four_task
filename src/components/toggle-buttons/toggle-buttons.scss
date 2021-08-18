@@ -3,7 +3,7 @@
 $font: "Montserrat", Helvetica, Arial, sans-serif;
 $color-toggle-label: $Dark-Shade-75;
 $color-toggle-bk: $Dark-Shade-25;
-$color-toggle-border: #3a7d5d;
+$color-toggle-border: #a8d07fd4;
 $color-border-focus: $Dark-Shade-100;
 
 .toggle-buttons {
@@ -51,38 +51,30 @@ $color-border-focus: $Dark-Shade-100;
     left: 0;
     width: 40px;
     height: 20px;
-    background: $color-background;
-    border: 1px solid $color-toggle-bk;
+    background: #cdd1da;
+    box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.129);
     border-radius: 10px;
     transition: 0.2s;
     box-sizing: border-box;
-    &_border {
-      box-shadow: 0px 0px 0px 2px $color-border-focus;
-    }
   }
 
   &__bef:after {
     content: "";
     position: absolute;
-    top: 3px;
+    top: 4px;
     left: 4px;
     width: 12px;
     height: 12px;
     border-radius: 10px;
-    background: $color-toggle-bk;
+    background: #fff;
     cursor: pointer;
     transition: 0.2s;
   }
 
   &__input:checked + &__bef {
-    border-color: $color-toggle-border;
+    background-color: #a8d07fd4;
   }
   &__input:checked + &__bef:after {
     left: 22px;
-    background: #3a7d5d;
-  }
-
-  &__tog &__label &__bef_border {
-    border-color: $color-border-focus;
   }
 }
