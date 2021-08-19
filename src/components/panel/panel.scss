@@ -3,27 +3,29 @@
 .panel {
   display: grid;
   grid-gap: 15px;
-  justify-content: space-around;
 
   &__values-wrap {
     width: 100%;
-    max-width: 260px;
+    max-width: 400px;
     grid-row-start: 1;
     grid-column-start: 1;
+    margin: 0 auto;
   }
 
   &__slider-data-wrap {
     width: 100%;
-    max-width: 260px;
+    max-width: 400px;
     grid-row-start: 2;
     grid-column-start: 1;
+    margin: 0 auto;
   }
 
   &__hints-wrap {
     width: 100%;
-    max-width: 260px;
+    max-width: 400px;
     grid-row-start: 1;
     grid-column-start: 3;
+    margin: 0 auto;
 
     @include media-breakpoint-down($md) {
       grid-row-start: 3;
@@ -33,9 +35,10 @@
 
   &__grid-wrap {
     width: 100%;
-    max-width: 260px;
+    max-width: 400px;
     grid-row-start: 1;
     grid-column-start: 2;
+    margin: 0 auto;
 
     @include media-breakpoint-down($xs) {
       grid-row-start: 4;
@@ -45,9 +48,10 @@
 
   &__different-wrap {
     width: 100%;
-    max-width: 260px;
+    max-width: 400px;
     grid-row-start: 2;
     grid-column-start: 2;
+    margin: 0 auto;
 
     @include media-breakpoint-down($xs) {
       grid-row-start: 5;
@@ -57,9 +61,10 @@
 
   &__code-wrap {
     width: 100%;
-    max-width: 260px;
+    max-width: 400px;
     grid-row-start: 2;
     grid-column-start: 3;
+    margin: 0 auto;
 
     @include media-breakpoint-down($md) {
       grid-row-start: 3;

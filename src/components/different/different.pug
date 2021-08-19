@@ -1,5 +1,5 @@
 include ../toggle-buttons/toggle-buttons.pug
-
+include ../select/select.pug
 
 mixin different(options)
   -
@@ -28,4 +28,29 @@ mixin different(options)
     div(class=classComp+'__vertical-wrap')
       +toggle-buttons({
         header: 'vertical',
+      })
+    -
+      const masOptions = [
+        {
+          value:'base',
+          text:'Base',
+          selected:'js-selected'
+        },
+        {
+          value:'fox',
+          text:'Fox',
+        },
+        {
+          value:'dark',
+          text:'Dark',
+        },
+        {
+          value:'classic',
+          text:'Classic',
+        },
+      ];
+    div(class=classComp+'__select-wrap')
+      +select({
+        label: 'Skin',
+        masOptions: masOptions,
       })

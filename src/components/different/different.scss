@@ -21,4 +21,11 @@
     grid-row-start: 1;
     grid-column-start: 3;
   }
+
+  &__select-wrap {
+    margin-top: 10px;
+    grid-row-start: 2;
+    grid-column-start: 1;
+    grid-column-end: 4;
+  }
 }
