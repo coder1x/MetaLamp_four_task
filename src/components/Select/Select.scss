@@ -73,8 +73,7 @@ $color-border-show: $Dark-Shade-50;
     font-size: 14px;
   }
 
-  &__item:hover,
-  &__item:focus {
+  &__item:hover {
     background-color: rgb(244, 249, 255);
   }
 

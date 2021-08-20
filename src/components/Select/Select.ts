@@ -62,18 +62,20 @@ class Select {
       str: '__displayed-wrap'
     }) as HTMLElement;
 
-
-
-    //classList.contains('js-selected');
     this.setDisplayed();
   }
 
+  setValSelect(elem: HTMLElement) {
+    const text = elem.innerText;
+    this.button.innerText = text;
+    const val = elem.getAttribute('data-val');
+    this.input.value = val;
+  }
 
   setDisplayed() {
     for (let item of this.items) {
       if (item.classList.contains('js-selected')) {
-        const text = item.innerText;
-        this.button.innerText = text;
+        this.setValSelect(item);
         item.classList.remove('js-selected');
         break;
       }
@@ -89,24 +91,88 @@ class Select {
   private toggle(flag = false) {
     const UlVisible: boolean = this.getVisible(this.options);
     let flagVis = !UlVisible && !flag;
-    this.toggleModif(this.elem, '_visible', flagVis);
+    this.toggleModif(this.elem, flagVis);
   }
 
+  private getModif() {
+    const selector = this.className + '_visible';
+    return selector.replace(/^\./, '');
+  }
 
-  private toggleModif(elem: Element, modif: string, flag = false) {
-    let clearName = this.className.replace(/^\./, '') + modif;
-    let objClass = elem.classList;
+  private toggleModif(elem: Element, flag = false) {
+    const clearName = this.getModif();
+    const objClass = elem.classList;
     flag ? objClass.add(clearName) : objClass.remove(clearName);
   }
 
   setActions() {
 
-
-    this.displayedWrap.addEventListener('click', (e: MouseEvent) => {
-
+    this.displayedWrap.addEventListener('click', () => {
       this.toggle();
-
     });
+
+    const keydown = (e: KeyboardEvent) => {
+      if (e.key == 'Escape') {
+        e.preventDefault();
+        this.toggle(true);
+      }
+
+    };
+
+    this.button.addEventListener('keydown', keydown);
+    this.options.addEventListener('keydown', keydown);
+
+    this.button.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key == 'Enter' || e.key == ' ') {
+        e.preventDefault();
+        this.toggle();
+      }
+    });
+
+
+    const setValue = (e: MouseEvent | KeyboardEvent) => {
+      let flag = false;
+      const keyE = e as KeyboardEvent;
+      const mousE = e as MouseEvent;
+
+      if (keyE.key == 'Enter' || keyE.key == ' ') {
+        flag = true;
+      } else if (mousE.type == 'click')
+        flag = true;
+
+      if (flag) {
+        const target = e.target as HTMLElement;
+        this.setValSelect(target);
+        this.toggle(true);
+      }
+    };
+
+
+    for (let item of this.items) {
+      item.addEventListener('click', setValue);
+      item.addEventListener('keydown', setValue);
+    }
+
+
+    document.addEventListener('click', (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const domEl = target.closest('.' + this.getModif()) ?? false;
+      if (!domEl) {
+        this.toggle(true);
+      }
+    });
+
+
+    document.addEventListener('focusin', (e: FocusEvent) => {
+      const target = e.target as HTMLElement;
+      const linkEl = target.closest(
+        this.className + '__options'
+      ) ?? false;
+      const ulEl = target.closest('.' + this.getModif()) ?? false;
+      if (!linkEl && !ulEl) { this.toggle(true); }
+    });
+
+
 
   }
 
