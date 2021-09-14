@@ -13,6 +13,9 @@ interface RangeSliderOptions {
   tipPrefix?: string;
   gridNum?: number;
   gridStep?: number;
+  onStart?: Function;
+  onChange?: Function;
+  onUpdate?: Function;
 }
 
 interface CalcDotPositionOpt {

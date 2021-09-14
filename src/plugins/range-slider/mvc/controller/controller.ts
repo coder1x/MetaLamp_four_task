@@ -2,7 +2,7 @@ import { Model } from '../model/model';
 import { View } from '../view/view';
 import { CalcDotPositionOpt } from '../model/model.d';
 import { onChangeFrom, onChangeTo } from './controller.d';
-
+import { RangeSliderOptions } from '../model/model.d';
 
 
 class Controller {
@@ -11,15 +11,34 @@ class Controller {
   flagBarCreate: boolean;
 
   // eslint-disable-next-line no-unused-vars
-  constructor(public model: Model, public view: View) {
-
+  constructor(private model: Model, private view: View) {
 
     this.createListeners();
     this.init();
   }
 
+  reset = () => {
 
-  init() {
+    // получаем из модели дефаултОптионс которые мы запомнили при анализе конфига
+
+    // вызываем метод update и передаём туда этот конфиг. 
+    // в итоге слайдер будет выглядить как в первый запуск.
+
+    console.log('reset');
+  }
+
+  update = (options: RangeSliderOptions) => {
+    //console.log(options);
+
+
+
+    this.model.setOptions(options);
+
+
+
+  }
+
+  private init() {
     this.view.initHandle(this.getDataInitHandle());
 
     this.view.createDomBase(
@@ -53,7 +72,7 @@ class Controller {
     };
   }
 
-  createListeners() {
+  private createListeners() {
 
     this.model.onChangeFrom = (data: onChangeFrom) => {
       this.view.setPositionFrom(data.fromP);
@@ -79,15 +98,15 @@ class Controller {
   }
 
 
-  handleCreateDomBase = () => {
+  private handleCreateDomBase = () => {
     this.view.initDomElem(this.handleInitDomElem);
   }
 
-  handleInitDomElem = () => {
+  private handleInitDomElem = () => {
     this.view.createHandle(this.handleCreateHandle);
   }
 
-  handleCreateHandle = (fromWidth: number, wrapWidth: number) => {
+  private handleCreateHandle = (fromWidth: number, wrapWidth: number) => {
 
     this.model.calcPosition(fromWidth, wrapWidth);
     this.view.setActionsHandle(this.handleActionsHandle);
@@ -96,7 +115,7 @@ class Controller {
   }
 
 
-  handleInitHints = () => {
+  private handleInitHints = () => {
     this.view.createDomHints(
       this.handleCreateDomHints,
       this.getDataHints()
@@ -105,7 +124,7 @@ class Controller {
   }
 
 
-  handleCreateDomHints = () => {
+  private handleCreateDomHints = () => {
 
     this.view.initBar(this.handleInitBar);
 
@@ -116,21 +135,18 @@ class Controller {
     this.flagTipCreate = true;
   }
 
-  handleInitBar = () => {
+  private handleInitBar = () => {
     this.view.createDomBar(this.handleCreateDomBar);
   }
 
-  handleCreateDomBar = () => {
-
+  private handleCreateDomBar = () => {
     this.flagBarCreate = true;
     this.ubdateBar();
 
     this.view.initGrid(this.handleInitGrid);
-
-
   }
 
-  handleInitGrid = () => {
+  private handleInitGrid = () => {
     this.handleCreateDomGrid(); // это нужно будет убрать... 
   }
 
@@ -142,8 +158,7 @@ class Controller {
     };
   }
 
-  handleCreateDomGrid = () => {
-
+  private handleCreateDomGrid = () => {
     const interval = this.model.calcGridNumStep();
     const obj2 = this.getDataMinMax();
 
@@ -154,45 +169,43 @@ class Controller {
     });
 
     this.view.createDomGrid(this.getDateGrid);
-
   }
 
-  getDateGrid = (value: number) => {
+  private getDateGrid = (value: number) => {
     return this.model.calcPositionGrid(value);
   }
 
 
-  ubdateBar = () => {
+  private ubdateBar = () => {
     const obj = this.model.calcPositionBar();
     this.view.setPositionBar(obj.barX, obj.widthBar);
   }
 
 
-  ubdateTipFrom = (valFrom: number) => {
+  private ubdateTipFrom = (valFrom: number) => {
     const obj = this.view.getWidthTipFromTo();
     const tipFromX = this.model.calcPositionTipFrom(obj.tipFrom);
     this.view.setTipFrom(valFrom, tipFromX);
   }
 
-  ubdateTipTo = (valTo: number) => {
+  private ubdateTipTo = (valTo: number) => {
     const obj = this.view.getWidthTipFromTo();
     const tipToX = this.model.calcPositionTipTo(obj.tipTo);
     this.view.setTipTo(valTo, tipToX);
   }
 
-  ubdateTipSingle = () => {
+  private ubdateTipSingle = () => {
     const widthSingle = this.view.getWidthTipSingle();
     const position = this.model.calcPositionTipSingle(widthSingle);
     this.view.setTipSingleX(position);
   }
 
-  handleActionsView = (pointX: number, wrapWidth: number) => {
+  private handleActionsView = (pointX: number, wrapWidth: number) => {
     this.model.clickLine(pointX, wrapWidth);
   }
 
-  handleActionsHandle = (options: CalcDotPositionOpt) => {
+  private handleActionsHandle = (options: CalcDotPositionOpt) => {
     this.model.calcDotPosition(options);
-
   }
 
 }

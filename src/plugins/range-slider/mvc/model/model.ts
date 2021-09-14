@@ -25,9 +25,13 @@ class Model {
   private gridNum: number;
   private gridStep: number;
   private grid: boolean;
+  private fromStartFl: boolean;
+  private toStartFl: boolean;
 
   onChangeFrom: Function;
   onChangeTo: Function;
+  onChange: Function;
+  onUpdate: Function;
 
 
   options: RangeSliderOptions;
@@ -50,7 +54,13 @@ class Model {
       grid: false,      // Шкала выключена
       gridSnap: false,  // точка переходит по ризкам на Шкале
       gridNum: 4,       // интервал в шкале
-      gridStep: 0       // Шаг шкалы
+      gridStep: 0,      // Шаг шкалы
+      // eslint-disable-next-line no-unused-vars
+      onStart: (data: RangeSliderOptions) => { },
+      // eslint-disable-next-line no-unused-vars
+      onChange: (data: RangeSliderOptions) => { },
+      // eslint-disable-next-line no-unused-vars
+      onUpdate: (data: RangeSliderOptions) => { },
     }, options);
   }
 
@@ -58,6 +68,9 @@ class Model {
 
     // тут можно произвести проверку входных данных на ошибки и 
     // попытаться их исправить
+
+    this.fromStartFl = true;
+    this.toStartFl = true;
 
     this.type = options.type;
     this.orientation = options.orientation;
@@ -72,8 +85,16 @@ class Model {
     this.gridNum = options.gridNum;
     this.gridStep = options.gridStep;
 
-    const DTipPrefix = options.tipPrefix.trim(); // убераем пробелы
-    this.tipPrefix = DTipPrefix.substr(0, 3); // префикс МАКС 3 символа.
+    const DTipPrefix = options.tipPrefix.trim();  // убераем пробелы
+    this.tipPrefix = DTipPrefix.substr(0, 3);     // префикс МАКС 3 символа.
+
+    this.onChange = options.onChange;
+    this.onUpdate = options.onUpdate;
+
+    this.valFrom = this.from;
+    this.valTo = this.to;
+
+    options.onStart(this.getOptions());
   }
 
 
@@ -85,6 +106,11 @@ class Model {
       valFrom: this.valFrom
     });
 
+    if (!this.fromStartFl) {
+      //console.log('setFrom');
+      this.onChange(this.getOptions());
+    }
+    this.fromStartFl = false;
   }
 
   set setTo(val: number) {
@@ -94,6 +120,12 @@ class Model {
       toP: val,
       valTo: this.valTo
     });
+
+    if (!this.toStartFl) {
+      //console.log('setTo');
+      this.onChange(this.getOptions());
+    }
+    this.toStartFl = false;
   }
 
   get getFrom() {
@@ -104,6 +136,67 @@ class Model {
     return this.toP;
   }
 
+
+  setOptions(options: RangeSliderOptions) {
+
+    const key = Object.keys(options);
+    const val = Object.values(options);
+
+
+    for (let i = 0; i < key.length; i++) {
+      switch (key[i]) {
+        case 'type':
+          this.type = val[i];
+          break;
+
+        case 'orientation':
+          this.orientation = val[i];
+          break;
+
+        case 'theme':
+          this.theme = val[i];
+          break;
+
+        case 'min':
+          this.min = val[i];
+          break;
+
+        case 'max':
+          this.max = val[i];
+          break;
+
+        case 'from':
+          this.from = val[i];
+          break;
+
+        case 'to':
+          this.to = val[i];
+          break;
+
+        case 'grid':
+          this.grid = val[i];
+          break;
+
+        case 'gridSnap':
+          this.gridSnap = val[i];
+          break;
+
+        case 'tipPrefix':
+          this.tipPrefix = val[i];
+          break;
+
+        case 'gridNum':
+          this.gridNum = val[i];
+          break;
+        case 'gridStep':
+          this.gridStep = val[i];
+          break;
+        default:
+          break;
+      }
+    }
+
+  }
 
   getOptions() {
     return {
@@ -135,8 +228,8 @@ class Model {
     this.wrapWidth = wrapWidth;
     this.dotP = fromWidth * 100 / wrapWidth; // XXXXXXXXXXXXXXXXXXX
 
-    this.valP = this.getRange() / 100;            // один процент
-    // this.stepP = this.step / this.valP;                 // количество процентов в шаге
+    this.valP = this.getRange() / 100;                  // один процент
+    // this.stepP = this.step / this.valP;              // количество процентов в шаге
     this.setFrom = (this.from - this.min) / this.valP;  // позиция левой точки в процентах
     this.setTo = (this.to - this.min) / this.valP;      // позиция правой точки в процентах
 
@@ -149,12 +242,12 @@ class Model {
     let interval = 0;
     let step = 0;
 
-    if (this.gridStep && this.gridNum == 4) {  // если задан Шаг а интервал по умолчанию стоит
+    if (this.gridStep && this.gridNum == 4) {     // если задан Шаг а интервал по умолчанию стоит
       step = this.gridStep;
-      interval = this.getRange() / step; // находим новый интервал
-    } else {                                   // делаем только по интервалу
+      interval = this.getRange() / step;          // находим новый интервал
+    } else {                                      // делаем только по интервалу
       interval = this.gridNum;
-      step = this.getRange() / interval; // находим шаг
+      step = this.getRange() / interval;          // находим шаг
     }
 
     this.gridStep = step;
@@ -220,7 +313,7 @@ class Model {
     if (this.type == 'single') {
       this.setFrom = pointP;
     }
-    else if (pointP > this.getTo) {            // если это значение больше чем To
+    else if (pointP > this.getTo) {       // если это значение больше чем To
       this.setTo = pointP;                // To  на эту точку
     } else if (pointP > this.getFrom) {   // если меньше To но больше From
       const To = this.getTo - pointP;     // из To вычетаем Val
