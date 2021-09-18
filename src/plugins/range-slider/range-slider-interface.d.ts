@@ -10,8 +10,11 @@ interface RangeSliderOptions {
   grid?: boolean;
   gridSnap?: boolean;
   tipPrefix?: string;
+  tipMinMax?: boolean;
+  tipFromTo?: boolean;
   gridNum?: number;
   gridStep?: number;
+  disabled?: boolean;
   onStart?: Function;
   onChange?: Function;
   onUpdate?: Function;

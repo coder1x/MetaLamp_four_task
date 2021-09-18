@@ -1,8 +1,12 @@
-import { RangeSliderOptions, CalcDotPositionOpt } from './model.d';
+import { RangeSliderOptions, CalcDotPositionOpt, PROP } from './model.d';
+
+import { Observer, TOB } from '../../observer';
 
 
-class Model {
 
+class Model extends Observer {
+
+  // --- данные конфига
   private type: string;
   private orientation: string;
   private theme: string;
@@ -10,6 +14,17 @@ class Model {
   private max: number;
   private from: number;
   private to: number;
+  private tipPrefix: string;
+  private tipMinMax: boolean;
+  private tipFromTo: boolean;
+  private gridSnap: boolean;
+  private gridNum: number;
+  private gridStep: number;
+  private grid: boolean;
+  private disabled: boolean;
+
+
+  // --- внутренние данные. 
   private valP: number;
   private fromP: number;
   private toP: number;
@@ -20,28 +35,30 @@ class Model {
   private valFrom: number;
   private valTo: number;
   private wrapWidth: number;
-  private tipPrefix: string;
-  private gridSnap: boolean;
-  private gridNum: number;
-  private gridStep: number;
-  private grid: boolean;
-  private fromStartFl: boolean;
-  private toStartFl: boolean;
 
-  onChangeFrom: Function;
-  onChangeTo: Function;
+  private MAX_VAL = 999999999999999;
+  private MIN_VAL = -999999999999999;
+
+
+  // private fromStartFl: boolean;
+  // private toStartFl: boolean;
+
+  // onChangeFrom: Function;
+  // onChangeTo: Function;
   onChange: Function;
   onUpdate: Function;
+  onStart: Function;
 
 
   options: RangeSliderOptions;
 
   constructor(options: RangeSliderOptions) {
+    super();
 
-    this.createProperties(this.getConfig(options));
+    this.createProperties(this.defaultConfig(options));
   }
 
-  private getConfig(options: RangeSliderOptions) {
+  private defaultConfig(options: RangeSliderOptions) {
     return Object.assign({
       type: 'single',   // тип - одна или две точки
       orientation: 'horizontal',  // положение слайдера
@@ -51,150 +68,29 @@ class Model {
       from: 1,          // позиция первой точки
       to: 2,            // позиция второй точки
       tipPrefix: '',    // Префикс для подсказок не больше 3 символов.
+      tipMinMax: true,  // подсказки включены
+      tipFromTo: true,  // подсказки точек включены
       grid: false,      // Шкала выключена
       gridSnap: false,  // точка переходит по ризкам на Шкале
       gridNum: 4,       // интервал в шкале
       gridStep: 0,      // Шаг шкалы
-      // eslint-disable-next-line no-unused-vars
-      onStart: (data: RangeSliderOptions) => { },
-      // eslint-disable-next-line no-unused-vars
-      onChange: (data: RangeSliderOptions) => { },
-      // eslint-disable-next-line no-unused-vars
-      onUpdate: (data: RangeSliderOptions) => { },
+      disabled: false,  // Включен или Выключен.
     }, options);
   }
 
   private createProperties(options: RangeSliderOptions) {
 
-    // тут можно произвести проверку входных данных на ошибки и 
-    // попытаться их исправить
+    // eslint-disable-next-line no-unused-vars
+    const emptyFun = (data: RangeSliderOptions) => { };
 
-    this.fromStartFl = true;
-    this.toStartFl = true;
+    this.onChange = options.onChange ?? emptyFun;
+    this.onUpdate = options.onUpdate ?? emptyFun;
+    this.onStart = options.onStart ?? emptyFun;
 
-    this.type = options.type;
-    this.orientation = options.orientation;
-    this.theme = options.theme;
-    this.min = options.min;
-    this.max = options.max;
-    this.to = options.to;
-    this.from = options.from;
-    this.gridSnap = options.gridSnap;
-    this.grid = options.grid;
+    this.update(options);
 
-    this.gridNum = options.gridNum;
-    this.gridStep = options.gridStep;
+    this.onStart(this.getOptions());
 
-    const DTipPrefix = options.tipPrefix.trim();  // убераем пробелы
-    this.tipPrefix = DTipPrefix.substr(0, 3);     // префикс МАКС 3 символа.
-
-    this.onChange = options.onChange;
-    this.onUpdate = options.onUpdate;
-
-    this.valFrom = this.from;
-    this.valTo = this.to;
-
-    options.onStart(this.getOptions());
-  }
-
-
-  set setFrom(val: number) {
-    this.fromP = val;
-    this.valFrom = +(this.min + (val * this.valP)).toFixed(0);
-    this.onChangeFrom({
-      fromP: val,
-      valFrom: this.valFrom
-    });
-
-    if (!this.fromStartFl) {
-      //console.log('setFrom');
-      this.onChange(this.getOptions());
-    }
-    this.fromStartFl = false;
-  }
-
-  set setTo(val: number) {
-    this.toP = val;
-    this.valTo = +(this.min + (val * this.valP)).toFixed(0);
-    this.onChangeTo({
-      toP: val,
-      valTo: this.valTo
-    });
-
-    if (!this.toStartFl) {
-      //console.log('setTo');
-      this.onChange(this.getOptions());
-    }
-    this.toStartFl = false;
-  }
-
-  get getFrom() {
-    return this.fromP;
-  }
-
-  get getTo() {
-    return this.toP;
-  }
-
-
-  setOptions(options: RangeSliderOptions) {
-
-    const key = Object.keys(options);
-    const val = Object.values(options);
-
-
-    for (let i = 0; i < key.length; i++) {
-      switch (key[i]) {
-        case 'type':
-          this.type = val[i];
-          break;
-
-        case 'orientation':
-          this.orientation = val[i];
-          break;
-
-        case 'theme':
-          this.theme = val[i];
-          break;
-
-        case 'min':
-          this.min = val[i];
-          break;
-
-        case 'max':
-          this.max = val[i];
-          break;
-
-        case 'from':
-          this.from = val[i];
-          break;
-
-        case 'to':
-          this.to = val[i];
-          break;
-
-        case 'grid':
-          this.grid = val[i];
-          break;
-
-        case 'gridSnap':
-          this.gridSnap = val[i];
-          break;
-
-        case 'tipPrefix':
-          this.tipPrefix = val[i];
-          break;
-
-        case 'gridNum':
-          this.gridNum = val[i];
-          break;
-        case 'gridStep':
-          this.gridStep = val[i];
-          break;
-        default:
-          break;
-      }
-    }
 
   }
 
@@ -207,165 +103,581 @@ class Model {
       max: this.max,
       to: this.to,
       from: this.from,
-      fromX: this.getFrom,
-      toX: this.getTo,
-      valFrom: this.valFrom,
-      valTo: this.valTo,
       tipPrefix: this.tipPrefix,
+      tipMinMax: this.tipMinMax,
+      tipFromTo: this.tipFromTo,
       grid: this.grid,
       gridSnap: this.gridSnap,
       gridNum: this.gridNum,
       gridStep: this.gridStep,
+      disabled: this.disabled,
     };
   }
 
-  getRange() {
-    return this.max - this.min;
-  }
 
-  calcPosition(fromWidth: number, wrapWidth: number) {
+  update(options: RangeSliderOptions) {
 
-    this.wrapWidth = wrapWidth;
-    this.dotP = fromWidth * 100 / wrapWidth; // XXXXXXXXXXXXXXXXXXX
+    this.setRangeData(options);
+    this.setDotData(options);
+    this.setGridData(options);
+    this.setOrientationData(options);
+    this.setThemeData(options);
+    this.setHintsData(options);
+    this.setDisabledData(options);
 
-    this.valP = this.getRange() / 100;                  // один процент
-    // this.stepP = this.step / this.valP;              // количество процентов в шаге
-    this.setFrom = (this.from - this.min) / this.valP;  // позиция левой точки в процентах
-    this.setTo = (this.to - this.min) / this.valP;      // позиция правой точки в процентах
-
-    this.limitFrom = this.getFrom;
-    this.limitTo = this.getTo;
+    // при первом старте не вызываем
+    //this.onUpdate(this.getOptions());
   }
 
 
-  calcGridNumStep() {
-    let interval = 0;
-    let step = 0;
+  propertiesValidation(properties: string[], obj: RangeSliderOptions) {
+    const prop = properties as Array<keyof typeof obj>;
+    let flag = false;
+    for (let item of prop) {
+      const dataT = obj[item] ?? null;
+      if (dataT != null) {
+        flag = true;
+        break;
+      }
+    }
+    if (!flag) return false;
+    return true;
+  }
 
-    if (this.gridStep && this.gridNum == 4) {     // если задан Шаг а интервал по умолчанию стоит
-      step = this.gridStep;
-      interval = this.getRange() / step;          // находим новый интервал
-    } else {                                      // делаем только по интервалу
-      interval = this.gridNum;
-      step = this.getRange() / interval;          // находим шаг
+
+  isEmptu(data: PROP) {
+    return (data ?? null) != null ? true : false;
+  }
+
+  checkValue(data: PROP, str: string) {
+    const _this = this;
+    const key = str as keyof typeof _this;
+    const val = this[key];
+    const valF = (val ?? null) != null ? true : false;
+    if (!this.isEmptu(data)) {
+      return valF ? val : null;
+    }
+    return data;
+  }
+
+
+
+  /*
+  min: 0,  // минимальное значение на школе
+  max: 10, // максимальное значение на школе
+
+  -проверяем что эти свойства есть и они не пустые
+  если нет не одного свойства то return false;
+  если одно свойство есть а другого нет то ищим 
+  в свойствах Модели - проверяем есть ли данные там
+  если есть то Валид. если нет То return false;
+  -проверяем на предельно допустимые значения. 
+  -Проверяем что min меньше max.
+*/
+  setRangeData(options: RangeSliderOptions): boolean {
+
+    const properties = ['min', 'max'];
+    // проверяем есть ли вообще для нас обнавления 
+    if (!this.propertiesValidation(properties, options)) return false;
+
+    let min: PROP = options.min;
+    let max: PROP = options.max;
+
+    min = this.checkValue(min, 'min') as PROP;
+    if (min == null) return false;
+
+    max = this.checkValue(max, 'max') as PROP;
+    if (max == null) return false;
+
+    if (min < this.MIN_VAL || max > this.MAX_VAL) return false;
+
+    if (min > max) {
+      const temp = min;
+      min = max;
+      max = temp;
     }
 
-    this.gridStep = step;
-    this.gridNum = interval;
+    // нужно првоерять чно новые данные отличаються от тех которые есть в модели.
+    if (min != this.min || max != this.max) {
+      this.min = +min;
+      this.max = +max;
 
-    return interval;
-  }
+      // вызываем оповещение подписчиков
 
-  calcPositionGrid(value: number) {
-    value = value + this.gridStep;
-    const position = ((value - this.min) * 100) / this.getRange();
-    return { value, position };
-  }
+      return true;
+    }
 
-
-  calcWidthP(width: number) {
-    return (width * 100 / this.wrapWidth) / 2;
-  }
-
-  calcPositionTipFrom(tipFrom: number) {
-    const tipFromP = this.calcWidthP(tipFrom - 4);
-    const tipFromX = this.getFrom - tipFromP;
-    return tipFromX;
-  }
-
-  calcPositionTipSingle(widthSingle: number) {
-    const line = (this.getTo - this.getFrom) / 2;
-    const centerFromTo = this.getFrom + line;
-    const tipSingleP = this.calcWidthP(widthSingle);
-    const center = centerFromTo - tipSingleP;
-    return center;
-  }
-
-  calcPositionTipTo(tipTo: number) {
-    const tipToP = this.calcWidthP(tipTo - 4);
-    const tipToX = this.getTo - tipToP;
-    return tipToX;
+    return false;
   }
 
 
 
-  calcPositionBar() {
-    let barX = 0;
-    let widthBar = 0;
 
-    if (this.type == 'double') {
-      barX = this.getFrom;
-      widthBar = this.getTo - this.getFrom;
+  /*
+  
+    type: 'single',   // тип - одна или две точки
+    from: 1,          // позиция первой точки
+    to: 2,            // позиция второй точки
+
+    -проверяем на существование данных
+    -проверяем что type корректный
+
+    --для одной точки
+    смотрим что бы from был больше min и меньше max
+
+    --для двух точек
+    смотрим что бы from был меньше чем to 
+    если нет то поменять их значения местами
+
+    -проверяем что точки не выходят за границы
+  */
+  setDotData(options: RangeSliderOptions): boolean {
+
+    const properties = ['type', 'from', 'to'];
+    // проверяем есть ли вообще для нас обнавления 
+    if (!this.propertiesValidation(properties, options)) return false;
+
+    let type: PROP = options.type;
+    let from: PROP = options.from;
+    let to: PROP = options.to;
+
+    // проверяем что необходимые нам данные есть.
+    if (!this.isEmptu(this.min)) return false;
+    if (!this.isEmptu(this.max)) return false;
+
+    type = this.checkValue(type, 'type') as PROP;
+    if (type == null) return false;
+
+    if (type == 'single' || type == 'double') {
+      this.type = type;
+    } else return false;
+
+    from = this.checkValue(from, 'from') as PROP;
+    if (from == null) return false;
+
+    if (from >= this.min && from <= this.max) {
+      this.from = +from;
+    } else return false;
+
+    if (type == 'double') // проверяем from и to 
+    {
+      if (from > to) {
+        const temp = from;
+        from = to;
+        to = temp;
+      }
+
+      to = this.checkValue(to, 'to') as PROP;
+      if (to == null) return false;
+
+      if (to <= this.max) {
+        this.to = to as number;
+      } else return false;
+    }
+
+    // вызываем оповещение подписчиков
+
+    return true;
+  }
+
+
+  setGridData(options: RangeSliderOptions): boolean {
+
+    const properties = ['grid', 'gridSnap', 'gridNum', 'gridStep'];
+    // проверяем есть ли вообще для нас обнавления 
+    if (!this.propertiesValidation(properties, options)) return false;
+
+    // тут нужно ещё проверять есть ли данные в min max - потому что без них не построить.
+
+    // grid: false,      // Шкала выключена
+    // gridSnap: false,  // точка переходит по ризкам на Шкале
+    // gridNum: 4,       // интервал в шкале
+    // gridStep: 0,      // Шаг шкалы
+
+    return true;
+  }
+
+
+  // orientation: 'horizontal',  // положение слайдера
+  setOrientationData(options: RangeSliderOptions): boolean {
+
+    const properties = ['orientation'];
+    // проверяем есть ли вообще для нас обнавления 
+    if (!this.propertiesValidation(properties, options)) return false;
+
+    const orientation = options.orientation.replace(/\s/g, '');
+
+    if (orientation == 'horizontal' || orientation == 'vertical') {
+      this.orientation = orientation;
+    } else return false;
+
+
+    // вызываем оповещение подписчиков
+
+    return true;
+  }
+
+
+  // theme: 'base',    // тема слайдера
+  setThemeData(options: RangeSliderOptions): boolean {
+
+    const properties = ['theme'];
+    // проверяем есть ли вообще для нас обнавления 
+    if (!this.propertiesValidation(properties, options)) return false;
+
+    const theme = options.theme.replace(/\s/g, '');
+
+    if (theme.length <= 20) {
+      this.theme = theme;
+    } else return false;
+
+
+    // вызываем оповещение подписчиков
+
+    return true;
+  }
+
+
+
+
+  /*
+    tipPrefix: '',    // Префикс для подсказок не больше 3 символов.
+    tipMinMax?: boolean;
+    tipFromTo?: boolean;
+  
+    tipPrefix - проверяем что он вообще существует, 
+    если нет то берём из Модели а если и там нет то не чего не делать с ним
+    Если tipPrefix есть то убираем пробелы, укарачиваем до 3 символов.
+
+    tipMinMax - проверяем что он вообще существует, 
+    если нет то берём из Модели а если и там нет то устанавливаем значение true;
+
+    tipFromTo - проверяем что он вообще существует, 
+    если нет то берём из Модели а если и там нет то устанавливаем значение true;
+  */
+  setHintsData(options: RangeSliderOptions): boolean {
+
+    const properties = ['tipPrefix', 'tipMinMax', 'tipFromTo'];
+    // проверяем есть ли вообще для нас обнавления 
+    if (!this.propertiesValidation(properties, options)) return false;
+
+    let tipPrefix: PROP = options.tipPrefix;
+    let tipMinMax: PROP = options.tipMinMax;
+    let tipFromTo: PROP = options.tipFromTo;
+
+    tipPrefix = this.checkValue(tipPrefix, 'tipPrefix') as PROP;
+    if (tipPrefix != null) {
+      this.tipPrefix = String(tipPrefix).replace(/\s/g, '').substr(0, 3);
     } else {
-      widthBar = this.getFrom;
+      this.tipPrefix = '';
     }
 
-    return { barX, widthBar };
+    tipMinMax = this.checkValue(tipMinMax, 'tipMinMax') as PROP;
+    if (tipMinMax != null) {
+      this.tipMinMax = tipMinMax as boolean;
+    } else {
+      this.tipMinMax = true;
+    }
+
+    tipFromTo = this.checkValue(tipFromTo, 'tipMinMax') as PROP;
+    if (tipFromTo != null) {
+      this.tipFromTo = tipFromTo as boolean;
+    } else {
+      this.tipFromTo = true;
+    }
+
+    // вызываем оповещение подписчиков
+
+    return true;
   }
 
 
-  clickLine = (pointX: number, wrapWidth: number) => {
+  // disabled: false, // Включен или Выключен. 
+  setDisabledData(options: RangeSliderOptions): boolean {
 
-    this.wrapWidth = wrapWidth;
-    const oneP = wrapWidth / 100; // один процент от всей школы
-    const pointP = pointX / oneP; // кол. процентов в области где кликнули
+    const properties = ['disabled'];
+    // проверяем есть ли вообще для нас обнавления 
+    if (!this.propertiesValidation(properties, options)) return false;
 
-    if (this.type == 'single') {
-      this.setFrom = pointP;
-    }
-    else if (pointP > this.getTo) {       // если это значение больше чем To
-      this.setTo = pointP;                // To  на эту точку
-    } else if (pointP > this.getFrom) {   // если меньше To но больше From
-      const To = this.getTo - pointP;     // из To вычетаем Val
-      const From = pointP - this.getFrom; // из Val вычетаем From
-      From > To ? this.setTo = pointP : this.setFrom = pointP; // то число что меньше та точка и ближе
-    } else {                              // Если Val меньше From то подвигать From
-      this.setFrom = pointP;
-    }
-    this.limitTo = this.getTo;
-    this.limitFrom = this.getFrom;
+    // сделать доп проверку потому что при передаче null в конфиге 
+    // у нас записываеться undefine
+    this.disabled = options.disabled;
+
+    // вызываем оповещение подписчиков
+
+    return true;
   }
 
 
-  calcDotPosition(options: CalcDotPositionOpt) {
 
-    //this.dotP = options.dotWidth * 100 / options.wrapWidth; // ширина точки в процентах
-    this.wrapWidth = options.wrapWidth;
-    const num = options.clientX - options.shiftX - options.wrapLeft;
-    let percent = num * 100 / this.wrapWidth;
+  // set setFrom(val: number) {
+  //   this.fromP = val;
+  //   this.valFrom = +(this.min + (val * this.valP)).toFixed(0);
+  //   this.onChangeFrom({
+  //     fromP: val,
+  //     valFrom: this.valFrom
+  //   });
 
-    if (options.type == 'From') {
-      this.limitFrom = percent;
-    }
-    else {
-      this.limitTo = percent;
-    }
+  //   if (!this.fromStartFl) {
+  //     //console.log('setFrom');
+  //     this.onChange(this.getOptions());
+  //   }
+  //   this.fromStartFl = false;
+  // }
 
-    const limitDot = !(this.limitFrom > this.limitTo);
+  // set setTo(val: number) {
+  //   this.toP = val;
+  //   this.valTo = +(this.min + (val * this.valP)).toFixed(0);
+  //   this.onChangeTo({
+  //     toP: val,
+  //     valTo: this.valTo
+  //   });
 
-    if (percent < 0) percent = 0;
-    if (percent > 100) percent = 100;
+  //   if (!this.toStartFl) {
+  //     //console.log('setTo');
+  //     this.onChange(this.getOptions());
+  //   }
+  //   this.toStartFl = false;
+  // }
 
-    const type = this.type == 'single';
+  // get getFrom() {
+  //   return this.fromP;
+  // }
 
-    if (type) {
-      this.setFrom = percent;
-    } else if (limitDot) {
-      this.fromTo = percent;
+  // get getTo() {
+  //   return this.toP;
+  // }
 
-      if (options.type == 'From') {
-        this.setFrom = percent;
-      }
-      else {
-        this.setTo = percent;
-      }
 
-    }
-    else {
-      this.setFrom = this.fromTo;
-      this.setTo = this.fromTo;
-    }
-  }
+  // // setOptions(options: RangeSliderOptions) {
+
+  // //   const key = Object.keys(options);
+  // //   const val = Object.values(options);
+
+
+  // //   for (let i = 0; i < key.length; i++) {
+  // //     switch (key[i]) {
+  // //       case 'type':
+  // //         this.type = val[i];
+  // //         break;
+
+  // //       case 'orientation':
+  // //         this.orientation = val[i];
+  // //         break;
+
+  // //       case 'theme':
+  // //         this.theme = val[i];
+  // //         break;
+
+  // //       case 'min':
+  // //         this.min = val[i];
+  // //         break;
+
+  // //       case 'max':
+  // //         this.max = val[i];
+  // //         break;
+
+  // //       case 'from':
+  // //         this.from = val[i];
+  // //         break;
+
+  // //       case 'to':
+  // //         this.to = val[i];
+  // //         break;
+
+  // //       case 'grid':
+  // //         this.grid = val[i];
+  // //         break;
+
+  // //       case 'gridSnap':
+  // //         this.gridSnap = val[i];
+  // //         break;
+
+  // //       case 'tipPrefix':
+  // //         this.tipPrefix = val[i];
+  // //         break;
+
+  // //       case 'gridNum':
+  // //         this.gridNum = val[i];
+  // //         break;
+  // //       case 'gridStep':
+  // //         this.gridStep = val[i];
+  // //         break;
+  // //       default:
+  // //         break;
+  // //     }
+  // //   }
+
+  // // }
+
+  // getOptions() {
+  //   return {
+  //     type: this.type,
+  //     orientation: this.orientation,
+  //     theme: this.theme,
+  //     min: this.min,
+  //     max: this.max,
+  //     to: this.to,
+  //     from: this.from,
+  //     fromX: this.getFrom,
+  //     toX: this.getTo,
+  //     valFrom: this.valFrom,
+  //     valTo: this.valTo,
+  //     tipPrefix: this.tipPrefix,
+  //     grid: this.grid,
+  //     gridSnap: this.gridSnap,
+  //     gridNum: this.gridNum,
+  //     gridStep: this.gridStep,
+  //   };
+  // }
+
+  // getRange() {
+  //   return this.max - this.min;
+  // }
+
+  // calcPosition(fromWidth: number, wrapWidth: number) {
+
+  //   this.wrapWidth = wrapWidth;
+  //   this.dotP = fromWidth * 100 / wrapWidth; // XXXXXXXXXXXXXXXXXXX
+
+  //   this.valP = this.getRange() / 100;                  // один процент
+  //   // this.stepP = this.step / this.valP;              // количество процентов в шаге
+  //   this.setFrom = (this.from - this.min) / this.valP;  // позиция левой точки в процентах
+  //   this.setTo = (this.to - this.min) / this.valP;      // позиция правой точки в процентах
+
+  //   this.limitFrom = this.getFrom;
+  //   this.limitTo = this.getTo;
+  // }
+
+
+  // calcGridNumStep() {
+  //   let interval = 0;
+  //   let step = 0;
+
+  //   if (this.gridStep && this.gridNum == 4) {     // если задан Шаг а интервал по умолчанию стоит
+  //     step = this.gridStep;
+  //     interval = this.getRange() / step;          // находим новый интервал
+  //   } else {                                      // делаем только по интервалу
+  //     interval = this.gridNum;
+  //     step = this.getRange() / interval;          // находим шаг
+  //   }
+
+  //   this.gridStep = step;
+  //   this.gridNum = interval;
+
+  //   return interval;
+  // }
+
+  // calcPositionGrid(value: number) {
+  //   value = value + this.gridStep;
+  //   const position = ((value - this.min) * 100) / this.getRange();
+  //   return { value, position };
+  // }
+
+
+  // calcWidthP(width: number) {
+  //   return (width * 100 / this.wrapWidth) / 2;
+  // }
+
+  // calcPositionTipFrom(tipFrom: number) {
+  //   const tipFromP = this.calcWidthP(tipFrom - 4);
+  //   const tipFromX = this.getFrom - tipFromP;
+  //   return tipFromX;
+  // }
+
+  // calcPositionTipSingle(widthSingle: number) {
+  //   const line = (this.getTo - this.getFrom) / 2;
+  //   const centerFromTo = this.getFrom + line;
+  //   const tipSingleP = this.calcWidthP(widthSingle);
+  //   const center = centerFromTo - tipSingleP;
+  //   return center;
+  // }
+
+  // calcPositionTipTo(tipTo: number) {
+  //   const tipToP = this.calcWidthP(tipTo - 4);
+  //   const tipToX = this.getTo - tipToP;
+  //   return tipToX;
+  // }
+
+
+
+  // calcPositionBar() {
+  //   let barX = 0;
+  //   let widthBar = 0;
+
+  //   if (this.type == 'double') {
+  //     barX = this.getFrom;
+  //     widthBar = this.getTo - this.getFrom;
+  //   } else {
+  //     widthBar = this.getFrom;
+  //   }
+
+  //   return { barX, widthBar };
+  // }
+
+
+  // clickLine = (pointX: number, wrapWidth: number) => {
+
+  //   this.wrapWidth = wrapWidth;
+  //   const oneP = wrapWidth / 100; // один процент от всей школы
+  //   const pointP = pointX / oneP; // кол. процентов в области где кликнули
+
+  //   if (this.type == 'single') {
+  //     this.setFrom = pointP;
+  //   }
+  //   else if (pointP > this.getTo) {       // если это значение больше чем To
+  //     this.setTo = pointP;                // To  на эту точку
+  //   } else if (pointP > this.getFrom) {   // если меньше To но больше From
+  //     const To = this.getTo - pointP;     // из To вычетаем Val
+  //     const From = pointP - this.getFrom; // из Val вычетаем From
+  //     From > To ? this.setTo = pointP : this.setFrom = pointP; // то число что меньше та точка и ближе
+  //   } else {                              // Если Val меньше From то подвигать From
+  //     this.setFrom = pointP;
+  //   }
+  //   this.limitTo = this.getTo;
+  //   this.limitFrom = this.getFrom;
+  // }
+
+
+  // calcDotPosition(options: CalcDotPositionOpt) {
+
+  //   //this.dotP = options.dotWidth * 100 / options.wrapWidth; // ширина точки в процентах
+  //   this.wrapWidth = options.wrapWidth;
+  //   const num = options.clientX - options.shiftX - options.wrapLeft;
+  //   let percent = num * 100 / this.wrapWidth;
+
+  //   if (options.type == 'From') {
+  //     this.limitFrom = percent;
+  //   }
+  //   else {
+  //     this.limitTo = percent;
+  //   }
+
+  //   const limitDot = !(this.limitFrom > this.limitTo);
+
+  //   if (percent < 0) percent = 0;
+  //   if (percent > 100) percent = 100;
+
+  //   const type = this.type == 'single';
+
+  //   if (type) {
+  //     this.setFrom = percent;
+  //   } else if (limitDot) {
+  //     this.fromTo = percent;
+
+  //     if (options.type == 'From') {
+  //       this.setFrom = percent;
+  //     }
+  //     else {
+  //       this.setTo = percent;
+  //     }
+
+  //   }
+  //   else {
+  //     this.setFrom = this.fromTo;
+  //     this.setTo = this.fromTo;
+  //   }
+  // }
 
 
 }
