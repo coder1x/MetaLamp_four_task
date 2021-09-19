@@ -1,5 +1,4 @@
 import { RangeSliderOptions, CalcDotPositionOpt, PROP } from './model.d';
-
 import { Observer, TOB } from '../../observer';
 
 
@@ -22,7 +21,7 @@ class Model extends Observer {
   private gridStep: number;
   private grid: boolean;
   private disabled: boolean;
-
+  private defaultData: RangeSliderOptions;
 
   // --- внутренние данные. 
   private valP: number;
@@ -43,6 +42,8 @@ class Model extends Observer {
   // private fromStartFl: boolean;
   // private toStartFl: boolean;
 
+  private startConfFl: boolean;
+
   // onChangeFrom: Function;
   // onChangeTo: Function;
   onChange: Function;
@@ -50,7 +51,7 @@ class Model extends Observer {
   onStart: Function;
 
 
-  options: RangeSliderOptions;
+  //options: RangeSliderOptions;
 
   constructor(options: RangeSliderOptions) {
     super();
@@ -59,6 +60,9 @@ class Model extends Observer {
   }
 
   private defaultConfig(options: RangeSliderOptions) {
+
+    this.startConfFl = false;
+
     return Object.assign({
       type: 'single',   // тип - одна или две точки
       orientation: 'horizontal',  // положение слайдера
@@ -72,7 +76,7 @@ class Model extends Observer {
       tipFromTo: true,  // подсказки точек включены
       grid: false,      // Шкала выключена
       gridSnap: false,  // точка переходит по ризкам на Шкале
-      gridNum: 4,       // интервал в шкале
+      gridNum: 0,       // интервал в шкале
       gridStep: 0,      // Шаг шкалы
       disabled: false,  // Включен или Выключен.
     }, options);
@@ -89,8 +93,8 @@ class Model extends Observer {
 
     this.update(options);
 
-    this.onStart(this.getOptions());
-
+    this.defaultData = this.getOptions();
+    this.onStart(this.defaultData);
 
   }
 
@@ -114,19 +118,76 @@ class Model extends Observer {
     };
   }
 
+  reset() {
+    const op = this.defaultData;
+    // тут будут все вызовы нотифая по конфигу
+    // которые будут запущены последовательно
+
+    this.notifyOB({
+      key: 'RangeData',
+      min: op.min,
+      max: op.max,
+    });
+
+    this.notifyOB({
+      key: 'DotData',
+      type: op.type,
+      from: op.from,
+      to: op.to,
+    });
+
+    this.notifyOB({
+      key: 'GridSnapData',
+      gridSnap: op.gridSnap,
+    });
+
+    this.notifyOB({
+      key: 'GridData',
+      grid: op.grid,
+      gridNum: op.gridNum,
+      gridStep: op.gridStep,
+    });
+
+    this.notifyOB({
+      key: 'OrientationData',
+      orientation: op.orientation,
+    });
+
+    this.notifyOB({
+      key: 'ThemeData',
+      theme: op.theme,
+    });
+
+    this.notifyOB({
+      key: 'HintsData',
+      tipPrefix: op.tipPrefix,
+      tipMinMax: op.tipMinMax,
+      tipFromTo: op.tipFromTo,
+    });
+
+    this.notifyOB({
+      key: 'DisabledData',
+      disabled: op.disabled,
+    });
+
+
+  }
 
   update(options: RangeSliderOptions) {
 
     this.setRangeData(options);
     this.setDotData(options);
     this.setGridData(options);
+    this.setGridSnapData(options);
     this.setOrientationData(options);
     this.setThemeData(options);
     this.setHintsData(options);
     this.setDisabledData(options);
 
     // при первом старте не вызываем
-    //this.onUpdate(this.getOptions());
+    if (this.startConfFl)
+      this.onUpdate(this.getOptions());
+    this.startConfFl = true;
   }
 
 
@@ -203,6 +264,11 @@ class Model extends Observer {
       this.max = +max;
 
       // вызываем оповещение подписчиков
+      this.notifyOB({
+        key: 'RangeData',
+        min: this.min,
+        max: this.max,
+      });
 
       return true;
     }
@@ -245,12 +311,13 @@ class Model extends Observer {
     if (!this.isEmptu(this.min)) return false;
     if (!this.isEmptu(this.max)) return false;
 
-    type = this.checkValue(type, 'type') as PROP;
-    if (type == null) return false;
-
     if (type == 'single' || type == 'double') {
       this.type = type;
-    } else return false;
+    } else {
+      if (this.isEmptu(this.type)) {
+        type = this.type;
+      } else return false;
+    }
 
     from = this.checkValue(from, 'from') as PROP;
     if (from == null) return false;
@@ -277,22 +344,99 @@ class Model extends Observer {
 
     // вызываем оповещение подписчиков
 
+    this.notifyOB({
+      key: 'DotData',
+      type: this.type,
+      from: this.from,
+      to: this.to,
+    });
+
     return true;
   }
 
 
+
+
+
+  // gridSnap: false,  // точка переходит по ризкам на Шкале
+  setGridSnapData(options: RangeSliderOptions): boolean {
+
+    const properties = ['gridSnap'];
+    // проверяем есть ли вообще для нас обнавления 
+
+    if (!this.propertiesValidation(properties, options)) {
+      if (this.gridSnap == undefined)
+        this.gridSnap = false;
+      return false;
+    }
+
+    this.gridSnap = options.gridSnap;
+
+    // вызываем оповещение подписчиков
+    this.notifyOB({
+      key: 'GridSnapData',
+      gridSnap: this.gridSnap,
+    });
+    return true;
+  }
+
+
+  /*
+  
+  grid: false,      // Шкала выключена
+  gridNum: 4,       // интервал в шкале
+  gridStep: 0,      // Шаг шкалы 
+
+  нужно проверять есть ли данные в min max - потому что без них не построить.
+
+gridStep - не должен привышать max - min = 
+
+gridNum >= 1
+
+  */
   setGridData(options: RangeSliderOptions): boolean {
 
-    const properties = ['grid', 'gridSnap', 'gridNum', 'gridStep'];
+    const properties = ['grid', 'gridNum', 'gridStep'];
     // проверяем есть ли вообще для нас обнавления 
     if (!this.propertiesValidation(properties, options)) return false;
 
-    // тут нужно ещё проверять есть ли данные в min max - потому что без них не построить.
+    let grid: PROP = options.grid;
+    let gridNum: PROP = options.gridNum;
+    let gridStep: PROP = options.gridStep;
 
-    // grid: false,      // Шкала выключена
-    // gridSnap: false,  // точка переходит по ризкам на Шкале
-    // gridNum: 4,       // интервал в шкале
-    // gridStep: 0,      // Шаг шкалы
+    grid = this.checkValue(grid, 'grid') as PROP ?? false;
+    this.grid = Boolean(grid);
+
+
+    if (!this.isEmptu(this.min) || !this.isEmptu(this.max)) return false;
+
+    gridNum = this.checkValue(gridNum, 'gridNum') as PROP ?? 0;
+    gridStep = this.checkValue(gridStep, 'gridStep') as PROP ?? 0;
+
+    const long = this.max - this.min;
+
+    if (gridStep > long) {
+      gridStep = long;
+    }
+
+    if (gridNum && gridStep) {
+      gridStep = 0;
+    } else if (!gridNum && !gridStep) {
+      gridNum = 4;
+    }
+
+    this.gridNum = +gridNum;
+    this.gridStep = +gridStep;
+
+
+
+    // вызываем оповещение подписчиков
+    this.notifyOB({
+      key: 'GridData',
+      grid: this.grid,
+      gridNum: this.gridNum,
+      gridStep: this.gridStep,
+    });
 
     return true;
   }
@@ -313,6 +457,10 @@ class Model extends Observer {
 
 
     // вызываем оповещение подписчиков
+    this.notifyOB({
+      key: 'OrientationData',
+      orientation: this.orientation,
+    });
 
     return true;
   }
@@ -329,10 +477,16 @@ class Model extends Observer {
 
     if (theme.length <= 20) {
       this.theme = theme;
-    } else return false;
-
+    } else {
+      console.log('параметр theme - превышает допустимое ' +
+        'количество символов (макс - 20)');
+    }
 
     // вызываем оповещение подписчиков
+    this.notifyOB({
+      key: 'ThemeData',
+      theme: this.theme,
+    });
 
     return true;
   }
@@ -387,6 +541,12 @@ class Model extends Observer {
     }
 
     // вызываем оповещение подписчиков
+    this.notifyOB({
+      key: 'HintsData',
+      tipPrefix: this.tipPrefix,
+      tipMinMax: this.tipMinMax,
+      tipFromTo: this.tipFromTo,
+    });
 
     return true;
   }
@@ -397,13 +557,20 @@ class Model extends Observer {
 
     const properties = ['disabled'];
     // проверяем есть ли вообще для нас обнавления 
-    if (!this.propertiesValidation(properties, options)) return false;
 
-    // сделать доп проверку потому что при передаче null в конфиге 
-    // у нас записываеться undefine
+    if (!this.propertiesValidation(properties, options)) {
+      if (this.disabled == undefined)
+        this.disabled = false;
+      return false;
+    }
+
     this.disabled = options.disabled;
 
     // вызываем оповещение подписчиков
+    this.notifyOB({
+      key: 'DisabledData',
+      disabled: this.disabled,
+    });
 
     return true;
   }

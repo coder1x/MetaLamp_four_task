@@ -26,17 +26,18 @@ $.fn.RangeSlider = function (options): JQuery {
 const sliderBase = $('.slider__base').RangeSlider({
   type: 'double',
   //type: 'single',
+  //theme: 'fox',
   min: -120,
   max: 800,
   from: 200,
   to: 500,
-  //disabled: false,
+  //disabled: true,
   // tipPrefix: '°C',
   // tipMinMax: false,
   // tipFromTo: false,
-  grid: true,
+  //grid: true,
   //gridSnap: true,
-  //gridNum: 10,
+  //gridNum: 6,
   gridStep: 30,
   // eslint-disable-next-line no-unused-vars
   onStart: function (data: RangeSliderOptions) {
@@ -54,10 +55,10 @@ const sliderBase = $('.slider__base').RangeSlider({
   },
   // eslint-disable-next-line no-unused-vars
   onUpdate: function (data: RangeSliderOptions) {
-    // console.log('-------------------------');
-    // console.log('onUpdate');
-    // console.log(data);
-    // console.log('-------------------------');
+    console.log('-------------------------');
+    console.log('onUpdate');
+    console.log(data);
+    console.log('-------------------------');
   }
 }).data('RangeSlider'); // вернёт объект для одного элемента
 
@@ -65,8 +66,7 @@ const sliderBase = $('.slider__base').RangeSlider({
 // sliderBase.reset();
 
 // sliderBase.update({
-//   from: 250,
-//   to: 630,
+//   theme: 'xyi',
 // });
 
 // console.log(sliderBase);

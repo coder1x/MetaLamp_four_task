@@ -15,45 +15,126 @@ class Controller {
   // eslint-disable-next-line no-unused-vars
   constructor(private model: Model, private view: View) {
 
-    // this.createListeners();
+    this.createListeners();
     this.init();
   }
 
-  // reset = () => {
 
-  //   // получаем из модели дефаултОптионс которые мы запомнили при анализе конфига
+  // this.setRangeData(options);
+  // this.setDotData(options);
+  // this.setGridData(options);
+  // this.setGridSnapData(options);
+  // this.setOrientationData(options);
+  // this.setThemeData(options);
+  // this.setHintsData(options);
+  // this.setDisabledData(options);
 
-  //   // вызываем метод update и передаём туда этот конфиг. 
-  //   // в итоге слайдер будет выглядить как в первый запуск.
+  private createListeners() {
 
-  //   // console.log('reset');
-  // }
-
-  // // eslint-disable-next-line no-unused-vars
-  // update = (options: RangeSliderOptions) => {
-  //   //console.log(options);
-
-
-
-  //   //this.model.setOptions(options);
-
-
-
-  // }
-
-  private init() {
-    // this.view.initHandle(this.getDataInitHandle());
-
-    // this.view.createDomBase(
-    //   this.handleCreateDomBase,
-    //   this.getDataTheme()
-    // );
-
-
-    this.view.init();
+    this.model.subscribeOB(this.handleRangeData);
+    this.model.subscribeOB(this.handleDotData);
+    this.model.subscribeOB(this.handleGridSnapData);
+    this.model.subscribeOB(this.handleGridData);
+    this.model.subscribeOB(this.handleOrientationData);
+    this.model.subscribeOB(this.handleThemeData);
+    this.model.subscribeOB(this.handleHintsData);
+    this.model.subscribeOB(this.handleDisabledData);
 
 
   }
+
+  private init() {
+    this.reset();
+
+  }
+
+
+
+  reset = () => {
+    this.model.reset();
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  update = (options: RangeSliderOptions) => {
+    this.model.update(options);
+  }
+
+
+  private handleRangeData = (options: TOB) => {
+    const key = options.key;
+    if (key != 'RangeData') return;
+
+    console.log('handleRangeData');
+    console.log(options);
+
+
+  };
+
+  private handleDotData = (options: TOB) => {
+    const key = options.key;
+    if (key != 'DotData') return;
+
+    console.log('handleDotData');
+    console.log(options);
+
+  };
+
+  private handleGridSnapData = (options: TOB) => {
+    const key = options.key;
+    if (key != 'GridSnapData') return;
+
+    console.log('handleGridSnapData');
+    console.log(options);
+
+  };
+
+  private handleGridData = (options: TOB) => {
+    const key = options.key;
+    if (key != 'GridData') return;
+
+    console.log('handleGridData');
+    console.log(options);
+
+  };
+
+  private handleOrientationData = (options: TOB) => {
+    const key = options.key;
+    if (key != 'OrientationData') return;
+
+    console.log('handleOrientationData');
+    console.log(options);
+
+  };
+
+
+  private handleThemeData = (options: TOB) => {
+    const key = options.key;
+    if (key != 'ThemeData') return;
+
+    this.view.setTheme(options.theme);
+
+    console.log('handleThemeData');
+    console.log(options);
+
+  };
+
+  private handleHintsData = (options: TOB) => {
+    const key = options.key;
+    if (key != 'HintsData') return;
+
+    console.log('handleHintsData');
+    console.log(options);
+
+  };
+
+  private handleDisabledData = (options: TOB) => {
+    const key = options.key;
+    if (key != 'DisabledData') return;
+
+    console.log('handleDisabledData');
+    console.log(options);
+
+  };
 
 
   // getDataTheme() {

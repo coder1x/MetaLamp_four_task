@@ -17,6 +17,8 @@ class View extends Observer {
   rsCenter: HTMLElement;
   rsBottom: Element;
   rsLine: HTMLElement;
+  prevTheme: string;
+
   handle: Handle;
   hints: Hints;
   bar: Bar;
@@ -27,12 +29,79 @@ class View extends Observer {
     super();
     this.rsName = 'range-slider';
     this.wrapSlider = this.elem.parentElement;
+
+    this.init();
   }
 
 
   init() {
 
+    // создаём базовые дом элементы. 
+    this.createDomBase();
+
+    // вешаем события.
+    this.setActions();
+
+
+    // this.handle = new Handle();
+
   }
+
+
+  // когда получим данные то повесить модификатор темы theme: string
+  // 'rs-' + theme // тут нужно запрашивать из модели
+
+  createDomBase() {
+
+    const createElem = (teg: string, className: string[]) => {
+      const elem = document.createElement(teg);
+      for (let item of className) {
+        elem.classList.add(item);
+      }
+      return elem;
+    };
+
+    this.rangeSlider = createElem('div', [
+      this.rsName,
+      'js-rs-' + this.numElem,
+    ]);
+
+    this.rsTop = createElem('div', [this.rsName + '__top']);
+    this.rsCenter = createElem('div', [this.rsName + '__center']);
+    this.rsBottom = createElem('div', [this.rsName + '__bottom']);
+    this.rsLine = createElem('span', [this.rsName + '__line']);
+
+    this.rsCenter.appendChild(this.rsLine);
+
+    this.rangeSlider.appendChild(this.rsTop);
+    this.rangeSlider.appendChild(this.rsCenter);
+    this.rangeSlider.appendChild(this.rsBottom);
+
+    this.wrapSlider.appendChild(this.rangeSlider);
+  }
+
+
+
+  setActions() {
+    this.rsLine.addEventListener('click', (event: MouseEvent) => {
+      const elem = (event.target as HTMLElement);
+
+      // вызываем оповещение подписчиков
+      // handler(event.offsetX, elem.offsetWidth);
+    });
+  }
+
+
+  setTheme(theme: string) {
+
+    // удаляем старую тему если есть 
+    if (this.prevTheme)
+      this.rangeSlider.classList.remove(this.prevTheme);
+    const classN = 'rs-' + theme;
+    this.rangeSlider.classList.add(classN);
+    this.prevTheme = classN;
+  }
+
 
   // initHandle(options: CreateHandleOptions) {
   //   this.handle = new Handle(options);
@@ -112,41 +181,6 @@ class View extends Observer {
   //   return this.hints.getWidthSingle();
   // }
 
-  // createDomBase(handler: Function, theme: string) {
-
-  //   const createElem = (teg: string, className: string[]) => {
-  //     const elem = document.createElement(teg);
-  //     for (let item of className) {
-  //       elem.classList.add(item);
-  //     }
-  //     return elem;
-  //   };
-
-  //   const wrapElem = createElem('div', [
-  //     this.rsName,
-  //     'js-rs-' + this.numElem,
-  //     'rs-' + theme // тут нужно запрашивать из модели
-  //   ]);
-
-
-  //   const topElem = createElem('div', [this.rsName + '__top']);
-  //   const centerElem = createElem('div', [this.rsName + '__center']);
-  //   const bottomElem = createElem('div', [this.rsName + '__bottom']);
-  //   const rsLine = createElem('span', [this.rsName + '__line']);
-
-  //   centerElem.appendChild(rsLine);
-
-  //   wrapElem.appendChild(topElem);
-  //   wrapElem.appendChild(centerElem);
-  //   wrapElem.appendChild(bottomElem);
-
-
-
-  //   this.wrapSlider.appendChild(wrapElem);
-
-
-  //   handler();
-  // }
 
 
 
@@ -155,33 +189,6 @@ class View extends Observer {
   // }
 
 
-  // initDomElem(handler: Function) {
-  //   // нужно получить дом элементы базовой разметки. 
-
-  //   const getElem = (elem: Element, str: string) => {
-  //     return elem.getElementsByClassName(str)[0];
-  //   };
-
-  //   this.rangeSlider = getElem(this.wrapSlider, 'js-rs-' + this.numElem);
-  //   this.rsTop = getElem(this.rangeSlider, this.rsName + '__top');
-  //   this.rsCenter = (getElem(this.rangeSlider,
-  //     this.rsName + '__center') as HTMLElement);
-
-  //   this.rsBottom = getElem(this.rangeSlider, this.rsName + '__bottom');
-  //   this.rsLine = (getElem(this.rangeSlider,
-  //     this.rsName + '__line') as HTMLElement);
-
-  //   handler();
-  // }
-
-  // setActions(handler: Function) {
-
-  //   this.rsLine.addEventListener('click', (event: MouseEvent) => {
-  //     const elem = (event.target as HTMLElement);
-  //     handler(event.offsetX, elem.offsetWidth);
-  //   });
-
-  // }
 
   // setActionsHandle(handler: Function) {
   //   this.handle.setActions(handler);
