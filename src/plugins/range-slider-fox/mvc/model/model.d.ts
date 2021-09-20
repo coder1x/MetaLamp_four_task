@@ -22,7 +22,7 @@ interface RangeSliderOptions {
 }
 
 interface CalcDotPositionOpt {
-  dotWidth: number,
+  // dotWidth: number,
   type: string,
   wrapWidth: number,
   wrapLeft: number,

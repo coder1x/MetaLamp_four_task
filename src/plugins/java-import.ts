@@ -1,6 +1,6 @@
 
-import './range-slider/range-slider.scss';
-import './range-slider/range-slider.ts';
+import './range-slider-fox/range-slider-fox.scss';
+import './range-slider-fox/range-slider-fox.ts';
 
 
 

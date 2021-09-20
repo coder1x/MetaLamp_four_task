@@ -19,7 +19,7 @@ class Hints {
 
 
   constructor(elem: HTMLElement | Element) {
-    this.rsName = 'range-slider';
+    this.rsName = 'range-slider-fox';
     this.rsTop = (elem as HTMLElement);
     this.flMinMax = false;
     this.flFromTo = false;

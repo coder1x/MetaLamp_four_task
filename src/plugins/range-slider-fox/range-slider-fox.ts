@@ -66,7 +66,7 @@ const sliderBase = $('.slider__base').RangeSlider({
 // sliderBase.reset();
 
 // sliderBase.update({
-//   theme: 'xyi',
+//   type: 'single',
 // });
 
 // console.log(sliderBase);

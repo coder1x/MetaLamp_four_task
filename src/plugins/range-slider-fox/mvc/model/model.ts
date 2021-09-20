@@ -27,12 +27,9 @@ class Model extends Observer {
   private valP: number;
   private fromP: number;
   private toP: number;
-  private dotP: number; // XXXXXXXXXXXXXXXXXXX
   private limitFrom: number;
   private limitTo: number;
   private fromTo: number;
-  private valFrom: number;
-  private valTo: number;
   private wrapWidth: number;
 
   private MAX_VAL = 999999999999999;
@@ -576,145 +573,41 @@ gridNum >= 1
   }
 
 
+  getRange() {
+    return this.max - this.min;
+  }
 
-  // set setFrom(val: number) {
-  //   this.fromP = val;
-  //   this.valFrom = +(this.min + (val * this.valP)).toFixed(0);
-  //   this.onChangeFrom({
-  //     fromP: val,
-  //     valFrom: this.valFrom
-  //   });
-
-  //   if (!this.fromStartFl) {
-  //     //console.log('setFrom');
-  //     this.onChange(this.getOptions());
-  //   }
-  //   this.fromStartFl = false;
-  // }
-
-  // set setTo(val: number) {
-  //   this.toP = val;
-  //   this.valTo = +(this.min + (val * this.valP)).toFixed(0);
-  //   this.onChangeTo({
-  //     toP: val,
-  //     valTo: this.valTo
-  //   });
-
-  //   if (!this.toStartFl) {
-  //     //console.log('setTo');
-  //     this.onChange(this.getOptions());
-  //   }
-  //   this.toStartFl = false;
-  // }
-
-  // get getFrom() {
-  //   return this.fromP;
-  // }
-
-  // get getTo() {
-  //   return this.toP;
-  // }
+  calcOnePercent() {
+    this.valP = this.getRange() / 100;  // один процент
+  }
 
 
-  // // setOptions(options: RangeSliderOptions) {
+  getDataDotFrom() {
+    return +(this.min + (this.fromP * this.valP)).toFixed(0);
+  }
 
-  // //   const key = Object.keys(options);
-  // //   const val = Object.values(options);
+  getDataDotTo() {
+    return +(this.min + (this.toP * this.valP)).toFixed(0);
+  }
+
+  calcPositionDotFrom() {
+    this.fromP = (this.from - this.min) / this.valP;  // позиция левой точки в процентах
+    // if (!this.startConfFl) {
+    //   this.onChange(this.getOptions());
+    // }
+    return this.fromP;
+  }
+
+  calcPositionDotTo() {
+    this.toP = (this.to - this.min) / this.valP;      // позиция правой точки в процентах
+    // if (!this.startConfFl) {
+    //   this.onChange(this.getOptions());
+    // }
+    return this.toP;
+  }
 
 
-  // //   for (let i = 0; i < key.length; i++) {
-  // //     switch (key[i]) {
-  // //       case 'type':
-  // //         this.type = val[i];
-  // //         break;
 
-  // //       case 'orientation':
-  // //         this.orientation = val[i];
-  // //         break;
-
-  // //       case 'theme':
-  // //         this.theme = val[i];
-  // //         break;
-
-  // //       case 'min':
-  // //         this.min = val[i];
-  // //         break;
-
-  // //       case 'max':
-  // //         this.max = val[i];
-  // //         break;
-
-  // //       case 'from':
-  // //         this.from = val[i];
-  // //         break;
-
-  // //       case 'to':
-  // //         this.to = val[i];
-  // //         break;
-
-  // //       case 'grid':
-  // //         this.grid = val[i];
-  // //         break;
-
-  // //       case 'gridSnap':
-  // //         this.gridSnap = val[i];
-  // //         break;
-
-  // //       case 'tipPrefix':
-  // //         this.tipPrefix = val[i];
-  // //         break;
-
-  // //       case 'gridNum':
-  // //         this.gridNum = val[i];
-  // //         break;
-  // //       case 'gridStep':
-  // //         this.gridStep = val[i];
-  // //         break;
-  // //       default:
-  // //         break;
-  // //     }
-  // //   }
-
-  // // }
-
-  // getOptions() {
-  //   return {
-  //     type: this.type,
-  //     orientation: this.orientation,
-  //     theme: this.theme,
-  //     min: this.min,
-  //     max: this.max,
-  //     to: this.to,
-  //     from: this.from,
-  //     fromX: this.getFrom,
-  //     toX: this.getTo,
-  //     valFrom: this.valFrom,
-  //     valTo: this.valTo,
-  //     tipPrefix: this.tipPrefix,
-  //     grid: this.grid,
-  //     gridSnap: this.gridSnap,
-  //     gridNum: this.gridNum,
-  //     gridStep: this.gridStep,
-  //   };
-  // }
-
-  // getRange() {
-  //   return this.max - this.min;
-  // }
-
-  // calcPosition(fromWidth: number, wrapWidth: number) {
-
-  //   this.wrapWidth = wrapWidth;
-  //   this.dotP = fromWidth * 100 / wrapWidth; // XXXXXXXXXXXXXXXXXXX
-
-  //   this.valP = this.getRange() / 100;                  // один процент
-  //   // this.stepP = this.step / this.valP;              // количество процентов в шаге
-  //   this.setFrom = (this.from - this.min) / this.valP;  // позиция левой точки в процентах
-  //   this.setTo = (this.to - this.min) / this.valP;      // позиция правой точки в процентах
-
-  //   this.limitFrom = this.getFrom;
-  //   this.limitTo = this.getTo;
-  // }
 
 
   // calcGridNumStep() {
@@ -806,45 +699,69 @@ gridNum >= 1
   // }
 
 
-  // calcDotPosition(options: CalcDotPositionOpt) {
+  calcDotPosition(options: CalcDotPositionOpt) {
 
-  //   //this.dotP = options.dotWidth * 100 / options.wrapWidth; // ширина точки в процентах
-  //   this.wrapWidth = options.wrapWidth;
-  //   const num = options.clientX - options.shiftX - options.wrapLeft;
-  //   let percent = num * 100 / this.wrapWidth;
+    let fromFl = false;
+    let toFl = false;
 
-  //   if (options.type == 'From') {
-  //     this.limitFrom = percent;
-  //   }
-  //   else {
-  //     this.limitTo = percent;
-  //   }
+    this.wrapWidth = options.wrapWidth;
+    const num = options.clientX - options.shiftX - options.wrapLeft;
+    let percent = num * 100 / this.wrapWidth;
 
-  //   const limitDot = !(this.limitFrom > this.limitTo);
+    if (options.type == 'From') {
+      this.limitFrom = percent;
+    }
+    else {
+      this.limitTo = percent;
+    }
 
-  //   if (percent < 0) percent = 0;
-  //   if (percent > 100) percent = 100;
+    const limitDot = !(this.limitFrom > this.limitTo);
 
-  //   const type = this.type == 'single';
+    if (percent < 0) percent = 0;
+    if (percent > 100) percent = 100;
 
-  //   if (type) {
-  //     this.setFrom = percent;
-  //   } else if (limitDot) {
-  //     this.fromTo = percent;
+    const typeF = this.type == 'single';
 
-  //     if (options.type == 'From') {
-  //       this.setFrom = percent;
-  //     }
-  //     else {
-  //       this.setTo = percent;
-  //     }
+    if (typeF) {
+      this.fromP = percent;
+      fromFl = true;
+    } else if (limitDot) {
+      this.fromTo = percent;
 
-  //   }
-  //   else {
-  //     this.setFrom = this.fromTo;
-  //     this.setTo = this.fromTo;
-  //   }
-  // }
+      if (options.type == 'From') {
+        this.fromP = percent;
+        fromFl = true;
+      }
+      else {
+        this.toP = percent;
+        toFl = true;
+      }
+
+    }
+    else {
+      this.fromP = this.fromTo;
+      this.toP = this.fromTo;
+      fromFl = true;
+      toFl = true;
+    }
+
+
+    if (fromFl) {
+      this.from = this.getDataDotFrom();
+    }
+
+    if (toFl) {
+      this.to = this.getDataDotTo();
+    }
+
+
+    this.setDotData({
+      from: this.from,
+      to: this.to,
+    });
+  }
+
+
 
 
 }

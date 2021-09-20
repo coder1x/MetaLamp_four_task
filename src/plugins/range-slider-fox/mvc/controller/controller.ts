@@ -40,6 +40,7 @@ class Controller {
     this.model.subscribeOB(this.handleHintsData);
     this.model.subscribeOB(this.handleDisabledData);
 
+    this.view.subscribeOB(this.handleDotMove);
 
   }
 
@@ -67,17 +68,52 @@ class Controller {
     console.log('handleRangeData');
     console.log(options);
 
+    this.model.calcOnePercent();
 
   };
+
 
   private handleDotData = (options: TOB) => {
     const key = options.key;
     if (key != 'DotData') return;
 
-    console.log('handleDotData');
-    console.log(options);
+    // console.log('handleDotData');
+    // console.log(options);
+
+    const type = options.type;
+
+    this.view.createDotElem(type); // создаём точки
+
+    const from = this.model.calcPositionDotFrom();
+    this.view.setDotFrom(from);
+
+    if (type == 'double') {
+      const to = this.model.calcPositionDotTo();
+      this.view.setDotTo(to, type);
+    }
+
+    this.view.setDotActions(type);
 
   };
+
+
+  private handleDotMove = (options: TOB) => {
+    const key = options.key;
+    if (key != 'DotMove') return;
+
+    // console.log('handleDotMove');
+    // console.log(options);
+
+    this.model.calcDotPosition({
+      type: options.type,
+      wrapWidth: options.wrapWidth,
+      wrapLeft: options.wrapLeft,
+      clientX: options.clientX,
+      shiftX: options.shiftX,
+    });
+
+  };
+
 
   private handleGridSnapData = (options: TOB) => {
     const key = options.key;
@@ -135,6 +171,11 @@ class Controller {
     console.log(options);
 
   };
+
+
+
+
+
 
 
   // getDataTheme() {

@@ -21,7 +21,7 @@ fs.readdirSync(PAGES_DIR).forEach((file) => {
 const description = 'Лучшие номера для вашей работы,' +
   ' отдыха и просто вдохновения';
 const keywords = 'Номера, Отель';
-const title = 'Демонстрация плагина range-slider';
+const title = 'Демонстрация плагина range-slider-fox';
 
 module.exports = {
 

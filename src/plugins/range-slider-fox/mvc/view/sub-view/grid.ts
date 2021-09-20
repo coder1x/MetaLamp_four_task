@@ -18,7 +18,7 @@ class Grid {
 
 
   constructor(elem: HTMLElement | Element) {
-    this.rsName = 'range-slider';
+    this.rsName = 'range-slider-fox';
     this.indent = 4; // отступ в пикселях между числами на шкале
     this.rsBottom = (elem as HTMLElement);
   }

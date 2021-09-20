@@ -27,10 +27,11 @@ class View extends Observer {
   // eslint-disable-next-line no-unused-vars
   constructor(public elem: Element, public numElem: Number) {
     super();
-    this.rsName = 'range-slider';
+    this.rsName = 'range-slider-fox';
     this.wrapSlider = this.elem.parentElement;
 
     this.init();
+    this.createListeners();
   }
 
 
@@ -43,10 +44,23 @@ class View extends Observer {
     this.setActions();
 
 
-    // this.handle = new Handle();
+    this.handle = new Handle(this.rsName, this.rsCenter);
 
   }
 
+
+  private createListeners() {
+    this.handle.subscribeOB(this.handleDotMove);
+  }
+
+  private handleDotMove = (options: TOB) => {
+    const key = options.key;
+    if (key != 'DotMove') return;
+
+    this.notifyOB({
+      key: 'DotMove', ...options
+    });
+  };
 
   // когда получим данные то повесить модификатор темы theme: string
   // 'rs-' + theme // тут нужно запрашивать из модели
@@ -102,6 +116,23 @@ class View extends Observer {
     this.prevTheme = classN;
   }
 
+
+  createDotElem(type: string) {
+    this.handle.createDomBase(type);
+  }
+
+  setDotFrom(fromP: number) {
+    this.handle.setFrom(fromP);
+  }
+
+  setDotTo(toP: number, type: string) {
+    this.handle.setTo(toP, type);
+  }
+
+
+  setDotActions(type: string) {
+    this.handle.setActions(type);
+  }
 
   // initHandle(options: CreateHandleOptions) {
   //   this.handle = new Handle(options);

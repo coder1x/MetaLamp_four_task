@@ -27,8 +27,11 @@ interface insideOptions extends RangeSliderOptions {
   limitFrom?: number;
   limitTo?: number;
   fromTo?: number;
-  valFrom?: number;
-  valTo?: number;
+
+  wrapWidth?: number,
+  wrapLeft?: number,
+  clientX?: number,
+  shiftX?: number
 }
 
 
