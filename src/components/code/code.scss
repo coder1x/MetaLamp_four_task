@@ -10,15 +10,12 @@ $color-focus: $Dark-Shade-100;
   align-content: flex-start;
   height: 100%;
 
-  .prettyprint {
-    border: 0px;
+  &__item {
+    color: #75994f;
+    font-size: 14px;
   }
 
-  &__config {
-    margin: 0px;
-  }
-
-  &__lang-java {
+  &__lang-js {
     color: #61819d;
     font-size: 14px;
   }

@@ -9,8 +9,9 @@ include ../code/code.pug
 
 mixin panel(options)
   -
-    let modif = options.modif ?? ''
-    let addClass = options.class ?? ''
+    const modif = options.modif ?? ''
+    const addClass = options.class ?? ''
+    const theme = options.theme ?? 'base'
     let classComp = 'panel'
     let className = classComp
     if(modif){
@@ -18,27 +19,29 @@ mixin panel(options)
     if(addClass){
     className += ' '+addClass}
   div(class=className)
-    .panel__values-wrap 
+    div(class=classComp+'__slider-wrap')
+      input(class='rslider__'+theme type='hidden' name='price' value='' tabindex='-1')
+    div(class=classComp+'__values-wrap') 
       +values({
         label: 'Values',
       })
-    .panel__slider-data-wrap 
+    div(class=classComp+'__slider-data-wrap') 
       +slider-data({
         label: 'Slider data',
       })
-    .panel__grid-wrap 
+    div(class=classComp+'__grid-wrap') 
       +grid({
         label: 'Grid',
       })
-    .panel__different-wrap 
+    div(class=classComp+'__different-wrap') 
       +different({
         label: 'Different',
       })
-    .panel__hints-wrap 
+    div(class=classComp+'__hints-wrap')
       +hints({
         label: 'Hints',
       })
-    .panel__code-wrap 
+    div(class=classComp+'__code-wrap')
       +code({
         label: 'Config code',
       })

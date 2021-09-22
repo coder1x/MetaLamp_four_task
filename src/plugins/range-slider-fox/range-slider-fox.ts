@@ -1,17 +1,17 @@
 
-import { RangeSliderOptions } from './mvc/model/model.d';
+//import { RangeSliderOptions } from './mvc/model/model.d';
 import { Controller, Model, View } from './mvc/controller/controller';
 
 
 // eslint-disable-next-line no-undef
-$.fn.RangeSlider = function (options): JQuery {
+$.fn.RangeSliderFox = function (options): JQuery {
 
   return this.each(function (i: number, el: Element) {
 
-    if (!$.data(el, 'RangeSlider')) {
+    if (!$.data(el, 'RangeSliderFox')) {
       $.data(
         el,
-        'RangeSlider',
+        'RangeSliderFox',
         new Controller(new Model(options), new View(el, i))
       );
     }
@@ -22,45 +22,7 @@ $.fn.RangeSlider = function (options): JQuery {
 
 
 
-// eslint-disable-next-line no-unused-vars
-const sliderBase = $('.slider__base').RangeSlider({
-  type: 'double',
-  //type: 'single',
-  //theme: 'fox',
-  min: -120,
-  max: 800,
-  from: 200,
-  to: 500,
-  //disabled: true,
-  // tipPrefix: '°C',
-  // tipMinMax: false,
-  // tipFromTo: false,
-  //grid: true,
-  //gridSnap: true,
-  //gridNum: 6,
-  gridStep: 30,
-  // eslint-disable-next-line no-unused-vars
-  onStart: function (data: RangeSliderOptions) {
-    console.log('-------------------------');
-    console.log('onStart');
-    console.log(data);
-    console.log('-------------------------');
-  },
-  // eslint-disable-next-line no-unused-vars
-  onChange: function (data: RangeSliderOptions) {
-    // console.log('-------------------------');
-    // console.log('onChange');
-    // console.log(data);
-    // console.log('-------------------------');
-  },
-  // eslint-disable-next-line no-unused-vars
-  onUpdate: function (data: RangeSliderOptions) {
-    console.log('-------------------------');
-    console.log('onUpdate');
-    console.log(data);
-    console.log('-------------------------');
-  }
-}).data('RangeSlider'); // вернёт объект для одного элемента
+
 
 
 // sliderBase.reset();
@@ -70,7 +32,6 @@ const sliderBase = $('.slider__base').RangeSlider({
 // });
 
 // console.log(sliderBase);
-
 
 // вернёт все объекты.
 // $('.slider-base').each(function (i: number, el: any) {

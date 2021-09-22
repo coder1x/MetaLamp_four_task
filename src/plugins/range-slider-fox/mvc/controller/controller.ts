@@ -20,15 +20,6 @@ class Controller {
   }
 
 
-  // this.setRangeData(options);
-  // this.setDotData(options);
-  // this.setGridData(options);
-  // this.setGridSnapData(options);
-  // this.setOrientationData(options);
-  // this.setThemeData(options);
-  // this.setHintsData(options);
-  // this.setDisabledData(options);
-
   private createListeners() {
 
     this.model.subscribeOB(this.handleRangeData);
@@ -65,8 +56,8 @@ class Controller {
     const key = options.key;
     if (key != 'RangeData') return;
 
-    console.log('handleRangeData');
-    console.log(options);
+    // console.log('handleRangeData');
+    // console.log(options);
 
     this.model.calcOnePercent();
 
@@ -119,8 +110,8 @@ class Controller {
     const key = options.key;
     if (key != 'GridSnapData') return;
 
-    console.log('handleGridSnapData');
-    console.log(options);
+    // console.log('handleGridSnapData');
+    // console.log(options);
 
   };
 
@@ -128,8 +119,8 @@ class Controller {
     const key = options.key;
     if (key != 'GridData') return;
 
-    console.log('handleGridData');
-    console.log(options);
+    // console.log('handleGridData');
+    // console.log(options);
 
   };
 
@@ -137,8 +128,8 @@ class Controller {
     const key = options.key;
     if (key != 'OrientationData') return;
 
-    console.log('handleOrientationData');
-    console.log(options);
+    // console.log('handleOrientationData');
+    // console.log(options);
 
   };
 
@@ -149,8 +140,8 @@ class Controller {
 
     this.view.setTheme(options.theme);
 
-    console.log('handleThemeData');
-    console.log(options);
+    // console.log('handleThemeData');
+    // console.log(options);
 
   };
 
@@ -158,8 +149,8 @@ class Controller {
     const key = options.key;
     if (key != 'HintsData') return;
 
-    console.log('handleHintsData');
-    console.log(options);
+    // console.log('handleHintsData');
+    // console.log(options);
 
   };
 
@@ -167,8 +158,8 @@ class Controller {
     const key = options.key;
     if (key != 'DisabledData') return;
 
-    console.log('handleDisabledData');
-    console.log(options);
+    // console.log('handleDisabledData');
+    // console.log(options);
 
   };
 

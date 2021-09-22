@@ -7,6 +7,8 @@ mixin code(options)
     let flLabel = options.flLabel ?? false
     let classComp = 'code'
     let className = classComp
+    let codeTop = '$(\'.demo\').RangeSliderFox({';
+    let codeBottom = '})';
     if(modif){
     className += ' '+classComp+'_'+modif}
     if(addClass){
@@ -15,15 +17,9 @@ mixin code(options)
     - if(!flLabel){
     legend(class=classComp+'__label')= label
     -}
-    pre(class=classComp+'__config')
-      code(class=classComp+'__lang-java')
-        |  $('.demo').RangeSliderFox({
-        |    type: 'double',
-        |    min: -120,
-        |    max: 800,
-        |    from: 200,
-        |    to: 500,
-        |    grid: true,
-        |    gridStep: 30,
-        |  });
+    div(class=classComp+'__config')
+      p(class=classComp+'__lang-js')=codeTop
+      ul(class=classComp+'__options')
+        li(class=classComp+'__item') type: 'double',
+      p(class=classComp+'__lang-js')=codeBottom
     button(class=classComp+'__copy') Copy code

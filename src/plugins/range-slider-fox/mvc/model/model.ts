@@ -29,7 +29,6 @@ class Model extends Observer {
   private toP: number;
   private limitFrom: number;
   private limitTo: number;
-  private fromTo: number;
   private wrapWidth: number;
 
   private MAX_VAL = 999999999999999;
@@ -40,6 +39,7 @@ class Model extends Observer {
   // private toStartFl: boolean;
 
   private startConfFl: boolean;
+  private ubdateConfFl: boolean;
 
   // onChangeFrom: Function;
   // onChangeTo: Function;
@@ -59,6 +59,7 @@ class Model extends Observer {
   private defaultConfig(options: RangeSliderOptions) {
 
     this.startConfFl = false;
+    this.ubdateConfFl = false;
 
     return Object.assign({
       type: 'single',   // тип - одна или две точки
@@ -171,6 +172,7 @@ class Model extends Observer {
   }
 
   update(options: RangeSliderOptions) {
+    this.ubdateConfFl = true;
 
     this.setRangeData(options);
     this.setDotData(options);
@@ -185,6 +187,7 @@ class Model extends Observer {
     if (this.startConfFl)
       this.onUpdate(this.getOptions());
     this.startConfFl = true;
+    this.ubdateConfFl = false;
   }
 
 
@@ -308,6 +311,9 @@ class Model extends Observer {
     if (!this.isEmptu(this.min)) return false;
     if (!this.isEmptu(this.max)) return false;
 
+
+    // ещё проверять что this.type != type иначе зачем перезаписывать
+
     if (type == 'single' || type == 'double') {
       this.type = type;
     } else {
@@ -347,6 +353,9 @@ class Model extends Observer {
       from: this.from,
       to: this.to,
     });
+
+    if (this.startConfFl && !this.ubdateConfFl)
+      this.onChange(this.getOptions());
 
     return true;
   }
@@ -592,17 +601,13 @@ gridNum >= 1
 
   calcPositionDotFrom() {
     this.fromP = (this.from - this.min) / this.valP;  // позиция левой точки в процентах
-    // if (!this.startConfFl) {
-    //   this.onChange(this.getOptions());
-    // }
+    this.limitFrom = this.fromP;
     return this.fromP;
   }
 
   calcPositionDotTo() {
     this.toP = (this.to - this.min) / this.valP;      // позиция правой точки в процентах
-    // if (!this.startConfFl) {
-    //   this.onChange(this.getOptions());
-    // }
+    this.limitTo = this.toP;
     return this.toP;
   }
 
@@ -703,12 +708,13 @@ gridNum >= 1
 
     let fromFl = false;
     let toFl = false;
+    const typeFrom = options.type == 'From';
 
     this.wrapWidth = options.wrapWidth;
     const num = options.clientX - options.shiftX - options.wrapLeft;
     let percent = num * 100 / this.wrapWidth;
 
-    if (options.type == 'From') {
+    if (typeFrom) {
       this.limitFrom = percent;
     }
     else {
@@ -722,13 +728,12 @@ gridNum >= 1
 
     const typeF = this.type == 'single';
 
-    if (typeF) {
+    if (typeF) {  // если одна точка
       this.fromP = percent;
       fromFl = true;
-    } else if (limitDot) {
-      this.fromTo = percent;
-
-      if (options.type == 'From') {
+    } else if (limitDot) { // если две точки и from меньше to
+      // в зависемости от того какая точка движется
+      if (typeFrom) {
         this.fromP = percent;
         fromFl = true;
       }
@@ -738,26 +743,33 @@ gridNum >= 1
       }
 
     }
-    else {
-      this.fromP = this.fromTo;
-      this.toP = this.fromTo;
+    else { // если from больше to
+      // берём значения точки к которой подъезжаем в плотную.
+      if (typeFrom) {
+        this.fromP = this.toP;
+      }
+      else {
+        this.toP = this.fromP;
+      }
+
       fromFl = true;
       toFl = true;
     }
 
+    let from: number;
+    let to: number;
 
     if (fromFl) {
-      this.from = this.getDataDotFrom();
+      from = this.getDataDotFrom(); // получаем значение from
     }
 
     if (toFl) {
-      this.to = this.getDataDotTo();
+      to = this.getDataDotTo(); // получаем значение to
     }
 
-
     this.setDotData({
-      from: this.from,
-      to: this.to,
+      from: from,
+      to: to,
     });
   }
 

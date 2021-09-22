@@ -35,7 +35,7 @@ class View extends Observer {
   }
 
 
-  init() {
+  private init() {
 
     // создаём базовые дом элементы. 
     this.createDomBase();

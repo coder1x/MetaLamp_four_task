@@ -21,19 +21,19 @@ interface RangeSliderOptions {
 }
 
 
-interface RangeSliderFunction {
+interface RangeSliderFoxFunction {
   // eslint-disable-next-line no-unused-vars
   (options: RangeSliderOptions): JQuery;
 }
 
 
-interface RangeSlider extends
-  RangeSliderFunction { }
+interface RangeSliderFox extends
+  RangeSliderFoxFunction { }
 
 
 // eslint-disable-next-line no-unused-vars
 interface JQuery {
-  RangeSlider: RangeSlider;
+  RangeSliderFox: RangeSliderFox;
 }
 
 

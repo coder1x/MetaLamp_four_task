@@ -7,9 +7,12 @@ block content
   main.demo-slider
     h1.demo-slider__header Range Slider Fox
     section.slider
-        .slider__wrap
-          input(class='slider__base' type='hidden' name='price' value='' tabindex='-1')
         .slider__panel-wrap 
           +panel({
-
+            theme:'base'
+          })
+    section.slider
+        .slider__panel-wrap 
+          +panel({
+            theme:'fox'
           })
