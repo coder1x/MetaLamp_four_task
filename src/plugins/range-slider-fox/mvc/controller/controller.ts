@@ -9,8 +9,7 @@ import { TOB } from '../../observer';
 
 class Controller {
 
-  // flagTipCreate: boolean;
-  // flagBarCreate: boolean;
+  // private startFl = false;
 
   // eslint-disable-next-line no-unused-vars
   constructor(private model: Model, private view: View) {
@@ -37,7 +36,7 @@ class Controller {
 
   private init() {
     this.reset();
-
+    // this.startFl = true;
   }
 
 
@@ -56,10 +55,15 @@ class Controller {
     const key = options.key;
     if (key != 'RangeData') return;
 
-    // console.log('handleRangeData');
-    // console.log(options);
-
     this.model.calcOnePercent();
+
+    // if (this.startFl) {
+    //   const options = this.model.getOptions();
+    //   this.model.update({
+    //     from: options.from,
+    //     to: options.to,
+    //   });
+    // }
 
   };
 

@@ -270,6 +270,15 @@ class Model extends Observer {
         max: this.max,
       });
 
+      // если обновили Диапазон то пересчитать все зависимые данные.
+      if (this.ubdateConfFl) {
+        this.setDotData({
+          from: this.from,
+          to: this.to,
+        });
+      }
+
+
       return true;
     }
 

@@ -47,25 +47,32 @@ class Panel {
       ...options
       ,
       // eslint-disable-next-line no-unused-vars
-      onStart: function (data: RangeSliderOptions) {
-
+      onStart: (data: RangeSliderOptions) => {
+        this.objValues.setData({
+          min: data.min,
+          max: data.max,
+          from: data.from,
+          to: data.to,
+        });
       },
       // eslint-disable-next-line no-unused-vars
-      onChange: function (data: RangeSliderOptions) {
-
+      onChange: (data: RangeSliderOptions) => {
+        this.objValues.setData({
+          min: data.min,
+          max: data.max,
+          from: data.from,
+          to: data.to,
+        });
       },
       // eslint-disable-next-line no-unused-vars
-      onUpdate: function (data: RangeSliderOptions) {
+      onUpdate: (data: RangeSliderOptions) => {
 
       }
     }).data('RangeSliderFox'); // вернёт объект для одного элемента
 
-    console.log(obj);
 
 
-    // когда получим объект слайдера - передать его в метод objValues
-    // что бы он мог его использовать при своих событиях и вызывать 
-    // обнавление данных
+    this.objValues.setAction(obj);
   }
 
 
@@ -106,7 +113,7 @@ objPanel[0].createRangeSlider({
 });
 
 
-objPanel[0].createRangeSlider({
+objPanel[1].createRangeSlider({
   type: 'double',
   //type: 'single',
   theme: 'fox',
