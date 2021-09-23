@@ -54,30 +54,16 @@ class Values {
 
   setAction(obj: any) {
 
-    // в инпутах должны вводиться только цифры
-    // знак минус и точка. 
+    let mapInput = new Map();
+    mapInput.set('min', this.min.value);
+    mapInput.set('max', this.max.value);
+    mapInput.set('from', this.from.value);
+    mapInput.set('to', this.to.value);
 
-    const minVal = () => {
+    const data = (e: Event) => {
+      const elem = e.target as HTMLInputElement;
       obj.update({
-        min: this.min.value
-      });
-    };
-
-    const maxVal = () => {
-      obj.update({
-        max: this.max.value
-      });
-    };
-
-    const fromVal = () => {
-      obj.update({
-        from: this.from.value
-      });
-    };
-
-    const toVal = () => {
-      obj.update({
-        to: this.to.value
+        [elem.name]: +mapInput.get(elem.name)
       });
     };
 
@@ -85,26 +71,22 @@ class Values {
       const elem = e.target as HTMLInputElement;
       let val = elem.value.replace(/[^-.\d]/g, '');
 
-      // val = val.replace(/^-?/,'');
-
-
-      let regexp = /^-?\d+?[.]?\d+$/;
+      let regexp = /^-?\d*?[.]?\d*$/;
       const valid = regexp.test(val);
-      console.log(valid);
 
-      if (valid) { elem.value = val; }
-
+      if (valid) {
+        mapInput.set(elem.name, val);
+        elem.value = val;
+      } else {
+        elem.value = mapInput.get(elem.name);
+      }
     };
 
-
-    this.min.addEventListener('change', minVal);
-    this.max.addEventListener('change', maxVal);
-    this.from.addEventListener('change', fromVal);
-    this.to.addEventListener('change', toVal);
 
     const masE = [this.min, this.max, this.from, this.to];
 
     for (let item of masE) {
+      item.addEventListener('change', data);
       item.addEventListener('input', inputProcessing);
     }
 

@@ -320,7 +320,6 @@ class Model extends Observer {
     if (!this.isEmptu(this.min)) return false;
     if (!this.isEmptu(this.max)) return false;
 
-
     // ещё проверять что this.type != type иначе зачем перезаписывать
 
     if (type == 'single' || type == 'double') {
@@ -387,6 +386,9 @@ class Model extends Observer {
 
     this.gridSnap = options.gridSnap;
 
+    // console.log('gridSnap: ' + this.gridSnap);
+
+
     // вызываем оповещение подписчиков
     this.notifyOB({
       key: 'GridSnapData',
@@ -418,6 +420,13 @@ gridNum >= 1
     let grid: PROP = options.grid;
     let gridNum: PROP = options.gridNum;
     let gridStep: PROP = options.gridStep;
+
+    // console.log('grid: ' + grid);
+    // console.log('gridNum: ' + gridNum);
+    // console.log('gridStep: ' + gridStep);
+
+
+
 
     grid = this.checkValue(grid, 'grid') as PROP ?? false;
     this.grid = Boolean(grid);

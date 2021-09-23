@@ -20,7 +20,7 @@ mixin panel(options)
     className += ' '+addClass}
   div(class=className)
     div(class=classComp+'__slider-wrap')
-      input(class='rslider__'+theme type='hidden' name='price' value='' tabindex='-1')
+      input(class='rslider__'+theme type='hidden' name='DATA' value='' tabindex='-2')
     div(class=classComp+'__values-wrap') 
       +values({
         label: 'Values',

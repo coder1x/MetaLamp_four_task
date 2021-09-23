@@ -9,20 +9,31 @@ interface optE {
 
 class Select {
 
-  className: string;
-  elem: HTMLElement;
-  button: HTMLElement;
-  input: HTMLInputElement;
-  items: HTMLElement[];
-  displayedWrap: HTMLElement;
-  options: HTMLElement;
+  private className: string;
+  private elem: HTMLElement;
+  private button: HTMLElement;
+  private input: HTMLInputElement;
+  private items: HTMLElement[];
+  private displayedWrap: HTMLElement;
+  private options: HTMLElement;
+  onChange: Function;
+  onUpdate: Function;
+  private updateFlag = false;
+  private startFlag = true;
+
 
   constructor(className: string, elem: HTMLElement) {
     this.className = className;
     this.elem = elem;
 
+    // eslint-disable-next-line no-unused-vars
+    const emptyFun = (val: string) => { };
+    this.onChange = emptyFun;
+    this.onUpdate = emptyFun;
+
     this.setDomElem();
     this.setActions();
+    this.startFlag = false;
   }
 
   private getElem(param: optE) {
@@ -38,7 +49,32 @@ class Select {
     return elem;
   }
 
-  setDomElem() {
+  getData() {
+    return this.input.value;
+  }
+
+  update(val: string) {
+    this.updateFlag = true;
+
+    let flag = false;
+    for (let item of this.items) {
+      const data = item.getAttribute('data-val');
+      if (data == val) {
+        flag = true;
+        this.setValSelect(item);
+        break;
+      }
+    }
+
+    this.updateFlag = false;
+    if (flag) {
+      this.onUpdate(val);
+    }
+
+  }
+
+
+  private setDomElem() {
 
     this.button = this.getElem({
       str: '__displayed'
@@ -65,14 +101,18 @@ class Select {
     this.setDisplayed();
   }
 
-  setValSelect(elem: HTMLElement) {
+  private setValSelect(elem: HTMLElement) {
     const text = elem.innerText;
     this.button.innerText = text;
     const val = elem.getAttribute('data-val');
     this.input.value = val;
+
+    if (!this.updateFlag && !this.startFlag)
+      this.onChange(val);
+
   }
 
-  setDisplayed() {
+  private setDisplayed() {
     for (let item of this.items) {
       if (item.classList.contains('js-selected')) {
         this.setValSelect(item);
@@ -105,7 +145,7 @@ class Select {
     flag ? objClass.add(clearName) : objClass.remove(clearName);
   }
 
-  setActions() {
+  private setActions() {
 
     this.displayedWrap.addEventListener('click', () => {
       this.toggle();
@@ -183,13 +223,15 @@ class Select {
 
 //==========================================================================
 
-function renderSelect(className: string) {
-  let components = document.querySelectorAll(className);
-  let objMas = [];
-  for (let elem of components) {
-    objMas.push(new Select(className, elem as HTMLElement));
-  }
-  return objMas;
-}
+// function renderSelect(className: string) {
+//   let components = document.querySelectorAll(className);
+//   let objMas = [];
+//   for (let elem of components) {
+//     objMas.push(new Select(className, elem as HTMLElement));
+//   }
+//   return objMas;
+// }
 
-renderSelect('.select');
+// renderSelect('.select');
+
+export { Select };

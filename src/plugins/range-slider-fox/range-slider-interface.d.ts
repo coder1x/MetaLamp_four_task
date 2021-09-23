@@ -20,7 +20,6 @@ interface RangeSliderOptions {
   onUpdate?: Function;
 }
 
-
 interface RangeSliderFoxFunction {
   // eslint-disable-next-line no-unused-vars
   (options: RangeSliderOptions): JQuery;
