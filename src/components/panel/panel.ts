@@ -7,7 +7,7 @@ import { SliderData } from '../slider-data/slider-data';
 import { Grid } from '../grid/grid';
 import { Hints } from '../hints/hints';
 import { Different } from '../different/different';
-
+import { CopyCode } from '../code/code';
 
 
 
@@ -19,6 +19,7 @@ class Panel {
   private objGrid: Grid;
   private objHints: Hints;
   private objDifferent: Different;
+  private objCopyCode: CopyCode;
 
   // eslint-disable-next-line no-unused-vars
   constructor(public nameClass: string, elem: HTMLElement) {
@@ -39,6 +40,7 @@ class Panel {
     this.objGrid = new Grid('.grid', this.getDom('.grid'));
     this.objHints = new Hints('.hints', this.getDom('.hints'));
     this.objDifferent = new Different('.different', this.getDom('.different'));
+    this.objCopyCode = new CopyCode('.code', this.getDom('.code'));
   }
 
   setData(data: RangeSliderOptions) {
@@ -69,6 +71,28 @@ class Panel {
       orientation: data.orientation,
       theme: data.theme,
     });
+
+    this.setDataCode(data);
+  }
+
+  setDataCode(data: RangeSliderOptions) {
+    this.objCopyCode.setData({
+      type: data.type,
+      disabled: data.disabled,
+      orientation: data.orientation,
+      theme: data.theme,
+      min: data.min,
+      max: data.max,
+      from: data.from,
+      to: data.to,
+      grid: data.grid,
+      gridSnap: data.gridSnap,
+      gridNum: data.gridNum,
+      gridStep: data.gridStep,
+      tipMinMax: data.tipMinMax,
+      tipFromTo: data.tipFromTo,
+      tipPrefix: data.tipPrefix,
+    });
   }
 
 
@@ -91,6 +115,7 @@ class Panel {
       onUpdate: (data: RangeSliderOptions) => {
         // тут будем получать данные только если мы вызвали
         // reset всей конфигурации. 
+        this.setDataCode(data);
       }
     }).data('RangeSliderFox'); // вернёт объект для одного элемента
 

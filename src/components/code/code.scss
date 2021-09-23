@@ -10,9 +10,16 @@ $color-focus: $Dark-Shade-100;
   align-content: flex-start;
   height: 100%;
 
+  &__config {
+    margin-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
   &__item {
-    color: #75994f;
+    color: #646568;
     font-size: 14px;
+    margin-left: 20px;
   }
 
   &__lang-js {

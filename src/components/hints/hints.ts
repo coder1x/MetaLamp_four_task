@@ -46,26 +46,15 @@ class Hints {
 
   setAction(obj: any) {
 
-    let mapInput = new Map();
-    mapInput.set('tipPrefix', this.tipPrefix.value);
-
-
-
     const data = (e: Event) => {
       const elem = e.target as HTMLInputElement;
-      console.log({
-        [elem.name]: +mapInput.get(elem.name)
-      });
-
       obj.update({
-        [elem.name]: +mapInput.get(elem.name)
+        [elem.name]: elem.value
       });
     };
 
 
-
-    const masE = [this.tipPrefix,];
-
+    const masE = [this.tipPrefix];
     for (let item of masE) {
       item.addEventListener('change', data);
     }

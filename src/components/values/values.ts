@@ -90,8 +90,6 @@ class Values {
       item.addEventListener('input', inputProcessing);
     }
 
-
-
   }
 
 }

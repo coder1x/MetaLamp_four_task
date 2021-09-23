@@ -1,11 +1,17 @@
 import './code.scss';
 
+
+import { RangeSliderOptions } from
+  '../../plugins/range-slider-fox/mvc/model/model.d';
+
+
 class CopyCode {
 
-  className: string;
-  elem: HTMLElement;
-  button: HTMLButtonElement;
-  code: HTMLElement;
+  private className: string;
+  private elem: HTMLElement;
+  private button: HTMLButtonElement;
+  private items: HTMLElement[];
+
 
   constructor(className: string, component: HTMLElement) {
     this.className = className;
@@ -14,14 +20,37 @@ class CopyCode {
     this.setActions();
   }
 
-  setDomElem() {
-    this.button = this.elem.querySelector(this.className + '__copy');
-    this.code = this.elem.querySelector(this.className + '__lang-java');
+
+  setData(options: RangeSliderOptions) {
+    const key = Object.keys(options);
+    const val = Object.values(options);
+
+    for (let i = 0; i < key.length; i++) {
+      let valT: string;
+      if (typeof val[i] == 'string') { valT = '\'' + val[i] + '\''; }
+      else {
+        valT = val[i];
+      }
+      const text = key[i] + ': ' + valT + ',';
+      this.items[i].innerText = text;
+    }
   }
 
-  setActions() {
+
+  private setDomElem() {
+    this.button = this.elem.querySelector(this.className + '__copy');
+
+    this.items =
+      [...this.elem.querySelectorAll<HTMLElement>(this.className + '__item')];
+  }
+
+  private setActions() {
     this.button.addEventListener('click', () => {
-      const text = this.code.innerText;
+      let text = '$(\'.demo\').RangeSliderFox({\n';
+      for (let item of this.items) {
+        text += item.innerText + '\n';
+      }
+      text += '});';
       navigator.clipboard.writeText(text)
         .then(() => {
         })
@@ -34,15 +63,6 @@ class CopyCode {
 }
 
 
-//==========================================================================
 
-function renderCopyCode(className: string) {
-  let components = document.querySelectorAll(className);
-  let objMas = [];
-  for (let elem of components) {
-    objMas.push(new CopyCode(className, elem as HTMLElement));
-  }
-  return objMas;
-}
 
-renderCopyCode('.code');
+export { CopyCode };

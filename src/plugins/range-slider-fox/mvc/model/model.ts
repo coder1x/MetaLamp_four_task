@@ -543,6 +543,7 @@ gridNum >= 1
     let tipMinMax: PROP = options.tipMinMax;
     let tipFromTo: PROP = options.tipFromTo;
 
+
     tipPrefix = this.checkValue(tipPrefix, 'tipPrefix') as PROP;
     if (tipPrefix != null) {
       this.tipPrefix = String(tipPrefix).replace(/\s/g, '').substr(0, 3);
@@ -557,7 +558,7 @@ gridNum >= 1
       this.tipMinMax = true;
     }
 
-    tipFromTo = this.checkValue(tipFromTo, 'tipMinMax') as PROP;
+    tipFromTo = this.checkValue(tipFromTo, 'tipFromTo') as PROP;
     if (tipFromTo != null) {
       this.tipFromTo = tipFromTo as boolean;
     } else {

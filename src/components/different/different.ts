@@ -44,10 +44,6 @@ class Different {
     const selectE = this.elem.querySelector('.select');
     this.select = new Select('.select', selectE as HTMLElement);
 
-    // this.select.onUpdate = (val: string) => {
-    //   console.log('onUpdate: ' + val);
-    // };
-
   }
 
 
@@ -66,6 +62,27 @@ class Different {
         theme: val
       });
     };
+
+    this.disabled.addEventListener('click', function () {
+      obj.update({
+        disabled: this.checked
+      });
+    });
+
+    this.type.addEventListener('click', function () {
+      const val = this.checked ? 'double' : 'single';
+      obj.update({
+        type: val
+      });
+    });
+
+    this.orientation.addEventListener('click', function () {
+      const val = this.checked ? 'vertical' : 'horizontal';
+      obj.update({
+        orientation: val
+      });
+    });
+
 
   }
 
