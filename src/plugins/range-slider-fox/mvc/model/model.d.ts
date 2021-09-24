@@ -19,6 +19,7 @@ interface RangeSliderOptions {
   onStart?: Function;
   onChange?: Function;
   onUpdate?: Function;
+  onReset?: Function;
 }
 
 interface CalcDotPositionOpt {

@@ -46,6 +46,7 @@ class Model extends Observer {
   onChange: Function;
   onUpdate: Function;
   onStart: Function;
+  onReset: Function;
 
 
   //options: RangeSliderOptions;
@@ -88,6 +89,7 @@ class Model extends Observer {
     this.onChange = options.onChange ?? emptyFun;
     this.onUpdate = options.onUpdate ?? emptyFun;
     this.onStart = options.onStart ?? emptyFun;
+    this.onReset = options.onStart ?? emptyFun;
 
     this.update(options);
 
@@ -118,8 +120,25 @@ class Model extends Observer {
 
   reset() {
     const op = this.defaultData;
-    // тут будут все вызовы нотифая по конфигу
-    // которые будут запущены последовательно
+
+    if (this.startConfFl)
+      this.onReset(this.defaultData);
+
+    this.type = op.type;
+    this.orientation = op.orientation;
+    this.theme = op.theme;
+    this.min = op.min;
+    this.max = op.max;
+    this.to = op.to;
+    this.from = op.from;
+    this.tipPrefix = op.tipPrefix;
+    this.tipMinMax = op.tipMinMax;
+    this.tipFromTo = op.tipFromTo;
+    this.grid = op.grid;
+    this.gridSnap = op.gridSnap;
+    this.gridNum = op.gridNum;
+    this.gridStep = op.gridStep;
+    this.disabled = op.disabled;
 
     this.notifyOB({
       key: 'RangeData',
@@ -339,14 +358,14 @@ class Model extends Observer {
 
     if (type == 'double') // проверяем from и to 
     {
+      to = this.checkValue(to, 'to') as PROP;
+      if (to == null) return false;
+
       if (from > to) {
         const temp = from;
         from = to;
         to = temp;
       }
-
-      to = this.checkValue(to, 'to') as PROP;
-      if (to == null) return false;
 
       if (to <= this.max) {
         this.to = to as number;
@@ -730,7 +749,19 @@ gridNum >= 1
     const typeFrom = options.type == 'From';
 
     this.wrapWidth = options.wrapWidth;
-    const num = options.clientX - options.shiftX - options.wrapLeft;
+
+    const vertical = this.orientation == 'vertical';
+    const dotXY = options.clientX - options.shiftX;
+    let num = 0;
+
+    if (vertical) {
+      num = options.wrapLeft - dotXY;
+    } else {
+      num = dotXY - options.wrapLeft;
+    }
+
+
+
     let percent = num * 100 / this.wrapWidth;
 
     if (typeFrom) {
@@ -760,16 +791,13 @@ gridNum >= 1
         this.toP = percent;
         toFl = true;
       }
-
     }
     else { // если from больше to
       // берём значения точки к которой подъезжаем в плотную.
-      if (typeFrom) {
+      if (typeFrom)
         this.fromP = this.toP;
-      }
-      else {
+      else
         this.toP = this.fromP;
-      }
 
       fromFl = true;
       toFl = true;

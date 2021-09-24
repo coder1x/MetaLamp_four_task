@@ -111,11 +111,11 @@ class Panel {
       onChange: (data: RangeSliderOptions) => {
         this.setData(data);
       },
-      // eslint-disable-next-line no-unused-vars
       onUpdate: (data: RangeSliderOptions) => {
-        // тут будем получать данные только если мы вызвали
-        // reset всей конфигурации. 
         this.setDataCode(data);
+      },
+      onReset: (data: RangeSliderOptions) => {
+        this.setData(data);
       }
     }).data('RangeSliderFox'); // вернёт объект для одного элемента
 
@@ -124,7 +124,7 @@ class Panel {
     this.objValues.setAction(obj);
     this.objGrid.setAction(obj);
     this.objHints.setAction(obj);
-    this.objDifferent.setAction(obj);
+    this.objDifferent.setAction(obj, this.elem);
   }
 
 

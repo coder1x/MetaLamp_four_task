@@ -11,6 +11,7 @@ class Handle extends Observer {
   wrapElem: HTMLElement;
   eventFromF: boolean;
   eventToF: boolean;
+  vertical: boolean;
 
   // eslint-disable-next-line no-unused-vars
   constructor(rsName: string, rsCenter: HTMLElement) {
@@ -27,7 +28,6 @@ class Handle extends Observer {
 
 
   createDomBase(type: string) {
-
     if (type == 'double' && this.elemFrom && this.elemTo) return;
     if (type == 'single' && this.elemFrom && !this.elemTo) return;
 
@@ -62,20 +62,51 @@ class Handle extends Observer {
       // удаляем точку если есть
       if (toE) {
         toE.remove();
+        this.elemTo = null;
       }
     }
   }
 
 
+  setOrientation(str: string) {
+    this.vertical = str == 'vertical' ? true : false;
 
-  setFrom(fromP: number) {
-    this.elemFrom.style.left = fromP + '%';
+    const convertStyle = (elem: CSSStyleDeclaration) => {
+      let val = '';
+      if (this.vertical) {
+        if (elem.left == '') return;
+        val = elem.left;
+        elem.removeProperty('left');
+        elem.bottom = val;
+      } else {
+        if (elem.bottom == '') return;
+        val = elem.bottom;
+        elem.removeProperty('bottom');
+        elem.left = val;
+      }
+    };
+
+    convertStyle(this.elemFrom.style);
+
+    if (this.elemTo)
+      convertStyle(this.elemTo.style);
+
   }
 
 
-  setTo(toP: number, type: string) {
-    if (type == 'double')
-      this.elemTo.style.left = toP + '%';
+  setFrom(fromP: number) {
+    const val = fromP + '%';
+    const from = this.elemFrom.style;
+    this.vertical ? from.bottom = val : from.left = val;
+  }
+
+
+  setTo(toP: number) {
+    if (this.elemTo) {
+      const val = toP + '%';
+      const to = this.elemTo.style;
+      this.vertical ? to.bottom = val : to.left = val;
+    }
   }
 
 
@@ -94,7 +125,7 @@ class Handle extends Observer {
 
 
 
-    let shiftX = 0;
+    let shiftXY = 0;
 
 
     // moveDot - будет передовать данные - так что на эти изменения нужно подписывать слушателей
@@ -102,26 +133,30 @@ class Handle extends Observer {
 
     const moveDot = (event: PointerEvent, elem: HTMLElement, type: string) => {
 
-      const wrapWidth = this.wrapElem.offsetWidth;
-      const position = this.wrapElem.getBoundingClientRect().left;
+      let wrapWH = 0;
+      const rect = this.wrapElem.getBoundingClientRect();
 
-      // вызываем нотифай и опрашиваем подписчиков. 
+      let position = 0;
+      let clientXY = 0;
 
+      if (this.vertical) {
+        wrapWH = this.wrapElem.offsetHeight;
+        position = rect.bottom;
+        clientXY = event.clientY;
+      } else {
+        wrapWH = this.wrapElem.offsetWidth;
+        position = rect.left;
+        clientXY = event.clientX;
+      }
 
-      // console.log(type);  // какая точка 
-      // //console.log(elem.offsetWidth); // ширина точки - это нужно отдельно где то просчитывать 
-      // console.log(event.clientX);  // координаты точки 
-      // console.log(wrapWidth);  // ширина враппера - это нужно отдельно где то просчитывать 
-      // console.log(position); // координаты левого края враппера
-      // console.log(shiftX); // сдвиг = координаты точки минус координаты левой стороны этой точки.
 
       this.notifyOB({
         key: 'DotMove',
-        type: type,
-        wrapWidth: wrapWidth,
-        wrapLeft: position,
-        clientX: event.clientX,
-        shiftX: shiftX,
+        type: type,  // какая точка 
+        wrapWidth: wrapWH, // ширина или высота враппера  
+        wrapLeft: position,  // координаты левого или нижнего края враппера
+        clientX: clientXY, // координаты точки 
+        shiftX: shiftXY, // сдвиг = координаты точки минус координаты края этой точки.
       });
 
     };
@@ -138,7 +173,8 @@ class Handle extends Observer {
     };
 
     const mouseMoveTo = (event: PointerEvent) => {
-      moveDot(event, this.elemTo, 'To');
+      if (type == 'double')
+        moveDot(event, this.elemTo, 'To');
     };
 
 
@@ -149,8 +185,13 @@ class Handle extends Observer {
 
     const mouseDown = (event: PointerEvent, elem: HTMLElement) => {
       event.preventDefault();
-      const position = elem.getBoundingClientRect().left;
-      shiftX = event.clientX - position;
+      const rect = elem.getBoundingClientRect();
+
+      if (this.vertical) {
+        shiftXY = event.clientY - rect.bottom;
+      } else {
+        shiftXY = event.clientX - rect.left;
+      }
 
       elem.setPointerCapture(event.pointerId);
     };
@@ -166,8 +207,7 @@ class Handle extends Observer {
       if (!this.eventToF) {
         this.elemTo.addEventListener('pointerdown', (event: PointerEvent) => {
 
-          if (type == 'double')
-            this.elemTo.style.zIndex = '2';
+          this.elemTo.style.zIndex = '2';
           this.elemFrom.style.zIndex = '1';
 
 
@@ -185,7 +225,7 @@ class Handle extends Observer {
     if (!this.eventFromF) {
       this.elemFrom.addEventListener('pointerdown', (event: PointerEvent) => {
 
-        if (type == 'double')
+        if (this.elemTo)
           this.elemTo.style.zIndex = '1';
         this.elemFrom.style.zIndex = '2';
 

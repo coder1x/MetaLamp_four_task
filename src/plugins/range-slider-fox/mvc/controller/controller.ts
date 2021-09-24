@@ -72,9 +72,6 @@ class Controller {
     const key = options.key;
     if (key != 'DotData') return;
 
-    // console.log('handleDotData');
-    // console.log(options);
-
     const type = options.type;
 
     this.view.createDotElem(type); // создаём точки
@@ -84,7 +81,7 @@ class Controller {
 
     if (type == 'double') {
       const to = this.model.calcPositionDotTo();
-      this.view.setDotTo(to, type);
+      this.view.setDotTo(to);
     }
 
     this.view.setDotActions(type);
@@ -132,8 +129,9 @@ class Controller {
     const key = options.key;
     if (key != 'OrientationData') return;
 
-    // console.log('handleOrientationData');
-    // console.log(options);
+
+    this.view.setOrientation(options.orientation);
+
 
   };
 

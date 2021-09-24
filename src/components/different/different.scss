@@ -28,4 +28,23 @@
     grid-column-start: 1;
     grid-column-end: 4;
   }
+
+  &__reset-wrap {
+    margin-top: 20px;
+  }
+
+  &__reset {
+    display: flex;
+    border: 0px;
+    border-radius: 4px;
+    padding: 5px 10px 5px 10px;
+    background-color: #cdd1da;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  &__reset:active {
+    box-shadow: inset -1px 4px 4px 0px rgba(0, 0, 0, 0.129);
+    color: rgb(245, 245, 245);
+  }
 }

@@ -94,11 +94,28 @@ class View extends Observer {
     this.wrapSlider.appendChild(this.rangeSlider);
   }
 
+  setOrientation(str: string) {
+
+    const modif = this.rsName + '_vertical';
+    const objP = this.rangeSlider.classList;
+    str == 'vertical' ? objP.add(modif) : objP.remove(modif);
+
+    this.handle.setOrientation(str);
+
+    // передаём эти данные во вью 
+    // она в свою очередь раздаст всем собвью .. 
+    // и все они будут перестроены. на другую работу.
+
+    // удалить свойство лефт и поменять его на bottom.
+
+
+  }
 
 
   setActions() {
+    // eslint-disable-next-line no-unused-vars
     this.rsLine.addEventListener('click', (event: MouseEvent) => {
-      const elem = (event.target as HTMLElement);
+      // const elem = (event.target as HTMLElement);
 
       // вызываем оповещение подписчиков
       // handler(event.offsetX, elem.offsetWidth);
@@ -125,8 +142,8 @@ class View extends Observer {
     this.handle.setFrom(fromP);
   }
 
-  setDotTo(toP: number, type: string) {
-    this.handle.setTo(toP, type);
+  setDotTo(toP: number) {
+    this.handle.setTo(toP);
   }
 
 

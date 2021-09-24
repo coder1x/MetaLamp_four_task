@@ -18,6 +18,7 @@ class Different {
   private disabled: HTMLInputElement;
   private orientation: HTMLInputElement;
   private select: Select;
+  private reset: HTMLButtonElement;
 
 
   // eslint-disable-next-line no-unused-vars
@@ -40,6 +41,8 @@ class Different {
     this.type = getDom('double');
     this.disabled = getDom('disabled');
     this.orientation = getDom('vertical');
+    this.reset =
+      this.elem.querySelector(this.nameClass + '__reset') as HTMLButtonElement;
 
     const selectE = this.elem.querySelector('.select');
     this.select = new Select('.select', selectE as HTMLElement);
@@ -55,7 +58,11 @@ class Different {
     this.select.update(String(options.theme));
   }
 
-  setAction(obj: any) {
+  setAction(obj: any, panelE: HTMLElement) {
+
+    this.reset.addEventListener('click', () => {
+      obj.reset();
+    });
 
     this.select.onChange = (val: string) => {
       obj.update({
@@ -76,8 +83,15 @@ class Different {
       });
     });
 
+
+
+    const modif = panelE.className + '_vertical';
+
     this.orientation.addEventListener('click', function () {
       const val = this.checked ? 'vertical' : 'horizontal';
+      const objP = panelE.classList;
+      this.checked ? objP.add(modif) : objP.remove(modif);
+
       obj.update({
         orientation: val
       });
