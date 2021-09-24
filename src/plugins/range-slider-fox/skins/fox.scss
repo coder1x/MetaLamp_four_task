@@ -65,12 +65,13 @@
 
     &__from,
     &__to {
-      height: 20px;
+      height: 1px;
     }
 
     &__from::before,
     &__to::before {
       position: absolute;
+      top: -9px;
       left: -9px;
       content: "";
       width: 20px;

@@ -1,7 +1,8 @@
 
+// eslint-disable-next-line no-unused-vars
 import { CreateHandleOptions } from '../view.d';
 
-import { Observer, TOB } from '../../../observer';
+import { Observer } from '../../../observer';
 
 class Handle extends Observer {
 
@@ -153,10 +154,10 @@ class Handle extends Observer {
       this.notifyOB({
         key: 'DotMove',
         type: type,  // какая точка 
-        wrapWidth: wrapWH, // ширина или высота враппера  
-        wrapLeft: position,  // координаты левого или нижнего края враппера
-        clientX: clientXY, // координаты точки 
-        shiftX: shiftXY, // сдвиг = координаты точки минус координаты края этой точки.
+        wrapWH: wrapWH, // ширина или высота враппера  
+        position: position,  // координаты левого или нижнего края враппера
+        clientXY: clientXY, // координаты точки 
+        shiftXY: shiftXY, // сдвиг = координаты точки минус координаты края этой точки.
       });
 
     };

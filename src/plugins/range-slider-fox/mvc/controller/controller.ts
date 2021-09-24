@@ -1,7 +1,12 @@
 import { Model } from '../model/model';
 import { View } from '../view/view';
+
+// eslint-disable-next-line no-unused-vars
 import { CalcDotPositionOpt } from '../model/model.d';
+
+// eslint-disable-next-line no-unused-vars
 import { onChangeFrom, onChangeTo } from './controller.d';
+
 import { RangeSliderOptions } from '../model/model.d';
 
 import { TOB } from '../../observer';
@@ -98,10 +103,10 @@ class Controller {
 
     this.model.calcDotPosition({
       type: options.type,
-      wrapWidth: options.wrapWidth,
-      wrapLeft: options.wrapLeft,
-      clientX: options.clientX,
-      shiftX: options.shiftX,
+      wrapWH: options.wrapWH,
+      position: options.position,
+      clientXY: options.clientXY,
+      shiftXY: options.shiftXY,
     });
 
   };

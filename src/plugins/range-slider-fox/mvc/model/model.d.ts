@@ -25,10 +25,10 @@ interface RangeSliderOptions {
 interface CalcDotPositionOpt {
   // dotWidth: number,
   type: string,
-  wrapWidth: number,
-  wrapLeft: number,
-  clientX: number,
-  shiftX: number
+  wrapWH: number,
+  position: number,
+  clientXY: number,
+  shiftXY: number
 }
 
 type PROP = number | string | boolean | undefined | null;

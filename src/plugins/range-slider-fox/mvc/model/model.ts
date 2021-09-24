@@ -1,5 +1,5 @@
 import { RangeSliderOptions, CalcDotPositionOpt, PROP } from './model.d';
-import { Observer, TOB } from '../../observer';
+import { Observer } from '../../observer';
 
 
 
@@ -748,19 +748,17 @@ gridNum >= 1
     let toFl = false;
     const typeFrom = options.type == 'From';
 
-    this.wrapWidth = options.wrapWidth;
+    this.wrapWidth = options.wrapWH;
 
     const vertical = this.orientation == 'vertical';
-    const dotXY = options.clientX - options.shiftX;
+    const dotXY = options.clientXY - options.shiftXY;
     let num = 0;
 
     if (vertical) {
-      num = options.wrapLeft - dotXY;
+      num = options.position - dotXY;
     } else {
-      num = dotXY - options.wrapLeft;
+      num = dotXY - options.position;
     }
-
-
 
     let percent = num * 100 / this.wrapWidth;
 

@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line no-unused-vars
 import { CreateHandleOptions, CreateHintsOptions, DateGrid } from './view.d';
 import { Handle } from './sub-view/handle';
 import { Hints } from './sub-view/hints';
