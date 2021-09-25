@@ -29,7 +29,7 @@ class Model extends Observer {
   private toP: number;
   private limitFrom: number;
   private limitTo: number;
-  private wrapWidth: number;
+  private wrapWH: number;
 
   private MAX_VAL = 999999999999999;
   private MIN_VAL = -999999999999999;
@@ -180,6 +180,11 @@ class Model extends Observer {
       tipPrefix: op.tipPrefix,
       tipMinMax: op.tipMinMax,
       tipFromTo: op.tipFromTo,
+      min: this.min,
+      max: this.max,
+      from: this.from,
+      to: this.to,
+      type: this.type,
     });
 
     this.notifyOB({
@@ -584,12 +589,18 @@ gridNum >= 1
       this.tipFromTo = true;
     }
 
+
     // вызываем оповещение подписчиков
     this.notifyOB({
       key: 'HintsData',
       tipPrefix: this.tipPrefix,
       tipMinMax: this.tipMinMax,
       tipFromTo: this.tipFromTo,
+      min: this.min,
+      max: this.max,
+      from: this.from,
+      to: this.to,
+      type: this.type,
     });
 
     return true;
@@ -628,7 +639,7 @@ gridNum >= 1
     this.valP = this.getRange() / 100;  // один процент
   }
 
-
+  //---------------------------------- Handle
   getDataDotFrom() {
     return +(this.min + (this.fromP * this.valP)).toFixed(0);
   }
@@ -649,98 +660,9 @@ gridNum >= 1
     return this.toP;
   }
 
-
-
-
-
-  // calcGridNumStep() {
-  //   let interval = 0;
-  //   let step = 0;
-
-  //   if (this.gridStep && this.gridNum == 4) {     // если задан Шаг а интервал по умолчанию стоит
-  //     step = this.gridStep;
-  //     interval = this.getRange() / step;          // находим новый интервал
-  //   } else {                                      // делаем только по интервалу
-  //     interval = this.gridNum;
-  //     step = this.getRange() / interval;          // находим шаг
-  //   }
-
-  //   this.gridStep = step;
-  //   this.gridNum = interval;
-
-  //   return interval;
-  // }
-
-  // calcPositionGrid(value: number) {
-  //   value = value + this.gridStep;
-  //   const position = ((value - this.min) * 100) / this.getRange();
-  //   return { value, position };
-  // }
-
-
-  // calcWidthP(width: number) {
-  //   return (width * 100 / this.wrapWidth) / 2;
-  // }
-
-  // calcPositionTipFrom(tipFrom: number) {
-  //   const tipFromP = this.calcWidthP(tipFrom - 4);
-  //   const tipFromX = this.getFrom - tipFromP;
-  //   return tipFromX;
-  // }
-
-  // calcPositionTipSingle(widthSingle: number) {
-  //   const line = (this.getTo - this.getFrom) / 2;
-  //   const centerFromTo = this.getFrom + line;
-  //   const tipSingleP = this.calcWidthP(widthSingle);
-  //   const center = centerFromTo - tipSingleP;
-  //   return center;
-  // }
-
-  // calcPositionTipTo(tipTo: number) {
-  //   const tipToP = this.calcWidthP(tipTo - 4);
-  //   const tipToX = this.getTo - tipToP;
-  //   return tipToX;
-  // }
-
-
-
-  // calcPositionBar() {
-  //   let barX = 0;
-  //   let widthBar = 0;
-
-  //   if (this.type == 'double') {
-  //     barX = this.getFrom;
-  //     widthBar = this.getTo - this.getFrom;
-  //   } else {
-  //     widthBar = this.getFrom;
-  //   }
-
-  //   return { barX, widthBar };
-  // }
-
-
-  // clickLine = (pointX: number, wrapWidth: number) => {
-
-  //   this.wrapWidth = wrapWidth;
-  //   const oneP = wrapWidth / 100; // один процент от всей школы
-  //   const pointP = pointX / oneP; // кол. процентов в области где кликнули
-
-  //   if (this.type == 'single') {
-  //     this.setFrom = pointP;
-  //   }
-  //   else if (pointP > this.getTo) {       // если это значение больше чем To
-  //     this.setTo = pointP;                // To  на эту точку
-  //   } else if (pointP > this.getFrom) {   // если меньше To но больше From
-  //     const To = this.getTo - pointP;     // из To вычетаем Val
-  //     const From = pointP - this.getFrom; // из Val вычетаем From
-  //     From > To ? this.setTo = pointP : this.setFrom = pointP; // то число что меньше та точка и ближе
-  //   } else {                              // Если Val меньше From то подвигать From
-  //     this.setFrom = pointP;
-  //   }
-  //   this.limitTo = this.getTo;
-  //   this.limitFrom = this.getFrom;
-  // }
-
+  setWrapWH(val: number) {
+    this.wrapWH = val;
+  }
 
   calcDotPosition(options: CalcDotPositionOpt) {
 
@@ -748,7 +670,7 @@ gridNum >= 1
     let toFl = false;
     const typeFrom = options.type == 'From';
 
-    this.wrapWidth = options.wrapWH;
+    this.setWrapWH(options.wrapWH);
 
     const vertical = this.orientation == 'vertical';
     const dotXY = options.clientXY - options.shiftXY;
@@ -760,7 +682,7 @@ gridNum >= 1
       num = dotXY - options.position;
     }
 
-    let percent = num * 100 / this.wrapWidth;
+    let percent = num * 100 / this.wrapWH;
 
     if (typeFrom) {
       this.limitFrom = percent;
@@ -817,6 +739,107 @@ gridNum >= 1
       to: to,
     });
   }
+
+
+  //---------------------------------- Hints
+
+
+  calcWidthP(width: number) {
+    return (width * 100 / this.wrapWH) / 2;
+  }
+
+  calcPositionTipFrom(tipFrom: number) {
+    const tipFromP = this.calcWidthP(tipFrom - 4);
+    const tipFromX = this.fromP - tipFromP;
+    return tipFromX;
+  }
+
+  calcPositionTipTo(tipTo: number) {
+    const tipToP = this.calcWidthP(tipTo - 4);
+    const tipToX = this.toP - tipToP;
+    return tipToX;
+  }
+
+  calcPositionTipSingle(widthSingle: number) {
+    const line = (this.toP - this.fromP) / 2;
+    const centerFromTo = this.fromP + line;
+    const tipSingleP = this.calcWidthP(widthSingle);
+    const center = centerFromTo - tipSingleP;
+    return center;
+  }
+
+
+
+
+
+  //---------------------------------- Grid
+  // calcGridNumStep() {
+  //   let interval = 0;
+  //   let step = 0;
+
+  //   if (this.gridStep && this.gridNum == 4) {     // если задан Шаг а интервал по умолчанию стоит
+  //     step = this.gridStep;
+  //     interval = this.getRange() / step;          // находим новый интервал
+  //   } else {                                      // делаем только по интервалу
+  //     interval = this.gridNum;
+  //     step = this.getRange() / interval;          // находим шаг
+  //   }
+
+  //   this.gridStep = step;
+  //   this.gridNum = interval;
+
+  //   return interval;
+  // }
+
+  // calcPositionGrid(value: number) {
+  //   value = value + this.gridStep;
+  //   const position = ((value - this.min) * 100) / this.getRange();
+  //   return { value, position };
+  // }
+
+
+
+
+  //---------------------------------- Bar
+
+  // calcPositionBar() {
+  //   let barX = 0;
+  //   let widthBar = 0;
+
+  //   if (this.type == 'double') {
+  //     barX = this.getFrom;
+  //     widthBar = this.getTo - this.getFrom;
+  //   } else {
+  //     widthBar = this.getFrom;
+  //   }
+
+  //   return { barX, widthBar };
+  // }
+
+
+  // clickLine = (pointX: number, wrapWidth: number) => {
+
+  //   this.wrapWidth = wrapWidth;
+  //   const oneP = wrapWidth / 100; // один процент от всей школы
+  //   const pointP = pointX / oneP; // кол. процентов в области где кликнули
+
+  //   if (this.type == 'single') {
+  //     this.setFrom = pointP;
+  //   }
+  //   else if (pointP > this.getTo) {       // если это значение больше чем To
+  //     this.setTo = pointP;                // To  на эту точку
+  //   } else if (pointP > this.getFrom) {   // если меньше To но больше From
+  //     const To = this.getTo - pointP;     // из To вычетаем Val
+  //     const From = pointP - this.getFrom; // из Val вычетаем From
+  //     From > To ? this.setTo = pointP : this.setFrom = pointP; // то число что меньше та точка и ближе
+  //   } else {                              // Если Val меньше From то подвигать From
+  //     this.setFrom = pointP;
+  //   }
+  //   this.limitTo = this.getTo;
+  //   this.limitFrom = this.getFrom;
+  // }
+
+
 
 
 

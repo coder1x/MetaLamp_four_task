@@ -1,5 +1,6 @@
 
-import { CreateTipFromTo } from '../view.d';
+import { CreateTipFromTo, CreateTipMinMax } from '../view.d';
+
 
 class Hints {
 
@@ -10,19 +11,13 @@ class Hints {
   tipMin: HTMLElement;
   tipMax: HTMLElement;
   tipSingle: HTMLElement;
-  flMinMax: boolean;
-  flFromTo: boolean;
-  fromPosition: number;
-  toPosition: number;
-  type: string;
   tipPrefix: string;
 
 
   constructor(elem: HTMLElement | Element) {
     this.rsName = 'range-slider-fox';
     this.rsTop = (elem as HTMLElement);
-    this.flMinMax = false;
-    this.flFromTo = false;
+
   }
 
   createElem(teg: string, className: string[]) {
@@ -33,84 +28,173 @@ class Hints {
     return elem;
   }
 
-  createTipMinMax(min: number, max: number, tipPrefix: string) {
+
+  setPrefix(tipPrefix: string) {
     this.tipPrefix = tipPrefix;
+  }
+
+  getPrefix(val: number | string) {
+    let text = String(val);
+    if (this.tipPrefix)
+      text += ' ' + this.tipPrefix;
+    return text;
+  }
+
+
+  //----------------------- создаём элементы
+
+  createTipMinMax() {
+    if (this.tipMin && this.tipMax) return;
     this.tipMin = this.createElem('div', [this.rsName + '__tip-min']);
     this.tipMax = this.createElem('div', [this.rsName + '__tip-max']);
-    this.setTipMin(min);
-    this.setTipMax(max);
     this.rsTop.appendChild(this.tipMin);
     this.rsTop.appendChild(this.tipMax);
-    this.flMinMax = true;
   }
 
-  createTipFromTo(options: CreateTipFromTo) {
-    const op = options;
-    this.tipPrefix = op.tipPrefix;
-    this.type = op.type;
+  createTipFrom() {
+    if (this.tipFrom) return;
     this.tipFrom = this.createElem('div', [this.rsName + '__tip-from']);
-    this.tipFrom.innerText = this.getPrefix(op.valFrom);
     this.rsTop.appendChild(this.tipFrom);
+  }
 
-    if (op.type == 'double') {
-      this.tipTo = this.createElem('div', [this.rsName + '__tip-to']);
-      this.tipTo.innerText = this.getPrefix(op.valTo);
+  createTipTo() {
+    if (this.tipTo) return;
+    this.tipTo = this.createElem('div', [this.rsName + '__tip-to']);
+    this.rsTop.appendChild(this.tipTo);
+  }
 
-      this.tipSingle = this.createElem('div', [this.rsName + '__tip-single']);
-      this.tipSingle.innerText =
-        this.getPrefix(op.valFrom) +
-        ' ⟷ ' +
-        this.getPrefix(op.valTo);
-      this.tipSingle.style.visibility = 'hidden';
-      this.rsTop.appendChild(this.tipTo);
-      this.rsTop.appendChild(this.tipSingle);
-    }
-
-    this.flFromTo = true;
+  createTipSingle() {
+    if (this.tipSingle) return;
+    this.tipSingle = this.createElem('div', [this.rsName + '__tip-single']);
+    this.tipSingle.style.visibility = 'hidden';
+    this.rsTop.appendChild(this.tipSingle);
   }
 
 
-  setTipSingle() {
-    if (!this.flMinMax || !this.flFromTo || this.type == 'single') return;
+  //------------------- удаляем элементы
+  deleteTipMinMax() {
+    if (!this.tipMin && !this.tipMax) return;
+    this.tipMin.remove();
+    this.tipMax.remove();
+    this.tipMin = null;
+    this.tipMax = null;
+  }
+
+  deleteTipFrom() {
+    if (!this.tipFrom) return;
+    this.tipFrom.remove();
+    this.tipFrom = null;
+  }
+
+  deleteTipTo() {
+    if (!this.tipTo) return;
+    this.tipTo.remove();
+    this.tipTo = null;
+  }
+
+  deleteTipSingle() {
+    if (!this.tipSingle) return;
+    this.tipSingle.remove();
+    this.tipSingle = null;
+  }
+
+
+
+  // --------------------------- заносим значения
+  setData(elem: HTMLElement, val: number) {
+    if (elem) {
+      elem.innerText = this.getPrefix(val);
+      this.checkVisibleTip();
+    }
+  }
+
+
+  setValTipMinMax(min: number, max: number) {
+    this.setData(this.tipMin, min);
+    this.setData(this.tipMax, max);
+  }
+
+  setValTipFrom(from: number) {
+    this.setData(this.tipFrom, from);
+  }
+  setValTipTo(to: number) {
+    this.setData(this.tipTo, to);
+  }
+
+  setValTipSingle() {
+    if (!this.tipSingle) return;
     const valFrom = this.tipFrom.innerHTML;
     const valTo = this.tipTo.innerHTML;
-    this.tipSingle.innerText = valFrom + ' ⟷ ' + valTo;
+    this.tipSingle.innerText = this.getPrefix(valFrom) +
+      ' ⟷ ' +
+      this.getPrefix(valTo);
   }
 
-  getWidthSingle() {
-    if (this.type == 'double') {
-      return this.tipSingle.offsetWidth;
-    } else {
-      return 0;
-    }
+  // --------------------------- изменяем позицию и обнавляем значения
+  setPositionFrom(coorXY: number, from: number) {
+    if (!this.tipFrom) return;
+    this.setValTipFrom(from);
+    this.tipFrom.style.left = coorXY + '%';
   }
 
-  getWidthFrom() {
-    return this.tipFrom.offsetWidth;
+  setPositionTo(coorXY: number, to: number) {
+    if (!this.tipTo) return;
+    this.setValTipTo(to);
+    this.tipTo.style.left = coorXY + '%';
   }
 
-  getWidthTo() {
-    if (this.type == 'double') {
-      return this.tipTo.offsetWidth;
-    } else {
-      return 0;
-    }
+  setPositionSingle(coorXY: number) {
+    if (!this.tipSingle) return;
+    this.setValTipSingle();
+    this.tipSingle.style.left = coorXY + '%';
   }
 
-  positionTipSingle(singleX: number) {
-    if (this.type == 'double')
-      this.tipSingle.style.left = singleX + '%';
+
+
+  getWidthTip() {
+    let fromW = 0;
+    let toW = 0;
+    let singleW = 0;
+    if (this.tipFrom)
+      fromW = this.tipFrom.offsetWidth;
+    if (this.tipTo)
+      toW = this.tipTo.offsetWidth;
+    if (this.tipSingle)
+      singleW = this.tipSingle.offsetWidth;
+    return { fromW, toW, singleW, };
   }
+
+
+  getHeightTip() {
+    let fromW = 0;
+    let toW = 0;
+    let singleW = 0;
+    if (this.tipFrom)
+      fromW = this.tipFrom.offsetHeight;
+    if (this.tipTo)
+      toW = this.tipTo.offsetHeight;
+    if (this.tipSingle)
+      singleW = this.tipSingle.offsetHeight;
+    return { fromW, toW, singleW, };
+  }
+
 
   checkVisibleTip() {
-    if (!this.flMinMax || !this.flFromTo) return;
+
+    const minMaxF = !this.tipMin || !this.tipMax;
+    const fromSingleF = !this.tipFrom || !this.tipSingle;
+
+    if (minMaxF || fromSingleF) return;
+    if (!this.tipSingle.style.left) return;
+
+    const type = this.tipTo ? true : false;
 
     const tipFromX = this.tipFrom.getBoundingClientRect().left;
     const tipFromW = this.tipFrom.offsetWidth;
 
     let tipToX = 0;
     let tipToW = 0;
-    if (this.type == 'double') {
+    if (type) {
       tipToX = this.tipTo.getBoundingClientRect().left;
       tipToW = this.tipTo.offsetWidth;
     }
@@ -126,62 +210,34 @@ class Hints {
     const visibilityTipMax = tipMaxX <= tipToXRight || tipMaxX <= tipFromXRight;
     const visibilityTipMin = tipMinXRight <= tipFromX;
 
-    if (this.type == 'double')
+    const display = (elem: HTMLElement, str: string) => {
+      elem.style.visibility = str;
+    };
+
+
+    if (type)
       if (visibilityTipSingle) {
-        this.tipFrom.style.visibility = 'hidden';
-        this.tipTo.style.visibility = 'hidden';
-        this.tipSingle.style.visibility = 'visible';
+        display(this.tipFrom, 'hidden');
+        display(this.tipTo, 'hidden');
+        display(this.tipSingle, 'visible');
       } else {
-        this.tipFrom.style.visibility = 'visible';
-        this.tipTo.style.visibility = 'visible';
-        this.tipSingle.style.visibility = 'hidden';
+        display(this.tipFrom, 'visible');
+        display(this.tipTo, 'visible');
+        display(this.tipSingle, 'hidden');
       }
 
     if (visibilityTipMax)
-      this.tipMax.style.visibility = 'hidden';
+      display(this.tipMax, 'hidden');
     else
-      this.tipMax.style.visibility = 'visible';
+      display(this.tipMax, 'visible');
+
 
     if (visibilityTipMin)
-      this.tipMin.style.visibility = 'visible';
+      display(this.tipMin, 'visible');
     else
-      this.tipMin.style.visibility = 'hidden';
-
-  }
-
-  getPrefix(val: number) {
-    let text = String(val);
-    if (this.tipPrefix)
-      text += ' ' + this.tipPrefix;
-    return text;
-  }
-
-  setTipMin(min: number) {
-    this.tipMin.innerText = this.getPrefix(min);
-    this.checkVisibleTip();
-  }
-
-  setTipMax(max: number) {
-    this.tipMax.innerText = this.getPrefix(max);
-    this.checkVisibleTip();
-  }
+      display(this.tipMin, 'hidden');
 
 
-  setTipFrom(valFrom: number, fromX: number) {
-    this.fromPosition = fromX;
-    this.tipFrom.innerText = this.getPrefix(valFrom);
-    this.tipFrom.style.left = fromX + '%';
-    this.checkVisibleTip();
-    this.setTipSingle();
-  }
-
-  setTipTo(valTo: number, toX: number) {
-    if (this.type == 'single') return;
-    this.toPosition = toX;
-    this.tipTo.innerText = this.getPrefix(valTo);
-    this.tipTo.style.left = toX + '%';
-    this.checkVisibleTip();
-    this.setTipSingle();
   }
 
 

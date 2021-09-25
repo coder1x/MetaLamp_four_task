@@ -18,14 +18,21 @@ interface CreateHintsOptions {
   valFrom: number,
   valTo: number,
   type: string,
-  tipPrefix: string,
+  tipMinMax: boolean,
+  tipFromTo: boolean,
 }
 
 interface CreateTipFromTo {
   valFrom: number,
   valTo: number,
   type: string,
-  tipPrefix: string,
+  tipFromTo: boolean,
+}
+
+interface CreateTipMinMax {
+  min: number,
+  max: number,
+  tipMinMax: boolean,
 }
 
 interface DateGrid {
@@ -40,5 +47,6 @@ export {
   TipFromTo,
   CreateHintsOptions,
   CreateTipFromTo,
-  DateGrid
+  DateGrid,
+  CreateTipMinMax
 };

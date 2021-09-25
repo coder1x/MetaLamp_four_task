@@ -19,7 +19,7 @@ class View extends Observer {
   rsBottom: Element;
   rsLine: HTMLElement;
   prevTheme: string;
-
+  vertical: boolean;
   handle: Handle;
   hints: Hints;
   bar: Bar;
@@ -46,6 +46,7 @@ class View extends Observer {
 
 
     this.handle = new Handle(this.rsName, this.rsCenter);
+    this.hints = new Hints(this.rsTop);
 
   }
 
@@ -63,8 +64,20 @@ class View extends Observer {
     });
   };
 
-  // когда получим данные то повесить модификатор темы theme: string
-  // 'rs-' + theme // тут нужно запрашивать из модели
+  // private handleWrapWH = (options: TOB) => {
+  //   const key = options.key;
+  //   if (key != 'WrapWH') return;
+
+  //   this.notifyOB({
+  //     key: 'WrapWH', ...options
+  //   });
+  // };
+
+  getWrapWH() {
+    return (this.vertical ?
+      this.rsCenter.offsetHeight :
+      this.rsCenter.offsetWidth);
+  }
 
   createDomBase() {
 
@@ -99,8 +112,8 @@ class View extends Observer {
 
     const modif = this.rsName + '_vertical';
     const objP = this.rangeSlider.classList;
-    str == 'vertical' ? objP.add(modif) : objP.remove(modif);
-
+    this.vertical = str == 'vertical' ? true : false;
+    this.vertical ? objP.add(modif) : objP.remove(modif);
     this.handle.setOrientation(str);
 
     // передаём эти данные во вью 
@@ -125,8 +138,6 @@ class View extends Observer {
 
 
   setTheme(theme: string) {
-
-    // удаляем старую тему если есть 
     if (this.prevTheme)
       this.rangeSlider.classList.remove(this.prevTheme);
     const classN = 'rs-' + theme;
@@ -135,6 +146,9 @@ class View extends Observer {
   }
 
 
+
+
+  //--------------------------------- handle
   createDotElem(type: string) {
     this.handle.createDomBase(type);
   }
@@ -147,62 +161,78 @@ class View extends Observer {
     this.handle.setTo(toP);
   }
 
-
   setDotActions(type: string) {
     this.handle.setActions(type);
   }
 
-  // initHandle(options: CreateHandleOptions) {
-  //   this.handle = new Handle(options);
-  // }
+  //--------------------------------- hints
 
-  // initHints(handler: Function) {
-  //   this.hints = new Hints(this.rsTop);
-  //   handler();
-  // }
+  setHintsData(options: TOB) {
+    this.hints.setPrefix(options.tipPrefix);
 
-  // initBar(handler: Function) {
-  //   this.bar = new Bar(this.rsCenter);
-  //   handler();
-  // }
+    if (options.tipMinMax) {
+      this.hints.createTipMinMax();
+      this.hints.setValTipMinMax(options.min, options.max);
+    }
+    else {
+      this.hints.deleteTipMinMax();
+    }
 
-  // initGrid(handler: Function) {
-  //   this.grid = new Grid(this.rsBottom);
-  //   handler();
-  // }
+    if (options.tipFromTo) {
+      this.hints.createTipFrom();
+      this.hints.setValTipFrom(options.from);
+      if (options.type == 'double') {
+        this.hints.createTipTo();
+        this.hints.createTipSingle();
+        this.hints.setValTipTo(options.to);
+        this.hints.setValTipSingle();
+      }
+    } else {
+      this.hints.deleteTipFrom();
+      if (options.type == 'double') {
+        this.hints.deleteTipTo();
+        this.hints.deleteTipSingle();
+      }
+    }
+  }
 
-  // setDataGrid(options: DateGrid) {
-  //   this.grid.setData(options);
-  // }
+  getWidthTip() {
+    return this.hints.getWidthTip();
+  }
 
-  // createDomGrid(handler: Function) {
-  //   this.grid.createDomGrid(handler);
-  // }
+  setPositionFrom(coorXY: number, from: number) {
+    this.hints.setPositionFrom(coorXY, from);
+  }
 
-  // createDomBar(handler: Function) {
-  //   this.bar.createDomBar(this.rsLine);
-  //   handler();
-  // }
+  setPositionTo(coorXY: number, to: number) {
+    this.hints.setPositionTo(coorXY, to);
+  }
 
-  // setPositionBar(barX: number, widthBar: number) {
-  //   this.bar.setBar(barX, widthBar);
-  // }
+  setPositionSingle(coorXY: number) {
+    this.hints.setPositionSingle(coorXY);
+  }
 
-  // createDomHints(handler: Function, options: CreateHintsOptions) {
 
-  //   this.hints.createTipMinMax(
-  //     options.min,
-  //     options.max,
-  //     options.tipPrefix
-  //   );
+
+
+
+
+  // createDomHints(options: CreateHintsOptions) {
+  //   this.hints.createTipMinMax({
+  //     min: options.min,
+  //     max: options.max,
+  //     tipMinMax: options.tipMinMax,
+  //   });
   //   this.hints.createTipFromTo({
   //     valFrom: options.valFrom,
   //     valTo: options.valTo,
   //     type: options.type,
-  //     tipPrefix: options.tipPrefix
+  //     tipFromTo: options.tipFromTo,
   //   });
+  // }
 
-  //   handler();
+  // setTipPrefix(tipPrefix: string) {
+  //   this.hints.setPrefix(tipPrefix);
   // }
 
   // getWidthTipFromTo() {
@@ -233,23 +263,33 @@ class View extends Observer {
 
 
 
-  // createHandle(handler: Function) {
-  //   this.handle.createHandle(this.rsCenter, handler);
+
+
+  // initGrid(handler: Function) {
+  //   this.grid = new Grid(this.rsBottom);
+  //   handler();
   // }
 
-
-
-  // setActionsHandle(handler: Function) {
-  //   this.handle.setActions(handler);
+  // setDataGrid(options: DateGrid) {
+  //   this.grid.setData(options);
   // }
 
-
-  // setPositionFrom(fromP: number) {
-  //   this.handle.setFrom(fromP);
+  // createDomGrid(handler: Function) {
+  //   this.grid.createDomGrid(handler);
   // }
 
-  // setPositionTo(toP: number) {
-  //   this.handle.setTo(toP);
+  // createDomBar(handler: Function) {
+  //   this.bar.createDomBar(this.rsLine);
+  //   handler();
+  // }
+
+  // setPositionBar(barX: number, widthBar: number) {
+  //   this.bar.setBar(barX, widthBar);
+  // }
+
+  // initBar(handler: Function) {
+  //   this.bar = new Bar(this.rsCenter);
+  //   handler();
   // }
 
 

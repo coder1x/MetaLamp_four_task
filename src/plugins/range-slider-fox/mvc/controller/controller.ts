@@ -14,7 +14,7 @@ import { TOB } from '../../observer';
 
 class Controller {
 
-  // private startFl = false;
+  private startFl = false;
 
   // eslint-disable-next-line no-unused-vars
   constructor(private model: Model, private view: View) {
@@ -41,7 +41,7 @@ class Controller {
 
   private init() {
     this.reset();
-    // this.startFl = true;
+    this.startFl = true;
   }
 
 
@@ -91,6 +91,10 @@ class Controller {
 
     this.view.setDotActions(type);
 
+    if (this.startFl) {
+      this.ubdateTipFromTo(options.from, options.to, options.type);
+    }
+
   };
 
 
@@ -136,8 +140,6 @@ class Controller {
 
 
     this.view.setOrientation(options.orientation);
-
-
   };
 
 
@@ -156,10 +158,33 @@ class Controller {
     const key = options.key;
     if (key != 'HintsData') return;
 
-    // console.log('handleHintsData');
-    // console.log(options);
+    const wrapWH = this.view.getWrapWH();
+    this.model.setWrapWH(wrapWH);
 
+    this.view.setHintsData(options);
+
+    this.ubdateTipFromTo(options.from, options.to, options.type);
   };
+
+  private ubdateTipFromTo(from: number, to: number, type: string) {
+
+    const obj = this.view.getWidthTip();
+    if (!obj.fromW && !obj.toW) return;
+
+    let coorXY = this.model.calcPositionTipFrom(obj.fromW);
+    this.view.setPositionFrom(coorXY, from);
+
+    if (type == 'double') {
+      coorXY = this.model.calcPositionTipTo(obj.toW);
+      this.view.setPositionTo(coorXY, to);
+
+      coorXY = this.model.calcPositionTipSingle(obj.singleW);
+      this.view.setPositionSingle(coorXY);
+    }
+  }
+
+
+
 
   private handleDisabledData = (options: TOB) => {
     const key = options.key;
@@ -174,95 +199,6 @@ class Controller {
 
 
 
-
-
-  // getDataTheme() {
-  //   const obj = this.model.getOptions();
-  //   return obj.theme;
-  // }
-
-  // getDataInitHandle() {
-  //   const obj = this.model.getOptions();
-  //   return {
-  //     type: obj.type,
-  //   };
-  // }
-
-  // getDataHints() {
-  //   const obj = this.model.getOptions();
-  //   return {
-  //     min: obj.min,
-  //     max: obj.max,
-  //     valFrom: obj.valFrom,
-  //     valTo: obj.valTo,
-  //     type: obj.type,
-  //     tipPrefix: obj.tipPrefix,
-  //   };
-  // }
-
-  // private createListeners() {
-
-  //   this.model.onChangeFrom = (data: onChangeFrom) => {
-  //     this.view.setPositionFrom(data.fromP);
-  //     if (this.flagTipCreate) {
-  //       this.ubdateTipFrom(data.valFrom);
-  //       this.ubdateTipSingle();
-  //     }
-
-  //     if (this.flagBarCreate)
-  //       this.ubdateBar();
-  //   };
-  //   this.model.onChangeTo = (data: onChangeTo) => {
-  //     this.view.setPositionTo(data.toP);
-  //     if (this.flagTipCreate) {
-  //       this.ubdateTipTo(data.valTo);
-  //       this.ubdateTipSingle();
-  //     }
-
-  //     if (this.flagBarCreate)
-  //       this.ubdateBar();
-  //   };
-
-  // }
-
-
-  // private handleCreateDomBase = () => {
-  //   this.view.initDomElem(this.handleInitDomElem);
-  // }
-
-  // private handleInitDomElem = () => {
-  //   this.view.createHandle(this.handleCreateHandle);
-  // }
-
-  // private handleCreateHandle = (fromWidth: number, wrapWidth: number) => {
-
-  //   this.model.calcPosition(fromWidth, wrapWidth);
-  //   this.view.setActionsHandle(this.handleActionsHandle);
-  //   this.view.setActions(this.handleActionsView);
-  //   this.view.initHints(this.handleInitHints);
-  // }
-
-
-  // private handleInitHints = () => {
-  //   this.view.createDomHints(
-  //     this.handleCreateDomHints,
-  //     this.getDataHints()
-  //   );
-
-  // }
-
-
-  // private handleCreateDomHints = () => {
-
-  //   this.view.initBar(this.handleInitBar);
-
-  //   const obj = this.getDataHints();
-  //   this.ubdateTipFrom(obj.valFrom);
-  //   this.ubdateTipTo(obj.valTo);
-  //   this.ubdateTipSingle();
-  //   this.flagTipCreate = true;
-  // }
-
   // private handleInitBar = () => {
   //   this.view.createDomBar(this.handleCreateDomBar);
   // }
@@ -273,6 +209,10 @@ class Controller {
 
   //   this.view.initGrid(this.handleInitGrid);
   // }
+
+
+
+
 
   // private handleInitGrid = () => {
   //   this.handleCreateDomGrid(); // это нужно будет убрать... 
@@ -310,23 +250,6 @@ class Controller {
   // }
 
 
-  // private ubdateTipFrom = (valFrom: number) => {
-  //   const obj = this.view.getWidthTipFromTo();
-  //   const tipFromX = this.model.calcPositionTipFrom(obj.tipFrom);
-  //   this.view.setTipFrom(valFrom, tipFromX);
-  // }
-
-  // private ubdateTipTo = (valTo: number) => {
-  //   const obj = this.view.getWidthTipFromTo();
-  //   const tipToX = this.model.calcPositionTipTo(obj.tipTo);
-  //   this.view.setTipTo(valTo, tipToX);
-  // }
-
-  // private ubdateTipSingle = () => {
-  //   const widthSingle = this.view.getWidthTipSingle();
-  //   const position = this.model.calcPositionTipSingle(widthSingle);
-  //   this.view.setTipSingleX(position);
-  // }
 
   // private handleActionsView = (pointX: number, wrapWidth: number) => {
   //   this.model.clickLine(pointX, wrapWidth);
