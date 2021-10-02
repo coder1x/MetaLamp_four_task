@@ -64,6 +64,7 @@ class Panel {
       tipMinMax: data.tipMinMax,
       tipFromTo: data.tipFromTo,
       tipPrefix: data.tipPrefix,
+      tipPostfix: data.tipPostfix,
     });
     this.objDifferent.setData({
       type: data.type,
@@ -92,6 +93,7 @@ class Panel {
       tipMinMax: data.tipMinMax,
       tipFromTo: data.tipFromTo,
       tipPrefix: data.tipPrefix,
+      tipPostfix: data.tipPostfix,
     });
   }
 

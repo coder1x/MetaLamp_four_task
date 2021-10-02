@@ -91,14 +91,18 @@ class Controller {
 
     this.view.setDotActions(type);
 
+    // ----------  Hints
     if (this.startFl) {
-      if (type == 'double') {
-        if (!this.view.checkTipTo()) {
-          this.view.createTipTo();
-          this.view.setValTipTo(options.to);
-        }
-      }
-      this.ubdateTipFromTo(options.from, options.to, options.type);
+      if (type == 'double')
+        this.view.toggleTipTo(options.to);
+      this.view.ubdateTipFromTo({
+        from: options.from,
+        to: options.to,
+        type: options.type,
+        fromXY: this.model.calcPositionTipFrom,
+        toXY: this.model.calcPositionTipTo,
+        singleXY: this.model.calcPositionTipSingle,
+      });
     }
 
   };
@@ -169,27 +173,17 @@ class Controller {
 
     this.view.setHintsData(options);
 
-    this.ubdateTipFromTo(options.from, options.to, options.type);
+    this.view.ubdateTipFromTo({
+      from: options.from,
+      to: options.to,
+      type: options.type,
+      fromXY: this.model.calcPositionTipFrom,
+      toXY: this.model.calcPositionTipTo,
+      singleXY: this.model.calcPositionTipSingle,
+    });
   };
 
-  private ubdateTipFromTo(from: number, to: number, type: string) {
 
-    const obj = this.view.getWidthTip();
-    if (!obj.fromW && !obj.toW) return;
-
-    let coorXY = this.model.calcPositionTipFrom(obj.fromW);
-    this.view.setPositionFrom(coorXY, from);
-
-    if (type == 'double') {
-      coorXY = this.model.calcPositionTipTo(obj.toW);
-      this.view.setPositionTo(coorXY, to);
-
-      coorXY = this.model.calcPositionTipSingle(obj.singleW);
-      this.view.setPositionSingle(coorXY);
-    } else {
-      this.view.deleteTipTo();
-    }
-  }
 
 
 

@@ -41,6 +41,15 @@ interface DateGrid {
   max: number,
 }
 
+interface UbdateTip {
+  from: number,
+  to: number,
+  fromXY: Function,
+  toXY: Function,
+  type: string,
+  singleXY: Function,
+}
+
 
 export {
   CreateHandleOptions,
@@ -48,5 +57,6 @@ export {
   CreateHintsOptions,
   CreateTipFromTo,
   DateGrid,
-  CreateTipMinMax
+  CreateTipMinMax,
+  UbdateTip
 };

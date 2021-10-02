@@ -1,10 +1,16 @@
 
 // eslint-disable-next-line no-unused-vars
-import { CreateHandleOptions, CreateHintsOptions, DateGrid } from './view.d';
+import {
+  CreateHandleOptions,
+  CreateHintsOptions,
+  DateGrid,
+  UbdateTip
+} from './view.d';
 import { Handle } from './sub-view/handle';
 import { Hints } from './sub-view/hints';
 import { Bar } from './sub-view/bar';
 import { Grid } from './sub-view/grid';
+
 
 
 import { Observer, TOB } from '../../observer';
@@ -169,7 +175,7 @@ class View extends Observer {
 
   setHintsData(options: TOB) {
     this.hints.setPrefix(options.tipPrefix);
-
+    this.hints.setPostfix(options.tipPostfix);
     if (options.tipMinMax) {
       this.hints.createTipMinMax();
       this.hints.setValTipMinMax(options.min, options.max);
@@ -196,85 +202,31 @@ class View extends Observer {
     }
   }
 
-  getWidthTip() {
-    return this.hints.getWidthTip();
+  toggleTipTo(to: number) {
+    if (!this.hints.checkTipTo()) {
+      this.hints.createTipTo();
+      this.hints.setValTipTo(to);
+    }
   }
 
-  deleteTipTo() {
-    this.hints.deleteTipTo();
-  }
+  ubdateTipFromTo(op: UbdateTip) {
+    const obj = this.hints.getWidthTip();
+    if (!obj.fromW && !obj.toW) return;
 
-  createTipTo() {
-    this.hints.createTipTo();
-  }
+    this.hints.setPositionFrom(op.fromXY(obj.fromW), op.from);
 
-  setValTipTo(to: number) {
-    this.hints.setValTipTo(to);
-  }
-
-  checkTipTo() {
-    return this.hints.checkTipTo();
-  }
-
-  setPositionFrom(coorXY: number, from: number) {
-    this.hints.setPositionFrom(coorXY, from);
-  }
-
-  setPositionTo(coorXY: number, to: number) {
-    this.hints.setPositionTo(coorXY, to);
-  }
-
-  setPositionSingle(coorXY: number) {
-    this.hints.setPositionSingle(coorXY);
+    if (op.type == 'double') {
+      this.hints.setPositionTo(op.toXY(obj.toW), op.to);
+      this.hints.setPositionSingle(op.singleXY(obj.singleW));
+    } else {
+      this.hints.deleteTipTo();
+    }
   }
 
 
 
 
 
-
-  // createDomHints(options: CreateHintsOptions) {
-  //   this.hints.createTipMinMax({
-  //     min: options.min,
-  //     max: options.max,
-  //     tipMinMax: options.tipMinMax,
-  //   });
-  //   this.hints.createTipFromTo({
-  //     valFrom: options.valFrom,
-  //     valTo: options.valTo,
-  //     type: options.type,
-  //     tipFromTo: options.tipFromTo,
-  //   });
-  // }
-
-  // setTipPrefix(tipPrefix: string) {
-  //   this.hints.setPrefix(tipPrefix);
-  // }
-
-  // getWidthTipFromTo() {
-  //   const widthFrom = this.hints.getWidthFrom();
-  //   const widthTo = this.hints.getWidthTo();
-  //   return {
-  //     tipFrom: widthFrom,
-  //     tipTo: widthTo
-  //   };
-  // }
-
-  // setTipFrom(valFrom: number, tipFromX: number) {
-  //   this.hints.setTipFrom(valFrom, tipFromX);
-  // }
-
-  // setTipTo(valTo: number, tipToX: number) {
-  //   this.hints.setTipTo(valTo, tipToX);
-  // }
-
-  // setTipSingleX(singleX: number) {
-  //   this.hints.positionTipSingle(singleX);
-  // }
-
-  // getWidthTipSingle() {
-  //   return this.hints.getWidthSingle();
-  // }
 
 
 

@@ -87,7 +87,22 @@ $color-focus: #1f2041;
   .range-slider-fox {
     &__top {
       width: auto;
+      flex-direction: column;
+      justify-content: unset;
+      align-items: unset;
     }
+
+    &__tip-min {
+      position: absolute;
+      bottom: 0%;
+      right: 10px;
+    }
+
+    &__tip-max {
+      position: absolute;
+      right: 10px;
+    }
+
     &__center {
       width: auto;
     }

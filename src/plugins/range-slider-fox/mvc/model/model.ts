@@ -14,6 +14,7 @@ class Model extends Observer {
   private from: number;
   private to: number;
   private tipPrefix: string;
+  private tipPostfix: string;
   private tipMinMax: boolean;
   private tipFromTo: boolean;
   private gridSnap: boolean;
@@ -71,6 +72,7 @@ class Model extends Observer {
       from: 1,          // позиция первой точки
       to: 2,            // позиция второй точки
       tipPrefix: '',    // Префикс для подсказок не больше 3 символов.
+      tipPostfix: '',
       tipMinMax: true,  // подсказки включены
       tipFromTo: true,  // подсказки точек включены
       grid: false,      // Шкала выключена
@@ -108,6 +110,7 @@ class Model extends Observer {
       to: this.to,
       from: this.from,
       tipPrefix: this.tipPrefix,
+      tipPostfix: this.tipPostfix,
       tipMinMax: this.tipMinMax,
       tipFromTo: this.tipFromTo,
       grid: this.grid,
@@ -559,18 +562,26 @@ gridNum >= 1
   */
   setHintsData(options: RangeSliderOptions): boolean {
 
-    const properties = ['tipPrefix', 'tipMinMax', 'tipFromTo'];
+    const properties = ['tipPrefix', 'tipPostfix', 'tipMinMax', 'tipFromTo'];
     // проверяем есть ли вообще для нас обнавления 
     if (!this.propertiesValidation(properties, options)) return false;
 
     let tipPrefix: PROP = options.tipPrefix;
+    let tipPostfix: PROP = options.tipPostfix;
     let tipMinMax: PROP = options.tipMinMax;
     let tipFromTo: PROP = options.tipFromTo;
 
 
+    tipPostfix = this.checkValue(tipPostfix, 'tipPostfix') as PROP;
+    if (tipPostfix != null) {
+      this.tipPostfix = String(tipPostfix).replace(/\s/g, '').substr(0, 15);
+    } else {
+      this.tipPostfix = '';
+    }
+
     tipPrefix = this.checkValue(tipPrefix, 'tipPrefix') as PROP;
     if (tipPrefix != null) {
-      this.tipPrefix = String(tipPrefix).replace(/\s/g, '').substr(0, 3);
+      this.tipPrefix = String(tipPrefix).replace(/\s/g, '').substr(0, 15);
     } else {
       this.tipPrefix = '';
     }
@@ -594,6 +605,7 @@ gridNum >= 1
     this.notifyOB({
       key: 'HintsData',
       tipPrefix: this.tipPrefix,
+      tipPostfix: this.tipPostfix,
       tipMinMax: this.tipMinMax,
       tipFromTo: this.tipFromTo,
       min: this.min,
@@ -748,19 +760,19 @@ gridNum >= 1
     return (width * 100 / this.wrapWH) / 2;
   }
 
-  calcPositionTipFrom(tipFrom: number) {
+  calcPositionTipFrom = (tipFrom: number) => {
     const tipFromP = this.calcWidthP(tipFrom - 4);
     const tipFromX = this.fromP - tipFromP;
     return tipFromX;
   }
 
-  calcPositionTipTo(tipTo: number) {
+  calcPositionTipTo = (tipTo: number) => {
     const tipToP = this.calcWidthP(tipTo - 4);
     const tipToX = this.toP - tipToP;
     return tipToX;
   }
 
-  calcPositionTipSingle(widthSingle: number) {
+  calcPositionTipSingle = (widthSingle: number) => {
     const line = (this.toP - this.fromP) / 2;
     const centerFromTo = this.fromP + line;
     const tipSingleP = this.calcWidthP(widthSingle);
