@@ -92,6 +92,12 @@ class Controller {
     this.view.setDotActions(type);
 
     if (this.startFl) {
+      if (type == 'double') {
+        if (!this.view.checkTipTo()) {
+          this.view.createTipTo();
+          this.view.setValTipTo(options.to);
+        }
+      }
       this.ubdateTipFromTo(options.from, options.to, options.type);
     }
 
@@ -180,6 +186,8 @@ class Controller {
 
       coorXY = this.model.calcPositionTipSingle(obj.singleW);
       this.view.setPositionSingle(coorXY);
+    } else {
+      this.view.deleteTipTo();
     }
   }
 

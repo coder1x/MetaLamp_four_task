@@ -84,12 +84,14 @@ class Hints {
     if (!this.tipFrom) return;
     this.tipFrom.remove();
     this.tipFrom = null;
+    this.checkVisibleTip();
   }
 
   deleteTipTo() {
     if (!this.tipTo) return;
     this.tipTo.remove();
     this.tipTo = null;
+    this.checkVisibleTip();
   }
 
   deleteTipSingle() {
@@ -98,13 +100,15 @@ class Hints {
     this.tipSingle = null;
   }
 
+  checkTipTo() {
+    return this.tipTo ? true : false;
+  }
 
 
   // --------------------------- заносим значения
   setData(elem: HTMLElement, val: number) {
     if (elem) {
       elem.innerText = this.getPrefix(val);
-      this.checkVisibleTip();
     }
   }
 
@@ -135,12 +139,14 @@ class Hints {
     if (!this.tipFrom) return;
     this.setValTipFrom(from);
     this.tipFrom.style.left = coorXY + '%';
+    this.checkVisibleTip();
   }
 
   setPositionTo(coorXY: number, to: number) {
     if (!this.tipTo) return;
     this.setValTipTo(to);
     this.tipTo.style.left = coorXY + '%';
+    this.checkVisibleTip();
   }
 
   setPositionSingle(coorXY: number) {
@@ -150,11 +156,13 @@ class Hints {
   }
 
 
-
+  //--------------------------------------- оптимизировать. 
   getWidthTip() {
     let fromW = 0;
     let toW = 0;
     let singleW = 0;
+
+    // - это можно перебрать через map метод. 
     if (this.tipFrom)
       fromW = this.tipFrom.offsetWidth;
     if (this.tipTo)
@@ -177,66 +185,84 @@ class Hints {
       singleW = this.tipSingle.offsetHeight;
     return { fromW, toW, singleW, };
   }
+  //--------------------------------------------- end 
+
 
 
   checkVisibleTip() {
-
-    const minMaxF = !this.tipMin || !this.tipMax;
-    const fromSingleF = !this.tipFrom || !this.tipSingle;
-
-    if (minMaxF || fromSingleF) return;
-    if (!this.tipSingle.style.left) return;
-
-    const type = this.tipTo ? true : false;
-
-    const tipFromX = this.tipFrom.getBoundingClientRect().left;
-    const tipFromW = this.tipFrom.offsetWidth;
-
+    let tipFromX = 0;
+    let tipFromW = 0;
     let tipToX = 0;
     let tipToW = 0;
+    let tipMinX = 0;
+    let tipMinW = 0;
+    let tipMaxX = 0;
+
+
+
+    const type = this.checkTipTo();
+
+    if (this.tipFrom) {
+      tipFromX = this.tipFrom.getBoundingClientRect().left;
+      tipFromW = this.tipFrom.offsetWidth;
+    }
+
     if (type) {
       tipToX = this.tipTo.getBoundingClientRect().left;
       tipToW = this.tipTo.offsetWidth;
     }
-    const tipMinX = this.tipMin.getBoundingClientRect().left;
-    const tipMinW = this.tipMin.offsetWidth;
-    const tipMaxX = this.tipMax.getBoundingClientRect().left;
 
+    if (this.tipMin) {
+      tipMinX = this.tipMin.getBoundingClientRect().left;
+      tipMinW = this.tipMin.offsetWidth;
+      tipMaxX = this.tipMax.getBoundingClientRect().left;
+    }
+
+
+    const tipMinXRight = tipMinX + tipMinW;
     const tipFromXRight = tipFromX + tipFromW;
     const tipToXRight = tipToX + tipToW;
-    const tipMinXRight = tipMinX + tipMinW;
-
     const visibilityTipSingle = tipFromXRight >= tipToX;
-    const visibilityTipMax = tipMaxX <= tipToXRight || tipMaxX <= tipFromXRight;
-    const visibilityTipMin = tipMinXRight <= tipFromX;
+    let visibilityTipMax = tipMaxX <= tipToXRight || tipMaxX <= tipFromXRight;
+    const visibilityTipMin = tipMinXRight <= tipFromX || !this.tipFrom;
 
     const display = (elem: HTMLElement, str: string) => {
       elem.style.visibility = str;
     };
 
 
-    if (type)
-      if (visibilityTipSingle) {
-        display(this.tipFrom, 'hidden');
-        display(this.tipTo, 'hidden');
-        display(this.tipSingle, 'visible');
+
+
+    if (this.tipFrom)
+      if (type) {
+        if (visibilityTipSingle) {
+          display(this.tipFrom, 'hidden');
+          display(this.tipTo, 'hidden');
+          display(this.tipSingle, 'visible');
+        } else {
+          display(this.tipFrom, 'visible');
+          display(this.tipTo, 'visible');
+          display(this.tipSingle, 'hidden');
+        }
       } else {
         display(this.tipFrom, 'visible');
-        display(this.tipTo, 'visible');
         display(this.tipSingle, 'hidden');
       }
 
-    if (visibilityTipMax)
-      display(this.tipMax, 'hidden');
-    else
-      display(this.tipMax, 'visible');
 
 
-    if (visibilityTipMin)
-      display(this.tipMin, 'visible');
-    else
-      display(this.tipMin, 'hidden');
+    if (this.tipMin) {
+      if (visibilityTipMax && this.tipFrom)
+        display(this.tipMax, 'hidden');
+      else
+        display(this.tipMax, 'visible');
 
+
+      if (visibilityTipMin)
+        display(this.tipMin, 'visible');
+      else
+        display(this.tipMin, 'hidden');
+    }
 
   }
 

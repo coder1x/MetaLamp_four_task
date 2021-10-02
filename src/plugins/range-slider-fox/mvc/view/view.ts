@@ -200,6 +200,22 @@ class View extends Observer {
     return this.hints.getWidthTip();
   }
 
+  deleteTipTo() {
+    this.hints.deleteTipTo();
+  }
+
+  createTipTo() {
+    this.hints.createTipTo();
+  }
+
+  setValTipTo(to: number) {
+    this.hints.setValTipTo(to);
+  }
+
+  checkTipTo() {
+    return this.hints.checkTipTo();
+  }
+
   setPositionFrom(coorXY: number, from: number) {
     this.hints.setPositionFrom(coorXY, from);
   }
