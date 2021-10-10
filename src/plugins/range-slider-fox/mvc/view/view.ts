@@ -1,8 +1,6 @@
 
 // eslint-disable-next-line no-unused-vars
 import {
-  CreateHandleOptions,
-  CreateHintsOptions,
   DateGrid,
   UbdateTip
 } from './view.d';
@@ -122,11 +120,10 @@ class View extends Observer {
     this.vertical ? objP.add(modif) : objP.remove(modif);
     this.handle.setOrientation(str);
 
-    // передаём эти данные во вью 
-    // она в свою очередь раздаст всем собвью .. 
-    // и все они будут перестроены. на другую работу.
+    this.hints.setOrientation(str);
+    // изменить позиции подсказок с учётом 
+    // положения слайдера.
 
-    // удалить свойство лефт и поменять его на bottom.
 
 
   }
@@ -174,8 +171,8 @@ class View extends Observer {
   //--------------------------------- hints
 
   setHintsData(options: TOB) {
-    this.hints.setPrefix(options.tipPrefix);
-    this.hints.setPostfix(options.tipPostfix);
+    this.hints.setAdditionalText(options.tipPrefix, options.tipPostfix);
+    this.hints.setTipFlag(options.tipFromTo, options.tipMinMax);
     if (options.tipMinMax) {
       this.hints.createTipMinMax();
       this.hints.setValTipMinMax(options.min, options.max);
@@ -211,13 +208,13 @@ class View extends Observer {
 
   ubdateTipFromTo(op: UbdateTip) {
     const obj = this.hints.getWidthTip();
-    if (!obj.fromW && !obj.toW) return;
+    if (!obj.fromWH && !obj.toWH) return;
 
-    this.hints.setPositionFrom(op.fromXY(obj.fromW), op.from);
+    this.hints.setPositionFrom(op.fromXY(obj.fromWH), op.from);
 
     if (op.type == 'double') {
-      this.hints.setPositionTo(op.toXY(obj.toW), op.to);
-      this.hints.setPositionSingle(op.singleXY(obj.singleW));
+      this.hints.setPositionTo(op.toXY(obj.toWH), op.to);
+      this.hints.setPositionSingle(op.singleXY(obj.singleWH));
     } else {
       this.hints.deleteTipTo();
     }

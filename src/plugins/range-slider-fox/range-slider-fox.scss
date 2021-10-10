@@ -103,6 +103,16 @@ $color-focus: #1f2041;
       right: 10px;
     }
 
+    &__tip-from,
+    &__tip-to {
+      right: 10px;
+    }
+
+    &__tip-single {
+      right: 10px;
+      text-align: center;
+    }
+
     &__center {
       width: auto;
     }

@@ -1,4 +1,13 @@
 
+interface CH {
+  tipMaxXY: number,
+  visibilityTipSingle: boolean,
+  visibilityTipMax: boolean,
+  visibilityTipMin: boolean,
+  tipMinYTop: number,
+  tipMinXRight: number,
+}
+
 
 class Hints {
 
@@ -11,12 +20,14 @@ class Hints {
   tipSingle: HTMLElement;
   tipPrefix: string;
   tipPostfix: string;
+  tipFromTo: boolean;
+  tipMinMax: boolean;
+  vertical: boolean;
 
 
   constructor(elem: HTMLElement | Element) {
     this.rsName = 'range-slider-fox';
     this.rsTop = (elem as HTMLElement);
-
   }
 
   createElem(teg: string, className: string[]) {
@@ -27,26 +38,55 @@ class Hints {
     return elem;
   }
 
-
-  setPrefix(tipPrefix: string) {
-    this.tipPrefix = tipPrefix;
+  setTipFlag(tipFromTo: boolean, tipMinMax: boolean) {
+    this.tipFromTo = tipFromTo;
+    this.tipMinMax = tipMinMax;
   }
 
-  setPostfix(tipPostfix: string) {
+  setAdditionalText(tipPrefix: string, tipPostfix: string) {
+    this.tipPrefix = tipPrefix;
     this.tipPostfix = tipPostfix;
   }
 
+
   getPrefix(val: number | string) {
     let text = String(val);
-
     if (this.tipPostfix)
       text = this.tipPostfix + ' ' + text;
-
     if (this.tipPrefix)
       text += ' ' + this.tipPrefix;
     return text;
   }
 
+  setOrientation(str: string) {
+    this.vertical = str == 'vertical' ? true : false;
+    // нужно вызвать сигнал который перестроит подсказки по новым координатам.
+
+    const convertStyle = (elem: CSSStyleDeclaration) => {
+      let val = '';
+      if (this.vertical) {
+        if (elem.left == '') return;
+        val = elem.left;
+        elem.removeProperty('left');
+        elem.bottom = val;
+      } else {
+        if (elem.bottom == '') return;
+        val = elem.bottom;
+        elem.removeProperty('bottom');
+        elem.left = val;
+      }
+    };
+
+    if (this.tipFrom)
+      convertStyle(this.tipFrom.style);
+
+    if (this.tipTo) {
+      convertStyle(this.tipTo.style);
+      if (this.tipSingle)
+        convertStyle(this.tipSingle.style);
+    }
+
+  }
 
   //----------------------- создаём элементы
 
@@ -106,9 +146,10 @@ class Hints {
     this.tipSingle.remove();
     this.tipSingle = null;
   }
+  //-------------------
 
   checkTipTo() {
-    return this.tipTo ? true : false;
+    return this.tipTo || !this.tipFromTo ? true : false;
   }
 
 
@@ -136,120 +177,216 @@ class Hints {
     if (!this.tipSingle) return;
     const valFrom = this.tipFrom.innerHTML;
     const valTo = this.tipTo.innerHTML;
-    this.tipSingle.innerText = valFrom + ' ⟷ ' + valTo;
+    this.tipSingle.innerText = valFrom +
+      (this.vertical ? ' ↕ ' : ' ⟷ ') + valTo;
   }
 
   // --------------------------- изменяем позицию и обнавляем значения
+
+  setStylePosition(coorXY: number, st: CSSStyleDeclaration) {
+    this.vertical ? st.bottom = coorXY + '%' : st.left = coorXY + '%';
+  }
+
   setPositionFrom(coorXY: number, from: number) {
     if (!this.tipFrom) return;
     this.setValTipFrom(from);
-    this.tipFrom.style.left = coorXY + '%';
+    const st = this.tipFrom.style;
+    this.setStylePosition(coorXY, st);
     this.checkVisibleTip();
   }
 
   setPositionTo(coorXY: number, to: number) {
     if (!this.tipTo) return;
     this.setValTipTo(to);
-    this.tipTo.style.left = coorXY + '%';
+    const st = this.tipTo.style;
+    this.setStylePosition(coorXY, st);
     this.checkVisibleTip();
   }
 
   setPositionSingle(coorXY: number) {
     if (!this.tipSingle) return;
     this.setValTipSingle();
-    this.tipSingle.style.left = coorXY + '%';
+    const st = this.tipSingle.style;
+    this.setStylePosition(coorXY, st);
   }
 
 
-  //--------------------------------------- оптимизировать. 
+  getSizeElem(elem: HTMLElement) {
+    return this.vertical ? elem.offsetHeight : elem.offsetWidth;
+  }
+
   getWidthTip() {
-    let fromW = 0;
-    let toW = 0;
-    let singleW = 0;
-
-    // - это можно перебрать через map метод. 
+    let fromWH = 0;
+    let toWH = 0;
+    let singleWH = 0;
     if (this.tipFrom)
-      fromW = this.tipFrom.offsetWidth;
+      fromWH = this.getSizeElem(this.tipFrom);
     if (this.tipTo)
-      toW = this.tipTo.offsetWidth;
+      toWH = this.getSizeElem(this.tipTo);
     if (this.tipSingle)
-      singleW = this.tipSingle.offsetWidth;
-    return { fromW, toW, singleW, };
+      singleWH = this.getSizeElem(this.tipSingle);
+    return { fromWH, toWH, singleWH, };
   }
 
 
-  getHeightTip() {
-    let fromW = 0;
-    let toW = 0;
-    let singleW = 0;
-    if (this.tipFrom)
-      fromW = this.tipFrom.offsetHeight;
-    if (this.tipTo)
-      toW = this.tipTo.offsetHeight;
-    if (this.tipSingle)
-      singleW = this.tipSingle.offsetHeight;
-    return { fromW, toW, singleW, };
-  }
-  //--------------------------------------------- end 
 
-
-
-  checkVisibleTip() {
-    let tipFromX = 0;
-    let tipFromW = 0;
-    let tipToX = 0;
-    let tipToW = 0;
-    let tipMinX = 0;
-    let tipMinW = 0;
-    let tipMaxX = 0;
-
-    const type = this.checkTipTo();
-
+  getBoundingFrom() {
+    let tipFromXY = 0;
+    let tipFromWH = 0;
     if (this.tipFrom) {
-      tipFromX = this.tipFrom.getBoundingClientRect().left;
-      tipFromW = this.tipFrom.offsetWidth;
+      const cr = this.tipFrom.getBoundingClientRect();
+      tipFromXY = this.vertical ? cr.bottom : cr.left;
+      tipFromWH = this.vertical ?
+        this.tipFrom.offsetHeight : this.tipFrom.offsetWidth;
     }
+    return { tipFromXY, tipFromWH };
+  }
 
-    if (type) {
-      tipToX = this.tipTo.getBoundingClientRect().left;
-      tipToW = this.tipTo.offsetWidth;
+  getBoundingTo() {
+    let tipToXY = 0;
+    let tipToWH = 0;
+    if (this.tipTo) {
+      const cr = this.tipTo.getBoundingClientRect();
+      tipToXY = this.vertical ? cr.bottom : cr.left;
+      tipToWH = this.vertical ?
+        this.tipTo.offsetHeight : this.tipTo.offsetWidth;
     }
+    return { tipToXY, tipToWH };
+  }
 
+  getBoundingMinMax() {
+    let tipMinXY = 0;
+    let tipMinWH = 0;
+    let tipMaxXY = 0;
     if (this.tipMin) {
-      tipMinX = this.tipMin.getBoundingClientRect().left;
-      tipMinW = this.tipMin.offsetWidth;
-      tipMaxX = this.tipMax.getBoundingClientRect().left;
+      const crMin = this.tipMin.getBoundingClientRect();
+      tipMinXY = this.vertical ? crMin.bottom : crMin.left;
+      tipMinWH = this.vertical ?
+        this.tipMin.offsetHeight : this.tipMin.offsetWidth;
+
+      const crMax = this.tipMax.getBoundingClientRect();
+      tipMaxXY = this.vertical ? crMax.bottom : crMax.left;
+    }
+    return { tipMinXY, tipMinWH, tipMaxXY };
+  }
+
+  getBoundingSingle() {
+    let tipSingleXY = 0;
+    let tipSingleWH = 0;
+    let tipSingleB = 0;
+
+    const cr = this.tipSingle.getBoundingClientRect();
+    tipSingleXY = this.vertical ? cr.bottom : cr.left;
+    tipSingleWH = this.vertical ?
+      this.tipSingle.offsetHeight : this.tipSingle.offsetWidth;
+
+    if (this.vertical) {
+      tipSingleB = tipSingleXY - tipSingleWH;
+    } else {
+      tipSingleB = tipSingleXY + tipSingleWH;
     }
 
-    const tipMinXRight = tipMinX + tipMinW;
-    const tipFromXRight = tipFromX + tipFromW;
-    const tipToXRight = tipToX + tipToW;
-    const visibilityTipSingle = tipFromXRight >= tipToX;
-    let visibilityTipMax = tipMaxX <= tipToXRight || tipMaxX <= tipFromXRight;
-    const visibilityTipMin = tipMinXRight <= tipFromX || !this.tipFrom;
+    return { tipSingleXY, tipSingleB };
+  }
+
+  toggleDisplay(op: CH) {
+
+    let {
+      tipMaxXY,
+      visibilityTipSingle,
+      visibilityTipMax,
+      visibilityTipMin,
+      tipMinYTop,
+      tipMinXRight,
+    } = op;
 
     const display = (elem: HTMLElement, fl: boolean) => {
       const toggle = fl ? 'visible' : 'hidden';
-      elem.style.visibility = toggle;
+      if (elem)
+        elem.style.visibility = toggle;
     };
 
-    if (this.tipFrom)
-      if (type) {
+    if (this.tipFrom && this.tipFromTo)
+      if (this.tipTo) {
         const vis = visibilityTipSingle ? false : true;
         display(this.tipFrom, vis);
         display(this.tipTo, vis);
         display(this.tipSingle, visibilityTipSingle);
+
+        if (visibilityTipSingle) {
+          let { tipSingleXY, tipSingleB } = this.getBoundingSingle();
+          if (this.vertical) {
+            if (tipMaxXY >= tipSingleB)
+              visibilityTipMax = true;
+            if (tipMinYTop <= tipSingleXY)
+              visibilityTipMin = false;
+          } else {
+            if (tipMaxXY <= tipSingleB)
+              visibilityTipMax = true;
+            if (tipMinXRight >= tipSingleXY)
+              visibilityTipMin = false;
+          }
+
+        }
       } else {
         display(this.tipFrom, true);
         display(this.tipSingle, false);
       }
 
-    if (this.tipMin) {
+    if (this.tipMin && this.tipMinMax) {
       const visMax = visibilityTipMax && this.tipFrom ? false : true;
       display(this.tipMax, visMax);
-
       display(this.tipMin, visibilityTipMin);
     }
+  }
+
+
+
+  checkVisibleTip() {
+    if (!this.tipMinMax && !this.tipFromTo) return;
+
+    //------------------------------------------- Получаем данные
+    let { tipFromXY, tipFromWH } = this.getBoundingFrom();
+    let { tipToXY, tipToWH } = this.getBoundingTo();
+    let { tipMinXY, tipMinWH, tipMaxXY } = this.getBoundingMinMax();
+    //-------------------------------------------
+
+    let visibilityTipSingle = false;
+    let visibilityTipMax = false;
+    let visibilityTipMin = false;
+    let tipMinYTop = 0;
+    let tipMinXRight = 0;
+
+    //------------------------------------------- Определяем логику
+    if (this.vertical) {
+      tipMinYTop = tipMinXY - tipMinWH;
+      const tipFromYTop = tipFromXY - tipFromWH;
+      const tipToYTop = tipToXY - tipToWH;
+      visibilityTipSingle = tipFromYTop <= tipToXY;
+      if (this.tipTo) {
+        visibilityTipMax = tipMaxXY >= tipToYTop || tipMaxXY >= tipFromYTop;
+      } else {
+        visibilityTipMax = tipMaxXY >= tipFromYTop;
+      }
+      visibilityTipMin = tipMinYTop >= tipFromXY || !this.tipFrom;
+    } else {
+      tipMinXRight = tipMinXY + tipMinWH;
+      const tipFromXRight = tipFromXY + tipFromWH;
+      const tipToXRight = tipToXY + tipToWH;
+      visibilityTipSingle = tipFromXRight >= tipToXY;
+      visibilityTipMax = tipMaxXY <= tipToXRight || tipMaxXY <= tipFromXRight;
+      visibilityTipMin = tipMinXRight <= tipFromXY || !this.tipFrom;
+    }
+    //------------------------------------------- Изменяем отображение
+    this.toggleDisplay({
+      tipMaxXY,
+      visibilityTipSingle,
+      visibilityTipMax,
+      visibilityTipMin,
+      tipMinYTop,
+      tipMinXRight,
+    });
+    //------------------------------------------- 
   }
 
 

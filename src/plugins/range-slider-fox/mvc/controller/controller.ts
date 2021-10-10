@@ -150,6 +150,16 @@ class Controller {
 
 
     this.view.setOrientation(options.orientation);
+
+    const obj = this.model.getOptions();
+    this.view.ubdateTipFromTo({
+      from: obj.from,
+      to: obj.to,
+      type: obj.type,
+      fromXY: this.model.calcPositionTipFrom,
+      toXY: this.model.calcPositionTipTo,
+      singleXY: this.model.calcPositionTipSingle,
+    });
   };
 
 
@@ -182,7 +192,6 @@ class Controller {
       singleXY: this.model.calcPositionTipSingle,
     });
   };
-
 
 
 

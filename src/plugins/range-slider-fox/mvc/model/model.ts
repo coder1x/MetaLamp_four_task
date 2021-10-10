@@ -762,20 +762,20 @@ gridNum >= 1
 
   calcPositionTipFrom = (tipFrom: number) => {
     const tipFromP = this.calcWidthP(tipFrom - 4);
-    const tipFromX = this.fromP - tipFromP;
-    return tipFromX;
+    const tipFromXY = this.fromP - tipFromP;
+    return tipFromXY;
   }
 
   calcPositionTipTo = (tipTo: number) => {
     const tipToP = this.calcWidthP(tipTo - 4);
-    const tipToX = this.toP - tipToP;
-    return tipToX;
+    const tipToXY = this.toP - tipToP;
+    return tipToXY;
   }
 
-  calcPositionTipSingle = (widthSingle: number) => {
+  calcPositionTipSingle = (singleWH: number) => {
     const line = (this.toP - this.fromP) / 2;
     const centerFromTo = this.fromP + line;
-    const tipSingleP = this.calcWidthP(widthSingle);
+    const tipSingleP = this.calcWidthP(singleWH);
     const center = centerFromTo - tipSingleP;
     return center;
   }
