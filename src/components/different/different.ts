@@ -6,6 +6,7 @@ import { Select } from '../select/select';
 interface OP {
   type?: string;
   disabled?: boolean;
+  bar?: boolean;
   orientation?: string;
   theme?: string;
 }
@@ -17,6 +18,7 @@ class Different {
   private type: HTMLInputElement;
   private disabled: HTMLInputElement;
   private orientation: HTMLInputElement;
+  private bar: HTMLInputElement;
   private select: Select;
   private reset: HTMLButtonElement;
 
@@ -40,6 +42,7 @@ class Different {
 
     this.type = getDom('double');
     this.disabled = getDom('disabled');
+    this.bar = getDom('bar');
     this.orientation = getDom('vertical');
     this.reset =
       this.elem.querySelector(this.nameClass + '__reset') as HTMLButtonElement;
@@ -52,6 +55,7 @@ class Different {
 
   setData(options: OP) {
     this.disabled.checked = options.disabled;
+    this.bar.checked = options.bar;
     this.type.checked = options.type == 'double' ? true : false;
     const orientF = options.orientation == 'horizontal' ? false : true;
     this.orientation.checked = orientF;
@@ -73,6 +77,12 @@ class Different {
     this.disabled.addEventListener('click', function () {
       obj.update({
         disabled: this.checked
+      });
+    });
+
+    this.bar.addEventListener('click', function () {
+      obj.update({
+        bar: this.checked
       });
     });
 

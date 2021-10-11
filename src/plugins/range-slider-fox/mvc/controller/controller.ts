@@ -34,6 +34,8 @@ class Controller {
     this.model.subscribeOB(this.handleThemeData);
     this.model.subscribeOB(this.handleHintsData);
     this.model.subscribeOB(this.handleDisabledData);
+    this.model.subscribeOB(this.handleBarData);
+
 
     this.view.subscribeOB(this.handleDotMove);
     this.view.subscribeOB(this.handleClickLine);
@@ -106,6 +108,10 @@ class Controller {
         singleXY: this.model.calcPositionTipSingle,
       });
     }
+
+    // ----------  Bar
+    const position = this.model.calcPositionBar();
+    this.view.setBar(position.barX, position.widthBar);
 
   };
 
@@ -223,6 +229,20 @@ class Controller {
 
     this.model.setWrapWH(options.wrapWH);
   };
+
+
+  private handleBarData = (options: TOB) => {
+    const key = options.key;
+    if (key != 'BarData') return;
+
+
+    this.view.setVisibleBar(options.bar);
+
+    const position = this.model.calcPositionBar();
+    this.view.setBar(position.barX, position.widthBar);
+  };
+
+
 
   // private handleInitBar = () => {
   //   this.view.createDomBar(this.handleCreateDomBar);

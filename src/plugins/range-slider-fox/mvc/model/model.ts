@@ -13,6 +13,7 @@ class Model extends Observer {
   private max: number;
   private from: number;
   private to: number;
+  private bar: boolean;
   private tipPrefix: string;
   private tipPostfix: string;
   private tipMinMax: boolean;
@@ -71,6 +72,7 @@ class Model extends Observer {
       max: 10,          // максимальное значение на школе
       from: 1,          // позиция первой точки
       to: 2,            // позиция второй точки
+      bar: false,
       tipPrefix: '',    // Префикс для подсказок не больше 3 символов.
       tipPostfix: '',
       tipMinMax: true,  // подсказки включены
@@ -109,6 +111,7 @@ class Model extends Observer {
       max: this.max,
       to: this.to,
       from: this.from,
+      bar: this.bar,
       tipPrefix: this.tipPrefix,
       tipPostfix: this.tipPostfix,
       tipMinMax: this.tipMinMax,
@@ -133,6 +136,7 @@ class Model extends Observer {
     this.min = op.min;
     this.max = op.max;
     this.to = op.to;
+    this.bar = op.bar;
     this.from = op.from;
     this.tipPrefix = op.tipPrefix;
     this.tipMinMax = op.tipMinMax;
@@ -195,6 +199,10 @@ class Model extends Observer {
       disabled: op.disabled,
     });
 
+    this.notifyOB({
+      key: 'BarData',
+      bar: op.bar,
+    });
 
   }
 
@@ -209,6 +217,7 @@ class Model extends Observer {
     this.setThemeData(options);
     this.setHintsData(options);
     this.setDisabledData(options);
+    this.setBarData(options);
 
     // при первом старте не вызываем
     if (this.startConfFl)
@@ -642,6 +651,33 @@ gridNum >= 1
     return true;
   }
 
+
+
+  // bar: false, // Включен или Выключен. 
+  setBarData(options: RangeSliderOptions): boolean {
+
+    const properties = ['bar'];
+    // проверяем есть ли вообще для нас обнавления 
+
+    if (!this.propertiesValidation(properties, options)) {
+      if (this.bar == undefined)
+        this.bar = false;
+      return false;
+    }
+
+    this.bar = options.bar;
+
+    // вызываем оповещение подписчиков
+    this.notifyOB({
+      key: 'BarData',
+      bar: this.bar,
+    });
+
+    return true;
+  }
+
+
+  //---------------------------------------------
 
   getRange() {
     return this.max - this.min;

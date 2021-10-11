@@ -122,6 +122,8 @@ class View extends Observer {
 
     this.hints.setOrientation(str);
 
+    this.bar.setOrientation(str);
+
     let wrapWH = 0;
     if (this.vertical) {
       wrapWH = this.rsCenter.offsetHeight;
@@ -229,9 +231,28 @@ class View extends Observer {
 
 
 
+  //--------------------------------- bar
+
+  setVisibleBar(bar: boolean) {
+    this.bar.setVisibleBar(bar);
 
 
+    this.createDomBar();
+    const size = this.vertical ?
+      this.rsLine.offsetWidth : this.rsLine.offsetHeight;
+    this.bar.setSizeWH(size);
 
+
+  }
+
+  createDomBar() {
+    this.bar.createDomBar();
+  }
+
+
+  setBar(barX: number, widthBar: number) {
+    this.bar.setBar(barX, widthBar);
+  }
 
 
 

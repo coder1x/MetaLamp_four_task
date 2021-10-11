@@ -70,6 +70,7 @@ class Panel {
       type: data.type,
       disabled: data.disabled,
       orientation: data.orientation,
+      bar: data.bar,
       theme: data.theme,
     });
 
@@ -86,6 +87,7 @@ class Panel {
       max: data.max,
       from: data.from,
       to: data.to,
+      bar: data.bar,
       grid: data.grid,
       gridSnap: data.gridSnap,
       gridNum: data.gridNum,
@@ -156,6 +158,7 @@ objPanel[0].createRangeSlider({
   max: 800,
   from: 200,
   to: 500,
+  bar: true,
   //disabled: true,
   //tipPrefix: '°C',
   // tipMinMax: false,

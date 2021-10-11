@@ -7,6 +7,7 @@ interface RangeSliderOptions {
   max?: number;
   from?: number;
   to?: number;
+  bar?: boolean;
   grid?: boolean;
   gridSnap?: boolean;
   tipPrefix?: string;
