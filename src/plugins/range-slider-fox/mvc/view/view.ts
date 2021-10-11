@@ -51,7 +51,7 @@ class View extends Observer {
 
     this.handle = new Handle(this.rsName, this.rsCenter);
     this.hints = new Hints(this.rsTop);
-
+    this.bar = new Bar(this.rsCenter);
   }
 
 
@@ -121,21 +121,28 @@ class View extends Observer {
     this.handle.setOrientation(str);
 
     this.hints.setOrientation(str);
-    // изменить позиции подсказок с учётом 
-    // положения слайдера.
 
+    let wrapWH = 0;
+    if (this.vertical) {
+      wrapWH = this.rsCenter.offsetHeight;
+    } else {
+      wrapWH = this.rsCenter.offsetWidth;
+    }
 
+    this.notifyOB({
+      key: 'SizeWrap',
+      wrapWH: wrapWH,
+    });
 
   }
 
 
   setActions() {
-    // eslint-disable-next-line no-unused-vars
     this.rsLine.addEventListener('click', (event: MouseEvent) => {
-      // const elem = (event.target as HTMLElement);
-
-      // вызываем оповещение подписчиков
-      // handler(event.offsetX, elem.offsetWidth);
+      this.notifyOB({
+        key: 'ClickLine',
+        clientXY: this.vertical ? event.offsetY : event.offsetX,
+      });
     });
   }
 

@@ -9,20 +9,21 @@
     &__tip-min,
     &__tip-max {
       padding: 1px 5px;
-      color: white;
-      background-color: #9f9f9f;
+      color: #ffffff;
+      background-color: #d86d00;
       border-radius: 3px;
       font-size: 12px;
     }
 
     &__tip-from,
     &__tip-to {
-      color: white;
       padding: 1px 5px;
       font-size: 12px;
-      background: linear-gradient(to bottom, #428bca 0%, #3071a9 100%);
       border-radius: 3px;
       white-space: nowrap;
+      color: #4d4d4d;
+      border: 1px solid #4d4d4d;
+      background: #fff;
     }
 
     &__grid-mark {
@@ -41,11 +42,11 @@
     }
 
     &__tip-single {
-      color: white;
+      color: #4d4d4d;
+      border: 1px solid #4d4d4d;
+      background: #fff;
       padding: 1px 5px;
       font-size: 12px;
-      background-color: #428bca;
-      background: linear-gradient(to bottom, #428bca 0%, #3071a9 100%);
       border-radius: 3px;
     }
 

@@ -36,6 +36,8 @@ class Controller {
     this.model.subscribeOB(this.handleDisabledData);
 
     this.view.subscribeOB(this.handleDotMove);
+    this.view.subscribeOB(this.handleClickLine);
+    this.view.subscribeOB(this.handleSizeWrap);
 
   }
 
@@ -207,8 +209,20 @@ class Controller {
   };
 
 
+  private handleClickLine = (options: TOB) => {
+    const key = options.key;
+    if (key != 'ClickLine') return;
+
+    this.model.clickLine(options.clientXY);
+  };
 
 
+  private handleSizeWrap = (options: TOB) => {
+    const key = options.key;
+    if (key != 'SizeWrap') return;
+
+    this.model.setWrapWH(options.wrapWH);
+  };
 
   // private handleInitBar = () => {
   //   this.view.createDomBar(this.handleCreateDomBar);

@@ -814,43 +814,74 @@ gridNum >= 1
 
   //---------------------------------- Bar
 
-  // calcPositionBar() {
-  //   let barX = 0;
-  //   let widthBar = 0;
+  calcPositionBar() {
+    let barX = 0;
+    let widthBar = 0;
 
-  //   if (this.type == 'double') {
-  //     barX = this.getFrom;
-  //     widthBar = this.getTo - this.getFrom;
-  //   } else {
-  //     widthBar = this.getFrom;
-  //   }
+    if (this.type == 'double') {
+      barX = this.fromP;
+      widthBar = this.toP - this.fromP;
+    } else {
+      widthBar = this.fromP;
+    }
 
-  //   return { barX, widthBar };
-  // }
+    return { barX, widthBar };
+  }
 
 
-  // clickLine = (pointX: number, wrapWidth: number) => {
+  //---------------------------------- Line
 
-  //   this.wrapWidth = wrapWidth;
-  //   const oneP = wrapWidth / 100; // один процент от всей школы
-  //   const pointP = pointX / oneP; // кол. процентов в области где кликнули
+  clickLine = (pointXY: number) => {
 
-  //   if (this.type == 'single') {
-  //     this.setFrom = pointP;
-  //   }
-  //   else if (pointP > this.getTo) {       // если это значение больше чем To
-  //     this.setTo = pointP;                // To  на эту точку
-  //   } else if (pointP > this.getFrom) {   // если меньше To но больше From
-  //     const To = this.getTo - pointP;     // из To вычетаем Val
-  //     const From = pointP - this.getFrom; // из Val вычетаем From
-  //     From > To ? this.setTo = pointP : this.setFrom = pointP; // то число что меньше та точка и ближе
-  //   } else {                              // Если Val меньше From то подвигать From
-  //     this.setFrom = pointP;
-  //   }
-  //   this.limitTo = this.getTo;
-  //   this.limitFrom = this.getFrom;
-  // }
+    const vertical = this.orientation == 'vertical';
 
+    let from = this.from;
+    let to = this.to;
+    let fromFl = false;
+    let toFl = false;
+
+    const oneP = this.wrapWH / 100; // один процент от всей школы
+    let pointP = 0;
+
+    if (vertical) {
+      pointP = 100 - (pointXY / oneP); // кол. процентов в области где кликнули
+    } else {
+      pointP = pointXY / oneP; // кол. процентов в области где кликнули
+    }
+
+    if (this.type == 'single') {
+      this.fromP = pointP;
+      fromFl = true;
+    }
+    else if (pointP > this.toP) {       // если это значение больше чем To
+      this.toP = pointP;                // To  на эту точку
+      toFl = true;
+    } else if (pointP > this.fromP) {   // если меньше To но больше From
+      const To = this.toP - pointP;     // из To вычетаем Val
+      const From = pointP - this.fromP; // из Val вычетаем From
+      From > To ? this.toP = pointP : this.fromP = pointP; // то число что меньше та точка и ближе
+      From > To ? toFl = true : fromFl = true;
+    } else {                              // Если Val меньше From то подвигать From
+      this.fromP = pointP;
+      fromFl = true;
+    }
+
+    if (fromFl) {
+      from = this.getDataDotFrom(); // получаем значение from
+    }
+
+    if (toFl) {
+      to = this.getDataDotTo(); // получаем значение to
+    }
+
+    this.setDotData({
+      type: this.type,
+      from: from,
+      to: to,
+    });
+
+
+  }
 
 
 

@@ -1,10 +1,14 @@
-class Bar {
+import { Observer, TOB } from '../../../observer';
+
+class Bar extends Observer {
+
 
   rsCenter: HTMLElement;
   rsName: string;
   elemBar: HTMLElement;
 
   constructor(elem: HTMLElement | Element) {
+    super();
     this.rsName = 'range-slider';
     this.rsCenter = (elem as HTMLElement);
   }
@@ -17,10 +21,13 @@ class Bar {
     return elem;
   }
 
-  createDomBar(line: HTMLElement) {
+  createDomBar() {
     this.elemBar = this.createElem('span', [this.rsName + '__bar']);
-    this.elemBar.style.height = line.offsetHeight + 'px';
     this.rsCenter.appendChild(this.elemBar);
+  }
+
+  setSizeWH(size: number) {
+    this.elemBar.style.height = size + 'px';
   }
 
   setBar(barX: number, widthBar: number) {
