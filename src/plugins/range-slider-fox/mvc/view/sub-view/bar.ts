@@ -50,8 +50,18 @@ class Bar extends Observer {
     if (this.elemBar)
       convertStyle(this.elemBar.style);
 
+  }
 
 
+  setActions() {
+    this.elemBar.addEventListener('click', (event: MouseEvent) => {
+      const dotXY = this.vertical ? event.offsetY : event.offsetX;
+
+      this.notifyOB({
+        key: 'ClickBar',
+        clientXY: dotXY,
+      });
+    });
   }
 
   createElem(teg: string, className: string[]) {
@@ -73,6 +83,8 @@ class Bar extends Observer {
 
     this.elemBar = this.createElem('span', [this.rsName + '__bar']);
     this.rsCenter.appendChild(this.elemBar);
+
+    this.setActions();
   }
 
   setSizeWH(size: number) {

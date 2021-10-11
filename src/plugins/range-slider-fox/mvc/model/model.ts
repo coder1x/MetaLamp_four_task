@@ -865,6 +865,19 @@ gridNum >= 1
   }
 
 
+  clickBar = (pointXY: number) => {
+    const vertical = this.orientation == 'vertical';
+    const oneP = this.wrapWH / 100; // один процент от всей школы
+
+    if (vertical) {
+      let remainderP = 100 - this.toP;
+      pointXY = remainderP * oneP + pointXY;
+      this.clickLine(pointXY);
+    } else {
+      this.clickLine(this.fromP * oneP + pointXY);
+    }
+  }
+
   //---------------------------------- Line
 
   clickLine = (pointXY: number) => {

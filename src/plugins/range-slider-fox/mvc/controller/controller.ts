@@ -40,6 +40,8 @@ class Controller {
     this.view.subscribeOB(this.handleDotMove);
     this.view.subscribeOB(this.handleClickLine);
     this.view.subscribeOB(this.handleSizeWrap);
+    this.view.subscribeOB(this.handleClickBar);
+
 
   }
 
@@ -242,6 +244,14 @@ class Controller {
     this.view.setBar(position.barX, position.widthBar);
   };
 
+  private handleClickBar = (options: TOB) => {
+    const key = options.key;
+    if (key != 'ClickBar') return;
+
+
+    this.model.clickBar(options.clientXY);
+
+  };
 
 
   // private handleInitBar = () => {
