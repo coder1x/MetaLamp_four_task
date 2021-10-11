@@ -1,6 +1,8 @@
 import { DateGrid } from '../view.d';
 
-class Grid {
+import { Observer, TOB } from '../../../observer';
+
+class Grid extends Observer {
 
   rsBottom: HTMLElement;
   rsName: string;
@@ -18,6 +20,7 @@ class Grid {
 
 
   constructor(elem: HTMLElement | Element) {
+    super();
     this.rsName = 'range-slider-fox';
     this.indent = 4; // отступ в пикселях между числами на шкале
     this.rsBottom = (elem as HTMLElement);
@@ -37,7 +40,7 @@ class Grid {
     this.max = options.max;
   }
 
-  createDomGrid(handler: Function) {
+  createDomGrid() {
 
     this.elemGrid = this.createElem('div', [this.rsName + '__grid']);
 
@@ -53,12 +56,12 @@ class Grid {
 
 
     createMark(this.min, 0, this.elemGrid);
-    let obj = handler(this.min);
-    createMark(obj.value, obj.position, this.elemGrid);
+    // let obj = handler(this.min);
+    // createMark(obj.value, obj.position, this.elemGrid);
 
     for (let i = 1; i < this.interval - 1; i++) {
-      obj = handler(obj.value);
-      createMark(obj.value, obj.position, this.elemGrid);
+      //  obj = handler(obj.value);
+      //  createMark(obj.value, obj.position, this.elemGrid);
     }
 
     createMark(this.max, 100, this.elemGrid);

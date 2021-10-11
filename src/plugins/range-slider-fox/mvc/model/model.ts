@@ -821,29 +821,29 @@ gridNum >= 1
 
 
   //---------------------------------- Grid
-  // calcGridNumStep() {
-  //   let interval = 0;
-  //   let step = 0;
+  calcGridNumStep() {
+    let interval = 0;
+    let step = 0;
 
-  //   if (this.gridStep && this.gridNum == 4) {     // если задан Шаг а интервал по умолчанию стоит
-  //     step = this.gridStep;
-  //     interval = this.getRange() / step;          // находим новый интервал
-  //   } else {                                      // делаем только по интервалу
-  //     interval = this.gridNum;
-  //     step = this.getRange() / interval;          // находим шаг
-  //   }
+    if (this.gridStep && this.gridNum == 4) {     // если задан Шаг а интервал по умолчанию стоит
+      step = this.gridStep;
+      interval = this.getRange() / step;          // находим новый интервал
+    } else {                                      // делаем только по интервалу
+      interval = this.gridNum;
+      step = this.getRange() / interval;          // находим шаг
+    }
 
-  //   this.gridStep = step;
-  //   this.gridNum = interval;
+    this.gridStep = step;
+    this.gridNum = interval;
 
-  //   return interval;
-  // }
+    return interval;
+  }
 
-  // calcPositionGrid(value: number) {
-  //   value = value + this.gridStep;
-  //   const position = ((value - this.min) * 100) / this.getRange();
-  //   return { value, position };
-  // }
+  calcPositionGrid(value: number) {
+    value = value + this.gridStep;
+    const position = ((value - this.min) * 100) / this.getRange();
+    return { value, position };
+  }
 
 
 
@@ -869,18 +869,29 @@ gridNum >= 1
     const vertical = this.orientation == 'vertical';
     const oneP = this.wrapWH / 100; // один процент от всей школы
 
-    if (vertical) {
-      let remainderP = 100 - this.toP;
-      pointXY = remainderP * oneP + pointXY;
-      this.clickLine(pointXY);
+    if (this.type == 'single') {
+      if (vertical) {
+        let remainderP = 100 - this.fromP;
+        pointXY = remainderP * oneP + pointXY;
+        this.clickLine(pointXY);
+      } else {
+        this.clickLine(pointXY);
+      }
     } else {
-      this.clickLine(this.fromP * oneP + pointXY);
+      if (vertical) {
+        let remainderP = 100 - this.toP;
+        pointXY = remainderP * oneP + pointXY;
+        this.clickLine(pointXY);
+      } else {
+        this.clickLine(this.fromP * oneP + pointXY);
+      }
     }
   }
 
   //---------------------------------- Line
 
   clickLine = (pointXY: number) => {
+
 
     const vertical = this.orientation == 'vertical';
 

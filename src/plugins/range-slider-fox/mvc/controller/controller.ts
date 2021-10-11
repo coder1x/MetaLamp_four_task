@@ -254,19 +254,6 @@ class Controller {
   };
 
 
-  // private handleInitBar = () => {
-  //   this.view.createDomBar(this.handleCreateDomBar);
-  // }
-
-  // private handleCreateDomBar = () => {
-  //   this.flagBarCreate = true;
-  //   this.ubdateBar();
-
-  //   this.view.initGrid(this.handleInitGrid);
-  // }
-
-
-
 
 
   // private handleInitGrid = () => {

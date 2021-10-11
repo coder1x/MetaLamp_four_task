@@ -52,6 +52,7 @@ class View extends Observer {
     this.handle = new Handle(this.rsName, this.rsCenter);
     this.hints = new Hints(this.rsTop);
     this.bar = new Bar(this.rsCenter);
+    this.grid = new Grid(this.rsBottom);
   }
 
 
@@ -267,33 +268,18 @@ class View extends Observer {
 
 
 
+  //--------------------------------- Grid
 
-  // initGrid(handler: Function) {
-  //   this.grid = new Grid(this.rsBottom);
-  //   handler();
-  // }
 
   // setDataGrid(options: DateGrid) {
   //   this.grid.setData(options);
   // }
 
-  // createDomGrid(handler: Function) {
-  //   this.grid.createDomGrid(handler);
+  // createDomGrid() {
+  //   this.grid.createDomGrid();
   // }
 
-  // createDomBar(handler: Function) {
-  //   this.bar.createDomBar(this.rsLine);
-  //   handler();
-  // }
 
-  // setPositionBar(barX: number, widthBar: number) {
-  //   this.bar.setBar(barX, widthBar);
-  // }
-
-  // initBar(handler: Function) {
-  //   this.bar = new Bar(this.rsCenter);
-  //   handler();
-  // }
 
 
 
