@@ -152,6 +152,10 @@ class Controller {
     const key = options.key;
     if (key != 'GridData') return;
 
+    // проверить есть ли грид - если есть то удалить его. 
+    // потому что любое изменение перестраивает всю шкалу. 
+    this.view.deleteGrid();
+
     if (options.grid) {
       this.model.createMark();
       this.view.createDomGrid();

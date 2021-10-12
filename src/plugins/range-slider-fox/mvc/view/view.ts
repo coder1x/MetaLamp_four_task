@@ -275,6 +275,10 @@ class View extends Observer {
   //   this.grid.setData(options);
   // }
 
+  deleteGrid() {
+    this.grid.deleteGrid();
+  }
+
   createDomGrid() {
     this.grid.createDomGrid();
   }

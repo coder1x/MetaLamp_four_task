@@ -47,11 +47,40 @@ class Grid extends Observer {
   }
 
   createDomGrid() {
+    const observer = new MutationObserver(() => {
+      this.shapingMark();
+    });
+
+    observer.observe(this.rsBottom, {
+      childList: true,
+    });
+
     this.rsBottom.appendChild(this.elemGrid);
-    this.shapingMark();
   }
 
+  deleteGrid() {
+    const items = this.elemGrid.children;
 
+    if (items.length > 0) {
+      while (this.elemGrid.firstChild) {
+        this.elemGrid.firstChild.remove();
+      }
+
+      this.masWidth = [];
+      this.oddElements = [[]];
+      this.evenElements = [[]];
+      this.previousElem.remove();
+      this.previousElem = null;
+      // нужно ещё на время игнорировать событие ресайза. 
+    }
+  }
+
+  toggleElem(elem: HTMLElement, display: string, opacity: string) {
+    const st = elem.style;
+    st.visibility = display;
+    const wrapE = (elem.parentNode as HTMLElement);
+    wrapE.style.opacity = opacity;
+  }
 
   visibleLastElem() {
     const lastX = this.lastElem.getBoundingClientRect().left;
@@ -59,18 +88,15 @@ class Grid extends Observer {
       this.previousElem.offsetWidth + this.indent;
 
     if (previousX >= lastX) {
-      this.previousElem.style.visibility = 'hidden';
-      const wrapE = (this.previousElem.parentNode as HTMLElement);
-      wrapE.style.opacity = '0.4';
+      this.toggleElem(this.previousElem, 'hidden', '0.4');
     } else {
-      this.previousElem.style.visibility = 'visible';
-      const wrapE = (this.previousElem.parentNode as HTMLElement);
-      wrapE.style.opacity = '1';
+      this.toggleElem(this.previousElem, 'visible', '1');
     }
   }
 
 
   shapingMark() {
+
     const gridMarks = this.elemGrid.getElementsByClassName(
       this.rsName + '__grid-mark'
     );
@@ -80,13 +106,11 @@ class Grid extends Observer {
     if (len > 1) {
       this.lastElem = (gridMarks[len - 1] as HTMLElement);
     }
-
-
     let elemWidth = 0;
 
     for (let item of gridMarks) {
       const mark = (item as HTMLElement);
-      const markX = mark.offsetWidth / 2 - this.indent;
+      const markX = mark.offsetWidth / 2;
       mark.style.left = '-' + markX + 'px';
 
       elemWidth += mark.offsetWidth + this.indent;
@@ -139,16 +163,12 @@ class Grid extends Observer {
 
     for (let n = 0; n <= i; n++) { // скрываем все чётные элементы до необходимого уровня.
       for (let elem of this.evenElements[n]) {
-        elem.style.visibility = 'hidden';
-        const wrapE = (elem.parentNode as HTMLElement);
-        wrapE.style.opacity = '0.4';
+        this.toggleElem(elem, 'hidden', '0.4');
       }
     }
 
     this.oddElements[i].map((elem) => { // делаем видемыми только нужные.
-      elem.style.visibility = 'visible';
-      const wrapE = (elem.parentNode as HTMLElement);
-      wrapE.style.opacity = '1';
+      this.toggleElem(elem, 'visible', '1');
     });
 
     const len = this.oddElements[i].length - 1;

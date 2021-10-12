@@ -457,16 +457,8 @@ gridNum >= 1
     let gridNum: PROP = options.gridNum;
     let gridStep: PROP = options.gridStep;
 
-    // console.log('grid: ' + grid);
-    // console.log('gridNum: ' + gridNum);
-    // console.log('gridStep: ' + gridStep);
-
-
-
-
     grid = this.checkValue(grid, 'grid') as PROP ?? false;
     this.grid = Boolean(grid);
-
 
     if (!this.isEmptu(this.min) || !this.isEmptu(this.max)) return false;
 
@@ -479,16 +471,20 @@ gridNum >= 1
       gridStep = long;
     }
 
-    if (gridNum && gridStep) {
-      gridStep = 0;
-    } else if (!gridNum && !gridStep) {
+    if (!gridNum && !gridStep) {
       gridNum = 4;
     }
 
+    // if (!gridNum) {
+    //   gridNum = 4;
+    // }
+
+    console.log(gridNum);
+    console.log(gridStep);
+
+
     this.gridNum = +gridNum;
     this.gridStep = +gridStep;
-
-
 
     // вызываем оповещение подписчиков
     this.notifyOB({
@@ -825,23 +821,27 @@ gridNum >= 1
     let interval = 0;
     let step = 0;
 
-    if (this.gridStep && this.gridNum == 4) {     // если задан Шаг а интервал по умолчанию стоит
+    console.log('gridStep: ' + this.gridStep);
+
+
+    if (this.gridStep && !this.gridNum) {     // если задан Шаг а интервал по умолчанию стоит
       step = this.gridStep;
       interval = this.getRange() / step;          // находим новый интервал
+      console.log('yes');
     } else {                                      // делаем только по интервалу
       interval = this.gridNum;
       step = this.getRange() / interval;          // находим шаг
     }
 
-    this.gridStep = step;
-    this.gridNum = interval;
+    console.log({ interval, step });
 
-    return interval;
+
+    return { interval, step };
   }
 
   createMark() {
-    const calcPositionGrid = (value: number) => {
-      value = value + this.gridStep;
+    const calcPositionGrid = (value: number, step: number) => {
+      value = value + step;
       const position = ((value - this.min) * 100) / this.getRange();
       return { value, position };
     };
@@ -855,13 +855,15 @@ gridNum >= 1
     };
 
     notify(this.min, 0);
-    let obj = calcPositionGrid(this.min);
+
+
+    const { interval, step } = this.calcGridNumStep();
+
+    let obj = calcPositionGrid(this.min, step);
     notify(obj.value, obj.position);
 
-    let interval = this.calcGridNumStep();
-
     for (let i = 1; i < interval - 1; i++) {
-      obj = calcPositionGrid(obj.value);
+      obj = calcPositionGrid(obj.value, step);
       notify(obj.value, obj.position);
     }
 
