@@ -275,11 +275,13 @@ class View extends Observer {
   //   this.grid.setData(options);
   // }
 
-  // createDomGrid() {
-  //   this.grid.createDomGrid();
-  // }
+  createDomGrid() {
+    this.grid.createDomGrid();
+  }
 
-
+  createMark(val: number, position: number) {
+    this.grid.createMark(val, position);
+  }
 
 
 

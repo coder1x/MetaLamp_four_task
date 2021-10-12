@@ -163,9 +163,9 @@ objPanel[0].createRangeSlider({
   //tipPrefix: '°C',
   // tipMinMax: false,
   // tipFromTo: false,
-  //grid: true,
+  grid: true,
   //gridSnap: true,
-  //gridNum: 6,
+  gridNum: 10,
   gridStep: 30,
 });
 
@@ -174,7 +174,7 @@ objPanel[1].createRangeSlider({
   type: 'double',
   //type: 'single',
   theme: 'fox',
-  min: -120,
+  min: 10,
   max: 800,
   from: 200,
   to: 500,
@@ -184,8 +184,8 @@ objPanel[1].createRangeSlider({
   // tipFromTo: false,
   grid: true,
   gridSnap: true,
-  //gridNum: 6,
-  gridStep: 30,
+  gridNum: 10,
+  //gridStep: 30,
 });
 
 

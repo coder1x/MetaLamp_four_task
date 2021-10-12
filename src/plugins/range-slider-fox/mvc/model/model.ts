@@ -839,11 +839,36 @@ gridNum >= 1
     return interval;
   }
 
-  calcPositionGrid(value: number) {
-    value = value + this.gridStep;
-    const position = ((value - this.min) * 100) / this.getRange();
-    return { value, position };
+  createMark() {
+    const calcPositionGrid = (value: number) => {
+      value = value + this.gridStep;
+      const position = ((value - this.min) * 100) / this.getRange();
+      return { value, position };
+    };
+
+    const notify = (valueG: number, position: number) => {
+      this.notifyOB({
+        key: 'CreateGrid',
+        valueG: valueG,
+        position: position,
+      });
+    };
+
+    notify(this.min, 0);
+    let obj = calcPositionGrid(this.min);
+    notify(obj.value, obj.position);
+
+    let interval = this.calcGridNumStep();
+
+    for (let i = 1; i < interval - 1; i++) {
+      obj = calcPositionGrid(obj.value);
+      notify(obj.value, obj.position);
+    }
+
+    notify(this.max, 100);
   }
+
+
 
 
 

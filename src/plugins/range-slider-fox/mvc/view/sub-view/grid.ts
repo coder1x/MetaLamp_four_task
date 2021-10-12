@@ -7,9 +7,6 @@ class Grid extends Observer {
   rsBottom: HTMLElement;
   rsName: string;
   elemGrid: HTMLElement;
-  interval: number;
-  min: number;
-  max: number;
   indent: number;
   masWidth: number[] = [];
   oddElements: HTMLElement[][] = [[]];
@@ -24,6 +21,7 @@ class Grid extends Observer {
     this.rsName = 'range-slider-fox';
     this.indent = 4; // отступ в пикселях между числами на шкале
     this.rsBottom = (elem as HTMLElement);
+    this.initDom();
   }
 
   createElem(teg: string, className: string[]) {
@@ -34,40 +32,25 @@ class Grid extends Observer {
     return elem;
   }
 
-  setData(options: DateGrid) {
-    this.interval = options.interval;
-    this.min = options.min;
-    this.max = options.max;
+
+  initDom() {
+    this.elemGrid = this.createElem('div', [this.rsName + '__grid']);
+  }
+
+  createMark = (val: number, position: number) => {
+    const gridPol = this.createElem('div', [this.rsName + '__grid-pol']);
+    const gridMark = this.createElem('span', [this.rsName + '__grid-mark']);
+    gridMark.innerText = String(val);
+    gridPol.appendChild(gridMark);
+    gridPol.style.left = position + '%';
+    this.elemGrid.appendChild(gridPol);
   }
 
   createDomGrid() {
-
-    this.elemGrid = this.createElem('div', [this.rsName + '__grid']);
-
-    const createMark = (val: number, position: number, elem: HTMLElement) => {
-      const gridPol = this.createElem('div', [this.rsName + '__grid-pol']);
-      const gridMark = this.createElem('span', [this.rsName + '__grid-mark']);
-      gridMark.innerText = String(val);
-      gridPol.appendChild(gridMark);
-      gridPol.style.left = position + '%';
-      elem.appendChild(gridPol);
-
-    };
-
-
-    createMark(this.min, 0, this.elemGrid);
-    // let obj = handler(this.min);
-    // createMark(obj.value, obj.position, this.elemGrid);
-
-    for (let i = 1; i < this.interval - 1; i++) {
-      //  obj = handler(obj.value);
-      //  createMark(obj.value, obj.position, this.elemGrid);
-    }
-
-    createMark(this.max, 100, this.elemGrid);
     this.rsBottom.appendChild(this.elemGrid);
     this.shapingMark();
   }
+
 
 
   visibleLastElem() {
@@ -103,7 +86,7 @@ class Grid extends Observer {
 
     for (let item of gridMarks) {
       const mark = (item as HTMLElement);
-      const markX = mark.offsetWidth / 2;
+      const markX = mark.offsetWidth / 2 - this.indent;
       mark.style.left = '-' + markX + 'px';
 
       elemWidth += mark.offsetWidth + this.indent;

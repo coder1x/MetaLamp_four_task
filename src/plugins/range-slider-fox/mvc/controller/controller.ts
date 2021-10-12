@@ -36,6 +36,9 @@ class Controller {
     this.model.subscribeOB(this.handleDisabledData);
     this.model.subscribeOB(this.handleBarData);
 
+    this.model.subscribeOB(this.handleCreateGrid);
+
+
 
     this.view.subscribeOB(this.handleDotMove);
     this.view.subscribeOB(this.handleClickLine);
@@ -149,8 +152,10 @@ class Controller {
     const key = options.key;
     if (key != 'GridData') return;
 
-    // console.log('handleGridData');
-    // console.log(options);
+    if (options.grid) {
+      this.model.createMark();
+      this.view.createDomGrid();
+    }
 
   };
 
@@ -253,6 +258,15 @@ class Controller {
 
   };
 
+  private handleCreateGrid = (options: TOB) => {
+    const key = options.key;
+    if (key != 'CreateGrid') return;
+
+
+    this.view.createMark(options.valueG, options.position);
+
+
+  };
 
 
 
