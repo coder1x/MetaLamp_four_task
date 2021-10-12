@@ -25,14 +25,15 @@ class CopyCode {
     const key = Object.keys(options);
     const val = Object.values(options);
 
-    for (let i = 0; i < key.length; i++) {
+    for (let i = 0; i < key.length; ++i) {
       let valT: string;
       if (typeof val[i] == 'string') { valT = '\'' + val[i] + '\''; }
       else {
         valT = val[i];
       }
       const text = key[i] + ': ' + valT + ',';
-      this.items[i].innerText = text;
+      if (this.items[i])
+        this.items[i].innerText = text;
     }
   }
 

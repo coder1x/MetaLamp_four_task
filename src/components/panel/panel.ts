@@ -59,6 +59,7 @@ class Panel {
       gridSnap: data.gridSnap,
       gridNum: data.gridNum,
       gridStep: data.gridStep,
+      gridRound: data.gridRound,
     });
     this.objHints.setData({
       tipMinMax: data.tipMinMax,
@@ -78,6 +79,7 @@ class Panel {
   }
 
   setDataCode(data: RangeSliderOptions) {
+
     this.objCopyCode.setData({
       type: data.type,
       disabled: data.disabled,
@@ -92,6 +94,7 @@ class Panel {
       gridSnap: data.gridSnap,
       gridNum: data.gridNum,
       gridStep: data.gridStep,
+      gridRound: data.gridRound,
       tipMinMax: data.tipMinMax,
       tipFromTo: data.tipFromTo,
       tipPrefix: data.tipPrefix,
@@ -165,8 +168,9 @@ objPanel[0].createRangeSlider({
   // tipFromTo: false,
   grid: true,
   //gridSnap: true,
-  gridNum: 10,
-  gridStep: 30,
+  gridNum: 20,
+  gridRound: 2,
+  //gridStep: 0,
 });
 
 

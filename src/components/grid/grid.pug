@@ -37,3 +37,9 @@ mixin grid(options)
         type: 'text',
         name: 'gridStep'
       })
+    div(class=classComp+'__round-wrap')
+      +text-field({
+        label: 'round up to',
+        type: 'text',
+        name: 'gridRound'
+      })

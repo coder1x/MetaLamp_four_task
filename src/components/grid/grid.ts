@@ -5,6 +5,7 @@ interface OP {
   gridSnap?: boolean;
   gridNum?: number;
   gridStep?: number;
+  gridRound?: number;
 }
 
 
@@ -15,6 +16,7 @@ class Grid {
   private snap: HTMLInputElement;
   private interval: HTMLInputElement;
   private step: HTMLInputElement;
+  private gridRound: HTMLInputElement;
 
   // eslint-disable-next-line no-unused-vars
   constructor(public nameClass: string, elem: HTMLElement) {
@@ -37,6 +39,7 @@ class Grid {
     this.snap = getDom('snap');
     this.interval = getDom('interval');
     this.step = getDom('step');
+    this.gridRound = getDom('round');
   }
 
   setData(options: OP) {
@@ -44,6 +47,7 @@ class Grid {
     this.snap.checked = options.gridSnap;
     this.interval.value = String(options.gridNum);
     this.step.value = String(options.gridStep);
+    this.gridRound.value = String(options.gridRound);
   }
 
   setAction(obj: any) {
@@ -51,13 +55,10 @@ class Grid {
     let mapInput = new Map();
     mapInput.set('gridNum', this.interval.value);
     mapInput.set('gridStep', this.step.value);
-
+    mapInput.set('gridRound', this.gridRound.value);
 
     const data = (e: Event) => {
       const elem = e.target as HTMLInputElement;
-      console.log({
-        [elem.name]: +mapInput.get(elem.name)
-      });
 
       obj.update({
         [elem.name]: +mapInput.get(elem.name)
@@ -80,7 +81,7 @@ class Grid {
     };
 
 
-    const masE = [this.interval, this.step];
+    const masE = [this.interval, this.step, this.gridRound];
 
     for (let item of masE) {
       item.addEventListener('change', data);

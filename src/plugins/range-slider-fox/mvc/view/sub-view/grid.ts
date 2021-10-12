@@ -14,14 +14,14 @@ class Grid extends Observer {
   lastElem: HTMLElement;
   previousElem: HTMLElement;
   startWidth: number;
+  offOn: boolean;
+  resizeF: boolean;
 
 
   constructor(elem: HTMLElement | Element) {
     super();
-    this.rsName = 'range-slider-fox';
-    this.indent = 4; // отступ в пикселях между числами на шкале
     this.rsBottom = (elem as HTMLElement);
-    this.initDom();
+    this.init();
   }
 
   createElem(teg: string, className: string[]) {
@@ -33,7 +33,11 @@ class Grid extends Observer {
   }
 
 
-  initDom() {
+  init() {
+    this.offOn = false;
+    this.resizeF = false;
+    this.rsName = 'range-slider-fox';
+    this.indent = 4; // отступ в пикселях между числами на шкале
     this.elemGrid = this.createElem('div', [this.rsName + '__grid']);
   }
 
@@ -56,12 +60,14 @@ class Grid extends Observer {
     });
 
     this.rsBottom.appendChild(this.elemGrid);
+    this.offOn = true;
   }
 
   deleteGrid() {
     const items = this.elemGrid.children;
 
     if (items.length > 0) {
+      this.offOn = false;
       while (this.elemGrid.firstChild) {
         this.elemGrid.firstChild.remove();
       }
@@ -71,7 +77,6 @@ class Grid extends Observer {
       this.evenElements = [[]];
       this.previousElem.remove();
       this.previousElem = null;
-      // нужно ещё на время игнорировать событие ресайза. 
     }
   }
 
@@ -179,6 +184,8 @@ class Grid extends Observer {
 
 
   getResizeWrap() {
+    if (this.resizeF) return;
+    this.resizeF = true;
     let sleep = 200;
     let rtime: Date;
     let timeout = false;
@@ -207,7 +214,8 @@ class Grid extends Observer {
         timeout = false;
         let totalWidth = this.elemGrid.offsetWidth;
         if (totalWidth != this.startWidth) {
-          this.visibleMark();
+          if (this.offOn)
+            this.visibleMark();
           this.startWidth = totalWidth;
         }
       }

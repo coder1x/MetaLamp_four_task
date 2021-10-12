@@ -21,6 +21,7 @@ class Model extends Observer {
   private gridSnap: boolean;
   private gridNum: number;
   private gridStep: number;
+  private gridRound: number;
   private grid: boolean;
   private disabled: boolean;
   private defaultData: RangeSliderOptions;
@@ -81,6 +82,7 @@ class Model extends Observer {
       gridSnap: false,  // точка переходит по ризкам на Шкале
       gridNum: 0,       // интервал в шкале
       gridStep: 0,      // Шаг шкалы
+      gridRound: 0,     // округление дробной части
       disabled: false,  // Включен или Выключен.
     }, options);
   }
@@ -120,6 +122,7 @@ class Model extends Observer {
       gridSnap: this.gridSnap,
       gridNum: this.gridNum,
       gridStep: this.gridStep,
+      gridRound: this.gridRound,
       disabled: this.disabled,
     };
   }
@@ -145,6 +148,7 @@ class Model extends Observer {
     this.gridSnap = op.gridSnap;
     this.gridNum = op.gridNum;
     this.gridStep = op.gridStep;
+    this.gridRound = op.gridRound;
     this.disabled = op.disabled;
 
     this.notifyOB({
@@ -170,6 +174,7 @@ class Model extends Observer {
       grid: op.grid,
       gridNum: op.gridNum,
       gridStep: op.gridStep,
+      gridRound: op.gridRound,
     });
 
     this.notifyOB({
@@ -187,11 +192,11 @@ class Model extends Observer {
       tipPrefix: op.tipPrefix,
       tipMinMax: op.tipMinMax,
       tipFromTo: op.tipFromTo,
-      min: this.min,
-      max: this.max,
-      from: this.from,
-      to: this.to,
-      type: this.type,
+      min: op.min,
+      max: op.max,
+      from: op.from,
+      to: op.to,
+      type: op.type,
     });
 
     this.notifyOB({
@@ -449,13 +454,14 @@ gridNum >= 1
   */
   setGridData(options: RangeSliderOptions): boolean {
 
-    const properties = ['grid', 'gridNum', 'gridStep'];
+    const properties = ['grid', 'gridNum', 'gridStep', 'gridRound'];
     // проверяем есть ли вообще для нас обнавления 
     if (!this.propertiesValidation(properties, options)) return false;
 
     let grid: PROP = options.grid;
     let gridNum: PROP = options.gridNum;
     let gridStep: PROP = options.gridStep;
+    let gridRound: PROP = options.gridRound;
 
     grid = this.checkValue(grid, 'grid') as PROP ?? false;
     this.grid = Boolean(grid);
@@ -464,6 +470,7 @@ gridNum >= 1
 
     gridNum = this.checkValue(gridNum, 'gridNum') as PROP ?? 0;
     gridStep = this.checkValue(gridStep, 'gridStep') as PROP ?? 0;
+    gridRound = this.checkValue(gridRound, 'gridRound') as PROP ?? 0;
 
     const long = this.max - this.min;
 
@@ -475,14 +482,14 @@ gridNum >= 1
       gridNum = 4;
     }
 
-    // if (!gridNum) {
-    //   gridNum = 4;
-    // }
+    if (gridRound < 0 || gridRound > 100) {
+      gridRound = 0;
+    }
 
-    console.log(gridNum);
-    console.log(gridStep);
+    // console.log(gridNum);
+    // console.log(gridStep);
 
-
+    this.gridRound = +gridRound;
     this.gridNum = +gridNum;
     this.gridStep = +gridStep;
 
@@ -492,6 +499,7 @@ gridNum >= 1
       grid: this.grid,
       gridNum: this.gridNum,
       gridStep: this.gridStep,
+      gridRound: this.gridRound,
     });
 
     return true;
@@ -820,9 +828,7 @@ gridNum >= 1
   calcGridNumStep() {
     let interval = 0;
     let step = 0;
-
-    console.log('gridStep: ' + this.gridStep);
-
+    // console.log('gridStep: ' + this.gridStep);
 
     if (this.gridStep && !this.gridNum) {     // если задан Шаг а интервал по умолчанию стоит
       step = this.gridStep;
@@ -833,15 +839,13 @@ gridNum >= 1
       step = this.getRange() / interval;          // находим шаг
     }
 
-    console.log({ interval, step });
-
-
+    // console.log({ interval, step });
     return { interval, step };
   }
 
   createMark() {
     const calcPositionGrid = (value: number, step: number) => {
-      value = value + step;
+      value = +(value + step).toFixed(this.gridRound);
       const position = ((value - this.min) * 100) / this.getRange();
       return { value, position };
     };

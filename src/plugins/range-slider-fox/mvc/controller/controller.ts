@@ -274,51 +274,6 @@ class Controller {
 
 
 
-  // private handleInitGrid = () => {
-  //   this.handleCreateDomGrid(); // это нужно будет убрать... 
-  // }
-
-  // getDataMinMax() {
-  //   const obj = this.model.getOptions();
-  //   return {
-  //     min: obj.min,
-  //     max: obj.max,
-  //   };
-  // }
-
-  // private handleCreateDomGrid = () => {
-  //   const interval = this.model.calcGridNumStep();
-  //   const obj2 = this.getDataMinMax();
-
-  //   this.view.setDataGrid({
-  //     interval: interval,
-  //     min: obj2.min,
-  //     max: obj2.max
-  //   });
-
-  //   this.view.createDomGrid(this.getDateGrid);
-  // }
-
-  // private getDateGrid = (value: number) => {
-  //   return this.model.calcPositionGrid(value);
-  // }
-
-
-  // private ubdateBar = () => {
-  //   const obj = this.model.calcPositionBar();
-  //   this.view.setPositionBar(obj.barX, obj.widthBar);
-  // }
-
-
-
-  // private handleActionsView = (pointX: number, wrapWidth: number) => {
-  //   this.model.clickLine(pointX, wrapWidth);
-  // }
-
-  // private handleActionsHandle = (options: CalcDotPositionOpt) => {
-  //   this.model.calcDotPosition(options);
-  // }
-
 }
 
 export { Controller, Model, View };

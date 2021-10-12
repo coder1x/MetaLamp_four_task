@@ -16,6 +16,7 @@ interface RangeSliderOptions {
   tipFromTo?: boolean;
   gridNum?: number;
   gridStep?: number;
+  gridRound?: number;
   disabled?: boolean;
   onStart?: Function;
   onChange?: Function;
