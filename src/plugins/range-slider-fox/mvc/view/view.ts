@@ -1,7 +1,6 @@
 
 // eslint-disable-next-line no-unused-vars
 import {
-  DateGrid,
   UbdateTip
 } from './view.d';
 import { Handle } from './sub-view/handle';
@@ -36,7 +35,6 @@ class View extends Observer {
     this.wrapSlider = this.elem.parentElement;
 
     this.init();
-    this.createListeners();
   }
 
 
@@ -53,6 +51,8 @@ class View extends Observer {
     this.hints = new Hints(this.rsTop);
     this.bar = new Bar(this.rsCenter);
     this.grid = new Grid(this.rsBottom);
+
+    this.createListeners();
   }
 
 
@@ -121,6 +121,23 @@ class View extends Observer {
     this.rangeSlider.appendChild(this.rsBottom);
 
     this.wrapSlider.appendChild(this.rangeSlider);
+
+
+    // let wrapWH = 0;
+    // if (this.vertical) {
+    //   wrapWH = this.rsCenter.offsetHeight;
+    // } else {
+    //   wrapWH = this.rsCenter.offsetWidth;
+    // }
+
+    // console.log(this.rsCenter.offsetHeight);
+
+
+    // this.notifyOB({
+    //   key: 'SizeWrap',
+    //   wrapWH: wrapWH,
+    // });
+
   }
 
   setOrientation(str: string) {
@@ -129,11 +146,6 @@ class View extends Observer {
     const objP = this.rangeSlider.classList;
     this.vertical = str == 'vertical' ? true : false;
     this.vertical ? objP.add(modif) : objP.remove(modif);
-    this.handle.setOrientation(str);
-
-    this.hints.setOrientation(str);
-
-    this.bar.setOrientation(str);
 
     let wrapWH = 0;
     if (this.vertical) {
@@ -146,6 +158,10 @@ class View extends Observer {
       key: 'SizeWrap',
       wrapWH: wrapWH,
     });
+
+    this.handle.setOrientation(str);
+    this.hints.setOrientation(str);
+    this.bar.setOrientation(str);
 
   }
 

@@ -21,16 +21,21 @@ class Different {
   private bar: HTMLInputElement;
   private select: Select;
   private reset: HTMLButtonElement;
+  private panel: HTMLElement;
+  private modif: string;
 
 
   // eslint-disable-next-line no-unused-vars
-  constructor(public nameClass: string, elem: HTMLElement) {
-
+  constructor(public nameClass: string, elem: HTMLElement, panel: HTMLElement) {
+    this.panel = panel;
     this.elem = elem;
     this.setDom();
   }
 
   private setDom() {
+
+    this.modif = this.panel.className + '_vertical';
+
     const getDom = (str: string) => {
       return this.elem.querySelector(
         this.nameClass +
@@ -60,9 +65,13 @@ class Different {
     const orientF = options.orientation == 'horizontal' ? false : true;
     this.orientation.checked = orientF;
     this.select.update(String(options.theme));
+
+    if (orientF) {
+      this.panel.classList.add(this.modif);
+    }
   }
 
-  setAction(obj: any, panelE: HTMLElement) {
+  setAction(obj: any) {
 
     this.reset.addEventListener('click', () => {
       obj.reset();
@@ -95,11 +104,10 @@ class Different {
 
 
 
-    const modif = panelE.className + '_vertical';
-
+    const modif = this.modif;
+    const objP = this.panel.classList;
     this.orientation.addEventListener('click', function () {
       const val = this.checked ? 'vertical' : 'horizontal';
-      const objP = panelE.classList;
       this.checked ? objP.add(modif) : objP.remove(modif);
 
       obj.update({

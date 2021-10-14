@@ -177,10 +177,7 @@ class Model extends Observer {
       gridRound: op.gridRound,
     });
 
-    this.notifyOB({
-      key: 'OrientationData',
-      orientation: op.orientation,
-    });
+
 
     this.notifyOB({
       key: 'ThemeData',
@@ -209,6 +206,11 @@ class Model extends Observer {
       bar: op.bar,
     });
 
+    this.notifyOB({
+      key: 'OrientationData',
+      orientation: op.orientation,
+    });
+
   }
 
   update(options: RangeSliderOptions) {
@@ -218,11 +220,11 @@ class Model extends Observer {
     this.setDotData(options);
     this.setGridData(options);
     this.setGridSnapData(options);
-    this.setOrientationData(options);
     this.setThemeData(options);
     this.setHintsData(options);
     this.setDisabledData(options);
     this.setBarData(options);
+    this.setOrientationData(options);
 
     // при первом старте не вызываем
     if (this.startConfFl)
@@ -833,7 +835,6 @@ gridNum >= 1
     if (this.gridStep && !this.gridNum) {     // если задан Шаг а интервал по умолчанию стоит
       step = this.gridStep;
       interval = this.getRange() / step;          // находим новый интервал
-      console.log('yes');
     } else {                                      // делаем только по интервалу
       interval = this.gridNum;
       step = this.getRange() / interval;          // находим шаг

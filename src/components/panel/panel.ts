@@ -21,8 +21,8 @@ class Panel {
   private objDifferent: Different;
   private objCopyCode: CopyCode;
 
-  // eslint-disable-next-line no-unused-vars
-  constructor(public nameClass: string, elem: HTMLElement) {
+
+  constructor(elem: HTMLElement) {
     this.elem = elem;
     this.init();
   }
@@ -39,7 +39,10 @@ class Panel {
     );
     this.objGrid = new Grid('.grid', this.getDom('.grid'));
     this.objHints = new Hints('.hints', this.getDom('.hints'));
-    this.objDifferent = new Different('.different', this.getDom('.different'));
+    this.objDifferent = new Different(
+      '.different',
+      this.getDom('.different'),
+      this.elem);
     this.objCopyCode = new CopyCode('.code', this.getDom('.code'));
   }
 
@@ -131,7 +134,7 @@ class Panel {
     this.objValues.setAction(obj);
     this.objGrid.setAction(obj);
     this.objHints.setAction(obj);
-    this.objDifferent.setAction(obj, this.elem);
+    this.objDifferent.setAction(obj);
   }
 
 
@@ -143,7 +146,7 @@ function renderPanel(className: string) {
   let components = document.querySelectorAll(className);
   let objMas: Panel[] = [];
   for (let elem of components) {
-    objMas.push(new Panel(className, elem as HTMLElement));
+    objMas.push(new Panel(elem as HTMLElement));
   }
   return objMas;
 }
@@ -177,6 +180,7 @@ objPanel[0].createRangeSlider({
 objPanel[1].createRangeSlider({
   type: 'double',
   //type: 'single',
+  orientation: 'vertical',
   theme: 'fox',
   min: 10,
   max: 800,
@@ -186,9 +190,9 @@ objPanel[1].createRangeSlider({
   // tipPrefix: '°C',
   // tipMinMax: false,
   // tipFromTo: false,
-  grid: true,
-  gridSnap: true,
-  gridNum: 10,
+  grid: false,
+  // gridSnap: true,
+  // gridNum: 10,
   //gridStep: 30,
 });
 

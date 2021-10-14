@@ -1,6 +1,4 @@
 
-// eslint-disable-next-line no-unused-vars
-import { CreateHandleOptions } from '../view.d';
 
 import { Observer } from '../../../observer';
 

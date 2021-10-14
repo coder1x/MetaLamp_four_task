@@ -1,6 +1,5 @@
-import { DateGrid } from '../view.d';
 
-import { Observer, TOB } from '../../../observer';
+import { Observer } from '../../../observer';
 
 class Grid extends Observer {
 
