@@ -226,6 +226,7 @@ class Model extends Observer {
     this.setBarData(options);
     this.setOrientationData(options);
 
+
     // при первом старте не вызываем
     if (this.startConfFl)
       this.onUpdate(this.getOptions());

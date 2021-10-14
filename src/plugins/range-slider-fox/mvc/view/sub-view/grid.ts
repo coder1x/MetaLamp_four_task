@@ -74,7 +74,8 @@ class Grid extends Observer {
       this.masWidth = [];
       this.oddElements = [[]];
       this.evenElements = [[]];
-      this.previousElem.remove();
+      if (this.previousElem)
+        this.previousElem.remove();
       this.previousElem = null;
     }
   }

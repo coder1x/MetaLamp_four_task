@@ -242,6 +242,10 @@ class View extends Observer {
     }
   }
 
+  ubdateTipMinMax(min: number, max: number) {
+    this.hints.setValTipMinMax(min, max);
+  }
+
   ubdateTipFromTo(op: UbdateTip) {
     const obj = this.hints.getWidthTip();
     if (!obj.fromWH && !obj.toWH) return;

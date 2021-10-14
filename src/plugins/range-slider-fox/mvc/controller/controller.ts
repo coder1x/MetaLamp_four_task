@@ -71,13 +71,14 @@ class Controller {
 
     this.model.calcOnePercent();
 
-    // if (this.startFl) {
-    //   const options = this.model.getOptions();
-    //   this.model.update({
-    //     from: options.from,
-    //     to: options.to,
-    //   });
-    // }
+    this.view.ubdateTipMinMax(options.min, options.max);
+
+    const obj = this.model.getOptions();
+    if (obj.grid) {
+      this.view.deleteGrid();
+      this.model.createMark();
+      this.view.createDomGrid();
+    }
 
   };
 
