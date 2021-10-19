@@ -30,8 +30,8 @@ $color-focus: #1f2041;
 
   &__grid-pol {
     position: absolute;
-    width: 1px;
-    height: 5px;
+    width: 1px; // **************
+    height: 5px; // **************
   }
 
   &__grid-mark {
@@ -95,21 +95,31 @@ $color-focus: #1f2041;
     &__tip-min {
       position: absolute;
       bottom: 0%;
-      right: 10px;
+      right: 10px; // **************
+    }
+
+    &__grid {
+      height: 100%;
+    }
+
+    &__grid-pol {
+      position: absolute;
+      width: 5px; // **************
+      height: 1px; // **************
     }
 
     &__tip-max {
       position: absolute;
-      right: 10px;
+      right: 10px; // **************
     }
 
     &__tip-from,
     &__tip-to {
-      right: 10px;
+      right: 10px; // **************
     }
 
     &__tip-single {
-      right: 10px;
+      right: 10px; // **************
       text-align: center;
     }
 

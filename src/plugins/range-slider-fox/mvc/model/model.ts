@@ -307,6 +307,18 @@ class Model extends Observer {
       this.min = +min;
       this.max = +max;
 
+      if (this.max < this.to)
+        this.to = this.max;
+
+      if (this.max < this.from)
+        this.from = this.max;
+
+      if (this.min > this.to)
+        this.to = this.min;
+
+      if (this.min > this.from)
+        this.from = this.min;
+
       // вызываем оповещение подписчиков
       this.notifyOB({
         key: 'RangeData',
@@ -379,7 +391,14 @@ class Model extends Observer {
 
     if (from >= this.min && from <= this.max) {
       this.from = +from;
-    } else return false;
+    } else {
+      if (from < this.min)
+        this.from = this.min;
+
+      if (from > this.max)
+        this.from = this.max;
+    }
+
 
     if (type == 'double') // проверяем from и to 
     {
@@ -394,7 +413,9 @@ class Model extends Observer {
 
       if (to <= this.max) {
         this.to = to as number;
-      } else return false;
+      } else {
+        this.to = this.max;
+      }
     }
 
     // вызываем оповещение подписчиков

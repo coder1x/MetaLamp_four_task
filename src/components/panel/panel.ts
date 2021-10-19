@@ -20,10 +20,12 @@ class Panel {
   private objHints: Hints;
   private objDifferent: Different;
   private objCopyCode: CopyCode;
+  private className: string;
 
 
-  constructor(elem: HTMLElement) {
+  constructor(elem: HTMLElement, className: string) {
     this.elem = elem;
+    this.className = className;
     this.init();
   }
 
@@ -107,12 +109,11 @@ class Panel {
 
 
   createRangeSlider(options: RangeSliderOptions) {
-    // метод принимает конфиг
 
-    // подвесим на события все объекты групп
-    const theme = options.theme ?? 'base';
+    const selector = this.className + '__slider-wrap input';
+    const elem = this.elem.querySelector(selector);
 
-    const obj = $('.rslider__' + theme).RangeSliderFox({
+    const obj = $(elem).RangeSliderFox({
       ...options
       ,
       onStart: (data: RangeSliderOptions) => {
@@ -146,7 +147,7 @@ function renderPanel(className: string) {
   let components = document.querySelectorAll(className);
   let objMas: Panel[] = [];
   for (let elem of components) {
-    objMas.push(new Panel(elem as HTMLElement));
+    objMas.push(new Panel(elem as HTMLElement, className));
   }
   return objMas;
 }
@@ -160,6 +161,7 @@ objPanel[0].createRangeSlider({
   type: 'double',
   //type: 'single',
   //theme: 'fox',
+  // orientation: 'vertical',
   min: -120,
   max: 800,
   from: 200,
@@ -177,24 +179,24 @@ objPanel[0].createRangeSlider({
 });
 
 
-objPanel[1].createRangeSlider({
-  type: 'double',
-  //type: 'single',
-  orientation: 'vertical',
-  theme: 'fox',
-  min: 10,
-  max: 800,
-  from: 200,
-  to: 500,
-  //disabled: true,
-  // tipPrefix: '°C',
-  // tipMinMax: false,
-  // tipFromTo: false,
-  grid: false,
-  // gridSnap: true,
-  // gridNum: 10,
-  //gridStep: 30,
-});
+// objPanel[1].createRangeSlider({
+//   type: 'double',
+//   //type: 'single',
+//   orientation: 'vertical',
+//   theme: 'fox',
+//   min: 10,
+//   max: 800,
+//   from: 200,
+//   to: 500,
+//   //disabled: true,
+//   // tipPrefix: '°C',
+//   // tipMinMax: false,
+//   // tipFromTo: false,
+//   grid: false,
+//   // gridSnap: true,
+//   // gridNum: 10,
+//   //gridStep: 30,
+// });
 
 
 // objPanel[2].createRangeSlider({

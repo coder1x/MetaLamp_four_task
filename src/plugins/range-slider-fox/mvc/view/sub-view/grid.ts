@@ -15,6 +15,7 @@ class Grid extends Observer {
   startWidth: number;
   offOn: boolean;
   resizeF: boolean;
+  vertical: boolean;
 
 
   constructor(elem: HTMLElement | Element) {
@@ -40,12 +41,63 @@ class Grid extends Observer {
     this.elemGrid = this.createElem('div', [this.rsName + '__grid']);
   }
 
+  setOrientation(str: string) {
+    this.vertical = str == 'vertical' ? true : false;
+
+    const convertStyle = (elem: CSSStyleDeclaration) => {
+      let val = '';
+      if (this.vertical) {
+        if (elem.left == '') return;
+        val = elem.left;
+        elem.removeProperty('left');
+        elem.bottom = val;
+      } else {
+        if (elem.bottom == '') return;
+        val = elem.bottom;
+        elem.removeProperty('bottom');
+        elem.left = val;
+      }
+    };
+
+    const convertGap = (elem: CSSStyleDeclaration) => {
+      if (elem.left == '') return;
+      let val = elem.left;
+      if (this.vertical) {
+        const num = parseInt(val);
+        val = Math.abs(num) + 'px';
+      } else {
+        val = '-' + val;
+      }
+      elem.left = val;
+    };
+
+    const elements = this.elemGrid.childNodes;
+
+    for (let item of elements) {
+      const pol = item as HTMLElement;
+      convertStyle(pol.style);
+
+      const mark = pol.firstChild as HTMLElement;
+      const stMark = mark.style;
+      if (this.vertical) {
+        stMark.top = '-' + mark.offsetHeight / 2 + 'px';
+      } else {
+        stMark.top = pol.offsetHeight + 2 + 'px';
+      }
+      convertGap(stMark);
+    }
+
+  }
+
   createMark = (val: number, position: number) => {
     const gridPol = this.createElem('div', [this.rsName + '__grid-pol']);
     const gridMark = this.createElem('span', [this.rsName + '__grid-mark']);
     gridMark.innerText = String(val);
     gridPol.appendChild(gridMark);
-    gridPol.style.left = position + '%';
+
+    const st = gridPol.style;
+    const pos = position + '%';
+    this.vertical ? st.bottom = pos : st.left = pos;
     this.elemGrid.appendChild(gridPol);
   }
 
@@ -106,6 +158,9 @@ class Grid extends Observer {
       this.rsName + '__grid-mark'
     );
 
+    const gridPols = this.elemGrid.getElementsByClassName(
+      this.rsName + '__grid-pol'
+    );
 
     const len = gridMarks.length;
     if (len > 1) {
@@ -113,20 +168,34 @@ class Grid extends Observer {
     }
     let elemWidth = 0;
 
+    let k = 0;
     for (let item of gridMarks) {
       const mark = (item as HTMLElement);
-      const markX = mark.offsetWidth / 2;
-      mark.style.left = '-' + markX + 'px';
+      const pol = (gridPols[k++] as HTMLElement);
 
-      elemWidth += mark.offsetWidth + this.indent;
-      this.oddElements[0].push(mark);
+      const stMark = mark.style;
+
+      if (this.vertical) {
+        stMark.top = '-' + mark.offsetHeight / 2 + 'px';
+        stMark.left = pol.offsetWidth + 2 + 'px';
+      } else {
+        stMark.left = '-' + mark.offsetWidth / 2 + 'px';
+        stMark.top = pol.offsetHeight + 2 + 'px';
+      }
+
+      if (!this.vertical) {
+        elemWidth += mark.offsetWidth + this.indent;
+        this.oddElements[0].push(mark);
+      }
     }
+    if (this.vertical) return;
 
     this.masWidth.push(elemWidth);
     this.oddElements[0].shift();
     this.oddElements[0].pop();
 
     let evenMas: HTMLElement[] = [];
+
     const breakIntoPieces = (mas: HTMLElement[]) => {
       elemWidth = 0;
       const newMas = mas.filter((elem, i) => {
@@ -158,6 +227,7 @@ class Grid extends Observer {
 
   // скрываем или показываем цифры на шкале.
   visibleMark() {
+    if (this.vertical) return;
     // находим индекс элементов - для нечётных - показать для чётных скрыть.
     const wrapWidth = this.elemGrid.offsetWidth;
     let i = 0;
@@ -214,7 +284,7 @@ class Grid extends Observer {
         timeout = false;
         let totalWidth = this.elemGrid.offsetWidth;
         if (totalWidth != this.startWidth) {
-          if (this.offOn)
+          if (this.offOn && !this.vertical)
             this.visibleMark();
           this.startWidth = totalWidth;
         }

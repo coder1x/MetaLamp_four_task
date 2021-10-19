@@ -162,6 +162,7 @@ class View extends Observer {
     this.handle.setOrientation(str);
     this.hints.setOrientation(str);
     this.bar.setOrientation(str);
+    this.grid.setOrientation(str);
 
   }
 
