@@ -59,6 +59,7 @@ class View extends Observer {
   private createListeners() {
     this.handle.subscribeOB(this.handleDotMove);
     this.bar.subscribeOB(this.handleClickBar);
+    this.grid.subscribeOB(this.handleClickMark);
   }
 
   private handleDotMove = (options: TOB) => {
@@ -76,6 +77,15 @@ class View extends Observer {
 
     this.notifyOB({
       key: 'ClickBar', ...options
+    });
+  };
+
+  private handleClickMark = (options: TOB) => {
+    const key = options.key;
+    if (key != 'ClickMark') return;
+
+    this.notifyOB({
+      key: 'ClickMark', ...options
     });
   };
 

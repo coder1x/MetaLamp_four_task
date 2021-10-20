@@ -94,11 +94,22 @@ class Grid extends Observer {
     const gridMark = this.createElem('span', [this.rsName + '__grid-mark']);
     gridMark.innerText = String(val);
     gridPol.appendChild(gridMark);
+    this.setAction(gridMark);
 
     const st = gridPol.style;
     const pos = position + '%';
     this.vertical ? st.bottom = pos : st.left = pos;
     this.elemGrid.appendChild(gridPol);
+  }
+
+  setAction(elem: HTMLElement) {
+    const _this = this;
+    elem.addEventListener('click', function () {
+      _this.notifyOB({
+        key: 'ClickMark',
+        valueG: Number(this.innerText)
+      });
+    });
   }
 
   createDomGrid() {

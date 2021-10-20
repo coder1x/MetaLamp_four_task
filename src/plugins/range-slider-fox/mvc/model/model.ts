@@ -942,6 +942,31 @@ gridNum >= 1
     }
   }
 
+  clickMark = (value: number) => {
+
+    let from = this.from;
+    let to = this.to;
+
+    if (this.type == 'single') {
+      from = value;
+    }
+    else if (value > to) {       // если это значение больше чем To
+      to = value;                // To  на эту точку
+    } else if (value > from) {   // если меньше To то больше From
+      const To = to - value;     // из To вычетаем Val
+      const From = value - from; // из Val вычетаем From
+      From > To ? to = value : from = value; // то число что меньше та точка и ближе
+    } else {                              // Если Val меньше From то подвигать From
+      from = value;
+    }
+
+    this.setDotData({
+      type: this.type,
+      from: from,
+      to: to,
+    });
+  }
+
   //---------------------------------- Line
 
   clickLine = (pointXY: number) => {
@@ -970,7 +995,7 @@ gridNum >= 1
     else if (pointP > this.toP) {       // если это значение больше чем To
       this.toP = pointP;                // To  на эту точку
       toFl = true;
-    } else if (pointP > this.fromP) {   // если меньше To но больше From
+    } else if (pointP > this.fromP) {   // если меньше To то больше From
       const To = this.toP - pointP;     // из To вычетаем Val
       const From = pointP - this.fromP; // из Val вычетаем From
       From > To ? this.toP = pointP : this.fromP = pointP; // то число что меньше та точка и ближе
