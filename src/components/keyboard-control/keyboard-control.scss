@@ -1,0 +1,16 @@
+.keyboard-control {
+  border: 1px solid rgba(31, 32, 65, 0.25);
+  border-radius: 4px;
+  box-sizing: border-box;
+  padding: 10px;
+  align-content: flex-start;
+  height: 100%;
+
+  &__one-wrap {
+    margin-bottom: 10px;
+  }
+
+  &__hold-wrap {
+    margin-bottom: 10px;
+  }
+}

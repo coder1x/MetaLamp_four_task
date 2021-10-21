@@ -1,12 +1,12 @@
 include ../text-field/text-field.pug
 
-mixin slider-data(options)
+mixin keyboard-control(options)
   -
     let label = options.label ?? ''
     let modif = options.modif ?? ''
     let addClass = options.class ?? ''
     let flLabel = options.flLabel ?? false
-    let classComp = 'slider-data'
+    let classComp = 'keyboard-control'
     let className = classComp
     if(modif){
     className += ' '+classComp+'_'+modif}
@@ -16,15 +16,15 @@ mixin slider-data(options)
     - if(!flLabel){
     legend(class=classComp+'__label')= label
     -}
-    div(class=classComp+'__valfrom-wrap')
+    div(class=classComp+'__one-wrap')
       +text-field({
-        label: 'value from',
+        label: 'key Step One',
         type: 'text',
-        name: 'from'
+        name: 'keyStepOne'
       })
-    div(class=classComp+'__valto-wrap')
+    div(class=classComp+'__hold-wrap')
       +text-field({
-        label: 'value to',
+        label: 'key Step Hold',
         type: 'text',
-        name: 'to'
+        name: 'keyStepHold'
       })

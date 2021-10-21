@@ -3,7 +3,7 @@ import { RangeSliderOptions } from
   '../../plugins/range-slider-fox/mvc/model/model.d';
 
 import { Values } from '../values/values';
-import { SliderData } from '../slider-data/slider-data';
+import { InputData } from '../input-data/input-data';
 import { Grid } from '../grid/grid';
 import { Hints } from '../hints/hints';
 import { Different } from '../different/different';
@@ -15,7 +15,7 @@ class Panel {
 
   private elem: HTMLElement;
   private objValues: Values;
-  private objSliderData: SliderData;
+  private objInputData: InputData;
   private objGrid: Grid;
   private objHints: Hints;
   private objDifferent: Different;
@@ -35,9 +35,9 @@ class Panel {
 
   private init() {
     this.objValues = new Values('.values', this.getDom('.values'));
-    this.objSliderData = new SliderData(
-      '.slider-data',
-      this.getDom('.slider-data')
+    this.objInputData = new InputData(
+      '.input-data',
+      this.className + '__slider-wrap input'
     );
     this.objGrid = new Grid('.grid', this.getDom('.grid'));
     this.objHints = new Hints('.hints', this.getDom('.hints'));
@@ -55,10 +55,7 @@ class Panel {
       from: data.from,
       to: data.to,
     });
-    this.objSliderData.setData({
-      from: data.from,
-      to: data.to,
-    });
+    this.objInputData.setData();
     this.objGrid.setData({
       grid: data.grid,
       gridSnap: data.gridSnap,

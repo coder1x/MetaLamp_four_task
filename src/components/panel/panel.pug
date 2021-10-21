@@ -1,9 +1,10 @@
 include ../values/values.pug
 include ../hints/hints.pug
 include ../grid/grid.pug
-include ../slider-data/slider-data.pug
+include ../input-data/input-data.pug
 include ../different/different.pug
 include ../code/code.pug
+include ../keyboard-control/keyboard-control.pug
 
 
 
@@ -25,9 +26,13 @@ mixin panel(options)
       +values({
         label: 'Values',
       })
-    div(class=classComp+'__slider-data-wrap') 
-      +slider-data({
-        label: 'Slider data',
+    div(class=classComp+'__Input-data-wrap') 
+      +input-data({
+        label: 'Input data',
+      })
+    div(class=classComp+'__keyboard-control-wrap') 
+      +keyboard-control({
+        label: 'keyboard control',
       })
     div(class=classComp+'__grid-wrap') 
       +grid({

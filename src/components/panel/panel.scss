@@ -118,11 +118,14 @@
       grid-column-end: 3;
     }
 
-    &__slider-data-wrap {
+    &__input-data-wrap {
       grid-row-start: 2;
       grid-row-end: 3;
       grid-column-start: 2;
       grid-column-end: 3;
+    }
+
+    &__keyboard-control-wrap {
     }
 
     &__hints-wrap {
