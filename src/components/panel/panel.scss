@@ -45,6 +45,16 @@
     grid-row-end: 5;
     grid-column-start: 1;
     grid-column-end: 2;
+    margin: 0 auto;
+
+    @include media-breakpoint-down($md) {
+      grid-row-start: 5;
+    }
+
+    @include media-breakpoint-down($xs) {
+      grid-row-start: 6;
+      grid-row-end: 7;
+    }
   }
 
   &__hints-wrap {
@@ -82,7 +92,8 @@
     margin: 0 auto;
 
     @include media-breakpoint-down($xs) {
-      grid-row-start: 6;
+      grid-row-start: 7;
+      grid-row-end: 8;
       grid-column-start: 1;
     }
   }
@@ -96,12 +107,13 @@
     margin: 0 auto;
 
     @include media-breakpoint-down($md) {
-      grid-row-start: 4;
+      grid-row-start: 5;
       grid-column-start: 2;
     }
 
     @include media-breakpoint-down($xs) {
-      grid-row-start: 7;
+      grid-row-start: 8;
+      grid-row-end: 9;
       grid-column-start: 1;
     }
   }

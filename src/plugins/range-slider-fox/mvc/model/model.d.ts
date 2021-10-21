@@ -8,6 +8,9 @@ interface RangeSliderOptions {
   max?: number;
   from?: number;
   to?: number;
+  step?: number,
+  keyStepOne?: number,
+  keyStepHold?: number,
   bar?: boolean;
   grid?: boolean;
   gridSnap?: boolean;
@@ -26,7 +29,6 @@ interface RangeSliderOptions {
 }
 
 interface CalcDotPositionOpt {
-  // dotWidth: number,
   type: string,
   wrapWH: number,
   position: number,

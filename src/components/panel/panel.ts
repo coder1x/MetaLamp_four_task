@@ -8,6 +8,7 @@ import { Grid } from '../grid/grid';
 import { Hints } from '../hints/hints';
 import { Different } from '../different/different';
 import { CopyCode } from '../code/code';
+import { KeyboardControl } from '../keyboard-control/keyboard-control';
 
 
 
@@ -21,6 +22,7 @@ class Panel {
   private objDifferent: Different;
   private objCopyCode: CopyCode;
   private className: string;
+  private objKeyboardControl: KeyboardControl;
 
 
   constructor(elem: HTMLElement, className: string) {
@@ -46,6 +48,11 @@ class Panel {
       this.getDom('.different'),
       this.elem);
     this.objCopyCode = new CopyCode('.code', this.getDom('.code'));
+
+    this.objKeyboardControl = new KeyboardControl(
+      '.keyboard-control',
+      this.getDom('.keyboard-control')
+    );
   }
 
   setData(data: RangeSliderOptions) {
@@ -54,7 +61,14 @@ class Panel {
       max: data.max,
       from: data.from,
       to: data.to,
+      step: data.step,
     });
+
+    this.objKeyboardControl.setData({
+      keyStepOne: data.keyStepOne,
+      keyStepHold: data.keyStepHold,
+    });
+
     this.objInputData.setData();
     this.objGrid.setData({
       grid: data.grid,
@@ -91,6 +105,9 @@ class Panel {
       max: data.max,
       from: data.from,
       to: data.to,
+      step: data.step,
+      keyStepOne: data.keyStepOne,
+      keyStepHold: data.keyStepHold,
       bar: data.bar,
       grid: data.grid,
       gridSnap: data.gridSnap,
@@ -133,6 +150,7 @@ class Panel {
     this.objGrid.setAction(obj);
     this.objHints.setAction(obj);
     this.objDifferent.setAction(obj);
+    this.objKeyboardControl.setAction(obj);
   }
 
 

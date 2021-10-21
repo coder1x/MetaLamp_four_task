@@ -13,6 +13,9 @@ class Model extends Observer {
   private max: number;
   private from: number;
   private to: number;
+  private step: number;
+  private keyStepOne: number;
+  private keyStepHold: number;
   private bar: boolean;
   private tipPrefix: string;
   private tipPostfix: string;
@@ -74,9 +77,12 @@ class Model extends Observer {
       max: 10,          // максимальное значение на школе
       from: 1,          // позиция первой точки
       to: 2,            // позиция второй точки
-      bar: false,
-      tipPrefix: '',    // Префикс для подсказок не больше 3 символов.
-      tipPostfix: '',
+      step: 0,           // Шаг для ползунков
+      keyStepOne: 0,    // Шаг при нажатии кнопки с клавиатуры
+      keyStepHold: 0,   // Шаг при удержании кнопки с клавиатуры
+      bar: false,       // Показать или скрыть полусу диапазона
+      tipPrefix: '',    // Префикс для подсказок не больше 15 символов.
+      tipPostfix: '',   // Префикс для подсказок не больше 15 символов.
       tipMinMax: true,  // подсказки включены
       tipFromTo: true,  // подсказки точек включены
       grid: false,      // Шкала выключена
@@ -114,6 +120,9 @@ class Model extends Observer {
       max: this.max,
       to: this.to,
       from: this.from,
+      step: this.step,
+      keyStepOne: this.keyStepOne,
+      keyStepHold: this.keyStepHold,
       bar: this.bar,
       tipPrefix: this.tipPrefix,
       tipPostfix: this.tipPostfix,
@@ -142,6 +151,9 @@ class Model extends Observer {
     this.to = op.to;
     this.bar = op.bar;
     this.from = op.from;
+    this.step = op.step;
+    this.keyStepOne = op.keyStepOne;
+    this.keyStepHold = op.keyStepHold;
     this.tipPrefix = op.tipPrefix;
     this.tipMinMax = op.tipMinMax;
     this.tipFromTo = op.tipFromTo;
@@ -156,6 +168,13 @@ class Model extends Observer {
       key: 'RangeData',
       min: op.min,
       max: op.max,
+    });
+
+    this.notifyOB({
+      key: 'Step',
+      step: op.step,
+      keyStepOne: op.keyStepOne,
+      keyStepHold: op.keyStepHold,
     });
 
     this.notifyOB({
@@ -177,8 +196,6 @@ class Model extends Observer {
       gridStep: op.gridStep,
       gridRound: op.gridRound,
     });
-
-
 
     this.notifyOB({
       key: 'ThemeData',

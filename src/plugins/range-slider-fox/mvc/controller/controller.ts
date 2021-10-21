@@ -1,14 +1,6 @@
 import { Model } from '../model/model';
 import { View } from '../view/view';
-
-// eslint-disable-next-line no-unused-vars
-import { CalcDotPositionOpt } from '../model/model.d';
-
-// eslint-disable-next-line no-unused-vars
-import { onChangeFrom, onChangeTo } from './controller.d';
-
 import { RangeSliderOptions } from '../model/model.d';
-
 import { TOB } from '../../observer';
 
 
@@ -18,7 +10,6 @@ class Controller {
 
   // eslint-disable-next-line no-unused-vars
   constructor(private model: Model, private view: View) {
-
     this.createListeners();
     this.init();
   }
@@ -26,25 +17,35 @@ class Controller {
 
   private createListeners() {
 
-    this.model.subscribeOB(this.handleRangeData);
-    this.model.subscribeOB(this.handleDotData);
-    this.model.subscribeOB(this.handleGridSnapData);
-    this.model.subscribeOB(this.handleGridData);
-    this.model.subscribeOB(this.handleOrientationData);
-    this.model.subscribeOB(this.handleThemeData);
-    this.model.subscribeOB(this.handleHintsData);
-    this.model.subscribeOB(this.handleDisabledData);
-    this.model.subscribeOB(this.handleBarData);
+    const subscribe = (talking: Model | View, items: Function[]) => {
+      for (let item of items)
+        talking.subscribeOB(item);
+    };
 
-    this.model.subscribeOB(this.handleCreateGrid);
+    const SModel = [this.handleRangeData,
+    this.handleDotData,
+    this.handleGridSnapData,
+    this.handleGridData,
+    this.handleOrientationData,
+    this.handleThemeData,
+    this.handleHintsData,
+    this.handleDisabledData,
+    this.handleBarData,
+    this.handleCreateGrid,
+    this.handleStep
+    ];
 
-    this.view.subscribeOB(this.handleDotMove);
-    this.view.subscribeOB(this.handleClickLine);
-    this.view.subscribeOB(this.handleSizeWrap);
-    this.view.subscribeOB(this.handleClickBar);
-    this.view.subscribeOB(this.handleClickMark);
-    this.view.subscribeOB(this.handleSnapNum);
+    subscribe(this.model, SModel);
 
+    const SView = [this.handleDotMove,
+    this.handleClickLine,
+    this.handleSizeWrap,
+    this.handleClickBar,
+    this.handleClickMark,
+    this.handleSnapNum,
+    ];
+
+    subscribe(this.view, SView);
   }
 
   private init() {
@@ -76,6 +77,16 @@ class Controller {
       this.model.createMark();
       this.view.createDomGrid();
     }
+
+  };
+
+  private handleStep = (options: TOB) => {
+    const key = options.key;
+    if (key != 'Step') return;
+
+    console.log('step');
+    console.log(options);
+
 
   };
 

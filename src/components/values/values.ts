@@ -5,6 +5,7 @@ interface OP {
   max?: number;
   from?: number;
   to?: number;
+  step?: number;
 }
 
 
@@ -15,6 +16,7 @@ class Values {
   private max: HTMLInputElement;
   private from: HTMLInputElement;
   private to: HTMLInputElement;
+  private step: HTMLInputElement;
 
 
 
@@ -40,7 +42,7 @@ class Values {
     this.max = getDom('max');
     this.from = getDom('from');
     this.to = getDom('to');
-
+    this.step = getDom('step');
   }
 
 
@@ -49,6 +51,7 @@ class Values {
     this.max.value = String(options.max);
     this.from.value = String(options.from);
     this.to.value = String(options.to);
+    this.step.value = String(options.step);
   }
 
 
@@ -59,6 +62,7 @@ class Values {
     mapInput.set('max', this.max.value);
     mapInput.set('from', this.from.value);
     mapInput.set('to', this.to.value);
+    mapInput.set('step', this.step.value);
 
     const data = (e: Event) => {
       const elem = e.target as HTMLInputElement;
@@ -83,7 +87,7 @@ class Values {
     };
 
 
-    const masE = [this.min, this.max, this.from, this.to];
+    const masE = [this.min, this.max, this.from, this.to, this.step];
 
     for (let item of masE) {
       item.addEventListener('change', data);
