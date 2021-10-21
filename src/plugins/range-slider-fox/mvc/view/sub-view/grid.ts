@@ -39,6 +39,14 @@ class Grid extends Observer {
     this.rsName = 'range-slider-fox';
     this.indent = 4; // отступ в пикселях между числами на шкале
     this.elemGrid = this.createElem('div', [this.rsName + '__grid']);
+
+    const observer = new MutationObserver(() => {
+      this.shapingMark();
+    });
+
+    observer.observe(this.rsBottom, {
+      childList: true,
+    });
   }
 
   setOrientation(str: string) {
@@ -113,14 +121,6 @@ class Grid extends Observer {
   }
 
   createDomGrid() {
-    const observer = new MutationObserver(() => {
-      this.shapingMark();
-    });
-
-    observer.observe(this.rsBottom, {
-      childList: true,
-    });
-
     this.rsBottom.appendChild(this.elemGrid);
     this.offOn = true;
   }
@@ -229,6 +229,8 @@ class Grid extends Observer {
       }
     };
 
+
+
     breakIntoPieces(this.oddElements[0]);
 
     this.visibleMark();
@@ -253,9 +255,19 @@ class Grid extends Observer {
       }
     }
 
+    let snapNum: number[] = [];
+
     this.oddElements[i].map((elem) => { // делаем видемыми только нужные.
       this.toggleElem(elem, 'visible', '1');
+      snapNum.push(+elem.innerText);
     });
+
+    this.notifyOB({
+      key: 'SnapNum',
+      snapNum: snapNum,
+    });
+    // console.log(snapNum); // массив отображаемых цифр
+
 
     const len = this.oddElements[i].length - 1;
     this.previousElem = this.oddElements[i][len];

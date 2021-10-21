@@ -43,6 +43,7 @@ class Controller {
     this.view.subscribeOB(this.handleSizeWrap);
     this.view.subscribeOB(this.handleClickBar);
     this.view.subscribeOB(this.handleClickMark);
+    this.view.subscribeOB(this.handleSnapNum);
 
   }
 
@@ -70,7 +71,7 @@ class Controller {
     this.view.ubdateTipMinMax(options.min, options.max);
 
     const obj = this.model.getOptions();
-    if (obj.grid) {
+    if (obj.grid && this.startFl) {
       this.view.deleteGrid();
       this.model.createMark();
       this.view.createDomGrid();
@@ -136,7 +137,7 @@ class Controller {
   private handleGridSnapData = (options: TOB) => {
     const key = options.key;
     if (key != 'GridSnapData') return;
-
+    this.model.snapDot();
   };
 
   private handleGridData = (options: TOB) => {
@@ -249,6 +250,13 @@ class Controller {
     if (key != 'ClickMark') return;
 
     this.model.clickMark(options.valueG);
+  };
+
+  private handleSnapNum = (options: TOB) => {
+    const key = options.key;
+    if (key != 'SnapNum') return;
+
+    this.model.calcSnap(options.snapNum);
   };
 
 

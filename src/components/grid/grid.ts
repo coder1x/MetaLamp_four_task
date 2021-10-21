@@ -57,13 +57,28 @@ class Grid {
     mapInput.set('gridStep', this.step.value);
     mapInput.set('gridRound', this.gridRound.value);
 
-    const data = (e: Event) => {
-      const elem = e.target as HTMLInputElement;
 
+    this.gridRound.addEventListener('change', () => {
       obj.update({
-        [elem.name]: +mapInput.get(elem.name)
+        gridRound: +this.gridRound.value,
       });
-    };
+    });
+
+    this.step.addEventListener('change', () => {
+      obj.update({
+        gridNum: 0,
+        gridStep: +this.step.value,
+      });
+      this.interval.value = '0';
+    });
+
+    this.interval.addEventListener('change', () => {
+      obj.update({
+        gridNum: + this.interval.value,
+        gridStep: 0,
+      });
+      this.step.value = '0';
+    });
 
     const inputProcessing = (e: Event) => {
       const elem = e.target as HTMLInputElement;
@@ -84,7 +99,6 @@ class Grid {
     const masE = [this.interval, this.step, this.gridRound];
 
     for (let item of masE) {
-      item.addEventListener('change', data);
       item.addEventListener('input', inputProcessing);
     }
 

@@ -24,14 +24,14 @@ interface RangeSliderOptions {
 interface insideOptions extends RangeSliderOptions {
   fromX?: number,
   toX?: number
-  valP?: number;
-  fromP?: number;
-  toP?: number;
-  limitFrom?: number;
-  limitTo?: number;
-  fromTo?: number;
-  valueG?: number;
-
+  valP?: number,
+  fromP?: number,
+  toP?: number,
+  limitFrom?: number,
+  limitTo?: number,
+  fromTo?: number,
+  valueG?: number,
+  snapNum?: number[],
   wrapWH?: number,
   position?: number,
   clientXY?: number,

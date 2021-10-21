@@ -33,7 +33,8 @@ class Model extends Observer {
   private limitFrom: number;
   private limitTo: number;
   private wrapWH: number;
-
+  private snapNum: number[] = [];
+  private stepGrid: number;
   private MAX_VAL = 999999999999999;
   private MIN_VAL = -999999999999999;
 
@@ -419,6 +420,11 @@ class Model extends Observer {
     }
 
     // вызываем оповещение подписчиков
+    if (this.gridSnap) {
+      this.from = this.getValSnap(this.from);
+      if (type == 'double')
+        this.to = this.getValSnap(this.to);
+    }
 
     this.notifyOB({
       key: 'DotData',
@@ -1020,6 +1026,47 @@ gridNum >= 1
     });
 
 
+  }
+
+
+  getValSnap(val: number) {
+    for (let i = 0; i < this.snapNum.length; i++) {
+      const item = this.snapNum[i];
+      if (val < item) {
+        const ost = this.stepGrid - (item - val);
+        return ost < this.stepGrid / 2 ?
+          this.snapNum[i ? i - 1 : i] : item;
+      }
+    }
+    return val;
+  }
+
+
+  snapDot() {
+    if (!this.gridSnap) return;
+
+    this.from = this.getValSnap(this.from);
+
+    if (this.type == 'double') {
+      this.to = this.getValSnap(this.to);
+    }
+
+    this.notifyOB({
+      key: 'DotData',
+      type: this.type,
+      from: this.from,
+      to: this.to,
+    });
+
+    this.onChange(this.getOptions());
+  }
+
+  calcSnap = (snapNum: number[]) => {
+    this.snapNum = [];
+    this.snapNum.push(this.min, ...snapNum, this.max);
+    this.stepGrid = this.snapNum[1] - this.snapNum[0];
+
+    this.snapDot();
   }
 
 

@@ -162,9 +162,9 @@ objPanel[0].createRangeSlider({
   //type: 'single',
   //theme: 'fox',
   // orientation: 'vertical',
-  min: -120,
+  min: 0,
   max: 800,
-  from: 200,
+  from: 215,
   to: 500,
   bar: true,
   //disabled: true,
@@ -172,10 +172,10 @@ objPanel[0].createRangeSlider({
   // tipMinMax: false,
   // tipFromTo: false,
   grid: true,
-  //gridSnap: true,
-  gridNum: 20,
+  gridSnap: true,
+  gridNum: 0,
+  gridStep: 40,
   gridRound: 2,
-  //gridStep: 0,
 });
 
 

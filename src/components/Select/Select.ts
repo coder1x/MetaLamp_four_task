@@ -171,11 +171,13 @@ class Select {
 
 
     const setValue = (e: MouseEvent | KeyboardEvent) => {
+
       let flag = false;
       const keyE = e as KeyboardEvent;
       const mousE = e as MouseEvent;
 
       if (keyE.key == 'Enter' || keyE.key == ' ') {
+        e.preventDefault();
         flag = true;
       } else if (mousE.type == 'click')
         flag = true;

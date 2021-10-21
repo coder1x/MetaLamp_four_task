@@ -60,7 +60,20 @@ class View extends Observer {
     this.handle.subscribeOB(this.handleDotMove);
     this.bar.subscribeOB(this.handleClickBar);
     this.grid.subscribeOB(this.handleClickMark);
+    this.grid.subscribeOB(this.handleSnapNum);
   }
+
+
+  //----------------------- убрать это в один универсальный метод ----------------------------------------- 
+
+  private handleSnapNum = (options: TOB) => {
+    const key = options.key;
+    if (key != 'SnapNum') return;
+
+    this.notifyOB({
+      key: 'SnapNum', ...options
+    });
+  };
 
   private handleDotMove = (options: TOB) => {
     const key = options.key;
@@ -88,6 +101,8 @@ class View extends Observer {
       key: 'ClickMark', ...options
     });
   };
+
+  //----------------------------------------------------------------
 
   // private handleWrapWH = (options: TOB) => {
   //   const key = options.key;
