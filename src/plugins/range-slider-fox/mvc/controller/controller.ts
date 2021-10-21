@@ -116,6 +116,9 @@ class Controller {
     const position = this.model.calcPositionBar();
     this.view.setBar(position.barX, position.widthBar);
 
+    // ----------  Input
+    this.view.setValueInput(options.from, options.to, options.type);
+
   };
 
 

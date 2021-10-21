@@ -27,6 +27,7 @@ class View extends Observer {
   hints: Hints;
   bar: Bar;
   grid: Grid;
+  typeElem: string;
 
   // eslint-disable-next-line no-unused-vars
   constructor(public elem: Element, public numElem: Number) {
@@ -37,8 +38,24 @@ class View extends Observer {
     this.init();
   }
 
+  setValueInput(from: number, to: number, type: string) {
+
+
+    if (this.typeElem == 'HTMLInputElement') {
+      let str = '';
+      const input = this.elem as HTMLInputElement;
+      input.value = str;
+      str += from;
+      if (type == 'double') {
+        str += ',' + to;
+      }
+      input.value = str;
+    }
+  }
 
   private init() {
+
+    this.typeElem = this.elem.constructor.name;
 
     // создаём базовые дом элементы. 
     this.createDomBase();

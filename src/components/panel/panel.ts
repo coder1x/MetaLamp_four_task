@@ -81,7 +81,7 @@ class Panel {
   }
 
   setDataCode(data: RangeSliderOptions) {
-
+    this.objInputData.setData();
     this.objCopyCode.setData({
       type: data.type,
       disabled: data.disabled,
