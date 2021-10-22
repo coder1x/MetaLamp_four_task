@@ -110,21 +110,56 @@ class Handle extends Observer {
 
 
   setActions(type: string) {
-
-    // нужны проверки которые будут проверять что мы не вешаем события повторно.
-
     const eventFromTo = this.eventFromF && this.eventToF;
-
     if (type == 'double' && eventFromTo) return;
-
     if (type == 'single' && eventFromTo) {
       this.eventToF = false;
     }
-
-
-
-
     let shiftXY = 0;
+
+
+    const keyDown = (e: KeyboardEvent) => {
+      const keyE = e as KeyboardEvent;
+      const directions = new Map();
+      directions.set('ArrowRight', '+');
+      directions.set('ArrowUp', '+');
+      directions.set('ArrowLeft', '-');
+      directions.set('ArrowDown', '-');
+
+      const fl = (keyE.key == 'ArrowRight' || keyE.key == 'ArrowLeft');
+      if (this.vertical && fl || !this.vertical && !fl)
+        return {};
+
+      if (!directions.get(keyE.key)) return {};
+      e.preventDefault();
+      const repeat = keyE.repeat;
+      const sign = directions.get(keyE.key);
+      return { repeat, sign };
+    };
+
+    this.elemFrom.addEventListener('keydown', (e: KeyboardEvent) => {
+      const { repeat, sign } = keyDown(e);
+      if (sign)
+        this.notifyOB({
+          key: 'DotKeyDown',
+          keyRepeat: repeat,
+          keySign: sign,
+          dot: 'from',
+        });
+    });
+
+    if (this.elemTo)
+      this.elemTo.addEventListener('keydown', (e: KeyboardEvent) => {
+        const { repeat, sign } = keyDown(e);
+        if (sign)
+          this.notifyOB({
+            key: 'DotKeyDown',
+            keyRepeat: repeat,
+            keySign: sign,
+            dot: 'to',
+          });
+      });
+
 
 
     // moveDot - будет передовать данные - так что на эти изменения нужно подписывать слушателей

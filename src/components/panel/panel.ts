@@ -95,6 +95,28 @@ class Panel {
   }
 
   setDataCode(data: RangeSliderOptions) {
+
+    this.objValues.setData({
+      min: data.min,
+      max: data.max,
+      from: data.from,
+      to: data.to,
+      step: data.step,
+    });
+
+    this.objKeyboardControl.setData({
+      keyStepOne: data.keyStepOne,
+      keyStepHold: data.keyStepHold,
+    });
+
+    this.objGrid.setData({
+      grid: data.grid,
+      gridSnap: data.gridSnap,
+      gridNum: data.gridNum,
+      gridStep: data.gridStep,
+      gridRound: data.gridRound,
+    });
+
     this.objInputData.setData();
     this.objCopyCode.setData({
       type: data.type,

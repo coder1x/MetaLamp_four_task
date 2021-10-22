@@ -16,7 +16,6 @@ class Controller {
 
 
   private createListeners() {
-
     const subscribe = (talking: Model | View, items: Function[]) => {
       for (let item of items)
         talking.subscribeOB(item);
@@ -43,6 +42,7 @@ class Controller {
     this.handleClickBar,
     this.handleClickMark,
     this.handleSnapNum,
+    this.handleDotKeyDown,
     ];
 
     subscribe(this.view, SView);
@@ -84,12 +84,16 @@ class Controller {
     const key = options.key;
     if (key != 'Step') return;
 
-    console.log('step');
-    console.log(options);
 
-
+    // console.log(options);
   };
 
+  private handleDotKeyDown = (options: TOB) => {
+    const key = options.key;
+    if (key != 'DotKeyDown') return;
+
+    this.model.calcKeyDown(options.keyRepeat, options.keySign, options.dot);
+  };
 
   private handleDotData = (options: TOB) => {
     const key = options.key;

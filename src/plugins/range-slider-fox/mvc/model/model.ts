@@ -235,6 +235,7 @@ class Model extends Observer {
     this.ubdateConfFl = true;
 
     this.setRangeData(options);
+    this.setStep(options);
     this.setDotData(options);
     this.setGridData(options);
     this.setGridSnapData(options);
@@ -362,6 +363,71 @@ class Model extends Observer {
 
 
 
+
+
+  setStep(options: RangeSliderOptions): boolean {
+
+    const properties = ['step', 'keyStepOne', 'keyStepHold'];
+    // проверяем есть ли вообще для нас обнавления 
+    if (!this.propertiesValidation(properties, options)) return false;
+
+    let step: PROP = options.step;
+    let keyStepOne: PROP = options.keyStepOne;
+    let keyStepHold: PROP = options.keyStepHold;
+
+    step = this.checkValue(step, 'step') as PROP;
+    if (step == null)
+      step = 0;
+
+    keyStepOne = this.checkValue(keyStepOne, 'keyStepOne') as PROP;
+    if (keyStepOne == null)
+      keyStepOne = 0;
+
+    keyStepHold = this.checkValue(keyStepHold, 'keyStepHold') as PROP;
+    if (keyStepHold == null)
+      keyStepHold = 0;
+
+
+    if (step > this.max)
+      step = this.max;
+
+    if (keyStepOne > this.max)
+      keyStepOne = this.max;
+
+    if (keyStepHold > this.max)
+      keyStepHold = this.max;
+
+    if (step < this.min)
+      step = this.min;
+
+    if (keyStepOne < this.min)
+      keyStepOne = this.min;
+
+    if (keyStepHold < this.min)
+      keyStepHold = this.min;
+
+
+    this.step = +step;
+    this.keyStepOne = +keyStepOne;
+    this.keyStepHold = +keyStepHold;
+
+
+    this.notifyOB({
+      key: 'Step',
+      step: this.step,
+      keyStepOne: this.keyStepOne,
+      keyStepHold: this.keyStepHold,
+    });
+
+
+    return false;
+  }
+
+
+
+
+
+
   /*
   
     type: 'single',   // тип - одна или две точки
@@ -436,12 +502,14 @@ class Model extends Observer {
       }
     }
 
-    // вызываем оповещение подписчиков
-    if (this.gridSnap) {
-      this.from = this.getValSnap(this.from);
-      if (type == 'double')
-        this.to = this.getValSnap(this.to);
-    }
+
+    if (!this.startConfFl && !this.ubdateConfFl)
+      if (this.gridSnap && !this.step) {
+        this.from = this.getValSnap(this.from);
+        if (type == 'double')
+          this.to = this.getValSnap(this.to);
+      }
+
 
     this.notifyOB({
       key: 'DotData',
@@ -472,10 +540,10 @@ class Model extends Observer {
       return false;
     }
 
-    this.gridSnap = options.gridSnap;
-
-    // console.log('gridSnap: ' + this.gridSnap);
-
+    if (!this.grid)
+      this.gridSnap = false;
+    else
+      this.gridSnap = options.gridSnap;
 
     // вызываем оповещение подписчиков
     this.notifyOB({
@@ -533,12 +601,19 @@ gridNum >= 1
       gridRound = 0;
     }
 
-    // console.log(gridNum);
-    // console.log(gridStep);
-
     this.gridRound = +gridRound;
     this.gridNum = +gridNum;
     this.gridStep = +gridStep;
+
+    if (!this.grid) {
+      if (this.gridSnap) {
+        this.gridSnap = false;
+        this.notifyOB({
+          key: 'GridSnapData',
+          gridSnap: this.gridSnap,
+        });
+      }
+    }
 
     // вызываем оповещение подписчиков
     this.notifyOB({
@@ -833,6 +908,12 @@ gridNum >= 1
       to = this.getDataDotTo(); // получаем значение to
     }
 
+    if (this.gridSnap && !this.step) {
+      from = this.getValSnap(from);
+      if (!typeF)
+        to = this.getValSnap(to);
+    }
+
     this.setDotData({
       from: from,
       to: to,
@@ -1086,6 +1167,54 @@ gridNum >= 1
     this.snapDot();
   }
 
+
+
+  calcKeyDown(repeat: boolean, sign: string, dot: string) {
+
+    let from = this.from;
+    let to = this.to;
+
+    //  this.step
+    //  this.keyStepOne
+    //  this.keyStepHold
+
+    const keyFl = !this.keyStepOne && !this.keyStepHold;
+
+    if (this.gridSnap && !this.step && keyFl) {
+      // переход исключительно по значениям шкалы.
+
+      //   to = this.getValSnap(to);
+
+    } else {
+
+      // переход с учётом шага. так же делать проверки 
+      // что бы точки вели себя одекватно.
+
+      // проверяем что !keyFl - это будет значить что в одном из 
+      // значений или даже в обоих задан шаг. тогда мы игнорируем step
+      // в ином случае мы используем step как единственный шаг.
+
+      // если keyStepOne равен нулю а keyStepHold задан то 
+      // keyStepOne делаем равным единицы
+      // есди keyStepHold равен нулю а keyStepOne имеет значение то
+      // keyStepHold = keyStepOne.
+
+
+      if (dot == 'from') {
+        from = sign != '+' ? from - 1 : from + 1;
+      } else {
+        to = sign != '+' ? to - 1 : to + 1;
+      }
+    }
+
+
+    this.setDotData({
+      type: this.type,
+      from: from,
+      to: to,
+    });
+
+  }
 
 
 

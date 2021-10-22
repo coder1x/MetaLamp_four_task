@@ -1,32 +1,32 @@
 
 
 interface RangeSliderOptions {
-  type?: string;
-  orientation?: string;
-  theme?: string;
-  min?: number;
-  max?: number;
-  from?: number;
-  to?: number;
+  type?: string,
+  orientation?: string,
+  theme?: string,
+  min?: number,
+  max?: number,
+  from?: number,
+  to?: number,
   step?: number,
   keyStepOne?: number,
   keyStepHold?: number,
-  bar?: boolean;
-  grid?: boolean;
-  gridSnap?: boolean;
-  tipPrefix?: string;
-  tipPostfix?: string;
-  tipMinMax?: boolean;
-  tipFromTo?: boolean;
-  gridNum?: number;
-  gridStep?: number;
-  gridRound?: number;
-  disabled?: boolean;
+  bar?: boolean,
+  grid?: boolean,
+  gridSnap?: boolean,
+  tipPrefix?: string,
+  tipPostfix?: string,
+  tipMinMax?: boolean,
+  tipFromTo?: boolean,
+  gridNum?: number,
+  gridStep?: number,
+  gridRound?: number,
+  disabled?: boolean,
 }
 
 interface insideOptions extends RangeSliderOptions {
   fromX?: number,
-  toX?: number
+  toX?: number,
   valP?: number,
   fromP?: number,
   toP?: number,
@@ -38,7 +38,10 @@ interface insideOptions extends RangeSliderOptions {
   wrapWH?: number,
   position?: number,
   clientXY?: number,
-  shiftXY?: number
+  shiftXY?: number,
+  keyRepeat?: boolean,
+  keySign?: string,
+  dot?: string,
 }
 
 

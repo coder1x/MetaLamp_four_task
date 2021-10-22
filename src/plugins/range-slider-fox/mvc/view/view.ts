@@ -75,6 +75,7 @@ class View extends Observer {
 
   private createListeners() {
     this.handle.subscribeOB(this.handleDotMove);
+    this.handle.subscribeOB(this.handleDotKeyDown);
     this.bar.subscribeOB(this.handleClickBar);
     this.grid.subscribeOB(this.handleClickMark);
     this.grid.subscribeOB(this.handleSnapNum);
@@ -91,6 +92,16 @@ class View extends Observer {
       key: 'SnapNum', ...options
     });
   };
+
+  private handleDotKeyDown = (options: TOB) => {
+    const key = options.key;
+    if (key != 'DotKeyDown') return;
+
+    this.notifyOB({
+      key: 'DotKeyDown', ...options
+    });
+  };
+
 
   private handleDotMove = (options: TOB) => {
     const key = options.key;
