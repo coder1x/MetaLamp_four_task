@@ -388,28 +388,19 @@ class Model extends Observer {
       keyStepHold = 0;
 
 
-    if (step > this.max)
-      step = this.max;
+    const validMaxMin = (val: number) => {
+      if (val > this.max)
+        return this.max;
 
-    if (keyStepOne > this.max)
-      keyStepOne = this.max;
+      if (val < this.min)
+        return this.min;
 
-    if (keyStepHold > this.max)
-      keyStepHold = this.max;
+      return val;
+    };
 
-    if (step < this.min)
-      step = this.min;
-
-    if (keyStepOne < this.min)
-      keyStepOne = this.min;
-
-    if (keyStepHold < this.min)
-      keyStepHold = this.min;
-
-
-    this.step = +step;
-    this.keyStepOne = +keyStepOne;
-    this.keyStepHold = +keyStepHold;
+    this.step = validMaxMin(+step);
+    this.keyStepOne = validMaxMin(+keyStepOne);
+    this.keyStepHold = validMaxMin(+keyStepHold);
 
 
     this.notifyOB({
@@ -1173,19 +1164,65 @@ gridNum >= 1
 
     let from = this.from;
     let to = this.to;
-
-    //  this.step
-    //  this.keyStepOne
-    //  this.keyStepHold
-
+    const signF = sign == '+';
+    const dotF = dot == 'from';
+    const typeF = this.type == 'double';
     const keyFl = !this.keyStepOne && !this.keyStepHold;
 
     if (this.gridSnap && !this.step && keyFl) {
-      // переход исключительно по значениям шкалы.
 
-      //   to = this.getValSnap(to);
+      const prev = this.snapNum[this.snapNum.length - 2];
+
+      const value = (i: number) => {
+        const val = this.snapNum[!signF ? i - 2 : i];
+        dotF ? from = val : to = val;
+      };
+
+      const moveFrom = (item: number, i: number) => {
+        if (from < item && dotF) {
+          if (from == to && signF && typeF) return false;
+          value(i);
+          return false;
+        }
+        else if (from == this.min) {
+          if (signF) {
+            from = this.snapNum[1];
+            return false;
+          }
+        } else if (from == this.max) {
+          if (!signF) {
+            from = prev;
+            return false;
+          }
+        }
+        return true;
+      };
+
+      const moveTo = (item: number, i: number) => {
+        if (to < item && !dotF) {
+          value(i);
+          return false;
+        } else if (to == this.max) {
+          if (!signF) {
+            to = prev;
+            return false;
+          }
+        }
+        return true;
+      };
+
+
+      for (let i = 0; i < this.snapNum.length; i++) {
+        const item = this.snapNum[i];
+        if (!moveFrom(item, i)) break;
+        if (!moveTo(item, i)) break;
+      }
+
 
     } else {
+      //  this.step
+      //  this.keyStepOne
+      //  this.keyStepHold
 
       // переход с учётом шага. так же делать проверки 
       // что бы точки вели себя одекватно.
@@ -1198,6 +1235,7 @@ gridNum >= 1
       // keyStepOne делаем равным единицы
       // есди keyStepHold равен нулю а keyStepOne имеет значение то
       // keyStepHold = keyStepOne.
+
 
 
       if (dot == 'from') {

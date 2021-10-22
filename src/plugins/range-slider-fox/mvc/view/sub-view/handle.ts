@@ -137,18 +137,21 @@ class Handle extends Observer {
       return { repeat, sign };
     };
 
-    this.elemFrom.addEventListener('keydown', (e: KeyboardEvent) => {
-      const { repeat, sign } = keyDown(e);
-      if (sign)
-        this.notifyOB({
-          key: 'DotKeyDown',
-          keyRepeat: repeat,
-          keySign: sign,
-          dot: 'from',
-        });
-    });
 
-    if (this.elemTo)
+
+    if (!this.eventFromF)
+      this.elemFrom.addEventListener('keydown', (e: KeyboardEvent) => {
+        const { repeat, sign } = keyDown(e);
+        if (sign)
+          this.notifyOB({
+            key: 'DotKeyDown',
+            keyRepeat: repeat,
+            keySign: sign,
+            dot: 'from',
+          });
+      });
+
+    if (this.elemTo && !this.eventToF)
       this.elemTo.addEventListener('keydown', (e: KeyboardEvent) => {
         const { repeat, sign } = keyDown(e);
         if (sign)
