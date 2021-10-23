@@ -78,14 +78,15 @@ class Controller {
       this.view.createDomGrid();
     }
 
+    this.model.calcStep();
+
   };
 
   private handleStep = (options: TOB) => {
     const key = options.key;
     if (key != 'Step') return;
 
-
-    // console.log(options);
+    this.model.calcStep();
   };
 
   private handleDotKeyDown = (options: TOB) => {

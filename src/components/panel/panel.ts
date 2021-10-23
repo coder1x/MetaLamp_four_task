@@ -199,7 +199,7 @@ objPanel[0].createRangeSlider({
   //type: 'single',
   //theme: 'fox',
   // orientation: 'vertical',
-  min: 0,
+  min: -120,
   max: 800,
   from: 215,
   to: 500,

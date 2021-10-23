@@ -37,6 +37,7 @@ class Model extends Observer {
   private limitTo: number;
   private wrapWH: number;
   private snapNum: number[] = [];
+  private stepNum: number[] = [];
   private stepGrid: number;
   private MAX_VAL = 999999999999999;
   private MIN_VAL = -999999999999999;
@@ -286,18 +287,6 @@ class Model extends Observer {
 
 
 
-  /*
-  min: 0,  // минимальное значение на школе
-  max: 10, // максимальное значение на школе
-
-  -проверяем что эти свойства есть и они не пустые
-  если нет не одного свойства то return false;
-  если одно свойство есть а другого нет то ищим 
-  в свойствах Модели - проверяем есть ли данные там
-  если есть то Валид. если нет То return false;
-  -проверяем на предельно допустимые значения. 
-  -Проверяем что min меньше max.
-*/
   setRangeData(options: RangeSliderOptions): boolean {
 
     const properties = ['min', 'max'];
@@ -363,8 +352,6 @@ class Model extends Observer {
 
 
 
-
-
   setStep(options: RangeSliderOptions): boolean {
 
     const properties = ['step', 'keyStepOne', 'keyStepHold'];
@@ -416,27 +403,6 @@ class Model extends Observer {
 
 
 
-
-
-
-  /*
-  
-    type: 'single',   // тип - одна или две точки
-    from: 1,          // позиция первой точки
-    to: 2,            // позиция второй точки
-
-    -проверяем на существование данных
-    -проверяем что type корректный
-
-    --для одной точки
-    смотрим что бы from был больше min и меньше max
-
-    --для двух точек
-    смотрим что бы from был меньше чем to 
-    если нет то поменять их значения местами
-
-    -проверяем что точки не выходят за границы
-  */
   setDotData(options: RangeSliderOptions): boolean {
 
     const properties = ['type', 'from', 'to'];
@@ -496,9 +462,9 @@ class Model extends Observer {
 
     if (!this.startConfFl && !this.ubdateConfFl)
       if (this.gridSnap && !this.step) {
-        this.from = this.getValSnap(this.from);
+        this.from = this.getValStep(this.from, this.stepGrid, this.snapNum);
         if (type == 'double')
-          this.to = this.getValSnap(this.to);
+          this.to = this.getValStep(this.to, this.stepGrid, this.snapNum);
       }
 
 
@@ -514,8 +480,6 @@ class Model extends Observer {
 
     return true;
   }
-
-
 
 
 
@@ -545,19 +509,6 @@ class Model extends Observer {
   }
 
 
-  /*
-  
-  grid: false,      // Шкала выключена
-  gridNum: 4,       // интервал в шкале
-  gridStep: 0,      // Шаг шкалы 
-
-  нужно проверять есть ли данные в min max - потому что без них не построить.
-
-gridStep - не должен привышать max - min = 
-
-gridNum >= 1
-
-  */
   setGridData(options: RangeSliderOptions): boolean {
 
     const properties = ['grid', 'gridNum', 'gridStep', 'gridRound'];
@@ -670,22 +621,6 @@ gridNum >= 1
 
 
 
-
-  /*
-    tipPrefix: '',    // Префикс для подсказок не больше 3 символов.
-    tipMinMax?: boolean;
-    tipFromTo?: boolean;
-  
-    tipPrefix - проверяем что он вообще существует, 
-    если нет то берём из Модели а если и там нет то не чего не делать с ним
-    Если tipPrefix есть то убираем пробелы, укарачиваем до 3 символов.
-
-    tipMinMax - проверяем что он вообще существует, 
-    если нет то берём из Модели а если и там нет то устанавливаем значение true;
-
-    tipFromTo - проверяем что он вообще существует, 
-    если нет то берём из Модели а если и там нет то устанавливаем значение true;
-  */
   setHintsData(options: RangeSliderOptions): boolean {
 
     const properties = ['tipPrefix', 'tipPostfix', 'tipMinMax', 'tipFromTo'];
@@ -900,15 +835,51 @@ gridNum >= 1
     }
 
     if (this.gridSnap && !this.step) {
-      from = this.getValSnap(from);
-      if (!typeF)
-        to = this.getValSnap(to);
+      if (fromFl)
+        from = this.getValStep(from, this.stepGrid, this.snapNum);
+      if (!typeF && toFl)
+        to = this.getValStep(to, this.stepGrid, this.snapNum);
     }
+
+
+    let signF = '';
+    if (this.from < from && fromFl) signF = 'right';
+    if (this.to < to && toFl) signF = 'right';
+    if (this.from > from && fromFl) signF = 'left';
+    if (this.to > to && toFl) signF = 'left';
+    if (signF == '') return;
+
+
+    if (this.step) {
+      if (fromFl)
+        from = this.getValStep(from, this.step, this.stepNum);
+      if (!typeF && toFl)
+        to = this.getValStep(to, this.step, this.stepNum);
+    }
+
+
 
     this.setDotData({
       from: from,
       to: to,
     });
+  }
+
+
+  calcStep() {
+    if (!this.step) return;
+
+    let mas: number[] = [];
+    let kol = this.min + this.step;
+    mas.push(this.min);
+    for (let i = this.min; i < this.max; i++) {
+      if (kol == i) {
+        mas.push(kol);
+        kol += this.step;
+      }
+    }
+    mas.push(this.max);
+    this.stepNum = mas;
   }
 
 
@@ -941,13 +912,10 @@ gridNum >= 1
 
 
 
-
-
   //---------------------------------- Grid
   calcGridNumStep() {
     let interval = 0;
     let step = 0;
-    // console.log('gridStep: ' + this.gridStep);
 
     if (this.gridStep && !this.gridNum) {     // если задан Шаг а интервал по умолчанию стоит
       step = this.gridStep;
@@ -957,7 +925,6 @@ gridNum >= 1
       step = this.getRange() / interval;          // находим шаг
     }
 
-    // console.log({ interval, step });
     return { interval, step };
   }
 
@@ -991,9 +958,6 @@ gridNum >= 1
 
     notify(this.max, 100);
   }
-
-
-
 
 
 
@@ -1065,8 +1029,6 @@ gridNum >= 1
   //---------------------------------- Line
 
   clickLine = (pointXY: number) => {
-
-
     const vertical = this.orientation == 'vertical';
 
     let from = this.from;
@@ -1113,18 +1075,16 @@ gridNum >= 1
       from: from,
       to: to,
     });
-
-
   }
 
 
-  getValSnap(val: number) {
-    for (let i = 0; i < this.snapNum.length; i++) {
-      const item = this.snapNum[i];
+  getValStep(val: number, step: number, mas: number[]) {
+    for (let i = 0; i < mas.length; i++) {
+      const item = mas[i];
       if (val < item) {
-        const ost = this.stepGrid - (item - val);
-        return ost < this.stepGrid / 2 ?
-          this.snapNum[i ? i - 1 : i] : item;
+        const ost = step - (item - val);
+        return ost < step / 2 ?
+          mas[i ? i - 1 : i] : item;
       }
     }
     return val;
@@ -1134,10 +1094,10 @@ gridNum >= 1
   snapDot() {
     if (!this.gridSnap) return;
 
-    this.from = this.getValSnap(this.from);
+    this.from = this.getValStep(this.from, this.stepGrid, this.snapNum);
 
     if (this.type == 'double') {
-      this.to = this.getValSnap(this.to);
+      this.to = this.getValStep(this.to, this.stepGrid, this.snapNum);
     }
 
     this.notifyOB({
@@ -1159,7 +1119,6 @@ gridNum >= 1
   }
 
 
-
   calcKeyDown(repeat: boolean, sign: string, dot: string) {
 
     let from = this.from;
@@ -1167,9 +1126,9 @@ gridNum >= 1
     const signF = sign == '+';
     const dotF = dot == 'from';
     const typeF = this.type == 'double';
-    const keyFl = !this.keyStepOne && !this.keyStepHold;
+    const keyF = !this.keyStepOne && !this.keyStepHold;
 
-    if (this.gridSnap && !this.step && keyFl) {
+    if (this.gridSnap && !this.step && keyF) {
 
       const prev = this.snapNum[this.snapNum.length - 2];
 
@@ -1220,42 +1179,41 @@ gridNum >= 1
 
 
     } else {
-      //  this.step
-      //  this.keyStepOne
-      //  this.keyStepHold
 
-      // переход с учётом шага. так же делать проверки 
-      // что бы точки вели себя одекватно.
+      const value = (step: number) => {
+        if (dotF) {
+          from = !signF ? from - step : from + step;
+        } else {
+          to = !signF ? to - step : to + step;
+        }
+        if (this.type == 'double') {
+          if (from > to && dotF) from = to;
+          if (from > to && !dotF) to = from;
+        }
+      };
 
-      // проверяем что !keyFl - это будет значить что в одном из 
-      // значений или даже в обоих задан шаг. тогда мы игнорируем step
-      // в ином случае мы используем step как единственный шаг.
-
-      // если keyStepOne равен нулю а keyStepHold задан то 
-      // keyStepOne делаем равным единицы
-      // есди keyStepHold равен нулю а keyStepOne имеет значение то
-      // keyStepHold = keyStepOne.
-
-
-
-      if (dot == 'from') {
-        from = sign != '+' ? from - 1 : from + 1;
+      if (!keyF) {
+        if (!this.keyStepOne && this.keyStepHold) {
+          this.keyStepOne = 1;
+        }
+        if (!this.keyStepHold && this.keyStepOne) {
+          this.keyStepHold = this.keyStepOne;
+        }
+        repeat ? value(this.keyStepHold) : value(this.keyStepOne);
+      } else if (this.step) {
+        value(this.step);
       } else {
-        to = sign != '+' ? to - 1 : to + 1;
+        value(1);
       }
     }
 
 
     this.setDotData({
-      type: this.type,
       from: from,
       to: to,
     });
 
   }
-
-
-
 
 }
 
