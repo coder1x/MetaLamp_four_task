@@ -376,12 +376,8 @@ class Model extends Observer {
 
 
     const validMaxMin = (val: number) => {
-      if (val > this.max)
-        return this.max;
-
-      if (val < this.min)
-        return this.min;
-
+      if (val > this.max) return this.max;
+      if (val < 0) return 0;
       return val;
     };
 

@@ -216,43 +216,44 @@ objPanel[0].createRangeSlider({
 });
 
 
-// objPanel[1].createRangeSlider({
-//   type: 'double',
-//   //type: 'single',
-//   orientation: 'vertical',
-//   theme: 'fox',
-//   min: 10,
-//   max: 800,
-//   from: 200,
-//   to: 500,
-//   //disabled: true,
-//   // tipPrefix: '°C',
-//   // tipMinMax: false,
-//   // tipFromTo: false,
-//   grid: false,
-//   // gridSnap: true,
-//   // gridNum: 10,
-//   //gridStep: 30,
-// });
+objPanel[1].createRangeSlider({
+  type: 'double',
+  //type: 'single',
+  orientation: 'vertical',
+  theme: 'dark',
+  min: 10,
+  max: 800,
+  from: 200,
+  to: 500,
+  bar: true,
+  //disabled: true,
+  // tipPrefix: '°C',
+  // tipMinMax: false,
+  // tipFromTo: false,
+  grid: true,
+  // gridSnap: true,
+  gridNum: 10,
+  //gridStep: 30,
+});
 
 
-// objPanel[2].createRangeSlider({
-//   type: 'double',
-//   //type: 'single',
-//   theme: 'fox',
-//   min: -120,
-//   max: 800,
-//   from: 200,
-//   to: 500,
-//   //disabled: true,
-//   // tipPrefix: '°C',
-//   // tipMinMax: false,
-//   // tipFromTo: false,
-//   grid: true,
-//   gridSnap: true,
-//   //gridNum: 6,
-//   gridStep: 30,
-// });
+objPanel[2].createRangeSlider({
+  type: 'double',
+  //type: 'single',
+  theme: 'fox',
+  min: -120,
+  max: 800,
+  from: 200,
+  to: 500,
+  //disabled: true,
+  // tipPrefix: '°C',
+  // tipMinMax: false,
+  // tipFromTo: false,
+  grid: true,
+  //gridSnap: true,
+  //gridNum: 6,
+  gridStep: 30,
+});
 
 
 

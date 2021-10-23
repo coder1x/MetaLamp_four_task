@@ -1,0 +1,90 @@
+.rs-classic.range-slider-fox {
+  .range-slider-fox {
+    min-height: 70px;
+
+    &__top {
+      min-height: 20px;
+    }
+
+    &__tip-min,
+    &__tip-max {
+      padding: 1px 5px;
+      color: #3a3a3a;
+      background: #c5d9ea;
+      font-size: 12px;
+    }
+
+    &__tip-from,
+    &__tip-to {
+      padding: 1px 5px;
+      font-size: 12px;
+      white-space: nowrap;
+      color: #3a3a3a;
+      background: #e9f5ff;
+    }
+
+    &__grid-mark {
+      font-size: 12px;
+      position: absolute;
+      top: 5px;
+    }
+
+    &__grid-pol {
+      background: #222;
+    }
+
+    &__bar {
+      background: #cdd7e0;
+    }
+
+    &__tip-single {
+      color: #3a3a3a;
+      background: #e9f5ff;
+      padding: 1px 5px;
+      font-size: 12px;
+    }
+
+    &__center {
+      min-height: 30px;
+    }
+
+    &__line {
+      min-height: 10px;
+      min-width: 10px;
+      background: #7596b1;
+      box-sizing: border-box;
+    }
+
+    &__from,
+    &__to {
+      height: 1px;
+    }
+
+    &__from:focus,
+    &__to:focus {
+      outline-offset: 12px;
+      outline: 2px solid $color-focus;
+    }
+
+    &__from::before,
+    &__to::before {
+      position: absolute;
+      top: -9px;
+      left: -5px;
+      content: "";
+      width: 12px;
+      height: 19px;
+      background-color: #bababa;
+      box-sizing: border-box;
+    }
+
+    &__from:hover::before,
+    &__to:hover::before {
+      background: #2c2c2b;
+    }
+
+    &__bottom {
+      top: 40px;
+    }
+  }
+}

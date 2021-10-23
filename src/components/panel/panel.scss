@@ -10,6 +10,7 @@
     grid-row-start: 1;
     grid-column-start: 1;
     grid-column-end: 4;
+    margin-bottom: 20px;
 
     @include media-breakpoint-down($md) {
       grid-column-start: 1;
@@ -125,12 +126,19 @@
   .panel {
     &__slider-wrap {
       grid-row-start: 1;
-      grid-row-end: 4;
+      grid-row-end: 3;
       grid-column-start: 1;
       grid-column-end: 2;
+      margin-bottom: 20px;
+
+      @include media-breakpoint-down($sm) {
+        min-height: 518px;
+        grid-row-end: 2;
+        grid-column-end: 3;
+      }
 
       @include media-breakpoint-down($xs) {
-        min-width: 105px;
+        grid-column-end: 2;
       }
     }
 
@@ -139,27 +147,16 @@
       grid-row-end: 2;
       grid-column-start: 2;
       grid-column-end: 3;
-    }
 
-    &__input-data-wrap {
-      grid-row-start: 2;
-      grid-row-end: 3;
-      grid-column-start: 2;
-      grid-column-end: 3;
-    }
+      @include media-breakpoint-down($sm) {
+        grid-row-start: 2;
+        grid-row-end: 3;
+        grid-column-start: 1;
+        grid-column-end: 2;
+      }
 
-    &__keyboard-control-wrap {
-      grid-row-start: 4;
-      grid-row-end: 5;
-      grid-column-start: 1;
-      grid-column-end: 2;
-    }
-
-    &__hints-wrap {
-      grid-row-start: 3;
-      grid-row-end: 4;
-      grid-column-start: 2;
-      grid-column-end: 3;
+      @include media-breakpoint-down($xs) {
+      }
     }
 
     &__grid-wrap {
@@ -168,26 +165,96 @@
       grid-column-start: 3;
       grid-column-end: 4;
 
-      @include media-breakpoint-down($xs) {
-        margin-top: 20px;
-        grid-row-start: 4;
-        grid-row-end: 5;
-        grid-column-start: 1;
+      @include media-breakpoint-down($sm) {
+        grid-row-start: 2;
+        grid-row-end: 3;
+        grid-column-start: 2;
         grid-column-end: 3;
+      }
+
+      @include media-breakpoint-down($xs) {
+        grid-row-start: 3;
+        grid-row-end: 4;
+        grid-column-start: 1;
+        grid-column-end: 2;
       }
     }
 
     &__different-wrap {
       grid-row-start: 2;
       grid-row-end: 3;
+      grid-column-start: 2;
+      grid-column-end: 3;
+
+      @include media-breakpoint-down($sm) {
+        grid-row-start: 3;
+        grid-row-end: 4;
+        grid-column-start: 1;
+        grid-column-end: 2;
+      }
+
+      @include media-breakpoint-down($xs) {
+        grid-row-start: 4;
+        grid-row-end: 5;
+      }
+    }
+
+    &__hints-wrap {
+      grid-row-start: 2;
+      grid-row-end: 3;
       grid-column-start: 3;
       grid-column-end: 4;
+
+      @include media-breakpoint-down($sm) {
+        grid-row-start: 3;
+        grid-row-end: 4;
+        grid-column-start: 2;
+        grid-column-end: 3;
+      }
 
       @include media-breakpoint-down($xs) {
         grid-row-start: 5;
         grid-row-end: 6;
         grid-column-start: 1;
-        grid-column-end: 3;
+        grid-column-end: 2;
+      }
+    }
+
+    &__keyboard-control-wrap {
+      grid-row-start: 3;
+      grid-row-end: 4;
+      grid-column-start: 1;
+      grid-column-end: 2;
+
+      @include media-breakpoint-down($sm) {
+        grid-row-start: 4;
+        grid-row-end: 5;
+        grid-column-start: 1;
+        grid-column-end: 2;
+      }
+
+      @include media-breakpoint-down($xs) {
+        grid-row-start: 6;
+        grid-row-end: 7;
+      }
+    }
+
+    &__input-data-wrap {
+      grid-row-start: 3;
+      grid-row-end: 4;
+      grid-column-start: 2;
+      grid-column-end: 3;
+
+      @include media-breakpoint-down($sm) {
+        grid-row-start: 4;
+        grid-row-end: 5;
+      }
+
+      @include media-breakpoint-down($xs) {
+        grid-row-start: 7;
+        grid-row-end: 8;
+        grid-column-start: 1;
+        grid-column-end: 2;
       }
     }
 
@@ -197,11 +264,17 @@
       grid-column-start: 3;
       grid-column-end: 4;
 
-      @include media-breakpoint-down($xs) {
-        grid-row-start: 6;
-        grid-row-end: 7;
+      @include media-breakpoint-down($sm) {
+        grid-row-start: 5;
+        grid-row-end: 6;
         grid-column-start: 1;
         grid-column-end: 3;
+      }
+
+      @include media-breakpoint-down($xs) {
+        grid-row-start: 8;
+        grid-row-end: 9;
+        grid-column-end: 2;
       }
     }
   }

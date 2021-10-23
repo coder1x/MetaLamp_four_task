@@ -41,7 +41,14 @@
     margin-top: 20px;
   }
 
-  &__reset {
+  &__apply-wrap {
+    grid-row-start: 4;
+    grid-column-start: 2;
+    margin-top: 20px;
+  }
+
+  &__reset,
+  &__apply {
     display: flex;
     border: 0px;
     border-radius: 4px;
@@ -51,8 +58,9 @@
     cursor: pointer;
   }
 
-  &__reset:active {
+  &__reset:active,
+  &__apply:active {
     box-shadow: inset -1px 4px 4px 0px rgba(0, 0, 0, 0.129);
-    color: rgb(245, 245, 245);
+    color: #868686;
   }
 }
