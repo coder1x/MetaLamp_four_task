@@ -37,10 +37,7 @@ class Panel {
 
   private init() {
     this.objValues = new Values('.values', this.getDom('.values'));
-    this.objInputData = new InputData(
-      '.input-data',
-      this.className + '__slider-wrap input'
-    );
+    this.objInputData = new InputData(this.className, this.elem);
     this.objGrid = new Grid('.grid', this.getDom('.grid'));
     this.objHints = new Hints('.hints', this.getDom('.hints'));
     this.objDifferent = new Different(
@@ -69,7 +66,7 @@ class Panel {
       keyStepHold: data.keyStepHold,
     });
 
-    this.objInputData.setData();
+    // this.objInputData.setData();
     this.objGrid.setData({
       grid: data.grid,
       gridSnap: data.gridSnap,
@@ -117,7 +114,7 @@ class Panel {
       gridRound: data.gridRound,
     });
 
-    this.objInputData.setData();
+    //this.objInputData.setData();
     this.objCopyCode.setData({
       type: data.type,
       disabled: data.disabled,

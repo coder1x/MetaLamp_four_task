@@ -1,39 +1,38 @@
 import './input-data.scss';
 
 
+
 class InputData {
 
-  private elem: HTMLElement;
   private value: HTMLInputElement;
   private input: HTMLInputElement;
 
   // eslint-disable-next-line no-unused-vars
-  constructor(public nameClass: string, public selectorIn: string) {
-
-    // this.elem = elem;
+  constructor(public className: string, public elem: HTMLElement) {
     this.setDom();
   }
 
   private setDom() {
-    const getDom = (str: string) => {
-      return this.elem.querySelector(
-        this.nameClass +
-        '__' +
-        str +
-        '-wrap input'
-      ) as HTMLInputElement;
-    };
 
-    this.elem = document.querySelector(this.nameClass);
-    this.input = document.querySelector(this.selectorIn);
-    this.value = getDom('value');
-  }
+    this.input = this.elem.querySelector(
+      this.className + '__slider-wrap input'
+    ) as HTMLInputElement;
 
-  setData() {
-    this.value.value = this.input.value;
+    this.value = this.elem.querySelector(
+      '.input-data input'
+    ) as HTMLInputElement;
+
+    const _this = this;
+    Object.defineProperty(this.input, "value", {
+      set: function (text) {
+        if (!text) return;
+        _this.value.value = text;
+        this.setAttribute("value", text);
+      }
+    });
+
   }
 }
-
 
 
 export { InputData };

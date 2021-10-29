@@ -27,7 +27,6 @@ class View extends Observer {
   hints: Hints;
   bar: Bar;
   grid: Grid;
-  typeElem: string;
   objData: TOB;
 
   // eslint-disable-next-line no-unused-vars
@@ -41,8 +40,13 @@ class View extends Observer {
 
   setValueInput(from: number, to: number, type: string) {
 
+    const typeElem = this.elem.constructor.name;
 
-    if (this.typeElem == 'HTMLInputElement') {
+    // console.log(typeElem);
+    // console.log(this.elem);
+
+
+    if (typeElem == 'HTMLInputElement') {
       let str = '';
       const input = this.elem as HTMLInputElement;
       input.value = str;
@@ -55,8 +59,6 @@ class View extends Observer {
   }
 
   private init() {
-
-    this.typeElem = this.elem.constructor.name;
 
     const options = new Map([
       ['type', 'type'],

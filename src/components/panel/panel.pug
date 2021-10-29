@@ -21,7 +21,13 @@ mixin panel(options)
     className += ' '+addClass}
   div(class=className)
     div(class=classComp+'__slider-wrap')
-      input(class='rslider__'+theme type='hidden' name='DATA' value='' tabindex='-2' data-type='double' data-disabled = 'false' data-from='420')
+      input(class='rslider__'+theme+' visually-hidden' 
+      type='text' 
+      name='DATA' 
+      value='' 
+      tabindex='-2' 
+      readonly="" 
+      )
     div(class=classComp+'__values-wrap') 
       +values({
         label: 'Values',

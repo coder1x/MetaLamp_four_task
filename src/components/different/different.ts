@@ -72,9 +72,14 @@ class Different {
   }
 
   setAction(obj: any) {
+    const modif = this.modif;
+    const objP = this.panel.classList;
 
     this.reset.addEventListener('click', () => {
       obj.reset();
+
+      const fl = this.orientation.checked;
+      fl ? objP.add(modif) : objP.remove(modif);
     });
 
     this.select.onChange = (val: string) => {
@@ -104,8 +109,6 @@ class Different {
 
 
 
-    const modif = this.modif;
-    const objP = this.panel.classList;
     this.orientation.addEventListener('click', function () {
       const val = this.checked ? 'vertical' : 'horizontal';
       this.checked ? objP.add(modif) : objP.remove(modif);
