@@ -28,6 +28,7 @@ class View extends Observer {
   bar: Bar;
   grid: Grid;
   typeElem: string;
+  objData: TOB;
 
   // eslint-disable-next-line no-unused-vars
   constructor(public elem: Element, public numElem: Number) {
@@ -57,19 +58,81 @@ class View extends Observer {
 
     this.typeElem = this.elem.constructor.name;
 
-    //  this.elem 
-    // ищим атрибуты - если они есть то считываем данные.
-    // и сразу записываем в свойства нотифая - по окончанию
-    // он отправит данные в хендлер. 
-    // все те поля что андефайн от них нужно избавиться.
-    // затем вызываем ubdate и передаём туда полученные данные. 
+    const options = new Map([
+      ['type', 'type'],
+      ['disabled', 'disabled'],
+      ['orientation', 'orientation'],
+      ['theme', 'theme'],
+      ['min', 'min'],
+      ['max', 'max'],
+      ['from', 'from'],
+      ['to', 'to'],
+      ['step', 'step'],
+      ['key_step_one', 'keyStepOne'],
+      ['key_step_hold', 'keyStepHold'],
+      ['bar', 'bar'],
+      ['grid', 'grid'],
+      ['grid_snap', 'gridSnap'],
+      ['grid_num', 'gridNum'],
+      ['grid_step', 'gridStep'],
+      ['grid_round', 'gridRound'],
+      ['tip_min_max', 'tipMinMax'],
+    ]);
 
-    // а ещё нужно повесить на инпут обсёрвер и следить за тем 
-    // меняються атрибуты или нет. что бы вносить новые данные. 
+    const mapOptions = new Map();
 
-    // Объекты MutationRecord имеют следующие свойства:
-    // type – тип изменения, один из:
-    // "attributes" изменён атрибут,
+    const getDataAttr = (item: string) => {
+      const attr = 'data-' + item;
+      if (this.elem.hasAttribute(attr)) {
+        const val = this.elem.getAttribute(attr);
+        const key = options.get(item);
+
+        const regNumber = /^-?\d*?[.]?\d*$/;
+        if (regNumber.test(val)) {
+          return [key, Number(val)];
+        }
+
+        const regBoolean = /^(true|false)$/;
+        if (regBoolean.test(val)) {
+          return [key, (val === 'true')];
+        }
+
+        return [key, val];
+      }
+    };
+
+    let masDataAttr = [];
+
+    for (let item of options.keys()) {
+      const data = getDataAttr(item);
+      if (data) {
+        const key = data[0];
+        const val = data[1];
+        mapOptions.set(key, val);
+        masDataAttr.push('data-' + item);
+      }
+    }
+
+    this.objData = Object.fromEntries(mapOptions);
+
+    let observer = new MutationObserver(mut => {
+      const attr = mut[0].attributeName;
+      const opt = attr.replace('data-', '');
+      const data = getDataAttr(opt);
+      if (data) {
+        const key = String(data[0]);
+        const val = data[1];
+        this.notifyOB({
+          key: 'DataAttributes',
+          [key]: val,
+        });
+      }
+    });
+
+    observer.observe(this.elem, {
+      attributeFilter: masDataAttr,
+    });
+
 
 
     // создаём базовые дом элементы. 
@@ -85,6 +148,14 @@ class View extends Observer {
     this.grid = new Grid(this.rsBottom);
 
     this.createListeners();
+  }
+
+  outDataAttr() {
+    if (Object.keys(this.objData).length != 0)
+      this.notifyOB({
+        key: 'DataAttributes',
+        ...this.objData,
+      });
   }
 
 
@@ -156,14 +227,6 @@ class View extends Observer {
 
   //----------------------------------------------------------------
 
-  // private handleWrapWH = (options: TOB) => {
-  //   const key = options.key;
-  //   if (key != 'WrapWH') return;
-
-  //   this.notifyOB({
-  //     key: 'WrapWH', ...options
-  //   });
-  // };
 
   getWrapWH() {
     return (this.vertical ?
@@ -199,23 +262,10 @@ class View extends Observer {
 
     this.wrapSlider.appendChild(this.rangeSlider);
 
-
-    // let wrapWH = 0;
-    // if (this.vertical) {
-    //   wrapWH = this.rsCenter.offsetHeight;
-    // } else {
-    //   wrapWH = this.rsCenter.offsetWidth;
-    // }
-
-    // console.log(this.rsCenter.offsetHeight);
-
-
-    // this.notifyOB({
-    //   key: 'SizeWrap',
-    //   wrapWH: wrapWH,
-    // });
-
   }
+
+
+
 
   setOrientation(str: string) {
 

@@ -63,6 +63,8 @@ class Model extends Observer {
     super();
 
     this.createProperties(this.defaultConfig(options));
+
+
   }
 
   private defaultConfig(options: RangeSliderOptions) {
@@ -109,6 +111,7 @@ class Model extends Observer {
 
     this.defaultData = this.getOptions();
     this.onStart(this.defaultData);
+
 
   }
 
@@ -230,6 +233,10 @@ class Model extends Observer {
       orientation: op.orientation,
     });
 
+    this.notifyOB({
+      key: 'Start',
+      ...op,
+    });
   }
 
   update(options: RangeSliderOptions) {
@@ -252,7 +259,10 @@ class Model extends Observer {
       this.onUpdate(this.getOptions());
     this.startConfFl = true;
     this.ubdateConfFl = false;
+
   }
+
+
 
 
   propertiesValidation(properties: string[], obj: RangeSliderOptions) {
@@ -341,7 +351,6 @@ class Model extends Observer {
           to: this.to,
         });
       }
-
 
       return true;
     }

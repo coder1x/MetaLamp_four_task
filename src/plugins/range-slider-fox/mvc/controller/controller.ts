@@ -22,17 +22,19 @@ class Controller {
         talking.subscribeOB(item);
     };
 
-    const SModel = [this.handleRangeData,
-    this.handleDotData,
-    this.handleGridSnapData,
-    this.handleGridData,
-    this.handleOrientationData,
-    this.handleThemeData,
-    this.handleHintsData,
-    this.handleDisabledData,
-    this.handleBarData,
-    this.handleCreateGrid,
-    this.handleStep
+    const SModel = [
+      this.handleStart,
+      this.handleRangeData,
+      this.handleDotData,
+      this.handleGridSnapData,
+      this.handleGridData,
+      this.handleOrientationData,
+      this.handleThemeData,
+      this.handleHintsData,
+      this.handleDisabledData,
+      this.handleBarData,
+      this.handleCreateGrid,
+      this.handleStep,
     ];
 
     subscribe(this.model, SModel);
@@ -44,6 +46,7 @@ class Controller {
     this.handleClickMark,
     this.handleSnapNum,
     this.handleDotKeyDown,
+    this.handleDataAttributes
     ];
 
     subscribe(this.view, SView);
@@ -68,6 +71,21 @@ class Controller {
     this.model.update(options);
   }
 
+
+  private handleStart = (options: TOB) => {
+    const key = options.key;
+    if (key != 'Start') return;
+    this.view.outDataAttr();
+  };
+
+  private handleDataAttributes = (options: TOB) => {
+    const key = options.key;
+    if (key != 'DataAttributes') return;
+
+    this.update(options);
+
+
+  };
 
   private handleRangeData = (options: TOB) => {
     const key = options.key;
