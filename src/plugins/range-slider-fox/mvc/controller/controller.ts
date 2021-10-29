@@ -7,6 +7,7 @@ import { TOB } from '../../observer';
 class Controller {
 
   private startFl = false;
+  private lock = false;
 
   // eslint-disable-next-line no-unused-vars
   constructor(private model: Model, private view: View) {
@@ -54,11 +55,16 @@ class Controller {
   }
 
   reset = () => {
+    if (this.lock) return;
     this.model.reset();
   }
 
   // eslint-disable-next-line no-unused-vars
   update = (options: RangeSliderOptions) => {
+    const lock = options.disabled !== false;
+    const orientation = typeof options.orientation !== 'string';
+    if (lock && orientation)
+      if (this.lock) return;
     this.model.update(options);
   }
 
@@ -92,6 +98,7 @@ class Controller {
   private handleDotKeyDown = (options: TOB) => {
     const key = options.key;
     if (key != 'DotKeyDown') return;
+    if (this.lock) return;
 
     this.model.calcKeyDown(options.keyRepeat, options.keySign, options.dot);
   };
@@ -99,6 +106,7 @@ class Controller {
   private handleDotData = (options: TOB) => {
     const key = options.key;
     if (key != 'DotData') return;
+
 
     const type = options.type;
 
@@ -141,6 +149,7 @@ class Controller {
   private handleDotMove = (options: TOB) => {
     const key = options.key;
     if (key != 'DotMove') return;
+    if (this.lock) return;
 
     this.model.calcDotPosition({
       type: options.type,
@@ -156,6 +165,7 @@ class Controller {
   private handleGridSnapData = (options: TOB) => {
     const key = options.key;
     if (key != 'GridSnapData') return;
+
     this.model.snapDot();
   };
 
@@ -223,12 +233,15 @@ class Controller {
     const key = options.key;
     if (key != 'DisabledData') return;
 
+    this.lock = options.disabled;
+    this.view.disabledRangeSlider(options.disabled);
   };
 
 
   private handleClickLine = (options: TOB) => {
     const key = options.key;
     if (key != 'ClickLine') return;
+    if (this.lock) return;
 
     this.model.clickLine(options.clientXY);
   };
@@ -255,18 +268,21 @@ class Controller {
   private handleClickBar = (options: TOB) => {
     const key = options.key;
     if (key != 'ClickBar') return;
+    if (this.lock) return;
     this.model.clickBar(options.clientXY);
   };
 
   private handleCreateGrid = (options: TOB) => {
     const key = options.key;
     if (key != 'CreateGrid') return;
+
     this.view.createMark(options.valueG, options.position);
   };
 
   private handleClickMark = (options: TOB) => {
     const key = options.key;
     if (key != 'ClickMark') return;
+    if (this.lock) return;
 
     this.model.clickMark(options.valueG);
   };

@@ -77,12 +77,12 @@
 		"@types/npm": "^2.0.32",
 		"@types/webpack-env": "^1.16.2",
 		"focus-visible": "^5.2.0",
+		"fox-favicon": "file:npm_plugins/fox-favicon",
+		"fox-url-convertor": "file:npm_plugins/fox-url-convertor",
 		"jquery": "^3.6.0",
 		"lodash": "^4.17.21",
 		"normalize.css": "^8.0.1",
 		"pug-html-loader": "^1.1.5",
-		"typescript": "^4.2.4",
-		"fox-url-convertor": "file:npm_plugins/fox-url-convertor",
-		"fox-favicon": "file:npm_plugins/fox-favicon"
+		"typescript": "^4.2.4"
 	}
 }

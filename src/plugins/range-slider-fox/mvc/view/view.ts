@@ -97,6 +97,15 @@ class View extends Observer {
   }
 
 
+
+  disabledRangeSlider(flag: boolean) {
+    const elem = this.wrapSlider as HTMLElement;
+    const st = elem.style;
+
+    flag ? st.opacity = '0.5' : st.opacity = '1';
+  }
+
+
   //----------------------- убрать это в один универсальный метод ----------------------------------------- 
 
   private handleSnapNum = (options: TOB) => {
