@@ -1,4 +1,4 @@
-import { Observer, TOB } from '../../../observer';
+import { Observer } from '../../../observer';
 
 class Bar extends Observer {
 
@@ -10,9 +10,9 @@ class Bar extends Observer {
   private vertical: boolean;
 
 
-  constructor(elem: HTMLElement | Element) {
+  constructor(elem: HTMLElement | Element, rsName: string) {
     super();
-    this.rsName = 'range-slider-fox';
+    this.rsName = rsName;
     this.rsCenter = (elem as HTMLElement);
   }
 
@@ -22,7 +22,6 @@ class Bar extends Observer {
 
   setOrientation(str: string) {
     this.vertical = str == 'vertical' ? true : false;
-    // нужно вызвать сигнал который перестроит подсказки по новым координатам.
 
     const convertStyle = (elem: CSSStyleDeclaration) => {
       let val = '';
@@ -49,7 +48,6 @@ class Bar extends Observer {
 
     if (this.elemBar)
       convertStyle(this.elemBar.style);
-
   }
 
 

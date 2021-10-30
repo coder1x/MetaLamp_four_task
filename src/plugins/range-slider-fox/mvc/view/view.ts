@@ -134,10 +134,10 @@ class View extends Observer {
     this.setActions();
 
 
-    this.handle = new Handle(this.rsName, this.rsCenter);
-    this.hints = new Hints(this.rsTop);
-    this.bar = new Bar(this.rsCenter);
-    this.grid = new Grid(this.rsBottom);
+    this.handle = new Handle(this.rsCenter, this.rsName);
+    this.hints = new Hints(this.rsTop, this.rsName);
+    this.bar = new Bar(this.rsCenter, this.rsName);
+    this.grid = new Grid(this.rsBottom, this.rsName);
 
     this.createListeners();
   }
@@ -205,14 +205,7 @@ class View extends Observer {
     this.wrapSlider.appendChild(this.rangeSlider);
   }
 
-
-  setOrientation(str: string) {
-
-    const modif = this.rsName + '_vertical';
-    const objP = this.rangeSlider.classList;
-    this.vertical = str == 'vertical' ? true : false;
-    this.vertical ? objP.add(modif) : objP.remove(modif);
-
+  private sizeWrap() {
     let wrapWH = 0;
     if (this.vertical) {
       wrapWH = this.rsCenter.offsetHeight;
@@ -224,6 +217,16 @@ class View extends Observer {
       key: 'SizeWrap',
       wrapWH: wrapWH,
     });
+  }
+
+  setOrientation(str: string) {
+
+    const modif = this.rsName + '_vertical';
+    const objP = this.rangeSlider.classList;
+    this.vertical = str == 'vertical' ? true : false;
+    this.vertical ? objP.add(modif) : objP.remove(modif);
+
+    this.sizeWrap();
 
     this.handle.setOrientation(str);
     this.hints.setOrientation(str);
@@ -308,17 +311,21 @@ class View extends Observer {
     this.hints.setValTipMinMax(min, max);
   }
 
+  getWidthTip() {
+    this.sizeWrap();
+    return this.hints.getWidthTip();
+  }
+
+  deleteTipTo() {
+    this.hints.deleteTipTo();
+  }
+
   ubdateTipFromTo(op: UbdateTip) {
-    const obj = this.hints.getWidthTip();
-    if (!obj.fromWH && !obj.toWH) return;
+    this.hints.setPositionFrom(op.fromXY, op.from);
 
-    this.hints.setPositionFrom(op.fromXY(obj.fromWH), op.from);
-
-    if (op.type == 'double') {
-      this.hints.setPositionTo(op.toXY(obj.toWH), op.to);
-      this.hints.setPositionSingle(op.singleXY(obj.singleWH));
-    } else {
-      this.hints.deleteTipTo();
+    if (op.toXY && op.singleXY) {
+      this.hints.setPositionTo(op.toXY, op.to);
+      this.hints.setPositionSingle(op.singleXY);
     }
   }
 

@@ -1,5 +1,7 @@
+$border-values: rgba(31, 32, 65, 0.25);
+
 .values {
-  border: 1px solid rgba(31, 32, 65, 0.25);
+  border: 1px solid $border-values;
   border-radius: 4px;
   box-sizing: border-box;
   padding: 10px;

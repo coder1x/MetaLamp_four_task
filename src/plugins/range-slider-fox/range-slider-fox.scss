@@ -22,6 +22,12 @@ $color-focus: #1f2041;
   &__tip-single,
   &__bar {
     position: absolute;
+    cursor: default;
+  }
+
+  &__tip-min,
+  &__tip-max {
+    cursor: default;
   }
 
   &__grid {

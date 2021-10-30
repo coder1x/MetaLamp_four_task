@@ -1,3 +1,15 @@
+$color-min-max: #3a3a3a;
+$background-min-max: #c5d9ea;
+$color-from-to: #3a3a3a;
+$background-from-to: #a6d7ff;
+$background-pol: #222;
+$background-bar: #cdd7e0;
+$color-single: #3a3a3a;
+$background-single: #a6d7ff;
+$background-line: #7596b1;
+$background-befori-dot: #bababa;
+$background-dot-hover: #2c2c2b;
+
 .rs-classic.range-slider-fox {
   .range-slider-fox {
     min-height: 70px;
@@ -9,8 +21,8 @@
     &__tip-min,
     &__tip-max {
       padding: 1px 5px;
-      color: #3a3a3a;
-      background: #c5d9ea;
+      color: $color-min-max;
+      background: $background-min-max;
       font-size: 12px;
     }
 
@@ -19,8 +31,8 @@
       padding: 1px 5px;
       font-size: 12px;
       white-space: nowrap;
-      color: #3a3a3a;
-      background: #e9f5ff;
+      color: $color-from-to;
+      background: $background-from-to;
     }
 
     &__grid-mark {
@@ -30,16 +42,16 @@
     }
 
     &__grid-pol {
-      background: #222;
+      background: $background-pol;
     }
 
     &__bar {
-      background: #cdd7e0;
+      background: $background-bar;
     }
 
     &__tip-single {
-      color: #3a3a3a;
-      background: #e9f5ff;
+      color: $color-single;
+      background: $background-single;
       padding: 1px 5px;
       font-size: 12px;
     }
@@ -51,7 +63,7 @@
     &__line {
       min-height: 10px;
       min-width: 10px;
-      background: #7596b1;
+      background: $background-line;
       box-sizing: border-box;
     }
 
@@ -74,13 +86,13 @@
       content: "";
       width: 12px;
       height: 19px;
-      background-color: #bababa;
+      background-color: $background-befori-dot;
       box-sizing: border-box;
     }
 
     &__from:hover::before,
     &__to:hover::before {
-      background: #2c2c2b;
+      background: $background-dot-hover;
     }
 
     &__bottom {

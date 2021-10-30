@@ -18,8 +18,9 @@ class Grid extends Observer {
   private vertical: boolean;
 
 
-  constructor(elem: HTMLElement | Element) {
+  constructor(elem: HTMLElement | Element, rsName: string) {
     super();
+    this.rsName = rsName;
     this.rsBottom = (elem as HTMLElement);
     this.init();
   }
@@ -36,7 +37,6 @@ class Grid extends Observer {
   private init() {
     this.offOn = false;
     this.resizeF = false;
-    this.rsName = 'range-slider-fox';
     this.indent = 4; // отступ в пикселях между числами на шкале
     this.elemGrid = this.createElem('div', [this.rsName + '__grid']);
 

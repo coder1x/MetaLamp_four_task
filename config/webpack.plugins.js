@@ -18,16 +18,15 @@ fs.readdirSync(PAGES_DIR).forEach((file) => {
   pages.push(file.split('/', 2));
 });
 
-const description = 'Лучшие номера для вашей работы,' +
-  ' отдыха и просто вдохновения';
-const keywords = 'Номера, Отель';
-const title = 'Демонстрация плагина range-slider-fox';
+const description = 'Узнайте, как использовать Range Slider Fox' +
+  ' на нескольких практических демонстрациях';
+const keywords = 'range slider, diapason, interval, price range, price slider';
+const title = 'Range Slider Fox';
 
 module.exports = {
 
   plugins: [
     new CleanWebpackPlugin(),   // очищаем от лишних файлов в папке дист
-
 
     ...pages.map(fileName => new HTMLWebpackPlugin({
       getData: () => {
@@ -77,12 +76,12 @@ module.exports = {
         },
         'twitter-title': {
           'name': 'twitter:title',
-          'content': 'booking rooms for TOXIN'
+          'content': 'Range Slider Fox'
         },
         'twitter-description': {
           'name': 'twitter:description',
-          'content': 'Лучшие номера для вашей работы,' +
-            ' отдыха и просто вдохновения'
+          'content': 'Узнайте, как использовать Range Slider Fox' +
+            ' на нескольких практических демонстрациях'
         },
         'twitter-site': {
           'name': 'twitter:site',
@@ -94,16 +93,16 @@ module.exports = {
         },
         'og-type': {
           'property': 'og:type',
-          'content': 'website'
+          'content': 'plugin'
         },
         'og-title': {
           'property': 'og:title',
-          'content': 'booking rooms for TOXIN'
+          'content': 'Range Slider Fox'
         },
         'og-description': {
           'property': 'og:description',
-          'content': 'Лучшие номера для вашей работы,' +
-            ' отдыха и просто вдохновения'
+          'content': 'Узнайте, как использовать Range Slider Fox' +
+            ' на нескольких практических демонстрациях'
         },
         'og-image': {
           'property': 'og:image',
@@ -125,10 +124,10 @@ module.exports = {
       //pathManifest: '/assets/favicons/',
       urlIcon: 'https://thylacine.ru/assets/favicons/',
       devMode: DP.isDev,
-      appName: 'бронирование номеров в TOXIN отель.',
-      appShortName: 'TOXIN',
-      appDescription: 'Лучшие номера для вашей работы,' +
-        ' отдыха и просто вдохновения',
+      appName: 'Plugin Range Slider Fox',
+      appShortName: 'Range Slider Fox',
+      appDescription: 'Узнайте, как использовать Range Slider Fox' +
+        ' на нескольких практических демонстрациях',
       developerName: 'coder1',
       developerURL: 'https://github.com/coder1x/',
       icons: {

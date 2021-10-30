@@ -25,8 +25,8 @@ class Hints {
   private vertical: boolean;
 
 
-  constructor(elem: HTMLElement | Element) {
-    this.rsName = 'range-slider-fox';
+  constructor(elem: HTMLElement | Element, rsName: string) {
+    this.rsName = rsName;
     this.rsTop = (elem as HTMLElement);
   }
 

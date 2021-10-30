@@ -3,6 +3,8 @@
 $font: "Montserrat", Helvetica, Arial, sans-serif;
 $color-focus: $Dark-Shade-100;
 $color-border-show: $Dark-Shade-50;
+$color-border: rgba(31, 32, 65, 0.5);
+$background-color-item: rgb(244, 249, 255);
 
 .select {
   width: 100%;
@@ -23,7 +25,7 @@ $color-border-show: $Dark-Shade-50;
     height: 25px;
     padding: 0px 22px 0px 15px;
     outline: 0;
-    background-color: #fff;
+    background-color: $color-background;
     border: 1px solid $color-border;
     border-radius: 4px;
     color: $color-input;
@@ -57,9 +59,9 @@ $color-border-show: $Dark-Shade-50;
 
   &__options {
     width: calc(100% - 2px);
-    background: #fff;
+    background: $color-background;
     display: none;
-    border: 1px solid rgba(31, 32, 65, 0.5);
+    border: 1px solid $color-border;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
     z-index: 5;
@@ -74,7 +76,7 @@ $color-border-show: $Dark-Shade-50;
   }
 
   &__item:hover {
-    background-color: rgb(244, 249, 255);
+    background-color: $background-color-item;
   }
 
   &__item:focus {

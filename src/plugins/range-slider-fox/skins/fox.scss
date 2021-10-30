@@ -1,3 +1,19 @@
+$color-min-max: #fff;
+$background-min-max: #d86d00;
+$color-from-to: #4d4d4d;
+$background-from-to: #fff;
+$border-from-to: #4d4d4d;
+$background-pol: #222;
+$background-bar: #898989;
+$color-single: #4d4d4d;
+$background-single: #fff;
+$border-single: #4d4d4d;
+$gradient-line: linear-gradient(to bottom, #e67521 -50%, #fbd2af 150%);
+$background-befori-dot: #4b4843;
+$border-befori-dot: rgba(0, 0, 0, 0.45);
+$shadow-befori-dot: rgba(0, 0, 0, 0.5);
+$background-dot-hover: #2c2c2b;
+
 .rs-fox.range-slider-fox {
   .range-slider-fox {
     min-height: 70px;
@@ -9,8 +25,8 @@
     &__tip-min,
     &__tip-max {
       padding: 1px 5px;
-      color: #ffffff;
-      background-color: #d86d00;
+      color: $color-min-max;
+      background-color: $background-min-max;
       border-radius: 3px;
       font-size: 12px;
     }
@@ -21,9 +37,9 @@
       font-size: 12px;
       border-radius: 3px;
       white-space: nowrap;
-      color: #4d4d4d;
-      border: 1px solid #4d4d4d;
-      background: #fff;
+      color: $color-from-to;
+      border: 1px solid $border-from-to;
+      background: $background-from-to;
     }
 
     &__grid-mark {
@@ -33,18 +49,18 @@
     }
 
     &__grid-pol {
-      background: #222;
+      background: $background-pol;
     }
 
     &__bar {
       border-radius: 10px;
-      background: #898989;
+      background: $background-bar;
     }
 
     &__tip-single {
-      color: #4d4d4d;
-      border: 1px solid #4d4d4d;
-      background: #fff;
+      color: $color-single;
+      border: 1px solid $border-single;
+      background: $background-single;
       padding: 1px 5px;
       font-size: 12px;
       border-radius: 3px;
@@ -58,7 +74,7 @@
       min-height: 10px;
       min-width: 10px;
       background-color: white;
-      background: linear-gradient(to bottom, #e67521 -50%, #fbd2af 150%);
+      background: $gradient-line;
       border: 1px solid #fff;
       border-radius: 12px;
       box-sizing: border-box;
@@ -83,16 +99,16 @@
       content: "";
       width: 20px;
       height: 20px;
-      border-color: rgba(0, 0, 0, 0.45);
-      background-color: #4b4843;
+      border-color: $border-befori-dot;
+      background-color: $background-befori-dot;
       border-radius: 50%;
       box-sizing: border-box;
-      box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 6px $shadow-befori-dot;
     }
 
     &__from:hover::before,
     &__to:hover::before {
-      background: #2c2c2b;
+      background: $background-dot-hover;
     }
 
     &__bottom {

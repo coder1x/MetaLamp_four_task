@@ -52,10 +52,12 @@ class Controller {
     subscribe(this.view, SView);
   }
 
+
   private init() {
     this.reset();
     this.startFl = true;
   }
+
 
   reset = () => {
     if (this.lock) return;
@@ -78,6 +80,7 @@ class Controller {
     this.view.outDataAttr();
   };
 
+
   private handleDataAttributes = (options: TOB) => {
     const key = options.key;
     if (key != 'DataAttributes') return;
@@ -86,6 +89,7 @@ class Controller {
 
 
   };
+
 
   private handleRangeData = (options: TOB) => {
     const key = options.key;
@@ -106,12 +110,14 @@ class Controller {
 
   };
 
+
   private handleStep = (options: TOB) => {
     const key = options.key;
     if (key != 'Step') return;
 
     this.model.calcStep();
   };
+
 
   private handleDotKeyDown = (options: TOB) => {
     const key = options.key;
@@ -120,6 +126,7 @@ class Controller {
 
     this.model.calcKeyDown(options.keyRepeat, options.keySign, options.dot);
   };
+
 
   private handleDotData = (options: TOB) => {
     const key = options.key;
@@ -144,14 +151,8 @@ class Controller {
     if (this.startFl) {
       if (type == 'double')
         this.view.toggleTipTo(options.to);
-      this.view.ubdateTipFromTo({
-        from: options.from,
-        to: options.to,
-        type: options.type,
-        fromXY: this.model.calcPositionTipFrom,
-        toXY: this.model.calcPositionTipTo,
-        singleXY: this.model.calcPositionTipSingle,
-      });
+
+      this.ubdateHints(options.type, options.from, options.to);
     }
 
     // ----------  Bar
@@ -202,21 +203,15 @@ class Controller {
 
   };
 
+
   private handleOrientationData = (options: TOB) => {
     const key = options.key;
     if (key != 'OrientationData') return;
 
     this.view.setOrientation(options.orientation);
-
     const obj = this.model.getOptions();
-    this.view.ubdateTipFromTo({
-      from: obj.from,
-      to: obj.to,
-      type: obj.type,
-      fromXY: this.model.calcPositionTipFrom,
-      toXY: this.model.calcPositionTipTo,
-      singleXY: this.model.calcPositionTipSingle,
-    });
+
+    this.ubdateHints(obj.type, obj.from, obj.to);
   };
 
 
@@ -227,24 +222,41 @@ class Controller {
     this.view.setTheme(options.theme);
   };
 
+
   private handleHintsData = (options: TOB) => {
     const key = options.key;
     if (key != 'HintsData') return;
 
     const wrapWH = this.view.getWrapWH();
     this.model.setWrapWH(wrapWH);
-
     this.view.setHintsData(options);
 
-    this.view.ubdateTipFromTo({
-      from: options.from,
-      to: options.to,
-      type: options.type,
-      fromXY: this.model.calcPositionTipFrom,
-      toXY: this.model.calcPositionTipTo,
-      singleXY: this.model.calcPositionTipSingle,
-    });
+    this.ubdateHints(options.type, options.from, options.to);
   };
+
+
+  private ubdateHints(type: string, from: number, to: number) {
+    const objTip = this.view.getWidthTip();
+    if (objTip.fromWH || objTip.toWH) {
+      const fromXY = this.model.calcPositionTipFrom(objTip.fromWH);
+      let toXY = 0;
+      let singleXY = 0;
+      if (type == 'double') {
+        toXY = this.model.calcPositionTipTo(objTip.toWH);
+        singleXY = this.model.calcPositionTipSingle(objTip.singleWH);
+      } else {
+        this.view.deleteTipTo();
+      }
+
+      this.view.ubdateTipFromTo({
+        from: from,
+        to: to,
+        fromXY,
+        toXY,
+        singleXY,
+      });
+    }
+  }
 
 
   private handleDisabledData = (options: TOB) => {
@@ -283,12 +295,14 @@ class Controller {
     this.view.setBar(position.barX, position.widthBar);
   };
 
+
   private handleClickBar = (options: TOB) => {
     const key = options.key;
     if (key != 'ClickBar') return;
     if (this.lock) return;
     this.model.clickBar(options.clientXY);
   };
+
 
   private handleCreateGrid = (options: TOB) => {
     const key = options.key;
@@ -297,6 +311,7 @@ class Controller {
     this.view.createMark(options.valueG, options.position);
   };
 
+
   private handleClickMark = (options: TOB) => {
     const key = options.key;
     if (key != 'ClickMark') return;
@@ -304,6 +319,7 @@ class Controller {
 
     this.model.clickMark(options.valueG);
   };
+
 
   private handleSnapNum = (options: TOB) => {
     const key = options.key;

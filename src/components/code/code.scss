@@ -2,8 +2,16 @@
 $font: "Montserrat", Helvetica, Arial, sans-serif;
 $color-focus: $Dark-Shade-100;
 
+$border-code: rgba(31, 32, 65, 0.25);
+$color-item: #646568;
+$color-lang-js: #61819d;
+$background-copy: #cdd1da;
+$color-copy: #fff;
+$shadow-copy-active: inset -1px 4px 4px 0px rgba(0, 0, 0, 0.129);
+$color-copy-active: #868686;
+
 .code {
-  border: 1px solid rgba(31, 32, 65, 0.25);
+  border: 1px solid $border-code;
   border-radius: 4px;
   box-sizing: border-box;
   padding: 10px 0px 10px 0px;
@@ -17,13 +25,13 @@ $color-focus: $Dark-Shade-100;
   }
 
   &__item {
-    color: #646568;
+    color: $color-item;
     font-size: 14px;
     margin-left: 20px;
   }
 
   &__lang-js {
-    color: #61819d;
+    color: $color-lang-js;
     font-size: 14px;
   }
 
@@ -33,21 +41,15 @@ $color-focus: $Dark-Shade-100;
     border: 0px;
     border-radius: 4px;
     padding: 5px 10px 5px 10px;
-    background-color: #cdd1da;
-    color: #fff;
+    background-color: $background-copy;
+    color: $color-copy;
     cursor: pointer;
-    // box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.129);
   }
 
   &__copy:active {
-    box-shadow: inset -1px 4px 4px 0px rgba(0, 0, 0, 0.129);
-    color: #868686;
+    box-shadow: $shadow-copy-active;
+    color: $color-copy-active;
   }
-
-  // &__copy:hover,
-  // &__copy:focus {
-
-  // }
 
   &__copy:focus {
     outline: 2px solid $color-focus;

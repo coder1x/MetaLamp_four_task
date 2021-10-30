@@ -13,7 +13,7 @@ class Handle extends Observer {
   private vertical: boolean;
 
   // eslint-disable-next-line no-unused-vars
-  constructor(rsName: string, rsCenter: HTMLElement) {
+  constructor(rsCenter: HTMLElement, rsName: string) {
     super();
     this.rsName = rsName;
     this.wrapElem = rsCenter;
@@ -89,7 +89,6 @@ class Handle extends Observer {
 
     if (this.elemTo)
       convertStyle(this.elemTo.style);
-
   }
 
 
@@ -137,8 +136,6 @@ class Handle extends Observer {
       return { repeat, sign };
     };
 
-
-
     if (!this.eventFromF)
       this.elemFrom.addEventListener('keydown', (e: KeyboardEvent) => {
         const { repeat, sign } = keyDown(e);
@@ -163,6 +160,7 @@ class Handle extends Observer {
           });
       });
 
+
     const moveDot = (event: PointerEvent, elem: HTMLElement, type: string) => {
 
       let wrapWH = 0;
@@ -181,7 +179,6 @@ class Handle extends Observer {
         clientXY = event.clientX;
       }
 
-
       this.notifyOB({
         key: 'DotMove',
         type: type,  // какая точка 
@@ -190,7 +187,6 @@ class Handle extends Observer {
         clientXY: clientXY, // координаты точки 
         shiftXY: shiftXY, // сдвиг = координаты точки минус координаты края этой точки.
       });
-
     };
 
 
@@ -204,6 +200,7 @@ class Handle extends Observer {
       document.removeEventListener('pointermove', mouseMoveFrom);
     };
 
+
     const mouseMoveTo = (event: PointerEvent) => {
       if (type == 'double')
         moveDot(event, this.elemTo, 'To');
@@ -214,6 +211,7 @@ class Handle extends Observer {
       document.removeEventListener('pointerup', mouseUpTo);
       document.removeEventListener('pointermove', mouseMoveTo);
     };
+
 
     const mouseDown = (event: PointerEvent, elem: HTMLElement) => {
       event.preventDefault();
@@ -234,14 +232,12 @@ class Handle extends Observer {
       elem.onselectstart = function () { return false; };
     };
 
-
     if (type == 'double') {
       if (!this.eventToF) {
         this.elemTo.addEventListener('pointerdown', (event: PointerEvent) => {
 
           this.elemTo.style.zIndex = '2';
           this.elemFrom.style.zIndex = '1';
-
 
           mouseDown(event, this.elemTo);
           document.addEventListener('pointermove', mouseMoveTo);
@@ -252,7 +248,6 @@ class Handle extends Observer {
         this.eventToF = true;
       }
     }
-
 
     if (!this.eventFromF) {
       this.elemFrom.addEventListener('pointerdown', (event: PointerEvent) => {
@@ -269,9 +264,7 @@ class Handle extends Observer {
       cancellation(this.elemFrom);
       this.eventFromF = true;
     }
-
   }
-
 
 
 }
