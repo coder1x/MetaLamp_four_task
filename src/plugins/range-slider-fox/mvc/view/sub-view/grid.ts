@@ -67,32 +67,20 @@ class Grid extends Observer {
       }
     };
 
-    const convertGap = (elem: CSSStyleDeclaration) => {
-      if (elem.left == '') return;
-      let val = elem.left;
-      if (this.vertical) {
-        const num = parseInt(val);
-        val = Math.abs(num) + 'px';
-      } else {
-        val = '-' + val;
-      }
-      elem.left = val;
-    };
-
     const elements = this.elemGrid.childNodes;
-
     for (let item of elements) {
       const pol = item as HTMLElement;
       convertStyle(pol.style);
-
       const mark = pol.firstChild as HTMLElement;
       const stMark = mark.style;
       if (this.vertical) {
         stMark.top = '-' + mark.offsetHeight / 2 + 'px';
+        stMark.left = (pol.offsetWidth + this.indent) + 'px';
       } else {
         stMark.top = pol.offsetHeight + 2 + 'px';
+        stMark.left = '-' + mark.offsetWidth / 2 + 'px';
       }
-      convertGap(stMark);
+
     }
 
   }
@@ -266,8 +254,6 @@ class Grid extends Observer {
       key: 'SnapNum',
       snapNum: snapNum,
     });
-    // console.log(snapNum); // массив отображаемых цифр
-
 
     const len = this.oddElements[i].length - 1;
     this.previousElem = this.oddElements[i][len];

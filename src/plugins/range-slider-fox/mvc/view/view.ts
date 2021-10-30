@@ -1,15 +1,9 @@
 
-// eslint-disable-next-line no-unused-vars
-import {
-  UbdateTip
-} from './view.d';
+import { UbdateTip } from './view.d';
 import { Handle } from './sub-view/handle';
 import { Hints } from './sub-view/hints';
 import { Bar } from './sub-view/bar';
 import { Grid } from './sub-view/grid';
-
-
-
 import { Observer, TOB } from '../../observer';
 
 class View extends Observer {
@@ -41,10 +35,6 @@ class View extends Observer {
   setValueInput(from: number, to: number, type: string) {
 
     const typeElem = this.elem.constructor.name;
-
-    // console.log(typeElem);
-    // console.log(this.elem);
-
 
     if (typeElem == 'HTMLInputElement') {
       let str = '';
@@ -160,15 +150,11 @@ class View extends Observer {
       });
   }
 
-
   private createListeners() {
-    this.handle.subscribeOB(this.handleDotMove);
-    this.handle.subscribeOB(this.handleDotKeyDown);
-    this.bar.subscribeOB(this.handleClickBar);
-    this.grid.subscribeOB(this.handleClickMark);
-    this.grid.subscribeOB(this.handleSnapNum);
+    this.handle.subscribeOB(this.handleForwarding);
+    this.bar.subscribeOB(this.handleForwarding);
+    this.grid.subscribeOB(this.handleForwarding);
   }
-
 
 
   disabledRangeSlider(flag: boolean) {
@@ -179,55 +165,10 @@ class View extends Observer {
   }
 
 
-  //----------------------- убрать это в один универсальный метод ----------------------------------------- 
 
-  private handleSnapNum = (options: TOB) => {
-    const key = options.key;
-    if (key != 'SnapNum') return;
-
-    this.notifyOB({
-      key: 'SnapNum', ...options
-    });
+  private handleForwarding = (options: TOB) => {
+    this.notifyOB({ ...options });
   };
-
-  private handleDotKeyDown = (options: TOB) => {
-    const key = options.key;
-    if (key != 'DotKeyDown') return;
-
-    this.notifyOB({
-      key: 'DotKeyDown', ...options
-    });
-  };
-
-
-  private handleDotMove = (options: TOB) => {
-    const key = options.key;
-    if (key != 'DotMove') return;
-
-    this.notifyOB({
-      key: 'DotMove', ...options
-    });
-  };
-
-  private handleClickBar = (options: TOB) => {
-    const key = options.key;
-    if (key != 'ClickBar') return;
-
-    this.notifyOB({
-      key: 'ClickBar', ...options
-    });
-  };
-
-  private handleClickMark = (options: TOB) => {
-    const key = options.key;
-    if (key != 'ClickMark') return;
-
-    this.notifyOB({
-      key: 'ClickMark', ...options
-    });
-  };
-
-  //----------------------------------------------------------------
 
 
   getWrapWH() {
@@ -237,7 +178,6 @@ class View extends Observer {
   }
 
   createDomBase() {
-
     const createElem = (teg: string, className: string[]) => {
       const elem = document.createElement(teg);
       for (let item of className) {
@@ -263,10 +203,7 @@ class View extends Observer {
     this.rangeSlider.appendChild(this.rsBottom);
 
     this.wrapSlider.appendChild(this.rangeSlider);
-
   }
-
-
 
 
   setOrientation(str: string) {
@@ -292,9 +229,7 @@ class View extends Observer {
     this.hints.setOrientation(str);
     this.bar.setOrientation(str);
     this.grid.setOrientation(str);
-
   }
-
 
   setActions() {
     this.rsLine.addEventListener('click', (event: MouseEvent) => {
@@ -313,9 +248,6 @@ class View extends Observer {
     this.rangeSlider.classList.add(classN);
     this.prevTheme = classN;
   }
-
-
-
 
   //--------------------------------- handle
   createDotElem(type: string) {
@@ -391,39 +323,27 @@ class View extends Observer {
   }
 
 
-
   //--------------------------------- bar
 
   setVisibleBar(bar: boolean) {
     this.bar.setVisibleBar(bar);
 
-
     this.createDomBar();
     const size = this.vertical ?
       this.rsLine.offsetWidth : this.rsLine.offsetHeight;
     this.bar.setSizeWH(size);
-
-
   }
 
   createDomBar() {
     this.bar.createDomBar();
   }
 
-
   setBar(barX: number, widthBar: number) {
     this.bar.setBar(barX, widthBar);
   }
 
 
-
-
   //--------------------------------- Grid
-
-
-  // setDataGrid(options: DateGrid) {
-  //   this.grid.setData(options);
-  // }
 
   deleteGrid() {
     this.grid.deleteGrid();
@@ -436,7 +356,6 @@ class View extends Observer {
   createMark(val: number, position: number) {
     this.grid.createMark(val, position);
   }
-
 
 
 }

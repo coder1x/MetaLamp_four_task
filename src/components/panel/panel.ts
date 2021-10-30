@@ -66,7 +66,6 @@ class Panel {
       keyStepHold: data.keyStepHold,
     });
 
-    // this.objInputData.setData();
     this.objGrid.setData({
       grid: data.grid,
       gridSnap: data.gridSnap,
@@ -114,7 +113,6 @@ class Panel {
       gridRound: data.gridRound,
     });
 
-    //this.objInputData.setData();
     this.objCopyCode.setData({
       type: data.type,
       disabled: data.disabled,
