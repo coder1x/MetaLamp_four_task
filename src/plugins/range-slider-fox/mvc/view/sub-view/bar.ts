@@ -3,8 +3,8 @@ import { Observer, TOB } from '../../../observer';
 class Bar extends Observer {
 
 
-  rsCenter: HTMLElement;
-  rsName: string;
+  private rsCenter: HTMLElement;
+  private rsName: string;
   private elemBar: HTMLElement;
   private bar: boolean;
   private vertical: boolean;
@@ -64,7 +64,7 @@ class Bar extends Observer {
     });
   }
 
-  createElem(teg: string, className: string[]) {
+  private createElem(teg: string, className: string[]) {
     const elem = document.createElement(teg);
     for (let item of className) {
       elem.classList.add(item);

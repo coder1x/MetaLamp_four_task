@@ -3,19 +3,19 @@ import { Observer } from '../../../observer';
 
 class Grid extends Observer {
 
-  rsBottom: HTMLElement;
-  rsName: string;
-  elemGrid: HTMLElement;
-  indent: number;
-  masWidth: number[] = [];
-  oddElements: HTMLElement[][] = [[]];
-  evenElements: HTMLElement[][] = [[]];
-  lastElem: HTMLElement;
-  previousElem: HTMLElement;
-  startWidth: number;
-  offOn: boolean;
-  resizeF: boolean;
-  vertical: boolean;
+  private rsBottom: HTMLElement;
+  private rsName: string;
+  private elemGrid: HTMLElement;
+  private indent: number;
+  private masWidth: number[] = [];
+  private oddElements: HTMLElement[][] = [[]];
+  private evenElements: HTMLElement[][] = [[]];
+  private lastElem: HTMLElement;
+  private previousElem: HTMLElement;
+  private startWidth: number;
+  private offOn: boolean;
+  private resizeF: boolean;
+  private vertical: boolean;
 
 
   constructor(elem: HTMLElement | Element) {
@@ -24,7 +24,7 @@ class Grid extends Observer {
     this.init();
   }
 
-  createElem(teg: string, className: string[]) {
+  private createElem(teg: string, className: string[]) {
     const elem = document.createElement(teg);
     for (let item of className) {
       elem.classList.add(item);
@@ -33,7 +33,7 @@ class Grid extends Observer {
   }
 
 
-  init() {
+  private init() {
     this.offOn = false;
     this.resizeF = false;
     this.rsName = 'range-slider-fox';
@@ -131,14 +131,14 @@ class Grid extends Observer {
     }
   }
 
-  toggleElem(elem: HTMLElement, display: string, opacity: string) {
+  private toggleElem(elem: HTMLElement, display: string, opacity: string) {
     const st = elem.style;
     st.visibility = display;
     const wrapE = (elem.parentNode as HTMLElement);
     wrapE.style.opacity = opacity;
   }
 
-  visibleLastElem() {
+  private visibleLastElem() {
     const lastX = this.lastElem.getBoundingClientRect().left;
     const previousX = this.previousElem.getBoundingClientRect().left +
       this.previousElem.offsetWidth + this.indent;
@@ -151,7 +151,7 @@ class Grid extends Observer {
   }
 
 
-  shapingMark() {
+  private shapingMark() {
 
     const gridMarks = this.elemGrid.getElementsByClassName(
       this.rsName + '__grid-mark'
@@ -227,7 +227,7 @@ class Grid extends Observer {
 
 
   // скрываем или показываем цифры на шкале.
-  visibleMark() {
+  private visibleMark() {
     if (this.vertical) return;
     // находим индекс элементов - для нечётных - показать для чётных скрыть.
     const wrapWidth = this.elemGrid.offsetWidth;
@@ -262,7 +262,7 @@ class Grid extends Observer {
   }
 
 
-  getResizeWrap() {
+  private getResizeWrap() {
     if (this.resizeF) return;
     this.resizeF = true;
     let sleep = 200;

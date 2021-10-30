@@ -4,13 +4,13 @@ import { Observer } from '../../../observer';
 
 class Handle extends Observer {
 
-  elemFrom: HTMLElement;
-  elemTo: HTMLElement;
-  rsName: string;
-  wrapElem: HTMLElement;
-  eventFromF: boolean;
-  eventToF: boolean;
-  vertical: boolean;
+  private elemFrom: HTMLElement;
+  private elemTo: HTMLElement;
+  private rsName: string;
+  private wrapElem: HTMLElement;
+  private eventFromF: boolean;
+  private eventToF: boolean;
+  private vertical: boolean;
 
   // eslint-disable-next-line no-unused-vars
   constructor(rsName: string, rsCenter: HTMLElement) {
@@ -21,7 +21,7 @@ class Handle extends Observer {
     this.eventToF = false;
   }
 
-  getElem = (elem: Element, str: string) => {
+  private getElem = (elem: Element, str: string) => {
     return elem.getElementsByClassName(str)[0] as HTMLElement;
   };
 
@@ -163,11 +163,6 @@ class Handle extends Observer {
           });
       });
 
-
-
-    // moveDot - будет передовать данные - так что на эти изменения нужно подписывать слушателей
-    // из модели. - которые будут менять конфиг и в свою очередь вызывать слушателей из Вью.
-
     const moveDot = (event: PointerEvent, elem: HTMLElement, type: string) => {
 
       let wrapWH = 0;
@@ -280,7 +275,6 @@ class Handle extends Observer {
 
 
 }
-
 
 
 

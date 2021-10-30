@@ -8,20 +8,20 @@ import { Observer, TOB } from '../../observer';
 
 class View extends Observer {
 
-  rsName: string;
-  wrapSlider: Element;
-  rangeSlider: Element;
-  rsTop: Element;
-  rsCenter: HTMLElement;
-  rsBottom: Element;
-  rsLine: HTMLElement;
-  prevTheme: string;
-  vertical: boolean;
-  handle: Handle;
-  hints: Hints;
-  bar: Bar;
-  grid: Grid;
-  objData: TOB;
+  private rsName: string;
+  private wrapSlider: Element;
+  private rangeSlider: Element;
+  private rsTop: Element;
+  private rsCenter: HTMLElement;
+  private rsBottom: Element;
+  private rsLine: HTMLElement;
+  private prevTheme: string;
+  private vertical: boolean;
+  private handle: Handle;
+  private hints: Hints;
+  private bar: Bar;
+  private grid: Grid;
+  private objData: TOB;
 
   // eslint-disable-next-line no-unused-vars
   constructor(public elem: Element, public numElem: Number) {
@@ -334,7 +334,7 @@ class View extends Observer {
     this.bar.setSizeWH(size);
   }
 
-  createDomBar() {
+  private createDomBar() {
     this.bar.createDomBar();
   }
 
