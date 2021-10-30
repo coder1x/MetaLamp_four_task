@@ -22,15 +22,18 @@ class InputData {
       '.input-data input'
     ) as HTMLInputElement;
 
-    const _this = this;
-    Object.defineProperty(this.input, "value", {
-      set: function (text) {
-        if (!text) return;
-        _this.value.value = text;
-        this.setAttribute("value", text);
-      }
-    });
-
+    if (this.input) {
+      const _this = this;
+      Object.defineProperty(this.input, "value", {
+        set: function (text) {
+          if (!text) return;
+          _this.value.value = text;
+          this.setAttribute("value", text);
+        }
+      });
+    } else {
+      this.value.disabled = true;
+    }
 
   }
 }

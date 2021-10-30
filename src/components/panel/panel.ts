@@ -141,10 +141,10 @@ class Panel {
 
   createRangeSlider(options: RangeSliderOptions) {
 
-    const selector = this.className + '__slider-wrap input';
+    const selector = this.className + '__slider-wrap';
     const elem = this.elem.querySelector(selector);
 
-    const obj = $(elem).RangeSliderFox({
+    const obj = $(elem.firstElementChild).RangeSliderFox({
       ...options
       ,
       onStart: (data: RangeSliderOptions) => {
