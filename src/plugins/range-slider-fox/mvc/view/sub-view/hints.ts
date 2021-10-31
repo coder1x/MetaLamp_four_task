@@ -187,17 +187,15 @@ class Hints {
     this.vertical ? st.bottom = coorXY + '%' : st.left = coorXY + '%';
   }
 
-  setPositionFrom(coorXY: number, from: number) {
+  setPositionFrom(coorXY: number) {
     if (!this.tipFrom) return;
-    this.setValTipFrom(from);
     const st = this.tipFrom.style;
     this.setStylePosition(coorXY, st);
     this.checkVisibleTip();
   }
 
-  setPositionTo(coorXY: number, to: number) {
+  setPositionTo(coorXY: number) {
     if (!this.tipTo) return;
-    this.setValTipTo(to);
     const st = this.tipTo.style;
     this.setStylePosition(coorXY, st);
     this.checkVisibleTip();

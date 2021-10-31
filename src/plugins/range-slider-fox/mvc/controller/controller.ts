@@ -131,8 +131,6 @@ class Controller {
   private handleDotData = (options: TOB) => {
     const key = options.key;
     if (key != 'DotData') return;
-
-
     const type = options.type;
 
     this.view.createDotElem(type); // создаём точки
@@ -148,12 +146,14 @@ class Controller {
     this.view.setDotActions(type);
 
     // ----------  Hints
+
     if (this.startFl) {
       if (type == 'double')
         this.view.toggleTipTo(options.to);
-
       this.ubdateHints(options.type, options.from, options.to);
     }
+
+
 
     // ----------  Bar
     const position = this.model.calcPositionBar();
@@ -236,26 +236,33 @@ class Controller {
 
 
   private ubdateHints(type: string, from: number, to: number) {
+
+    this.view.ubdateTipValue(from, to);
+
     const objTip = this.view.getWidthTip();
+
     if (objTip.fromWH || objTip.toWH) {
+      this.model.calcPositionDotFrom();
       const fromXY = this.model.calcPositionTipFrom(objTip.fromWH);
       let toXY = 0;
       let singleXY = 0;
       if (type == 'double') {
+        this.model.calcPositionDotTo();
         toXY = this.model.calcPositionTipTo(objTip.toWH);
         singleXY = this.model.calcPositionTipSingle(objTip.singleWH);
       } else {
         this.view.deleteTipTo();
       }
 
-      this.view.ubdateTipFromTo({
-        from: from,
-        to: to,
+      this.view.ubdateTipPosition({
         fromXY,
         toXY,
         singleXY,
       });
     }
+
+
+
   }
 
 

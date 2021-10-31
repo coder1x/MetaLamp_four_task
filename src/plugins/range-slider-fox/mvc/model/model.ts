@@ -602,6 +602,7 @@ class Model extends Observer {
       this.tipFromTo = true;
     }
 
+
     this.notifyOB({
       key: 'HintsData',
       tipPrefix: this.tipPrefix,

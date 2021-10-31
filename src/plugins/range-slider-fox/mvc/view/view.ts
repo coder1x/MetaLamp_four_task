@@ -320,11 +320,17 @@ class View extends Observer {
     this.hints.deleteTipTo();
   }
 
-  ubdateTipFromTo(op: UbdateTip) {
-    this.hints.setPositionFrom(op.fromXY, op.from);
 
+  ubdateTipValue(from: number, to: number) {
+    this.hints.setValTipFrom(from);
+    this.hints.setValTipTo(to);
+    this.hints.setValTipSingle();
+  }
+
+  ubdateTipPosition(op: UbdateTip) {
+    this.hints.setPositionFrom(op.fromXY);
     if (op.toXY && op.singleXY) {
-      this.hints.setPositionTo(op.toXY, op.to);
+      this.hints.setPositionTo(op.toXY);
       this.hints.setPositionSingle(op.singleXY);
     }
   }
