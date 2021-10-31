@@ -122,7 +122,8 @@ module.exports = {
       src: `${PATHS.src}${PATHS.assets}images/icon/favicon.png`,
       path: 'assets/favicons/',
       //pathManifest: '/assets/favicons/',
-      urlIcon: 'https://thylacine.ru/assets/favicons/',
+      //'https://thylacine.ru/
+      urlIcon: 'assets/favicons/',
       devMode: DP.isDev,
       appName: 'Plugin Range Slider Fox',
       appShortName: 'Range Slider Fox',

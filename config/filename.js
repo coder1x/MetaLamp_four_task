@@ -15,7 +15,10 @@ module.exports = {
       if (ext === 'js') {
         dir = `${PATHS.assets}js/`;
       }
-    dir = dir.replace(/\//g, "\\");
+    dir = dir.replace(/\//g, '\\');
+
+    if (DP.isMulti)
+      dir = dir.replace(/^\\/, '');
 
     if (DP.isDev) {
       return `${dir}[name].${ext}`;

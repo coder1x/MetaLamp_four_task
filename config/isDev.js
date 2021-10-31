@@ -1,6 +1,8 @@
 
 
+const key = process.env.NODE_ENV;
 module.exports = {
-  isDev: process.env.NODE_ENV === 'development',
-  isProd: !this.isDev
+  isDev: key === 'development' || key !== 'multisite',
+  isProd: !this.isDev,
+  isMulti: key === 'multisite',
 };
