@@ -194,11 +194,14 @@ class Controller {
 
     // проверить есть ли грид - если есть то удалить его. 
     // потому что любое изменение перестраивает всю шкалу. 
-    this.view.deleteGrid();
 
-    if (options.grid) {
-      this.model.createMark();
-      this.view.createDomGrid();
+
+    if (this.startFl) {
+      this.view.deleteGrid();
+      if (options.grid) {
+        this.model.createMark();
+        this.view.createDomGrid();
+      }
     }
 
   };
@@ -212,6 +215,16 @@ class Controller {
     const obj = this.model.getOptions();
 
     this.ubdateHints(obj.type, obj.from, obj.to);
+
+
+    //-------- grid
+
+    if (obj.grid) {
+      this.view.deleteGrid();
+      this.model.createMark();
+      this.view.createDomGrid();
+    }
+
   };
 
 
@@ -237,7 +250,7 @@ class Controller {
 
   private ubdateHints(type: string, from: number, to: number) {
 
-    this.view.ubdateTipValue(from, to);
+    this.view.ubdateTipValue(from, to, type);
 
     const objTip = this.view.getWidthTip();
 
@@ -297,7 +310,8 @@ class Controller {
     if (key != 'BarData') return;
 
     this.view.setVisibleBar(options.bar);
-
+    this.model.calcPositionDotFrom();
+    this.model.calcPositionDotTo();
     const position = this.model.calcPositionBar();
     this.view.setBar(position.barX, position.widthBar);
   };

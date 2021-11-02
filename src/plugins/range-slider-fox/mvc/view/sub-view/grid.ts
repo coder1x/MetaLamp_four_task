@@ -7,7 +7,7 @@ class Grid extends Observer {
   private rsName: string;
   private elemGrid: HTMLElement;
   private indent: number;
-  private masWidth: number[] = [];
+  private masWH: number[] = [];
   private oddElements: HTMLElement[][] = [[]];
   private evenElements: HTMLElement[][] = [[]];
   private lastElem: HTMLElement;
@@ -16,7 +16,6 @@ class Grid extends Observer {
   private offOn: boolean;
   private resizeF: boolean;
   private vertical: boolean;
-
 
   constructor(elem: HTMLElement | Element, rsName: string) {
     super();
@@ -51,38 +50,16 @@ class Grid extends Observer {
 
   setOrientation(str: string) {
     this.vertical = str == 'vertical' ? true : false;
+  }
 
-    const convertStyle = (elem: CSSStyleDeclaration) => {
-      let val = '';
-      if (this.vertical) {
-        if (elem.left == '') return;
-        val = elem.left;
-        elem.removeProperty('left');
-        elem.bottom = val;
-      } else {
-        if (elem.bottom == '') return;
-        val = elem.bottom;
-        elem.removeProperty('bottom');
-        elem.left = val;
-      }
-    };
+  getOrientation() {
+    const width = this.rsBottom.offsetWidth;
+    const height = this.rsBottom.offsetHeight;
+    console.log('width: ' + width);
+    console.log('height: ' + height);
 
-    const elements = this.elemGrid.childNodes;
-    for (let item of elements) {
-      const pol = item as HTMLElement;
-      convertStyle(pol.style);
-      const mark = pol.firstChild as HTMLElement;
-      const stMark = mark.style;
-      if (this.vertical) {
-        stMark.top = '-' + mark.offsetHeight / 2 + 'px';
-        stMark.left = (pol.offsetWidth + this.indent) + 'px';
-      } else {
-        stMark.top = pol.offsetHeight + 2 + 'px';
-        stMark.left = '-' + mark.offsetWidth / 2 + 'px';
-      }
 
-    }
-
+    return width > height ? false : true;
   }
 
   createMark = (val: number, position: number) => {
@@ -121,13 +98,6 @@ class Grid extends Observer {
       while (this.elemGrid.firstChild) {
         this.elemGrid.firstChild.remove();
       }
-
-      this.masWidth = [];
-      this.oddElements = [[]];
-      this.evenElements = [[]];
-      if (this.previousElem)
-        this.previousElem.remove();
-      this.previousElem = null;
     }
   }
 
@@ -138,20 +108,17 @@ class Grid extends Observer {
     wrapE.style.opacity = opacity;
   }
 
-  private visibleLastElem() {
-    const lastX = this.lastElem.getBoundingClientRect().left;
-    const previousX = this.previousElem.getBoundingClientRect().left +
-      this.previousElem.offsetWidth + this.indent;
 
-    if (previousX >= lastX) {
-      this.toggleElem(this.previousElem, 'hidden', '0.4');
-    } else {
-      this.toggleElem(this.previousElem, 'visible', '1');
-    }
-  }
+
 
 
   private shapingMark() {
+    this.masWH = [];
+    this.oddElements = [[]];
+    this.evenElements = [[]];
+    if (this.previousElem)
+      this.previousElem.remove();
+    this.previousElem = null;
 
     const gridMarks = this.elemGrid.getElementsByClassName(
       this.rsName + '__grid-mark'
@@ -165,7 +132,7 @@ class Grid extends Observer {
     if (len > 1) {
       this.lastElem = (gridMarks[len - 1] as HTMLElement);
     }
-    let elemWidth = 0;
+    let elemWH = 0;
 
     let k = 0;
     for (let item of gridMarks) {
@@ -177,33 +144,35 @@ class Grid extends Observer {
       if (this.vertical) {
         stMark.top = '-' + mark.offsetHeight / 2 + 'px';
         stMark.left = pol.offsetWidth + 2 + 'px';
+        elemWH += mark.offsetHeight + this.indent;
       } else {
         stMark.left = '-' + mark.offsetWidth / 2 + 'px';
         stMark.top = pol.offsetHeight + 2 + 'px';
+        elemWH += mark.offsetWidth + this.indent;
       }
 
-      if (!this.vertical) {
-        elemWidth += mark.offsetWidth + this.indent;
-        this.oddElements[0].push(mark);
-      }
+      this.oddElements[0].push(mark);
     }
-    if (this.vertical) return;
 
-    this.masWidth.push(elemWidth);
+    this.masWH.push(elemWH);
     this.oddElements[0].shift();
     this.oddElements[0].pop();
 
     let evenMas: HTMLElement[] = [];
 
     const breakIntoPieces = (mas: HTMLElement[]) => {
-      elemWidth = 0;
+      elemWH = 0;
       const newMas = mas.filter((elem, i) => {
         if (i % 2 == 0) { // каждый второй элемент массива
           evenMas.push(elem);
           return false;
         }
         else {
-          elemWidth += elem.offsetWidth + this.indent;
+          if (this.vertical)
+            elemWH += elem.offsetHeight + this.indent;
+          else
+            elemWH += elem.offsetWidth + this.indent;
+
           return true;
         }
       });
@@ -212,14 +181,15 @@ class Grid extends Observer {
         this.oddElements.push(newMas);
         this.evenElements.push(evenMas);
         evenMas = [];
-        this.masWidth.push(elemWidth);
+        this.masWH.push(elemWH);
         breakIntoPieces(newMas);
       }
     };
 
-
-
     breakIntoPieces(this.oddElements[0]);
+
+    this.evenElements.shift();
+
 
     this.visibleMark();
     this.getResizeWrap();
@@ -228,19 +198,25 @@ class Grid extends Observer {
 
   // скрываем или показываем цифры на шкале.
   private visibleMark() {
-    if (this.vertical) return;
+
     // находим индекс элементов - для нечётных - показать для чётных скрыть.
-    const wrapWidth = this.elemGrid.offsetWidth;
+
+    const width = this.elemGrid.offsetWidth;
+    const height = this.elemGrid.offsetHeight;
+    const size = this.vertical ? height : width;
+
+    const wrapWH = size;
     let i = 0;
-    for (; i < this.masWidth.length; i++) {
-      if (this.masWidth[i] <= wrapWidth)
+    for (; i < this.masWH.length; i++) {
+      if (this.masWH[i] <= wrapWH)
         break;
     }
 
     for (let n = 0; n <= i; n++) { // скрываем все чётные элементы до необходимого уровня.
-      for (let elem of this.evenElements[n]) {
-        this.toggleElem(elem, 'hidden', '0.4');
-      }
+      if (this.evenElements[n])
+        for (let elem of this.evenElements[n]) {
+          this.toggleElem(elem, 'hidden', '0.4');
+        }
     }
 
     let snapNum: number[] = [];
@@ -259,6 +235,33 @@ class Grid extends Observer {
     this.previousElem = this.oddElements[i][len];
 
     this.visibleLastElem();
+  }
+
+  private visibleLastElem() {
+    if (!this.lastElem || !this.previousElem) return;
+
+    const lastR = this.lastElem.getBoundingClientRect();
+    const previousR = this.previousElem.getBoundingClientRect();
+    const lastXY = this.vertical ? lastR.bottom : lastR.left;
+    const width = this.previousElem.offsetWidth;
+    let previousBL = 0;
+    let previousXY = 0;
+
+    if (this.vertical) {
+      previousBL = previousR.top;
+      previousXY = previousBL + this.indent;
+    } else {
+      previousBL = previousR.left;
+      previousXY = previousBL + width + this.indent;
+    }
+
+    const flag = this.vertical ? previousXY <= lastXY : previousXY >= lastXY;
+
+    if (flag) {
+      this.toggleElem(this.previousElem, 'hidden', '0.4');
+    } else {
+      this.toggleElem(this.previousElem, 'visible', '1');
+    }
   }
 
 
@@ -293,8 +296,9 @@ class Grid extends Observer {
         timeout = false;
         let totalWidth = this.elemGrid.offsetWidth;
         if (totalWidth != this.startWidth) {
-          if (this.offOn && !this.vertical)
+          if (this.offOn && !this.vertical) {
             this.visibleMark();
+          }
           this.startWidth = totalWidth;
         }
       }

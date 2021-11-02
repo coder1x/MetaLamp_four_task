@@ -842,31 +842,31 @@ class Model extends Observer {
       interval = this.getRange() / step;          // находим новый интервал
     } else {                                      // делаем только по интервалу
       interval = this.gridNum;
-      step = this.getRange() / interval;          // находим шаг
+      step = (this.max - this.min) / interval;          // находим шаг
     }
 
     return { interval, step };
   }
 
   createMark() {
+    const range = this.getRange();
+
     const calcPositionGrid = (value: number, step: number) => {
-      value = +(value + step).toFixed(this.gridRound);
-      const position = ((value - this.min) * 100) / this.getRange();
+      value = value + step;
+      const position = ((value - this.min) * 100) / range;
       return { value, position };
     };
 
     const notify = (valueG: number, position: number) => {
       this.notifyOB({
         key: 'CreateGrid',
-        valueG: valueG,
+        valueG: +valueG.toFixed(this.gridRound),
         position: position,
       });
     };
 
     notify(this.min, 0);
-
     const { interval, step } = this.calcGridNumStep();
-
     let obj = calcPositionGrid(this.min, step);
     notify(obj.value, obj.position);
 

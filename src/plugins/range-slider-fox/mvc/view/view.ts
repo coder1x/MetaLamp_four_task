@@ -321,10 +321,12 @@ class View extends Observer {
   }
 
 
-  ubdateTipValue(from: number, to: number) {
+  ubdateTipValue(from: number, to: number, type: string) {
     this.hints.setValTipFrom(from);
-    this.hints.setValTipTo(to);
-    this.hints.setValTipSingle();
+    if (type == 'double') {
+      this.hints.setValTipTo(to);
+      this.hints.setValTipSingle();
+    }
   }
 
   ubdateTipPosition(op: UbdateTip) {
@@ -340,15 +342,10 @@ class View extends Observer {
 
   setVisibleBar(bar: boolean) {
     this.bar.setVisibleBar(bar);
-
-    this.createDomBar();
+    this.bar.createDomBar();
     const size = this.vertical ?
       this.rsLine.offsetWidth : this.rsLine.offsetHeight;
     this.bar.setSizeWH(size);
-  }
-
-  private createDomBar() {
-    this.bar.createDomBar();
   }
 
   setBar(barX: number, widthBar: number) {

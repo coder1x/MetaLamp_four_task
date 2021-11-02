@@ -191,62 +191,40 @@ const objPanel = renderPanel('.panel');
 
 objPanel[0].createRangeSlider({
   type: 'double',
-  //type: 'single',
-  //theme: 'fox',
-  // orientation: 'vertical',
-  min: -120,
-  max: 800,
-  from: 215,
-  to: 500,
-  bar: true,
-  //disabled: true,
-  //tipPrefix: '°C',
-  // tipMinMax: false,
-  // tipFromTo: false,
-  grid: true,
-  gridSnap: true,
-  gridNum: 0,
-  gridStep: 40,
-  gridRound: 2,
-});
-
-
-objPanel[1].createRangeSlider({
-  type: 'double',
-  //type: 'single',
-  orientation: 'vertical',
-  theme: 'dark',
-  min: 10,
-  max: 800,
-  from: 200,
-  to: 500,
-  bar: true,
-  //disabled: true,
-  // tipPrefix: '°C',
-  // tipMinMax: false,
-  // tipFromTo: false,
-  grid: true,
-  // gridSnap: true,
-  gridNum: 10,
-  //gridStep: 30,
-});
-
-
-objPanel[2].createRangeSlider({
-  type: 'double',
-  //type: 'single',
+  orientation: 'horizontal',
   theme: 'fox',
   min: -120,
   max: 800,
   from: 200,
   to: 500,
-  //disabled: true,
-  // tipPrefix: '°C',
-  // tipMinMax: false,
-  // tipFromTo: false,
+  bar: true,
   grid: true,
-  //gridSnap: true,
-  //gridNum: 6,
+  gridNum: 40,
+});
+
+
+objPanel[1].createRangeSlider({
+  type: 'double',
+  orientation: 'vertical',
+  theme: 'dark',
+  min: -120,
+  max: 800,
+  from: 200,
+  to: 500,
+  bar: true,
+  grid: true,
+  gridStep: 33,
+});
+
+
+objPanel[2].createRangeSlider({
+  type: 'double',
+  min: -120,
+  max: 800,
+  from: 200,
+  to: 500,
+  grid: true,
+  bar: true,
   gridStep: 30,
 });
 
