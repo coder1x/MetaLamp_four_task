@@ -143,6 +143,7 @@ class Model extends Observer {
     this.keyStepOne = op.keyStepOne;
     this.keyStepHold = op.keyStepHold;
     this.tipPrefix = op.tipPrefix;
+    this.tipPostfix = op.tipPostfix;
     this.tipMinMax = op.tipMinMax;
     this.tipFromTo = op.tipFromTo;
     this.grid = op.grid;
@@ -193,6 +194,7 @@ class Model extends Observer {
     this.notifyOB({
       key: 'HintsData',
       tipPrefix: op.tipPrefix,
+      tipPostfix: op.tipPostfix,
       tipMinMax: op.tipMinMax,
       tipFromTo: op.tipFromTo,
       min: op.min,

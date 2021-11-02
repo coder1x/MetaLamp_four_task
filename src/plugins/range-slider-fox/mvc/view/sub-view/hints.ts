@@ -177,8 +177,9 @@ class Hints {
     if (!this.tipSingle) return;
     const valFrom = this.tipFrom.innerHTML;
     const valTo = this.tipTo.innerHTML;
-    this.tipSingle.innerText = valFrom +
-      (this.vertical ? ' ↕ ' : ' ⟷ ') + valTo;
+    const br = '<br>';
+    this.tipSingle.innerHTML = valFrom +
+      (this.vertical ? br + '↕' + br : ' ⟷ ') + valTo;
   }
 
   // --------------------------- изменяем позицию и обнавляем значения

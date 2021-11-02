@@ -113,6 +113,13 @@ class Panel {
       gridRound: data.gridRound,
     });
 
+    this.objHints.setData({
+      tipMinMax: data.tipMinMax,
+      tipFromTo: data.tipFromTo,
+      tipPrefix: data.tipPrefix,
+      tipPostfix: data.tipPostfix,
+    });
+
     this.objCopyCode.setData({
       type: data.type,
       disabled: data.disabled,
