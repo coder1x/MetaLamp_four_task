@@ -8,6 +8,7 @@ class Controller {
 
   private startFl = false;
   private lock = false;
+  private funAtrr: Function;
 
   // eslint-disable-next-line no-unused-vars
   constructor(private model: Model, private view: View) {
@@ -54,8 +55,10 @@ class Controller {
 
 
   private init() {
+    this.funAtrr = () => { };
     this.reset();
     this.startFl = true;
+    this.funAtrr();
   }
 
 
@@ -85,8 +88,9 @@ class Controller {
     const key = options.key;
     if (key != 'DataAttributes') return;
 
-    this.update(options);
-
+    this.funAtrr = () => {
+      this.update(options);
+    };
 
   };
 
@@ -245,6 +249,7 @@ class Controller {
     this.view.setHintsData(options);
 
     this.ubdateHints(options.type, options.from, options.to);
+
   };
 
 

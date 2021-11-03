@@ -59,6 +59,8 @@ class Different {
 
 
   setData(options: OP) {
+    console.log('setData');
+
     this.disabled.checked = options.disabled;
     this.bar.checked = options.bar;
     this.type.checked = options.type == 'double' ? true : false;
