@@ -7,8 +7,8 @@
       "dom.iterable",
       "esnext"
     ],
-    "sourceMap": true, // Создавать ли соответствующие source map файлы ".map"?
-    "allowJs": true, // Разрешать компилировать файлы с JavaScript-кодом?
+    "sourceMap": false, // Создавать ли соответствующие source map файлы ".map"?
+    "allowJs": false, // Разрешать компилировать файлы с JavaScript-кодом?
     "skipLibCheck": true, // Не проверять типы, заданные во всех файлах описания типов (*.d.ts)?
     "esModuleInterop": true, // Создать хелперы __importStar и __importDefault для обеспечения совместимости с экосистемой Babel и включить allowSyntheticDefaultImports для совместимости с системой типов.
     "allowSyntheticDefaultImports": true, // Разрешить импортировать модули не имеющие внутри себя "import default"?

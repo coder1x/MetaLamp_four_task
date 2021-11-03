@@ -15,8 +15,7 @@ module.exports = merge(devServ, {
 
   target: DP.isDev ? 'web' : 'browserslist',
   //devtool: DP.isDev ? 'eval-cheap-module-source-map' : 'source-map', //  (карта для браузеров) 
-  //devtool: false,
-  devtool: DP.isDev ? 'eval-cheap-module-source-map' : false,
+  devtool: DP.isDev ? false : false,
 
   entry: [
     "webpack/hot/dev-server",
