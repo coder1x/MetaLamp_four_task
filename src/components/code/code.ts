@@ -1,8 +1,7 @@
 import './code.scss';
 
-
 import { RangeSliderOptions } from
-  '../../plugins/range-slider-fox/mvc/model/model.d';
+  '../../plugins/range-slider-fox/glob-interface';
 
 
 class CopyCode {

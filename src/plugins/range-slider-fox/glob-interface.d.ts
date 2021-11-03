@@ -26,19 +26,4 @@ interface RangeSliderOptions {
   onReset?: Function;
 }
 
-interface RangeSliderFoxFunction {
-  // eslint-disable-next-line no-unused-vars
-  (options: RangeSliderOptions): JQuery;
-}
-
-
-interface RangeSliderFox extends
-  RangeSliderFoxFunction { }
-
-
-// eslint-disable-next-line no-unused-vars
-interface JQuery {
-  RangeSliderFox: RangeSliderFox;
-}
-
-
+export { RangeSliderOptions };

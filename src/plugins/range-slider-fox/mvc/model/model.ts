@@ -1,4 +1,5 @@
-import { RangeSliderOptions, CalcDotPositionOpt, PROP } from './model.d';
+import { RangeSliderOptions } from '../../glob-interface';
+import { CalcDotPositionOpt, PROP } from './model.d';
 import { Observer } from '../../observer';
 
 

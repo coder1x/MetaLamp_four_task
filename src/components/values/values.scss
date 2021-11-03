@@ -1,12 +1,29 @@
 $border-values: rgba(31, 32, 65, 0.25);
 
 .values {
+  position: relative;
   border: 1px solid $border-values;
   border-radius: 4px;
   box-sizing: border-box;
   padding: 10px;
   align-content: flex-start;
   height: 100%;
+
+  &__info {
+    position: absolute;
+    top: 1px;
+    right: 13px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 10px;
+    height: 10px;
+    padding: 5px;
+    border: 1px solid #222;
+    border-radius: 50%;
+    cursor: pointer;
+  }
 
   &__min-wrap {
     margin: 5px;

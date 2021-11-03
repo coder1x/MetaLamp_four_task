@@ -24,6 +24,12 @@ class Different {
   private panel: HTMLElement;
   private modif: string;
 
+  private disabledD: boolean;
+  private barD: boolean;
+  private typeD: string;
+  private orientationD: string;
+  private themeD: string;
+
 
   // eslint-disable-next-line no-unused-vars
   constructor(public nameClass: string, elem: HTMLElement, panel: HTMLElement) {
@@ -59,14 +65,34 @@ class Different {
 
 
   setData(options: OP) {
-    console.log('setData');
+    const { disabled, bar, type, orientation, theme } = options;
+    let orientF: boolean;
 
-    this.disabled.checked = options.disabled;
-    this.bar.checked = options.bar;
-    this.type.checked = options.type == 'double' ? true : false;
-    const orientF = options.orientation == 'horizontal' ? false : true;
-    this.orientation.checked = orientF;
-    this.select.update(String(options.theme));
+    if (this.disabledD != disabled) {
+      this.disabled.checked = disabled;
+      this.disabledD = disabled;
+    }
+
+    if (this.barD != bar) {
+      this.bar.checked = bar;
+      this.barD = bar;
+    }
+
+    if (this.typeD != type) {
+      this.type.checked = type == 'double' ? true : false;
+      this.typeD = type;
+    }
+
+    if (this.orientationD != orientation) {
+      orientF = orientation == 'horizontal' ? false : true;
+      this.orientation.checked = orientF;
+      this.orientationD = orientation;
+    }
+
+    if (this.themeD != theme) {
+      this.select.update(String(theme));
+      this.themeD = theme;
+    }
 
     if (orientF) {
       this.panel.classList.add(this.modif);

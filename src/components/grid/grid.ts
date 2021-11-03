@@ -18,6 +18,12 @@ class Grid {
   private step: HTMLInputElement;
   private gridRound: HTMLInputElement;
 
+  private gridD: boolean;
+  private gridSnapD: boolean;
+  private gridNumD: number;
+  private gridStepD: number;
+  private gridRoundD: number;
+
   // eslint-disable-next-line no-unused-vars
   constructor(public nameClass: string, elem: HTMLElement) {
 
@@ -43,11 +49,28 @@ class Grid {
   }
 
   setData(options: OP) {
-    this.grid.checked = options.grid;
-    this.snap.checked = options.gridSnap;
-    this.interval.value = String(options.gridNum);
-    this.step.value = String(options.gridStep);
-    this.gridRound.value = String(options.gridRound);
+    const { grid, gridSnap, gridNum, gridStep, gridRound } = options;
+
+    if (this.gridD != grid) {
+      this.grid.checked = grid;
+      this.gridD = grid;
+    }
+    if (this.gridSnapD != gridSnap) {
+      this.snap.checked = gridSnap;
+      this.gridSnapD = gridSnap;
+    }
+    if (this.gridNumD != gridNum) {
+      this.interval.value = String(gridNum);
+      this.gridNumD = gridNum;
+    }
+    if (this.gridStepD != gridStep) {
+      this.step.value = String(gridStep);
+      this.gridStepD = gridStep;
+    }
+    if (this.gridRoundD != gridRound) {
+      this.gridRound.value = String(gridRound);
+      this.gridRoundD = gridRound;
+    }
   }
 
   setAction(obj: any) {

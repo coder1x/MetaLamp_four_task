@@ -1,6 +1,6 @@
 import { Model } from '../model/model';
 import { View } from '../view/view';
-import { RangeSliderOptions } from '../model/model.d';
+import { RangeSliderOptions } from '../../glob-interface';
 import { TOB } from '../../observer';
 
 

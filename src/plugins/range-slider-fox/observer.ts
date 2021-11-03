@@ -1,28 +1,4 @@
-
-
-interface RangeSliderOptions {
-  type?: string,
-  orientation?: string,
-  theme?: string,
-  min?: number,
-  max?: number,
-  from?: number,
-  to?: number,
-  step?: number,
-  keyStepOne?: number,
-  keyStepHold?: number,
-  bar?: boolean,
-  grid?: boolean,
-  gridSnap?: boolean,
-  tipPrefix?: string,
-  tipPostfix?: string,
-  tipMinMax?: boolean,
-  tipFromTo?: boolean,
-  gridNum?: number,
-  gridStep?: number,
-  gridRound?: number,
-  disabled?: boolean,
-}
+import { RangeSliderOptions } from './glob-interface';
 
 interface insideOptions extends RangeSliderOptions {
   fromX?: number,
@@ -47,13 +23,7 @@ interface insideOptions extends RangeSliderOptions {
 
 interface TOB extends insideOptions {
   key?: string,
-
 }
-
-// интерфейс должен содержать не только описание конфига но и внутренних данных
-// которая передаёт въюшка или передаёт модель в виде процентов, координат и тп.
-// можно это реализовать через наследование интерфейсов и разбить на логические части.
-
 
 abstract class Observer {
   private observers: Function[] = [];
@@ -74,7 +44,6 @@ abstract class Observer {
     }
   }
 }
-
 
 export { Observer, TOB };
 

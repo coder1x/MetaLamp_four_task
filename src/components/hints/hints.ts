@@ -14,6 +14,12 @@ class Hints {
   private tipPrefix: HTMLInputElement;
   private tipPostfix: HTMLInputElement;
 
+  private tipMinMaxD: boolean;
+  private tipFromToD: boolean;
+  private tipPrefixD: string;
+  private tipPostfixD: string;
+
+
   // eslint-disable-next-line no-unused-vars
   constructor(public nameClass: string, elem: HTMLElement) {
     this.elem = elem;
@@ -37,10 +43,24 @@ class Hints {
   }
 
   setData(options: OP) {
-    this.tipMinMax.checked = options.tipMinMax;
-    this.tipFromTo.checked = options.tipFromTo;
-    this.tipPrefix.value = String(options.tipPrefix);
-    this.tipPostfix.value = String(options.tipPostfix);
+    const { tipMinMax, tipFromTo, tipPrefix, tipPostfix } = options;
+
+    if (this.tipMinMaxD != tipMinMax) {
+      this.tipMinMax.checked = tipMinMax;
+      this.tipMinMaxD = tipMinMax;
+    }
+    if (this.tipFromToD != tipFromTo) {
+      this.tipFromTo.checked = tipFromTo;
+      this.tipFromToD = tipFromTo;
+    }
+    if (this.tipPrefixD != tipPrefix) {
+      this.tipPrefix.value = String(tipPrefix);
+      this.tipPrefixD = tipPrefix;
+    }
+    if (this.tipPostfixD != tipPostfix) {
+      this.tipPostfix.value = String(tipPostfix);
+      this.tipPostfixD = tipPostfix;
+    }
   }
 
   setAction(obj: any) {

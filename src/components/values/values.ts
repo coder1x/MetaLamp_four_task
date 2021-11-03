@@ -18,6 +18,11 @@ class Values {
   private to: HTMLInputElement;
   private step: HTMLInputElement;
 
+  private minD: number;
+  private maxD: number;
+  private fromD: number;
+  private toD: number;
+  private stepD: number;
 
 
   // eslint-disable-next-line no-unused-vars
@@ -47,11 +52,32 @@ class Values {
 
 
   setData(options: OP) {
-    this.min.value = String(options.min);
-    this.max.value = String(options.max);
-    this.from.value = String(options.from);
-    this.to.value = String(options.to);
-    this.step.value = String(options.step);
+    const { min, max, from, to, step } = options;
+
+    if (this.minD != min) {
+      this.min.value = String(min);
+      this.minD = min;
+    }
+
+    if (this.maxD != max) {
+      this.max.value = String(max);
+      this.maxD = max;
+    }
+
+    if (this.fromD != from) {
+      this.from.value = String(from);
+      this.fromD = from;
+    }
+
+    if (this.toD != to) {
+      this.to.value = String(to);
+      this.toD = to;
+    }
+
+    if (this.stepD != step) {
+      this.step.value = String(step);
+      this.stepD = step;
+    }
   }
 
 

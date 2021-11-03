@@ -1,6 +1,7 @@
 import './panel.scss';
+
 import { RangeSliderOptions } from
-  '../../plugins/range-slider-fox/mvc/model/model.d';
+  '../../plugins/range-slider-fox/glob-interface';
 
 import { Values } from '../values/values';
 import { InputData } from '../input-data/input-data';
@@ -9,7 +10,6 @@ import { Hints } from '../hints/hints';
 import { Different } from '../different/different';
 import { CopyCode } from '../code/code';
 import { KeyboardControl } from '../keyboard-control/keyboard-control';
-
 
 
 class Panel {
@@ -87,10 +87,10 @@ class Panel {
       theme: data.theme,
     });
 
-    this.setDataCode(data);
+    this.setDataU(data);
   }
 
-  setDataCode(data: RangeSliderOptions) {
+  setDataU(data: RangeSliderOptions) {
 
     this.objValues.setData({
       min: data.min,
@@ -161,13 +161,12 @@ class Panel {
         this.setData(data);
       },
       onUpdate: (data: RangeSliderOptions) => {
-        this.setDataCode(data);
+        this.setDataU(data);
       },
       onReset: (data: RangeSliderOptions) => {
         this.setData(data);
       }
     }).data('RangeSliderFox'); // вернёт объект для одного элемента
-
 
 
     this.objValues.setAction(obj);
@@ -176,10 +175,7 @@ class Panel {
     this.objDifferent.setAction(obj);
     this.objKeyboardControl.setAction(obj);
   }
-
-
 }
-
 
 
 function renderPanel(className: string) {

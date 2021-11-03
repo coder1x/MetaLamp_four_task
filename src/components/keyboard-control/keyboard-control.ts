@@ -12,6 +12,9 @@ class KeyboardControl {
   private keyStepOne: HTMLInputElement;
   private keyStepHold: HTMLInputElement;
 
+  private keyStepOneD: number;
+  private keyStepHoldD: number;
+
   // eslint-disable-next-line no-unused-vars
   constructor(public nameClass: string, elem: HTMLElement) {
 
@@ -37,8 +40,17 @@ class KeyboardControl {
 
 
   setData(options: OP) {
-    this.keyStepOne.value = String(options.keyStepOne);
-    this.keyStepHold.value = String(options.keyStepHold);
+    const { keyStepOne, keyStepHold } = options;
+
+    if (this.keyStepOneD != keyStepOne) {
+      this.keyStepOne.value = String(keyStepOne);
+      this.keyStepOneD = keyStepOne;
+    }
+
+    if (this.keyStepHoldD != keyStepHold) {
+      this.keyStepHold.value = String(keyStepHold);
+      this.keyStepHoldD = keyStepHold;
+    }
   }
 
 
