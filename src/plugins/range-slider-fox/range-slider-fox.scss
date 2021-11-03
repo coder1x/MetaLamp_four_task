@@ -25,6 +25,10 @@ $color-focus: #1f2041;
     cursor: default;
   }
 
+  &__tip-single {
+    white-space: nowrap;
+  }
+
   &__tip-min,
   &__tip-max {
     cursor: default;
@@ -130,7 +134,6 @@ $color-focus: #1f2041;
     &__tip-single {
       right: 10px; // **************
       text-align: center;
-      white-space: nowrap;
     }
 
     &__center {

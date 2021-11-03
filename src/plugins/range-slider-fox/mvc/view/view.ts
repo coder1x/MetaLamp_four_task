@@ -165,7 +165,6 @@ class View extends Observer {
   }
 
 
-
   private handleForwarding = (options: TOB) => {
     this.notifyOB({ ...options });
   };

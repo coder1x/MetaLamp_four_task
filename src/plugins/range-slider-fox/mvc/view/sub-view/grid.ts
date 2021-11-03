@@ -55,10 +55,6 @@ class Grid extends Observer {
   getOrientation() {
     const width = this.rsBottom.offsetWidth;
     const height = this.rsBottom.offsetHeight;
-    console.log('width: ' + width);
-    console.log('height: ' + height);
-
-
     return width > height ? false : true;
   }
 
@@ -226,42 +222,39 @@ class Grid extends Observer {
       snapNum.push(+elem.innerText);
     });
 
-    this.notifyOB({
-      key: 'SnapNum',
-      snapNum: snapNum,
-    });
-
     const len = this.oddElements[i].length - 1;
     this.previousElem = this.oddElements[i][len];
 
-    this.visibleLastElem();
+    this.visibleLastElem(snapNum);
   }
 
-  private visibleLastElem() {
+  private visibleLastElem(snapNum: number[]) {
     if (!this.lastElem || !this.previousElem) return;
 
     const lastR = this.lastElem.getBoundingClientRect();
     const previousR = this.previousElem.getBoundingClientRect();
     const lastXY = this.vertical ? lastR.bottom : lastR.left;
-    const width = this.previousElem.offsetWidth;
-    let previousBL = 0;
-    let previousXY = 0;
 
-    if (this.vertical) {
-      previousBL = previousR.top;
-      previousXY = previousBL + this.indent;
-    } else {
-      previousBL = previousR.left;
-      previousXY = previousBL + width + this.indent;
-    }
+    let previousXY = this.vertical ? previousR.top : previousR.right;
+    previousXY += this.indent;
 
-    const flag = this.vertical ? previousXY <= lastXY : previousXY >= lastXY;
+    const flag = this.vertical ? previousXY <= lastXY : previousXY > lastXY;
+    const number = +this.previousElem.innerText;
 
     if (flag) {
       this.toggleElem(this.previousElem, 'hidden', '0.4');
+      snapNum = snapNum.filter((item) => item !== number);
     } else {
       this.toggleElem(this.previousElem, 'visible', '1');
+      const len = snapNum.length - 1;
+      if (snapNum[len] != number)
+        snapNum.push(number);
     }
+
+    this.notifyOB({
+      key: 'SnapNum',
+      snapNum: snapNum,
+    });
   }
 
 
