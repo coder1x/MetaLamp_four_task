@@ -52,7 +52,8 @@ class Panel {
     );
   }
 
-  setData(data: RangeSliderOptions) {
+
+  setDataChange(data: RangeSliderOptions) {
     this.objValues.setData({
       min: data.min,
       max: data.max,
@@ -61,43 +62,50 @@ class Panel {
       step: data.step,
     });
 
-    this.objKeyboardControl.setData({
+    this.objCopyCode.setData({
+      type: data.type,
+      disabled: data.disabled,
+      orientation: data.orientation,
+      theme: data.theme,
+      min: data.min,
+      max: data.max,
+      from: data.from,
+      to: data.to,
+      step: data.step,
       keyStepOne: data.keyStepOne,
       keyStepHold: data.keyStepHold,
-    });
-
-    this.objGrid.setData({
+      bar: data.bar,
       grid: data.grid,
       gridSnap: data.gridSnap,
       gridNum: data.gridNum,
       gridStep: data.gridStep,
       gridRound: data.gridRound,
-    });
-    this.objHints.setData({
       tipMinMax: data.tipMinMax,
       tipFromTo: data.tipFromTo,
       tipPrefix: data.tipPrefix,
       tipPostfix: data.tipPostfix,
     });
+  }
+
+  setData(data: RangeSliderOptions) {
+    this.setDataU(data);
+  }
+
+  setDataU(data: RangeSliderOptions) {
+    this.objValues.setData({
+      min: data.min,
+      max: data.max,
+      from: data.from,
+      to: data.to,
+      step: data.step,
+    });
+
     this.objDifferent.setData({
       type: data.type,
       disabled: data.disabled,
       orientation: data.orientation,
       bar: data.bar,
       theme: data.theme,
-    });
-
-    this.setDataU(data);
-  }
-
-  setDataU(data: RangeSliderOptions) {
-
-    this.objValues.setData({
-      min: data.min,
-      max: data.max,
-      from: data.from,
-      to: data.to,
-      step: data.step,
     });
 
     this.objKeyboardControl.setData({
@@ -158,7 +166,7 @@ class Panel {
         this.setData(data);
       },
       onChange: (data: RangeSliderOptions) => {
-        this.setData(data);
+        this.setDataChange(data);
       },
       onUpdate: (data: RangeSliderOptions) => {
         this.setDataU(data);
@@ -206,30 +214,30 @@ objPanel[0].createRangeSlider({
 });
 
 
-objPanel[1].createRangeSlider({
-  type: 'double',
-  orientation: 'vertical',
-  theme: 'dark',
-  min: -120,
-  max: 800,
-  from: 200,
-  to: 500,
-  bar: true,
-  grid: true,
-  gridStep: 33,
-});
+// objPanel[1].createRangeSlider({
+//   type: 'double',
+//   orientation: 'vertical',
+//   theme: 'dark',
+//   min: -120,
+//   max: 800,
+//   from: 200,
+//   to: 500,
+//   bar: true,
+//   grid: true,
+//   gridStep: 33,
+// });
 
 
-objPanel[2].createRangeSlider({
-  type: 'double',
-  min: -120,
-  max: 800,
-  from: 200,
-  to: 500,
-  grid: true,
-  bar: true,
-  gridStep: 30,
-});
+// objPanel[2].createRangeSlider({
+//   type: 'double',
+//   min: -120,
+//   max: 800,
+//   from: 200,
+//   to: 500,
+//   grid: true,
+//   bar: true,
+//   gridStep: 30,
+// });
 
 
 

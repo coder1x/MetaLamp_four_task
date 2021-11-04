@@ -321,11 +321,13 @@ class View extends Observer {
 
 
   ubdateTipValue(from: number, to: number, type: string) {
+
     this.hints.setValTipFrom(from);
     if (type == 'double') {
       this.hints.setValTipTo(to);
       this.hints.setValTipSingle();
     }
+
   }
 
   ubdateTipPosition(op: UbdateTip) {

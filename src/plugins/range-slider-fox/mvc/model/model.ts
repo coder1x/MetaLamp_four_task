@@ -91,7 +91,7 @@ class Model extends Observer {
     this.onChange = options.onChange ?? emptyFun;
     this.onUpdate = options.onUpdate ?? emptyFun;
     this.onStart = options.onStart ?? emptyFun;
-    this.onReset = options.onStart ?? emptyFun;
+    this.onReset = options.onReset ?? emptyFun;
 
     this.update(options);
 
@@ -144,6 +144,7 @@ class Model extends Observer {
       const val = this.getProperty(op, key as keyof RangeSliderOptions);
       this.setProperty(this, key as keyof Model, val as this[keyof Model]);
     }
+
 
     this.notifyOB({
       key: 'RangeData',

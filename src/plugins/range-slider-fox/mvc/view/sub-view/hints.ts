@@ -165,7 +165,7 @@ class Hints {
   // --------------------------- заносим значения
   setData(elem: HTMLElement, val: number) {
     if (elem) {
-      elem.innerText = this.getPrefix(val);
+      return elem.innerText = this.getPrefix(val);
     }
   }
 
@@ -190,7 +190,6 @@ class Hints {
     this.tipSingle.innerHTML = valFrom +
       (this.vertical ? br + '↕' + br : ' ⟷ ') + valTo;
 
-    return true;
   }
 
   // --------------------------- изменяем позицию

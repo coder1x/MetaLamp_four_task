@@ -54,11 +54,11 @@ class Controller {
   }
 
 
-  private init() {
+  private async init() {
     this.funAtrr = () => { };
-    this.reset();
-    this.startFl = true;
-    this.funAtrr();
+    await this.reset();
+    this.startFl = await true;
+    await this.funAtrr();
   }
 
 
@@ -259,19 +259,19 @@ class Controller {
   };
 
 
-  private ubdateHints(type: string, from: number, to: number) {
+  private async ubdateHints(type: string, from: number, to: number) {
 
-    this.view.ubdateTipValue(from, to, type);
+    await this.view.ubdateTipValue(from, to, type);
 
-    const objTip = this.view.getWidthTip();
+    const objTip = await this.view.getWidthTip();
 
     if (objTip.fromWH || objTip.toWH) {
-      this.model.calcPositionDotFrom();
+      // this.model.calcPositionDotFrom();
       const fromXY = this.model.calcPositionTipFrom(objTip.fromWH);
       let toXY = 0;
       let singleXY = 0;
       if (type == 'double') {
-        this.model.calcPositionDotTo();
+        // this.model.calcPositionDotTo();
         toXY = this.model.calcPositionTipTo(objTip.toWH);
         singleXY = this.model.calcPositionTipSingle(objTip.singleWH);
       } else {
