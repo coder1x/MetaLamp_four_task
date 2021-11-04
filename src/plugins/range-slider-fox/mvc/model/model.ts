@@ -2,7 +2,6 @@ import { RangeSliderOptions } from '../../glob-interface';
 import { CalcDotPositionOpt, PROP } from './model.d';
 import { Observer } from '../../observer';
 
-
 class Model extends Observer {
 
   // --- данные конфига
@@ -126,33 +125,25 @@ class Model extends Observer {
     };
   }
 
+  private getProperty<T, K extends keyof T>(obj: T, key: K) {
+    return obj[key];
+  }
+
+  private setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
+    obj[key] = value;
+  }
+
   reset() {
     const op = this.defaultData;
 
     if (this.startConfFl)
       this.onReset(this.defaultData);
 
-    this.type = op.type;
-    this.orientation = op.orientation;
-    this.theme = op.theme;
-    this.min = op.min;
-    this.max = op.max;
-    this.to = op.to;
-    this.bar = op.bar;
-    this.from = op.from;
-    this.step = op.step;
-    this.keyStepOne = op.keyStepOne;
-    this.keyStepHold = op.keyStepHold;
-    this.tipPrefix = op.tipPrefix;
-    this.tipPostfix = op.tipPostfix;
-    this.tipMinMax = op.tipMinMax;
-    this.tipFromTo = op.tipFromTo;
-    this.grid = op.grid;
-    this.gridSnap = op.gridSnap;
-    this.gridNum = op.gridNum;
-    this.gridStep = op.gridStep;
-    this.gridRound = op.gridRound;
-    this.disabled = op.disabled;
+    let opKey = Object.keys(op);
+    for (let key of opKey) {
+      const val = this.getProperty(op, key as keyof RangeSliderOptions);
+      this.setProperty(this, key as keyof Model, val as this[keyof Model]);
+    }
 
     this.notifyOB({
       key: 'RangeData',
@@ -219,6 +210,7 @@ class Model extends Observer {
       key: 'OrientationData',
       orientation: op.orientation,
     });
+
 
     this.notifyOB({
       key: 'Start',
@@ -776,7 +768,7 @@ class Model extends Observer {
     if (this.to < to && toFl) signF = 'right';
     if (this.from > from && fromFl) signF = 'left';
     if (this.to > to && toFl) signF = 'left';
-    if (signF == '') return;
+    if (signF == '') return false;
 
     if (this.step) {
       if (fromFl)
@@ -789,11 +781,12 @@ class Model extends Observer {
       from: from,
       to: to,
     });
+    return true;
   }
 
 
   calcStep() {
-    if (!this.step) return;
+    if (!this.step) return false;
 
     let mas: number[] = [];
     let kol = this.min + this.step;
@@ -806,6 +799,7 @@ class Model extends Observer {
     }
     mas.push(this.max);
     this.stepNum = mas;
+    return true;
   }
 
 
@@ -845,14 +839,19 @@ class Model extends Observer {
       interval = this.getRange() / step;          // находим новый интервал
     } else {                                      // делаем только по интервалу
       interval = this.gridNum;
-      step = (this.max - this.min) / interval;          // находим шаг
+      step = (this.max - this.min) / interval;    // находим шаг
     }
 
     return { interval, step };
   }
 
+
   createMark() {
     const range = this.getRange();
+    let masMark: {
+      val: number,
+      position: number,
+    }[] = [];
 
     const calcPositionGrid = (value: number, step: number) => {
       value = value + step;
@@ -861,11 +860,8 @@ class Model extends Observer {
     };
 
     const notify = (valueG: number, position: number) => {
-      this.notifyOB({
-        key: 'CreateGrid',
-        valueG: +valueG.toFixed(this.gridRound),
-        position: position,
-      });
+      const val = +valueG.toFixed(this.gridRound);
+      masMark.push({ val, position });
     };
 
     notify(this.min, 0);
@@ -878,6 +874,11 @@ class Model extends Observer {
       notify(obj.value, obj.position);
     }
     notify(this.max, 100);
+
+    this.notifyOB({
+      key: 'CreateGrid',
+      valMark: masMark,
+    });
   }
 
   //---------------------------------- Bar
@@ -897,22 +898,22 @@ class Model extends Observer {
     const vertical = this.orientation == 'vertical';
     const oneP = this.wrapWH / 100; // один процент от всей школы
 
+    const verticalC = (valP: number) => {
+      let remainderP = 100 - valP;
+      pointXY = remainderP * oneP + pointXY;
+      this.clickLine(pointXY);
+    };
+
     if (this.type == 'single') {
-      if (vertical) {
-        let remainderP = 100 - this.fromP;
-        pointXY = remainderP * oneP + pointXY;
+      if (vertical)
+        verticalC(this.fromP);
+      else
         this.clickLine(pointXY);
-      } else {
-        this.clickLine(pointXY);
-      }
     } else {
-      if (vertical) {
-        let remainderP = 100 - this.toP;
-        pointXY = remainderP * oneP + pointXY;
-        this.clickLine(pointXY);
-      } else {
+      if (vertical)
+        verticalC(this.toP);
+      else
         this.clickLine(this.fromP * oneP + pointXY);
-      }
     }
   }
 
@@ -1004,7 +1005,7 @@ class Model extends Observer {
 
 
   snapDot() {
-    if (!this.gridSnap) return;
+    if (!this.gridSnap) return false;
 
     this.from = this.getValStep(this.from, this.stepGrid, this.snapNum);
 
@@ -1020,6 +1021,7 @@ class Model extends Observer {
     });
 
     this.onChange(this.getOptions());
+    return true;
   }
 
   calcSnap = (snapNum: number[]) => {

@@ -17,12 +17,14 @@ class Grid extends Observer {
   private resizeF: boolean;
   private vertical: boolean;
 
+
   constructor(elem: HTMLElement | Element, rsName: string) {
     super();
     this.rsName = rsName;
     this.rsBottom = (elem as HTMLElement);
     this.init();
   }
+
 
   private createElem(teg: string, className: string[]) {
     const elem = document.createElement(teg);
@@ -48,9 +50,11 @@ class Grid extends Observer {
     });
   }
 
+
   setOrientation(str: string) {
     this.vertical = str == 'vertical' ? true : false;
   }
+
 
   getOrientation() {
     const width = this.rsBottom.offsetWidth;
@@ -58,37 +62,49 @@ class Grid extends Observer {
     return width > height ? false : true;
   }
 
-  createMark = (val: number, position: number) => {
-    const gridPol = this.createElem('div', [this.rsName + '__grid-pol']);
-    const gridMark = this.createElem('span', [this.rsName + '__grid-mark']);
-    gridMark.innerText = String(val);
-    gridPol.appendChild(gridMark);
-    this.setAction(gridMark);
 
-    const st = gridPol.style;
-    const pos = position + '%';
-    this.vertical ? st.bottom = pos : st.left = pos;
-    this.elemGrid.appendChild(gridPol);
+  createMark = (valMark: {
+    val: number,
+    position: number,
+  }[]) => {
+    for (let item of valMark) {
+      const { val, position } = item;
+      const gridPol = this.createElem('div', [this.rsName + '__grid-pol']);
+      const gridMark = this.createElem('span', [this.rsName + '__grid-mark']);
+      gridMark.innerText = String(val);
+      gridPol.appendChild(gridMark);
+      const st = gridPol.style;
+      const pos = position + '%';
+      this.vertical ? st.bottom = pos : st.left = pos;
+      this.elemGrid.appendChild(gridPol);
+    }
   }
+
 
   setAction(elem: HTMLElement) {
-    const _this = this;
-    elem.addEventListener('click', function () {
-      _this.notifyOB({
-        key: 'ClickMark',
-        valueG: Number(this.innerText)
-      });
+    elem.addEventListener('click', (e: Event) => {
+      const mark = e.target as HTMLElement;
+      //const typeElem = mark.constructor.name;
+      const selector = this.rsName + '__grid-mark';
+      if (mark.className == selector) {
+        this.notifyOB({
+          key: 'ClickMark',
+          valueG: Number(mark.innerText)
+        });
+      }
     });
   }
+
 
   createDomGrid() {
     this.rsBottom.appendChild(this.elemGrid);
     this.offOn = true;
+    this.setAction(this.elemGrid);
   }
+
 
   deleteGrid() {
     const items = this.elemGrid.children;
-
     if (items.length > 0) {
       this.offOn = false;
       while (this.elemGrid.firstChild) {
@@ -96,6 +112,7 @@ class Grid extends Observer {
       }
     }
   }
+
 
   private toggleElem(elem: HTMLElement, display: string, opacity: string) {
     const st = elem.style;
@@ -105,13 +122,12 @@ class Grid extends Observer {
   }
 
 
-
-
-
   private shapingMark() {
     this.masWH = [];
     this.oddElements = [[]];
     this.evenElements = [[]];
+    let elemWH = 0;
+
     if (this.previousElem)
       this.previousElem.remove();
     this.previousElem = null;
@@ -128,7 +144,7 @@ class Grid extends Observer {
     if (len > 1) {
       this.lastElem = (gridMarks[len - 1] as HTMLElement);
     }
-    let elemWH = 0;
+
 
     let k = 0;
     for (let item of gridMarks) {
@@ -164,11 +180,8 @@ class Grid extends Observer {
           return false;
         }
         else {
-          if (this.vertical)
-            elemWH += elem.offsetHeight + this.indent;
-          else
-            elemWH += elem.offsetWidth + this.indent;
-
+          elemWH += this.vertical ? elem.offsetHeight : elem.offsetWidth;
+          elemWH += this.indent;
           return true;
         }
       });
@@ -186,7 +199,6 @@ class Grid extends Observer {
 
     this.evenElements.shift();
 
-
     this.visibleMark();
     this.getResizeWrap();
   }
@@ -194,9 +206,7 @@ class Grid extends Observer {
 
   // скрываем или показываем цифры на шкале.
   private visibleMark() {
-
     // находим индекс элементов - для нечётных - показать для чётных скрыть.
-
     const width = this.elemGrid.offsetWidth;
     const height = this.elemGrid.offsetHeight;
     const size = this.vertical ? height : width;
@@ -228,8 +238,9 @@ class Grid extends Observer {
     this.visibleLastElem(snapNum);
   }
 
+
   private visibleLastElem(snapNum: number[]) {
-    if (!this.lastElem || !this.previousElem) return;
+    if (!this.lastElem || !this.previousElem) return false;
 
     const lastR = this.lastElem.getBoundingClientRect();
     const previousR = this.previousElem.getBoundingClientRect();
@@ -255,11 +266,12 @@ class Grid extends Observer {
       key: 'SnapNum',
       snapNum: snapNum,
     });
+    return true;
   }
 
 
   private getResizeWrap() {
-    if (this.resizeF) return;
+    if (this.resizeF) return false;
     this.resizeF = true;
     let sleep = 200;
     let rtime: Date;
@@ -270,7 +282,7 @@ class Grid extends Observer {
       let throttle = function (type: string, name: string, obj = window) {
         let running = false;
         let func = function () {
-          if (running) { return; }
+          if (running) { return false; }
           running = true;
           requestAnimationFrame(function () {
             obj.dispatchEvent(new CustomEvent(name));
@@ -304,14 +316,10 @@ class Grid extends Observer {
         setTimeout(resizeend, sleep);
       }
     });
+    return true;
   }
 
 }
-
-
-
-
-
 
 
 

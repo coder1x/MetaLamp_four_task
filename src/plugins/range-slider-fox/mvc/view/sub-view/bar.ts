@@ -16,31 +16,44 @@ class Bar extends Observer {
     this.rsCenter = (elem as HTMLElement);
   }
 
+
   setVisibleBar(bar: boolean) {
     this.bar = bar;
   }
+
+
+  private getProperty<T, K extends keyof T>(obj: T, key: K) {
+    return obj[key];
+  }
+
+
+  private setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
+    obj[key] = value;
+  }
+
 
   setOrientation(str: string) {
     this.vertical = str == 'vertical' ? true : false;
 
     const convertStyle = (elem: CSSStyleDeclaration) => {
-      let val = '';
       let sizeW = '';
       let sizeH = '';
+
+      const toggleBar = (from: string, to: string) => {
+        const val = this.getProperty(elem, from as keyof CSSStyleDeclaration);
+        if (val == '') return false;
+        sizeW = elem.width;
+        sizeH = elem.height;
+        elem.removeProperty(from);
+        const key = to as keyof CSSStyleDeclaration;
+        this.setProperty(elem, key, val);
+        return true;
+      };
+
       if (this.vertical) {
-        if (elem.left == '') return;
-        val = elem.left;
-        sizeW = elem.width;
-        sizeH = elem.height;
-        elem.removeProperty('left');
-        elem.bottom = val;
+        if (!toggleBar('left', 'bottom')) return false;
       } else {
-        if (elem.bottom == '') return;
-        val = elem.bottom;
-        sizeW = elem.width;
-        sizeH = elem.height;
-        elem.removeProperty('bottom');
-        elem.left = val;
+        if (!toggleBar('bottom', 'left')) return false;
       }
       elem.width = sizeH;
       elem.height = sizeW;
@@ -48,6 +61,8 @@ class Bar extends Observer {
 
     if (this.elemBar)
       convertStyle(this.elemBar.style);
+
+    return true;
   }
 
 
@@ -62,6 +77,7 @@ class Bar extends Observer {
     });
   }
 
+
   private createElem(teg: string, className: string[]) {
     const elem = document.createElement(teg);
     for (let item of className) {
@@ -70,31 +86,36 @@ class Bar extends Observer {
     return elem;
   }
 
+
   createDomBar() {
     if (!this.bar && this.elemBar) {
       this.elemBar.remove();
       this.elemBar = null;
-      return;
+      return false;
     }
-    if (this.bar && this.elemBar) return;
-    if (!this.bar && !this.elemBar) return;
+    if (this.bar && this.elemBar) return false;
+    if (!this.bar && !this.elemBar) return false;
 
     this.elemBar = this.createElem('span', [this.rsName + '__bar']);
     this.rsCenter.appendChild(this.elemBar);
 
     this.setActions();
+    return true;
   }
 
+
   setSizeWH(size: number) {
-    if (!this.elemBar) return;
+    if (!this.elemBar) return false;
 
     const sizePX = size + 'px';
     const st = this.elemBar.style;
     this.vertical ? st.width = sizePX : st.height = sizePX;
+    return true;
   }
 
+
   setBar(barX: number, widthBar: number) {
-    if (!this.elemBar) return;
+    if (!this.elemBar) return false;
 
     const st = this.elemBar.style;
 
@@ -105,7 +126,7 @@ class Bar extends Observer {
       st.left = barX + '%';
       st.width = widthBar + '%';
     }
-
+    return true;
   }
 }
 

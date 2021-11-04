@@ -63,7 +63,7 @@ class Controller {
 
 
   reset = () => {
-    if (this.lock) return;
+    if (this.lock) return false;
     this.model.reset();
   }
 
@@ -72,32 +72,34 @@ class Controller {
     const lock = options.disabled !== false;
     const orientation = typeof options.orientation !== 'string';
     if (lock && orientation)
-      if (this.lock) return;
+      if (this.lock) return false;
     this.model.update(options);
+    return true;
   }
 
 
   private handleStart = (options: TOB) => {
     const key = options.key;
-    if (key != 'Start') return;
+    if (key != 'Start') return false;
     this.view.outDataAttr();
+    return true;
   };
 
 
   private handleDataAttributes = (options: TOB) => {
     const key = options.key;
-    if (key != 'DataAttributes') return;
+    if (key != 'DataAttributes') return false;
 
     this.funAtrr = () => {
       this.update(options);
     };
-
+    return true;
   };
 
 
   private handleRangeData = (options: TOB) => {
     const key = options.key;
-    if (key != 'RangeData') return;
+    if (key != 'RangeData') return false;
 
     this.model.calcOnePercent();
 
@@ -111,30 +113,32 @@ class Controller {
     }
 
     this.model.calcStep();
-
+    return true;
   };
 
 
   private handleStep = (options: TOB) => {
     const key = options.key;
-    if (key != 'Step') return;
+    if (key != 'Step') return false;
 
     this.model.calcStep();
+    return true;
   };
 
 
   private handleDotKeyDown = (options: TOB) => {
     const key = options.key;
-    if (key != 'DotKeyDown') return;
-    if (this.lock) return;
+    if (key != 'DotKeyDown') return false;
+    if (this.lock) return false;
 
     this.model.calcKeyDown(options.keyRepeat, options.keySign, options.dot);
+    return true;
   };
 
 
   private handleDotData = (options: TOB) => {
     const key = options.key;
-    if (key != 'DotData') return;
+    if (key != 'DotData') return false;
     const type = options.type;
 
     this.view.createDotElem(type); // создаём точки
@@ -165,14 +169,14 @@ class Controller {
 
     // ----------  Input
     this.view.setValueInput(options.from, options.to, options.type);
-
+    return true;
   };
 
 
   private handleDotMove = (options: TOB) => {
     const key = options.key;
-    if (key != 'DotMove') return;
-    if (this.lock) return;
+    if (key != 'DotMove') return false;
+    if (this.lock) return false;
 
     this.model.calcDotPosition({
       type: options.type,
@@ -181,20 +185,21 @@ class Controller {
       clientXY: options.clientXY,
       shiftXY: options.shiftXY,
     });
-
+    return true;
   };
 
 
   private handleGridSnapData = (options: TOB) => {
     const key = options.key;
-    if (key != 'GridSnapData') return;
+    if (key != 'GridSnapData') return false;
 
     this.model.snapDot();
+    return true;
   };
 
   private handleGridData = (options: TOB) => {
     const key = options.key;
-    if (key != 'GridData') return;
+    if (key != 'GridData') return false;
 
     // проверить есть ли грид - если есть то удалить его. 
     // потому что любое изменение перестраивает всю шкалу. 
@@ -207,13 +212,13 @@ class Controller {
         this.view.createDomGrid();
       }
     }
-
+    return true;
   };
 
 
   private handleOrientationData = (options: TOB) => {
     const key = options.key;
-    if (key != 'OrientationData') return;
+    if (key != 'OrientationData') return false;
 
     this.view.setOrientation(options.orientation);
     const obj = this.model.getOptions();
@@ -228,28 +233,29 @@ class Controller {
       this.model.createMark();
       this.view.createDomGrid();
     }
-
+    return true;
   };
 
 
   private handleThemeData = (options: TOB) => {
     const key = options.key;
-    if (key != 'ThemeData') return;
+    if (key != 'ThemeData') return false;
 
     this.view.setTheme(options.theme);
+    return true;
   };
 
 
   private handleHintsData = (options: TOB) => {
     const key = options.key;
-    if (key != 'HintsData') return;
+    if (key != 'HintsData') return false;
 
     const wrapWH = this.view.getWrapWH();
     this.model.setWrapWH(wrapWH);
     this.view.setHintsData(options);
 
     this.ubdateHints(options.type, options.from, options.to);
-
+    return true;
   };
 
 
@@ -286,72 +292,81 @@ class Controller {
 
   private handleDisabledData = (options: TOB) => {
     const key = options.key;
-    if (key != 'DisabledData') return;
+    if (key != 'DisabledData') return false;
 
     this.lock = options.disabled;
     this.view.disabledRangeSlider(options.disabled);
+    return true;
   };
 
 
   private handleClickLine = (options: TOB) => {
     const key = options.key;
-    if (key != 'ClickLine') return;
-    if (this.lock) return;
+    if (key != 'ClickLine') return false;
+    if (this.lock) return false;
 
     this.model.clickLine(options.clientXY);
+    return true;
   };
 
 
   private handleSizeWrap = (options: TOB) => {
     const key = options.key;
-    if (key != 'SizeWrap') return;
+    if (key != 'SizeWrap') return false;
 
     this.model.setWrapWH(options.wrapWH);
+    return true;
   };
 
 
   private handleBarData = (options: TOB) => {
     const key = options.key;
-    if (key != 'BarData') return;
+    if (key != 'BarData') return false;
 
     this.view.setVisibleBar(options.bar);
     this.model.calcPositionDotFrom();
     this.model.calcPositionDotTo();
     const position = this.model.calcPositionBar();
     this.view.setBar(position.barX, position.widthBar);
+    return true;
   };
 
 
   private handleClickBar = (options: TOB) => {
     const key = options.key;
-    if (key != 'ClickBar') return;
-    if (this.lock) return;
+    if (key != 'ClickBar') return false;
+    if (this.lock) return false;
     this.model.clickBar(options.clientXY);
+    return true;
   };
 
 
   private handleCreateGrid = (options: TOB) => {
     const key = options.key;
-    if (key != 'CreateGrid') return;
+    if (key != 'CreateGrid') return false;
 
-    this.view.createMark(options.valueG, options.position);
+    this.view.createMark(options.valMark);
+
+    return true;
   };
 
 
   private handleClickMark = (options: TOB) => {
     const key = options.key;
-    if (key != 'ClickMark') return;
-    if (this.lock) return;
+    if (key != 'ClickMark') return false;
+    if (this.lock) return false;
 
     this.model.clickMark(options.valueG);
+    return true;
   };
 
 
   private handleSnapNum = (options: TOB) => {
     const key = options.key;
-    if (key != 'SnapNum') return;
+    if (key != 'SnapNum') return false;
 
     this.model.calcSnap(options.snapNum);
+    return true;
   };
 
 

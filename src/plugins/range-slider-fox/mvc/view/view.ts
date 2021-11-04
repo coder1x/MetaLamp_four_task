@@ -362,8 +362,11 @@ class View extends Observer {
     this.grid.createDomGrid();
   }
 
-  createMark(val: number, position: number) {
-    this.grid.createMark(val, position);
+  createMark(valMark: {
+    val: number,
+    position: number,
+  }[]) {
+    this.grid.createMark(valMark);
   }
 
 

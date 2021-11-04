@@ -27,8 +27,9 @@ class Handle extends Observer {
 
 
   createDomBase(type: string) {
-    if (type == 'double' && this.elemFrom && this.elemTo) return;
-    if (type == 'single' && this.elemFrom && !this.elemTo) return;
+    const double = type == 'double' ? true : false;
+    if (double && this.elemFrom && this.elemTo) return false;
+    if (!double && this.elemFrom && !this.elemTo) return false;
 
     const createElem = (teg: string, className: string[]) => {
       const elem = document.createElement(teg);
@@ -51,7 +52,7 @@ class Handle extends Observer {
       this.wrapElem.appendChild(this.elemFrom);
     }
 
-    if (type == 'double') {
+    if (double) {
       // не создаём если элемент уже существует
       if (!toE) {
         this.elemTo = createElem('span', [toClassName]);
@@ -64,6 +65,7 @@ class Handle extends Observer {
         this.elemTo = null;
       }
     }
+    return true;
   }
 
 
@@ -73,16 +75,17 @@ class Handle extends Observer {
     const convertStyle = (elem: CSSStyleDeclaration) => {
       let val = '';
       if (this.vertical) {
-        if (elem.left == '') return;
+        if (elem.left == '') return false;
         val = elem.left;
         elem.removeProperty('left');
         elem.bottom = val;
       } else {
-        if (elem.bottom == '') return;
+        if (elem.bottom == '') return false;
         val = elem.bottom;
         elem.removeProperty('bottom');
         elem.left = val;
       }
+      return true;
     };
 
     convertStyle(this.elemFrom.style);
@@ -110,7 +113,7 @@ class Handle extends Observer {
 
   setActions(type: string) {
     const eventFromTo = this.eventFromF && this.eventToF;
-    if (type == 'double' && eventFromTo) return;
+    if (type == 'double' && eventFromTo) return false;
     if (type == 'single' && eventFromTo) {
       this.eventToF = false;
     }
@@ -264,6 +267,7 @@ class Handle extends Observer {
       cancellation(this.elemFrom);
       this.eventFromF = true;
     }
+    return true;
   }
 
 

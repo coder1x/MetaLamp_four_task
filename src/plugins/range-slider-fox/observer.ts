@@ -10,6 +10,10 @@ interface insideOptions extends RangeSliderOptions {
   limitTo?: number,
   fromTo?: number,
   valueG?: number,
+  valMark?: {
+    val: number,
+    position: number,
+  }[],
   snapNum?: number[],
   wrapWH?: number,
   position?: number,
@@ -40,7 +44,7 @@ abstract class Observer {
 
   protected notifyOB(options: TOB) {
     for (let item of this.observers) {
-      item(options);
+      if (item(options)) break;
     }
   }
 }
