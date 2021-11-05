@@ -213,7 +213,7 @@ class Grid extends Observer {
 
     const wrapWH = size;
     let i = 0;
-    for (; i < this.masWH.length; i++) {
+    for (; i < this.masWH.length - 1; i++) {
       if (this.masWH[i] <= wrapWH)
         break;
     }

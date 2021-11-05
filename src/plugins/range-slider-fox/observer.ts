@@ -44,7 +44,9 @@ abstract class Observer {
 
   protected notifyOB(options: TOB) {
     for (let item of this.observers) {
-      if (item(options)) break;
+      item(options);
+      // if (item(options)) 
+      // break;
     }
   }
 }

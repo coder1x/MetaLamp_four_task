@@ -42,7 +42,7 @@ class Model extends Observer {
   private MIN_VAL = -999999999999999;
   private startConfFl: boolean;
   private ubdateConfFl: boolean;
-
+  onHandle: Function;
   onChange: Function;
   onUpdate: Function;
   onStart: Function;
@@ -53,6 +53,7 @@ class Model extends Observer {
     super();
     this.createProperties(this.defaultConfig(options));
   }
+
 
   private defaultConfig(options: RangeSliderOptions) {
 
@@ -84,20 +85,32 @@ class Model extends Observer {
     }, options);
   }
 
+
   private createProperties(options: RangeSliderOptions) {
-    // eslint-disable-next-line no-unused-vars
-    const emptyFun = (data: RangeSliderOptions) => { };
 
-    this.onChange = options.onChange ?? emptyFun;
-    this.onUpdate = options.onUpdate ?? emptyFun;
-    this.onStart = options.onStart ?? emptyFun;
-    this.onReset = options.onReset ?? emptyFun;
 
-    this.update(options);
+    this.onHandle = async () => {
+      // eslint-disable-next-line no-unused-vars
+      const emptyFun = (data: RangeSliderOptions) => { };
 
-    this.defaultData = this.getOptions();
-    this.onStart(this.defaultData);
+      this.onChange = options.onChange ?? emptyFun;
+      this.onUpdate = options.onUpdate ?? emptyFun;
+      this.onStart = options.onStart ?? emptyFun;
+      this.onReset = options.onReset ?? emptyFun;
+
+      await this.update(options);
+
+      this.defaultData = await this.getOptions();
+      await this.notifyOB({
+        key: 'Start',
+        ...this.defaultData,
+      });
+
+      await this.onStart(this.defaultData);
+    };
+
   }
+
 
   getOptions() {
     return {
@@ -125,13 +138,16 @@ class Model extends Observer {
     };
   }
 
+
   private getProperty<T, K extends keyof T>(obj: T, key: K) {
     return obj[key];
   }
 
+
   private setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
     obj[key] = value;
   }
+
 
   reset() {
     const op = this.defaultData;
@@ -145,93 +161,44 @@ class Model extends Observer {
       this.setProperty(this, key as keyof Model, val as this[keyof Model]);
     }
 
+    const keysMap = [
+      'RangeData',
+      'Step',
+      'DotData',
+      'GridSnapData',
+      'GridData',
+      'ThemeData',
+      'HintsData',
+      'DisabledData',
+      'BarData',
+      'OrientationData',
+      'Start'
+    ];
 
-    this.notifyOB({
-      key: 'RangeData',
-      min: op.min,
-      max: op.max,
-    });
+    for (let key of keysMap) {
+      this.notifyOB({
+        key: key,
+        ...op,
+      });
+    }
 
-    this.notifyOB({
-      key: 'Step',
-      step: op.step,
-      keyStepOne: op.keyStepOne,
-      keyStepHold: op.keyStepHold,
-    });
-
-    this.notifyOB({
-      key: 'DotData',
-      type: op.type,
-      from: op.from,
-      to: op.to,
-    });
-
-    this.notifyOB({
-      key: 'GridSnapData',
-      gridSnap: op.gridSnap,
-    });
-
-    this.notifyOB({
-      key: 'GridData',
-      grid: op.grid,
-      gridNum: op.gridNum,
-      gridStep: op.gridStep,
-      gridRound: op.gridRound,
-    });
-
-    this.notifyOB({
-      key: 'ThemeData',
-      theme: op.theme,
-    });
-
-    this.notifyOB({
-      key: 'HintsData',
-      tipPrefix: op.tipPrefix,
-      tipPostfix: op.tipPostfix,
-      tipMinMax: op.tipMinMax,
-      tipFromTo: op.tipFromTo,
-      min: op.min,
-      max: op.max,
-      from: op.from,
-      to: op.to,
-      type: op.type,
-    });
-
-    this.notifyOB({
-      key: 'DisabledData',
-      disabled: op.disabled,
-    });
-
-    this.notifyOB({
-      key: 'BarData',
-      bar: op.bar,
-    });
-
-    this.notifyOB({
-      key: 'OrientationData',
-      orientation: op.orientation,
-    });
-
-
-    this.notifyOB({
-      key: 'Start',
-      ...op,
-    });
   }
 
-  update(options: RangeSliderOptions) {
+
+  async update(options: RangeSliderOptions) {
+
     this.ubdateConfFl = true;
 
-    this.setRangeData(options);
-    this.setStep(options);
-    this.setDotData(options);
-    this.setGridData(options);
-    this.setGridSnapData(options);
-    this.setThemeData(options);
-    this.setHintsData(options);
-    this.setDisabledData(options);
-    this.setBarData(options);
-    this.setOrientationData(options);
+    await this.setRangeData(options);
+    await this.setStep(options);
+    await this.setDotData(options);
+    await this.setGridData(options);
+    await this.setGridSnapData(options);
+    await this.setThemeData(options);
+    await this.setBarData(options);
+    await this.setDisabledData(options);
+    await this.setHintsData(options);
+    await this.setOrientationData(options);
 
     if (this.startConfFl)
       this.onUpdate(this.getOptions());
@@ -258,6 +225,7 @@ class Model extends Observer {
   private isEmptu(data: PROP) {
     return (data ?? null) != null ? true : false;
   }
+
 
   private checkValue(data: PROP, str: string) {
     const _this = this;
@@ -659,34 +627,44 @@ class Model extends Observer {
     return this.max - this.min;
   }
 
+
   calcOnePercent() {
     this.valP = this.getRange() / 100;
   }
+
 
   //---------------------------------- Handle
   getDataDotFrom() {
     return +(this.min + (this.fromP * this.valP)).toFixed(0);
   }
 
+
   getDataDotTo() {
     return +(this.min + (this.toP * this.valP)).toFixed(0);
   }
 
+
   calcPositionDotFrom() {
+    console.log('calcPositionDotFrom');
+
     this.fromP = (this.from - this.min) / this.valP;  // позиция левой точки в процентах
     this.limitFrom = this.fromP;
     return this.fromP;
   }
 
+
   calcPositionDotTo() {
+    console.log('calcPositionDotTo');
     this.toP = (this.to - this.min) / this.valP;      // позиция правой точки в процентах
     this.limitTo = this.toP;
     return this.toP;
   }
 
+
   setWrapWH(val: number) {
     this.wrapWH = val;
   }
+
 
   calcDotPosition(options: CalcDotPositionOpt) {
     let fromFl = false;
@@ -807,8 +785,11 @@ class Model extends Observer {
   //---------------------------------- Hints
 
   private calcWidthP(width: number) {
+    console.log(this.wrapWH);
+
     return (width * 100 / this.wrapWH) / 2;
   }
+
 
   calcPositionTipFrom = (tipFrom: number) => {
     const tipFromP = this.calcWidthP(tipFrom - 4);
@@ -816,11 +797,13 @@ class Model extends Observer {
     return tipFromXY;
   }
 
+
   calcPositionTipTo = (tipTo: number) => {
     const tipToP = this.calcWidthP(tipTo - 4);
     const tipToXY = this.toP - tipToP;
     return tipToXY;
   }
+
 
   calcPositionTipSingle = (singleWH: number) => {
     const line = (this.toP - this.fromP) / 2;
@@ -941,6 +924,7 @@ class Model extends Observer {
       to: to,
     });
   }
+
 
   //---------------------------------- Line
   clickLine = (pointXY: number) => {

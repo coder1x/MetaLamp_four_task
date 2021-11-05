@@ -28,6 +28,14 @@ class Hints {
   constructor(elem: HTMLElement | Element, rsName: string) {
     this.rsName = rsName;
     this.rsTop = (elem as HTMLElement);
+    this.init();
+  }
+
+  private init() {
+    // this.createTipMinMax();
+    // this.createTipFrom();
+    // this.createTipTo();
+    // this.createTipSingle();
   }
 
   private createElem(teg: string, className: string[]) {
@@ -171,15 +179,22 @@ class Hints {
 
 
   setValTipMinMax(min: number, max: number) {
-    this.setData(this.tipMin, min);
-    this.setData(this.tipMax, max);
+    let T = '';
+    T += this.setData(this.tipMin, min);
+    T += ' | ';
+    T += this.setData(this.tipMax, max);
+    console.log('setValTipMinMax: ' + T);
   }
 
   setValTipFrom(from: number) {
-    this.setData(this.tipFrom, from);
+    let T = '';
+    T += this.setData(this.tipFrom, from);
+    console.log('setValTipFrom: ' + T);
   }
   setValTipTo(to: number) {
-    this.setData(this.tipTo, to);
+    let T = '';
+    T += this.setData(this.tipTo, to);
+    console.log('setValTipTo: ' + T);
   }
 
   setValTipSingle() {
@@ -189,7 +204,7 @@ class Hints {
     const br = '<br>';
     this.tipSingle.innerHTML = valFrom +
       (this.vertical ? br + '↕' + br : ' ⟷ ') + valTo;
-
+    console.log('setValTipSingle: ' + this.tipSingle.innerHTML);
   }
 
   // --------------------------- изменяем позицию
@@ -200,6 +215,7 @@ class Hints {
 
   setPositionFrom(coorXY: number) {
     if (!this.tipFrom) return false;
+    console.log('setPositionFrom');
     const st = this.tipFrom.style;
     this.setStylePosition(coorXY, st);
     this.checkVisibleTip();
@@ -209,6 +225,7 @@ class Hints {
 
   setPositionTo(coorXY: number) {
     if (!this.tipTo) return false;
+    console.log('setPositionTo');
     const st = this.tipTo.style;
     this.setStylePosition(coorXY, st);
     this.checkVisibleTip();
@@ -218,6 +235,7 @@ class Hints {
 
   setPositionSingle(coorXY: number) {
     if (!this.tipSingle) return false;
+    console.log('setPositionSingle');
     this.setValTipSingle();
     const st = this.tipSingle.style;
     this.setStylePosition(coorXY, st);

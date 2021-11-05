@@ -53,104 +53,77 @@ class Panel {
   }
 
 
-  setDataChange(data: RangeSliderOptions) {
+  private setValue(data: RangeSliderOptions) {
     this.objValues.setData({
-      min: data.min,
-      max: data.max,
-      from: data.from,
-      to: data.to,
-      step: data.step,
+      ...data
     });
+  }
 
+
+  private setCopyCode(data: RangeSliderOptions) {
     this.objCopyCode.setData({
-      type: data.type,
-      disabled: data.disabled,
-      orientation: data.orientation,
-      theme: data.theme,
-      min: data.min,
-      max: data.max,
-      from: data.from,
-      to: data.to,
-      step: data.step,
-      keyStepOne: data.keyStepOne,
-      keyStepHold: data.keyStepHold,
-      bar: data.bar,
-      grid: data.grid,
-      gridSnap: data.gridSnap,
-      gridNum: data.gridNum,
-      gridStep: data.gridStep,
-      gridRound: data.gridRound,
-      tipMinMax: data.tipMinMax,
-      tipFromTo: data.tipFromTo,
-      tipPrefix: data.tipPrefix,
-      tipPostfix: data.tipPostfix,
+      ...data
     });
   }
 
-  setData(data: RangeSliderOptions) {
-    this.setDataU(data);
-  }
 
-  setDataU(data: RangeSliderOptions) {
-    this.objValues.setData({
-      min: data.min,
-      max: data.max,
-      from: data.from,
-      to: data.to,
-      step: data.step,
-    });
-
+  private setDifferent(data: RangeSliderOptions) {
     this.objDifferent.setData({
-      type: data.type,
-      disabled: data.disabled,
-      orientation: data.orientation,
-      bar: data.bar,
-      theme: data.theme,
+      ...data
     });
+  }
 
+
+  private setKeyboardControl(data: RangeSliderOptions) {
     this.objKeyboardControl.setData({
-      keyStepOne: data.keyStepOne,
-      keyStepHold: data.keyStepHold,
+      ...data
     });
+  }
 
+
+  private setGrid(data: RangeSliderOptions) {
     this.objGrid.setData({
-      grid: data.grid,
-      gridSnap: data.gridSnap,
-      gridNum: data.gridNum,
-      gridStep: data.gridStep,
-      gridRound: data.gridRound,
+      ...data
     });
+  }
 
+
+  private setHints(data: RangeSliderOptions) {
     this.objHints.setData({
-      tipMinMax: data.tipMinMax,
-      tipFromTo: data.tipFromTo,
-      tipPrefix: data.tipPrefix,
-      tipPostfix: data.tipPostfix,
+      ...data
     });
+  }
 
-    this.objCopyCode.setData({
-      type: data.type,
-      disabled: data.disabled,
-      orientation: data.orientation,
-      theme: data.theme,
-      min: data.min,
-      max: data.max,
-      from: data.from,
-      to: data.to,
-      step: data.step,
-      keyStepOne: data.keyStepOne,
-      keyStepHold: data.keyStepHold,
-      bar: data.bar,
-      grid: data.grid,
-      gridSnap: data.gridSnap,
-      gridNum: data.gridNum,
-      gridStep: data.gridStep,
-      gridRound: data.gridRound,
-      tipMinMax: data.tipMinMax,
-      tipFromTo: data.tipFromTo,
-      tipPrefix: data.tipPrefix,
-      tipPostfix: data.tipPostfix,
-    });
+  private setDataS(data: RangeSliderOptions) {
+    this.setValue(data);
+    this.setCopyCode(data);
+    this.setDifferent(data);
+    this.setKeyboardControl(data);
+    this.setGrid(data);
+    this.setHints(data);
+  }
+
+  private setDataC(data: RangeSliderOptions) {
+    this.setValue(data);
+    this.setCopyCode(data);
+  }
+
+  private setDataU(data: RangeSliderOptions) {
+    this.setValue(data);
+    this.setCopyCode(data);
+    this.setDifferent(data);
+    this.setKeyboardControl(data);
+    this.setGrid(data);
+    this.setHints(data);
+  }
+
+  private setDataR(data: RangeSliderOptions) {
+    this.setValue(data);
+    this.setCopyCode(data);
+    this.setDifferent(data);
+    this.setKeyboardControl(data);
+    this.setGrid(data);
+    this.setHints(data);
   }
 
 
@@ -163,16 +136,16 @@ class Panel {
       ...options
       ,
       onStart: (data: RangeSliderOptions) => {
-        this.setData(data);
+        this.setDataS(data);
       },
       onChange: (data: RangeSliderOptions) => {
-        this.setDataChange(data);
+        this.setDataC(data);
       },
       onUpdate: (data: RangeSliderOptions) => {
         this.setDataU(data);
       },
       onReset: (data: RangeSliderOptions) => {
-        this.setData(data);
+        this.setDataR(data);
       }
     }).data('RangeSliderFox'); // вернёт объект для одного элемента
 
@@ -202,7 +175,7 @@ const objPanel = renderPanel('.panel');
 
 objPanel[0].createRangeSlider({
   type: 'double',
-  orientation: 'horizontal',
+  orientation: 'vertical',
   theme: 'fox',
   min: -120,
   max: 800,

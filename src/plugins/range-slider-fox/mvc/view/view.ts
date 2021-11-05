@@ -22,6 +22,7 @@ class View extends Observer {
   private bar: Bar;
   private grid: Grid;
   private objData: TOB;
+  onHandle: Function;
 
   // eslint-disable-next-line no-unused-vars
   constructor(public elem: Element, public numElem: Number) {
@@ -48,8 +49,7 @@ class View extends Observer {
     }
   }
 
-  private init() {
-
+  private attributesChange() {
     const options = new Map([
       ['type', 'type'],
       ['disabled', 'disabled'],
@@ -124,22 +124,24 @@ class View extends Observer {
     observer.observe(this.elem, {
       attributeFilter: masDataAttr,
     });
+  }
 
+  private init() {
 
+    this.onHandle = async () => {
 
-    // создаём базовые дом элементы. 
-    this.createDomBase();
+      await this.createDomBase(); // создаём базовые дом элементы. 
+      await this.setActions();  // вешаем события.
 
-    // вешаем события.
-    this.setActions();
+      this.handle = await new Handle(this.rsCenter, this.rsName);
+      this.hints = await new Hints(this.rsTop, this.rsName);
+      this.bar = await new Bar(this.rsCenter, this.rsName);
+      this.grid = await new Grid(this.rsBottom, this.rsName);
 
+      await this.createListeners();
+      await this.attributesChange();
+    };
 
-    this.handle = new Handle(this.rsCenter, this.rsName);
-    this.hints = new Hints(this.rsTop, this.rsName);
-    this.bar = new Bar(this.rsCenter, this.rsName);
-    this.grid = new Grid(this.rsBottom, this.rsName);
-
-    this.createListeners();
   }
 
   outDataAttr() {
@@ -177,6 +179,10 @@ class View extends Observer {
   }
 
   createDomBase() {
+
+    console.log('view createDomBase');
+
+
     const createElem = (teg: string, className: string[]) => {
       const elem = document.createElement(teg);
       for (let item of className) {
@@ -195,7 +201,25 @@ class View extends Observer {
     this.rsBottom = createElem('div', [this.rsName + '__bottom']);
     this.rsLine = createElem('span', [this.rsName + '__line']);
 
+
+
+    //  setTimeout(() => {
+
+
+    //});
+
+    // const observer = new MutationObserver(() => {
+    //   console.log();
+
+    // });
+
+    // observer.observe(this.rsCenter, {
+    //   childList: true,
+    // });
+
     this.rsCenter.appendChild(this.rsLine);
+
+    console.log(this.rsCenter.offsetHeight);
 
     this.rangeSlider.appendChild(this.rsTop);
     this.rangeSlider.appendChild(this.rsCenter);
@@ -205,6 +229,7 @@ class View extends Observer {
   }
 
   private sizeWrap() {
+
     let wrapWH = 0;
     if (this.vertical) {
       wrapWH = this.rsCenter.offsetHeight;
@@ -218,19 +243,21 @@ class View extends Observer {
     });
   }
 
-  setOrientation(str: string) {
+  async setOrientation(str: string) {
 
     const modif = this.rsName + '_vertical';
     const objP = this.rangeSlider.classList;
     this.vertical = str == 'vertical' ? true : false;
     this.vertical ? objP.add(modif) : objP.remove(modif);
 
-    this.sizeWrap();
 
-    this.handle.setOrientation(str);
-    this.hints.setOrientation(str);
-    this.bar.setOrientation(str);
-    this.grid.setOrientation(str);
+
+    await this.handle.setOrientation(str);
+    await this.hints.setOrientation(str);
+    await this.bar.setOrientation(str);
+    await this.grid.setOrientation(str);
+
+    await this.sizeWrap();
   }
 
   setActions() {
@@ -283,12 +310,12 @@ class View extends Observer {
 
     if (options.tipFromTo) {
       this.hints.createTipFrom();
-      this.hints.setValTipFrom(options.from);
+      //this.hints.setValTipFrom(options.from);
       if (options.type == 'double') {
         this.hints.createTipTo();
         this.hints.createTipSingle();
-        this.hints.setValTipTo(options.to);
-        this.hints.setValTipSingle();
+        //  this.hints.setValTipTo(options.to);
+        //  this.hints.setValTipSingle();
       }
     } else {
       this.hints.deleteTipFrom();
@@ -310,8 +337,9 @@ class View extends Observer {
     this.hints.setValTipMinMax(min, max);
   }
 
-  getWidthTip() {
-    this.sizeWrap();
+  getWidthTip(startFL: boolean) {
+    if (startFL)
+      this.sizeWrap();
     return this.hints.getWidthTip();
   }
 
@@ -321,6 +349,7 @@ class View extends Observer {
 
 
   ubdateTipValue(from: number, to: number, type: string) {
+    console.log('-------------------  ubdateTipValue');
 
     this.hints.setValTipFrom(from);
     if (type == 'double') {
@@ -331,6 +360,7 @@ class View extends Observer {
   }
 
   ubdateTipPosition(op: UbdateTip) {
+    console.log('-------------------  ubdateTipPosition');
     this.hints.setPositionFrom(op.fromXY);
     if (op.toXY && op.singleXY) {
       this.hints.setPositionTo(op.toXY);
