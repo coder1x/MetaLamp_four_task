@@ -179,22 +179,15 @@ class Hints {
 
 
   setValTipMinMax(min: number, max: number) {
-    let T = '';
-    T += this.setData(this.tipMin, min);
-    T += ' | ';
-    T += this.setData(this.tipMax, max);
-    console.log('setValTipMinMax: ' + T);
+    this.setData(this.tipMin, min);
+    this.setData(this.tipMax, max);
   }
 
   setValTipFrom(from: number) {
-    let T = '';
-    T += this.setData(this.tipFrom, from);
-    console.log('setValTipFrom: ' + T);
+    this.setData(this.tipFrom, from);
   }
   setValTipTo(to: number) {
-    let T = '';
-    T += this.setData(this.tipTo, to);
-    console.log('setValTipTo: ' + T);
+    this.setData(this.tipTo, to);
   }
 
   setValTipSingle() {
@@ -204,7 +197,6 @@ class Hints {
     const br = '<br>';
     this.tipSingle.innerHTML = valFrom +
       (this.vertical ? br + '↕' + br : ' ⟷ ') + valTo;
-    console.log('setValTipSingle: ' + this.tipSingle.innerHTML);
   }
 
   // --------------------------- изменяем позицию
@@ -215,7 +207,7 @@ class Hints {
 
   setPositionFrom(coorXY: number) {
     if (!this.tipFrom) return false;
-    console.log('setPositionFrom');
+
     const st = this.tipFrom.style;
     this.setStylePosition(coorXY, st);
     this.checkVisibleTip();
@@ -225,7 +217,7 @@ class Hints {
 
   setPositionTo(coorXY: number) {
     if (!this.tipTo) return false;
-    console.log('setPositionTo');
+
     const st = this.tipTo.style;
     this.setStylePosition(coorXY, st);
     this.checkVisibleTip();
@@ -235,8 +227,7 @@ class Hints {
 
   setPositionSingle(coorXY: number) {
     if (!this.tipSingle) return false;
-    console.log('setPositionSingle');
-    this.setValTipSingle();
+
     const st = this.tipSingle.style;
     this.setStylePosition(coorXY, st);
     return true;

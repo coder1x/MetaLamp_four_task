@@ -150,6 +150,7 @@ class Model extends Observer {
 
 
   reset() {
+
     const op = this.defaultData;
 
     if (this.startConfFl)
@@ -645,8 +646,6 @@ class Model extends Observer {
 
 
   calcPositionDotFrom() {
-    console.log('calcPositionDotFrom');
-
     this.fromP = (this.from - this.min) / this.valP;  // позиция левой точки в процентах
     this.limitFrom = this.fromP;
     return this.fromP;
@@ -654,7 +653,6 @@ class Model extends Observer {
 
 
   calcPositionDotTo() {
-    console.log('calcPositionDotTo');
     this.toP = (this.to - this.min) / this.valP;      // позиция правой точки в процентах
     this.limitTo = this.toP;
     return this.toP;
@@ -785,8 +783,6 @@ class Model extends Observer {
   //---------------------------------- Hints
 
   private calcWidthP(width: number) {
-    console.log(this.wrapWH);
-
     return (width * 100 / this.wrapWH) / 2;
   }
 

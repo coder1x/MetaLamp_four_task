@@ -169,6 +169,7 @@ class View extends Observer {
 
   private handleForwarding = (options: TOB) => {
     this.notifyOB({ ...options });
+    return true;
   };
 
 
@@ -179,9 +180,6 @@ class View extends Observer {
   }
 
   createDomBase() {
-
-    console.log('view createDomBase');
-
 
     const createElem = (teg: string, className: string[]) => {
       const elem = document.createElement(teg);
@@ -201,26 +199,7 @@ class View extends Observer {
     this.rsBottom = createElem('div', [this.rsName + '__bottom']);
     this.rsLine = createElem('span', [this.rsName + '__line']);
 
-
-
-    //  setTimeout(() => {
-
-
-    //});
-
-    // const observer = new MutationObserver(() => {
-    //   console.log();
-
-    // });
-
-    // observer.observe(this.rsCenter, {
-    //   childList: true,
-    // });
-
     this.rsCenter.appendChild(this.rsLine);
-
-    console.log(this.rsCenter.offsetHeight);
-
     this.rangeSlider.appendChild(this.rsTop);
     this.rangeSlider.appendChild(this.rsCenter);
     this.rangeSlider.appendChild(this.rsBottom);
@@ -249,8 +228,6 @@ class View extends Observer {
     const objP = this.rangeSlider.classList;
     this.vertical = str == 'vertical' ? true : false;
     this.vertical ? objP.add(modif) : objP.remove(modif);
-
-
 
     await this.handle.setOrientation(str);
     await this.hints.setOrientation(str);
@@ -337,8 +314,8 @@ class View extends Observer {
     this.hints.setValTipMinMax(min, max);
   }
 
-  getWidthTip(startFL: boolean) {
-    if (startFL)
+  getWidthTip(startFL: boolean, resetFL: boolean) {
+    if (startFL && !resetFL)
       this.sizeWrap();
     return this.hints.getWidthTip();
   }
@@ -349,7 +326,6 @@ class View extends Observer {
 
 
   ubdateTipValue(from: number, to: number, type: string) {
-    console.log('-------------------  ubdateTipValue');
 
     this.hints.setValTipFrom(from);
     if (type == 'double') {
@@ -360,7 +336,6 @@ class View extends Observer {
   }
 
   ubdateTipPosition(op: UbdateTip) {
-    console.log('-------------------  ubdateTipPosition');
     this.hints.setPositionFrom(op.fromXY);
     if (op.toXY && op.singleXY) {
       this.hints.setPositionTo(op.toXY);

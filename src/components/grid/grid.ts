@@ -131,10 +131,16 @@ class Grid {
       });
     });
 
-    this.snap.addEventListener('click', function () {
-      obj.update({
-        gridSnap: this.checked
-      });
+    this.snap.addEventListener('click', (e: Event) => {
+      const elem = e.target as HTMLInputElement;
+      if (this.grid.checked) {
+        obj.update({
+          gridSnap: elem.checked
+        });
+      } else {
+        e.preventDefault();
+      }
+
     });
 
   }

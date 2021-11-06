@@ -36,6 +36,7 @@ class Grid extends Observer {
 
 
   private init() {
+
     this.offOn = false;
     this.resizeF = false;
     this.indent = 4; // отступ в пикселях между числами на шкале
@@ -82,6 +83,7 @@ class Grid extends Observer {
 
 
   setAction(elem: HTMLElement) {
+
     elem.addEventListener('click', (e: Event) => {
       const mark = e.target as HTMLElement;
       //const typeElem = mark.constructor.name;

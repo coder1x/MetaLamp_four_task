@@ -31,6 +31,7 @@ interface TOB extends insideOptions {
 
 abstract class Observer {
   private observers: Function[] = [];
+  // lockOB: boolean = false;
 
   public subscribeOB(observer: Function) {
     if (!this.observers.includes(observer)) {
@@ -45,8 +46,6 @@ abstract class Observer {
   protected notifyOB(options: TOB) {
     for (let item of this.observers) {
       item(options);
-      // if (item(options)) 
-      // break;
     }
   }
 }
