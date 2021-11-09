@@ -1,5 +1,5 @@
 import { RangeSliderOptions } from '../../glob-interface';
-import { CalcDotPositionOpt, PROP } from './model.d';
+import { CalcDotPositionOpt, PROP, TP } from './model.d';
 import { Observer } from '../../observer';
 
 class Model extends Observer {
@@ -664,6 +664,29 @@ class Model extends Observer {
   }
 
 
+  private convertToPercent(options: TP) {
+    const { fl, clientXY, shiftXY, position, } = options;
+    const vertical = this.orientation == 'vertical';
+    const dotXY = clientXY - shiftXY;
+    let num = 0;
+
+    if (vertical) {
+      num = position - dotXY;
+    } else {
+      num = dotXY - position;
+    }
+    let percent = num * 100 / this.wrapWH;
+
+    if (fl) {
+      this.limitFrom = percent;
+    }
+    else {
+      this.limitTo = percent;
+    }
+    return percent;
+  }
+
+
   calcDotPosition(options: CalcDotPositionOpt) {
     let fromFl = false;
     let toFl = false;
@@ -671,24 +694,12 @@ class Model extends Observer {
 
     this.setWrapWH(options.wrapWH);
 
-    const vertical = this.orientation == 'vertical';
-    const dotXY = options.clientXY - options.shiftXY;
-    let num = 0;
-
-    if (vertical) {
-      num = options.position - dotXY;
-    } else {
-      num = dotXY - options.position;
-    }
-
-    let percent = num * 100 / this.wrapWH;
-
-    if (typeFrom) {
-      this.limitFrom = percent;
-    }
-    else {
-      this.limitTo = percent;
-    }
+    let percent = this.convertToPercent({
+      fl: typeFrom,
+      clientXY: options.clientXY,
+      shiftXY: options.shiftXY,
+      position: options.position,
+    });
 
     const limitDot = !(this.limitFrom > this.limitTo);
 
@@ -700,7 +711,7 @@ class Model extends Observer {
     if (typeF) {  // если одна точка
       this.fromP = percent;
       fromFl = true;
-    } else if (limitDot) { // если две точки и from меньше to
+    } else if (limitDot) {  // если две точки и from меньше to
       // в зависемости от того какая точка движется
       if (typeFrom) {
         this.fromP = percent;

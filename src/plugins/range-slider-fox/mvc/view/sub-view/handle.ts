@@ -1,6 +1,12 @@
-
-
 import { Observer } from '../../../observer';
+
+interface MD {
+  event: PointerEvent,
+  type: string,
+  shiftXY: number,
+}
+
+type mapKey = Map<string, string>;
 
 class Handle extends Observer {
 
@@ -110,6 +116,60 @@ class Handle extends Observer {
     }
   }
 
+  private moveDot = (options: MD) => {
+
+    const { event, type, shiftXY } = options;
+    const rect = this.wrapElem.getBoundingClientRect();
+    const wrap = this.wrapElem;
+    const fl = this.vertical;
+
+    const wrapWH = fl ? wrap.offsetHeight : wrap.offsetWidth;
+    const position = fl ? rect.bottom : rect.left;
+    const clientXY = fl ? event.clientY : event.clientX;
+
+    this.notifyOB({
+      key: 'DotMove',
+      type,  // какая точка 
+      wrapWH, // ширина или высота враппера  
+      position,  // координаты левого или нижнего края враппера
+      clientXY, // координаты точки 
+      shiftXY, // сдвиг = координаты точки минус координаты края этой точки.
+    });
+  };
+
+  private keyDown = (e: KeyboardEvent, directions: mapKey, dot: string) => {
+    const fl = (e.key == 'ArrowRight' || e.key == 'ArrowLeft');
+    if (this.vertical && fl || !this.vertical && !fl)
+      return {};
+
+    if (!directions.get(e.key)) return {};
+    e.preventDefault();
+    const repeat = e.repeat;
+    const sign = directions.get(e.key);
+
+    if (sign)
+      this.notifyOB({
+        key: 'DotKeyDown',
+        keyRepeat: repeat,
+        keySign: sign,
+        dot: dot,
+      });
+  };
+
+
+  private mouseDown = (event: PointerEvent, elem: HTMLElement) => {
+    event.preventDefault();
+    let shiftXY = 0;
+    const rect = elem.getBoundingClientRect();
+    if (this.vertical) {
+      shiftXY = event.clientY - rect.bottom;
+    } else {
+      shiftXY = event.clientX - rect.left;
+    }
+    elem.setPointerCapture(event.pointerId);
+    return shiftXY;
+  };
+
 
   setActions(type: string) {
     const eventFromTo = this.eventFromF && this.eventToF;
@@ -119,116 +179,48 @@ class Handle extends Observer {
     }
     let shiftXY = 0;
 
-
-    const keyDown = (e: KeyboardEvent) => {
-      const keyE = e as KeyboardEvent;
-      const directions = new Map();
-      directions.set('ArrowRight', '+');
-      directions.set('ArrowUp', '+');
-      directions.set('ArrowLeft', '-');
-      directions.set('ArrowDown', '-');
-
-      const fl = (keyE.key == 'ArrowRight' || keyE.key == 'ArrowLeft');
-      if (this.vertical && fl || !this.vertical && !fl)
-        return {};
-
-      if (!directions.get(keyE.key)) return {};
-      e.preventDefault();
-      const repeat = keyE.repeat;
-      const sign = directions.get(keyE.key);
-      return { repeat, sign };
-    };
+    const directions = new Map();
+    directions.set('ArrowRight', '+');
+    directions.set('ArrowUp', '+');
+    directions.set('ArrowLeft', '-');
+    directions.set('ArrowDown', '-');
 
     if (!this.eventFromF)
       this.elemFrom.addEventListener('keydown', (e: KeyboardEvent) => {
-        const { repeat, sign } = keyDown(e);
-        if (sign)
-          this.notifyOB({
-            key: 'DotKeyDown',
-            keyRepeat: repeat,
-            keySign: sign,
-            dot: 'from',
-          });
+        this.keyDown(e, directions, 'from');
       });
 
     if (this.elemTo && !this.eventToF)
       this.elemTo.addEventListener('keydown', (e: KeyboardEvent) => {
-        const { repeat, sign } = keyDown(e);
-        if (sign)
-          this.notifyOB({
-            key: 'DotKeyDown',
-            keyRepeat: repeat,
-            keySign: sign,
-            dot: 'to',
-          });
+        this.keyDown(e, directions, 'to');
       });
-
-
-    const moveDot = (event: PointerEvent, elem: HTMLElement, type: string) => {
-
-      let wrapWH = 0;
-      const rect = this.wrapElem.getBoundingClientRect();
-
-      let position = 0;
-      let clientXY = 0;
-
-      if (this.vertical) {
-        wrapWH = this.wrapElem.offsetHeight;
-        position = rect.bottom;
-        clientXY = event.clientY;
-      } else {
-        wrapWH = this.wrapElem.offsetWidth;
-        position = rect.left;
-        clientXY = event.clientX;
-      }
-
-      this.notifyOB({
-        key: 'DotMove',
-        type: type,  // какая точка 
-        wrapWH: wrapWH, // ширина или высота враппера  
-        position: position,  // координаты левого или нижнего края враппера
-        clientXY: clientXY, // координаты точки 
-        shiftXY: shiftXY, // сдвиг = координаты точки минус координаты края этой точки.
-      });
-    };
-
 
     const mouseMoveFrom = (event: PointerEvent) => {
-      moveDot(event, this.elemFrom, 'From');
+      this.moveDot({
+        event: event,
+        type: 'From',
+        shiftXY
+      });
     };
-
 
     const mouseUpFrom = () => {
       document.removeEventListener('pointerup', mouseUpFrom);
       document.removeEventListener('pointermove', mouseMoveFrom);
     };
 
-
     const mouseMoveTo = (event: PointerEvent) => {
       if (type == 'double')
-        moveDot(event, this.elemTo, 'To');
+        this.moveDot({
+          event: event,
+          type: 'To',
+          shiftXY
+        });
     };
-
 
     const mouseUpTo = () => {
       document.removeEventListener('pointerup', mouseUpTo);
       document.removeEventListener('pointermove', mouseMoveTo);
     };
-
-
-    const mouseDown = (event: PointerEvent, elem: HTMLElement) => {
-      event.preventDefault();
-      const rect = elem.getBoundingClientRect();
-
-      if (this.vertical) {
-        shiftXY = event.clientY - rect.bottom;
-      } else {
-        shiftXY = event.clientX - rect.left;
-      }
-
-      elem.setPointerCapture(event.pointerId);
-    };
-
 
     const cancellation = (elem: HTMLElement) => {
       elem.ondragstart = function () { return false; };
@@ -238,11 +230,10 @@ class Handle extends Observer {
     if (type == 'double') {
       if (!this.eventToF) {
         this.elemTo.addEventListener('pointerdown', (event: PointerEvent) => {
-
           this.elemTo.style.zIndex = '2';
           this.elemFrom.style.zIndex = '1';
 
-          mouseDown(event, this.elemTo);
+          shiftXY = this.mouseDown(event, this.elemTo);
           document.addEventListener('pointermove', mouseMoveTo);
           document.addEventListener('pointerup', mouseUpTo);
         });
@@ -254,12 +245,11 @@ class Handle extends Observer {
 
     if (!this.eventFromF) {
       this.elemFrom.addEventListener('pointerdown', (event: PointerEvent) => {
-
         if (this.elemTo)
           this.elemTo.style.zIndex = '1';
         this.elemFrom.style.zIndex = '2';
 
-        mouseDown(event, this.elemFrom);
+        shiftXY = this.mouseDown(event, this.elemFrom);
         document.addEventListener('pointermove', mouseMoveFrom);
         document.addEventListener('pointerup', mouseUpFrom);
       });
@@ -270,10 +260,7 @@ class Handle extends Observer {
     return true;
   }
 
-
 }
-
-
 
 
 export { Handle };

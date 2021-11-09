@@ -163,12 +163,17 @@ class Controller {
     // ----------  Hints
     if (type == 'double' && lockFl)
       this.view.toggleTipTo(options.to);
-    this.ubdateHints(options.type, options.from, options.to);
+
+    if (lockFl) {
+      this.ubdateHints(options.type, options.from, options.to);
+    }
 
 
     // ----------  Bar
-    const position = this.model.calcPositionBar();
-    this.view.setBar(position.barX, position.widthBar);
+    if (lockFl) {
+      const position = this.model.calcPositionBar();
+      this.view.setBar(position.barX, position.widthBar);
+    }
 
     // ----------  Input
     this.view.setValueInput(options.from, options.to, options.type);
@@ -262,6 +267,7 @@ class Controller {
 
 
   private async ubdateHints(type: string, from: number, to: number) {
+
     await this.view.ubdateTipValue(from, to, type);
     const objTip = await this.view.getWidthTip(this.startFL, this.resetFL);
 
@@ -281,7 +287,9 @@ class Controller {
         toXY,
         singleXY,
       });
+
     }
+    await this.view.checkVisibleTip();
 
   }
 

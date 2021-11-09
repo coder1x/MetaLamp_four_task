@@ -287,12 +287,9 @@ class View extends Observer {
 
     if (options.tipFromTo) {
       this.hints.createTipFrom();
-      //this.hints.setValTipFrom(options.from);
       if (options.type == 'double') {
         this.hints.createTipTo();
         this.hints.createTipSingle();
-        //  this.hints.setValTipTo(options.to);
-        //  this.hints.setValTipSingle();
       }
     } else {
       this.hints.deleteTipFrom();
@@ -324,15 +321,17 @@ class View extends Observer {
     this.hints.deleteTipTo();
   }
 
+  checkVisibleTip() {
+    this.hints.checkVisibleTip();
+  }
+
 
   ubdateTipValue(from: number, to: number, type: string) {
-
     this.hints.setValTipFrom(from);
     if (type == 'double') {
       this.hints.setValTipTo(to);
       this.hints.setValTipSingle();
     }
-
   }
 
   ubdateTipPosition(op: UbdateTip) {

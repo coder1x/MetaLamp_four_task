@@ -31,7 +31,6 @@ interface TOB extends insideOptions {
 
 abstract class Observer {
   private observers: Function[] = [];
-  // lockOB: boolean = false;
 
   public subscribeOB(observer: Function) {
     if (!this.observers.includes(observer)) {

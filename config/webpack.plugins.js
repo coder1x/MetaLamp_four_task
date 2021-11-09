@@ -85,11 +85,11 @@ module.exports = {
         },
         'twitter-site': {
           'name': 'twitter:site',
-          'content': 'https://thylacine.ru/'
+          'content': 'https://plugins.su/'
         },
         'twitter-image': {
           'name': 'twitter:image',
-          'content': 'https://thylacine.ru/social.webp'
+          'content': 'https://plugins.su/social.webp'
         },
         'og-type': {
           'property': 'og:type',
@@ -106,7 +106,7 @@ module.exports = {
         },
         'og-image': {
           'property': 'og:image',
-          'content': 'https://thylacine.ru/social.webp'
+          'content': 'https://plugins.su/social.webp'
         }
       },
     })),

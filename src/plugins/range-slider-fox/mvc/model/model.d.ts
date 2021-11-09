@@ -7,7 +7,14 @@ interface CalcDotPositionOpt {
   shiftXY: number
 }
 
+interface TP {
+  fl: boolean,
+  clientXY: number,
+  shiftXY: number,
+  position: number,
+}
+
 type PROP = number | string | boolean | undefined | null;
 
 
-export { CalcDotPositionOpt, PROP };
+export { CalcDotPositionOpt, PROP, TP };
