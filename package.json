@@ -8,7 +8,8 @@
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "buildM": "cross-env NODE_ENV=multisite webpack --mode production",
     "watch": "cross-env NODE_ENV=development webpack --mode development --watch",
-    "start": "cross-env NODE_ENV=development webpack serve --mode development"
+    "start": "cross-env NODE_ENV=development webpack serve --mode development",
+    "test": "jest"
   },
   "author": "coder1 <c.o.d.e.r.1@mail.ru>",
   "license": "ISC",
@@ -50,6 +51,7 @@
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.1",
     "image-webpack-loader": "^7.0.1",
+    "jest": "^27.3.1",
     "mini-css-extract-plugin": "^1.6.0",
     "node-sass": "^6.0.0",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
@@ -75,8 +77,10 @@
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@types/css-font-loading-module": "0.0.6",
+    "@types/jest": "^27.0.2",
     "@types/npm": "^2.0.32",
     "@types/webpack-env": "^1.16.2",
+    "eslint-plugin-jest": "^25.2.4",
     "focus-visible": "^5.2.0",
     "fox-favicon": "file:npm_plugins/fox-favicon",
     "fox-url-convertor": "file:npm_plugins/fox-url-convertor",
@@ -84,6 +88,8 @@
     "lodash": "^4.17.21",
     "normalize.css": "^8.0.1",
     "pug-html-loader": "^1.1.5",
+    "ts-jest": "^27.0.7",
+    "ts-node": "^10.4.0",
     "typescript": "^4.2.4"
   }
 }

@@ -8,7 +8,8 @@
     "sourceType": "module" // установите значение «script» (по умолчанию) или «module», если ваш код находится в модулях ECMAScript. 
   },
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "jest"
   ],
   "rules": {
     "no-unused-vars": "warn", // ругаться на неиспользуемые переменные.
@@ -30,7 +31,12 @@
         "ignoreRegExpLiterals": true,
         "code": 80
       }
-    ]
+    ],
+    "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error"
   },
   "extends": [
     // "plugin:@typescript-eslint/recommended",
@@ -44,6 +50,7 @@
     "browser": true,
     "node": true,
     "commonjs": true,
-    "jquery": true
+    "jquery": true,
+    "jest/globals": true
   }
 }
