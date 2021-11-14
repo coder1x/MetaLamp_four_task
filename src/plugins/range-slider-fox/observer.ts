@@ -35,11 +35,14 @@ abstract class Observer {
   public subscribeOB(observer: Function) {
     if (!this.observers.includes(observer)) {
       this.observers.push(observer);
+      return this.observers.length;
     }
+    return false;
   }
 
   public unsubscribeOB(observer: Function) {
     this.observers = this.observers.filter((item) => item !== observer);
+    return this.observers.length;
   }
 
   protected notifyOB(options: TOB) {
