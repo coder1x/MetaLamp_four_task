@@ -30,9 +30,8 @@ interface TOB extends insideOptions {
 }
 
 abstract class Observer {
-  private observers: Function[] = [];
 
-  public subscribeOB(observer: Function) {
+  subscribeOB(observer: Function) {
     if (!this.observers.includes(observer)) {
       this.observers.push(observer);
       return this.observers.length;
@@ -40,10 +39,12 @@ abstract class Observer {
     return false;
   }
 
-  public unsubscribeOB(observer: Function) {
+  unsubscribeOB(observer: Function) {
     this.observers = this.observers.filter((item) => item !== observer);
     return this.observers.length;
   }
+
+  private observers: Function[] = [];
 
   protected notifyOB(options: TOB) {
     for (let item of this.observers) {

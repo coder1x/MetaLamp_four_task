@@ -2,7 +2,6 @@ import { Observer } from '../../../observer';
 
 class Bar extends Observer {
 
-
   private rsCenter: HTMLElement;
   private rsName: string;
   private elemBar: HTMLElement;
@@ -19,16 +18,6 @@ class Bar extends Observer {
 
   setVisibleBar(bar: boolean) {
     this.bar = bar;
-  }
-
-
-  private getProperty<T, K extends keyof T>(obj: T, key: K) {
-    return obj[key];
-  }
-
-
-  private setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
-    obj[key] = value;
   }
 
 
@@ -78,15 +67,6 @@ class Bar extends Observer {
   }
 
 
-  private createElem(teg: string, className: string[]) {
-    const elem = document.createElement(teg);
-    for (let item of className) {
-      elem.classList.add(item);
-    }
-    return elem;
-  }
-
-
   createDomBar() {
     if (!this.bar && this.elemBar) {
       this.elemBar.remove();
@@ -128,6 +108,26 @@ class Bar extends Observer {
     }
     return true;
   }
+
+
+  private getProperty<T, K extends keyof T>(obj: T, key: K) {
+    return obj[key];
+  }
+
+
+  private setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
+    obj[key] = value;
+  }
+
+
+  private createElem(teg: string, className: string[]) {
+    const elem = document.createElement(teg);
+    for (let item of className) {
+      elem.classList.add(item);
+    }
+    return elem;
+  }
+
 }
 
 export { Bar };

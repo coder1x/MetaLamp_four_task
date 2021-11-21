@@ -23,10 +23,14 @@ class View extends Observer {
   private grid: Grid;
   private objData: TOB;
   onHandle: Function;
+  elem: Element;
+  numElem: Number;
 
-  // eslint-disable-next-line no-unused-vars
-  constructor(public elem: Element, public numElem: Number) {
+
+  constructor(elem: Element, numElem: Number) {
     super();
+    this.elem = elem;
+    this.numElem = numElem;
     this.rsName = 'range-slider-fox';
     this.wrapSlider = this.elem.parentElement;
 
@@ -49,101 +53,6 @@ class View extends Observer {
     }
   }
 
-  private attributesChange() {
-    const options = new Map([
-      ['type', 'type'],
-      ['disabled', 'disabled'],
-      ['orientation', 'orientation'],
-      ['theme', 'theme'],
-      ['min', 'min'],
-      ['max', 'max'],
-      ['from', 'from'],
-      ['to', 'to'],
-      ['step', 'step'],
-      ['key_step_one', 'keyStepOne'],
-      ['key_step_hold', 'keyStepHold'],
-      ['bar', 'bar'],
-      ['grid', 'grid'],
-      ['grid_snap', 'gridSnap'],
-      ['grid_num', 'gridNum'],
-      ['grid_step', 'gridStep'],
-      ['grid_round', 'gridRound'],
-      ['tip_min_max', 'tipMinMax'],
-    ]);
-
-    const mapOptions = new Map();
-
-    const getDataAttr = (item: string) => {
-      const attr = 'data-' + item;
-      if (this.elem.hasAttribute(attr)) {
-        const val = this.elem.getAttribute(attr);
-        const key = options.get(item);
-
-        const regNumber = /^-?\d*?[.]?\d*$/;
-        if (regNumber.test(val)) {
-          return [key, Number(val)];
-        }
-
-        const regBoolean = /^(true|false)$/;
-        if (regBoolean.test(val)) {
-          return [key, (val === 'true')];
-        }
-
-        return [key, val];
-      }
-    };
-
-    let masDataAttr = [];
-
-    for (let item of options.keys()) {
-      const data = getDataAttr(item);
-      if (data) {
-        const key = data[0];
-        const val = data[1];
-        mapOptions.set(key, val);
-        masDataAttr.push('data-' + item);
-      }
-    }
-
-    this.objData = Object.fromEntries(mapOptions);
-
-    let observer = new MutationObserver(mut => {
-      const attr = mut[0].attributeName;
-      const opt = attr.replace('data-', '');
-      const data = getDataAttr(opt);
-      if (data) {
-        const key = String(data[0]);
-        const val = data[1];
-        this.notifyOB({
-          key: 'DataAttributes',
-          [key]: val,
-        });
-      }
-    });
-
-    observer.observe(this.elem, {
-      attributeFilter: masDataAttr,
-    });
-  }
-
-  private init() {
-
-    this.onHandle = async () => {
-
-      await this.createDomBase(); // создаём базовые дом элементы. 
-      await this.setActions();  // вешаем события.
-
-      this.handle = await new Handle(this.rsCenter, this.rsName);
-      this.hints = await new Hints(this.rsTop, this.rsName);
-      this.bar = await new Bar(this.rsCenter, this.rsName);
-      this.grid = await new Grid(this.rsBottom, this.rsName);
-
-      await this.createListeners();
-      await this.attributesChange();
-    };
-
-  }
-
   outDataAttr() {
     if (Object.keys(this.objData).length != 0)
       this.notifyOB({
@@ -151,13 +60,6 @@ class View extends Observer {
         ...this.objData,
       });
   }
-
-  private createListeners() {
-    this.handle.subscribeOB(this.handleForwarding);
-    this.bar.subscribeOB(this.handleForwarding);
-    this.grid.subscribeOB(this.handleForwarding);
-  }
-
 
   disabledRangeSlider(flag: boolean) {
     const elem = this.wrapSlider as HTMLElement;
@@ -167,16 +69,12 @@ class View extends Observer {
   }
 
 
-  private handleForwarding = (options: TOB) => {
-    this.notifyOB({ ...options });
-    return true;
-  };
-
-
   getWrapWH() {
-    return (this.vertical ?
+    const size = (this.vertical ?
       this.rsCenter.offsetHeight :
       this.rsCenter.offsetWidth);
+
+    return size;
   }
 
   createDomBase() {
@@ -207,20 +105,6 @@ class View extends Observer {
     this.wrapSlider.appendChild(this.rangeSlider);
   }
 
-  private sizeWrap() {
-
-    let wrapWH = 0;
-    if (this.vertical) {
-      wrapWH = this.rsCenter.offsetHeight;
-    } else {
-      wrapWH = this.rsCenter.offsetWidth;
-    }
-
-    this.notifyOB({
-      key: 'SizeWrap',
-      wrapWH: wrapWH,
-    });
-  }
 
   async setOrientation(str: string) {
 
@@ -374,6 +258,132 @@ class View extends Observer {
   }[]) {
     this.grid.createMark(valMark);
   }
+
+
+  private attributesChange() {
+    const options = new Map([
+      ['type', 'type'],
+      ['disabled', 'disabled'],
+      ['orientation', 'orientation'],
+      ['theme', 'theme'],
+      ['min', 'min'],
+      ['max', 'max'],
+      ['from', 'from'],
+      ['to', 'to'],
+      ['step', 'step'],
+      ['key_step_one', 'keyStepOne'],
+      ['key_step_hold', 'keyStepHold'],
+      ['bar', 'bar'],
+      ['grid', 'grid'],
+      ['grid_snap', 'gridSnap'],
+      ['grid_num', 'gridNum'],
+      ['grid_step', 'gridStep'],
+      ['grid_round', 'gridRound'],
+      ['tip_min_max', 'tipMinMax'],
+    ]);
+
+    const mapOptions = new Map();
+
+    const getDataAttr = (item: string) => {
+      const attr = 'data-' + item;
+      if (this.elem.hasAttribute(attr)) {
+        const val = this.elem.getAttribute(attr);
+        const key = options.get(item);
+
+        const regNumber = /^-?\d*?[.]?\d*$/;
+        if (regNumber.test(val)) {
+          return [key, Number(val)];
+        }
+
+        const regBoolean = /^(true|false)$/;
+        if (regBoolean.test(val)) {
+          return [key, (val === 'true')];
+        }
+
+        return [key, val];
+      }
+    };
+
+    let masDataAttr = [];
+
+    for (let item of options.keys()) {
+      const data = getDataAttr(item);
+      if (data) {
+        const key = data[0];
+        const val = data[1];
+        mapOptions.set(key, val);
+        masDataAttr.push('data-' + item);
+      }
+    }
+
+    this.objData = Object.fromEntries(mapOptions);
+
+    let observer = new MutationObserver(mut => {
+      const attr = mut[0].attributeName;
+      const opt = attr.replace('data-', '');
+      const data = getDataAttr(opt);
+      if (data) {
+        const key = String(data[0]);
+        const val = data[1];
+        this.notifyOB({
+          key: 'DataAttributes',
+          [key]: val,
+        });
+      }
+    });
+
+    observer.observe(this.elem, {
+      attributeFilter: masDataAttr,
+    });
+  }
+
+  private init() {
+
+    this.onHandle = async () => {
+
+      await this.createDomBase(); // создаём базовые дом элементы. 
+      await this.setActions();  // вешаем события.
+
+      this.handle = await new Handle(this.rsCenter, this.rsName);
+      this.hints = await new Hints(this.rsTop, this.rsName);
+      this.bar = await new Bar(this.rsCenter, this.rsName);
+      this.grid = await new Grid(this.rsBottom, this.rsName);
+
+      await this.createListeners();
+      await this.attributesChange();
+    };
+
+  }
+
+
+  private createListeners() {
+    this.handle.subscribeOB(this.handleForwarding);
+    this.bar.subscribeOB(this.handleForwarding);
+    this.grid.subscribeOB(this.handleForwarding);
+  }
+
+
+  private handleForwarding = (options: TOB) => {
+    this.notifyOB({ ...options });
+    return true;
+  };
+
+
+  private sizeWrap() {
+
+    let wrapWH = 0;
+    if (this.vertical) {
+      wrapWH = this.rsCenter.offsetHeight;
+    } else {
+      wrapWH = this.rsCenter.offsetWidth;
+    }
+
+    this.notifyOB({
+      key: 'SizeWrap',
+      wrapWH: wrapWH,
+    });
+  }
+
 
 
 }

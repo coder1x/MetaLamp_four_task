@@ -18,7 +18,6 @@ class Handle extends Observer {
   private eventToF: boolean;
   private vertical: boolean;
 
-  // eslint-disable-next-line no-unused-vars
   constructor(rsCenter: HTMLElement, rsName: string) {
     super();
     this.rsName = rsName;
@@ -26,10 +25,6 @@ class Handle extends Observer {
     this.eventFromF = false;
     this.eventToF = false;
   }
-
-  private getElem = (elem: Element, str: string) => {
-    return elem.getElementsByClassName(str)[0] as HTMLElement;
-  };
 
 
   createDomBase(type: string) {
@@ -115,60 +110,6 @@ class Handle extends Observer {
       this.vertical ? to.bottom = val : to.left = val;
     }
   }
-
-  private moveDot = (options: MD) => {
-
-    const { event, type, shiftXY } = options;
-    const rect = this.wrapElem.getBoundingClientRect();
-    const wrap = this.wrapElem;
-    const fl = this.vertical;
-
-    const wrapWH = fl ? wrap.offsetHeight : wrap.offsetWidth;
-    const position = fl ? rect.bottom : rect.left;
-    const clientXY = fl ? event.clientY : event.clientX;
-
-    this.notifyOB({
-      key: 'DotMove',
-      type,  // какая точка 
-      wrapWH, // ширина или высота враппера  
-      position,  // координаты левого или нижнего края враппера
-      clientXY, // координаты точки 
-      shiftXY, // сдвиг = координаты точки минус координаты края этой точки.
-    });
-  };
-
-  private keyDown = (e: KeyboardEvent, directions: mapKey, dot: string) => {
-    const fl = (e.key == 'ArrowRight' || e.key == 'ArrowLeft');
-    if (this.vertical && fl || !this.vertical && !fl)
-      return {};
-
-    if (!directions.get(e.key)) return {};
-    e.preventDefault();
-    const repeat = e.repeat;
-    const sign = directions.get(e.key);
-
-    if (sign)
-      this.notifyOB({
-        key: 'DotKeyDown',
-        keyRepeat: repeat,
-        keySign: sign,
-        dot: dot,
-      });
-  };
-
-
-  private mouseDown = (event: PointerEvent, elem: HTMLElement) => {
-    event.preventDefault();
-    let shiftXY = 0;
-    const rect = elem.getBoundingClientRect();
-    if (this.vertical) {
-      shiftXY = event.clientY - rect.bottom;
-    } else {
-      shiftXY = event.clientX - rect.left;
-    }
-    elem.setPointerCapture(event.pointerId);
-    return shiftXY;
-  };
 
 
   setActions(type: string) {
@@ -259,6 +200,66 @@ class Handle extends Observer {
     }
     return true;
   }
+
+
+  private getElem = (elem: Element, str: string) => {
+    return elem.getElementsByClassName(str)[0] as HTMLElement;
+  };
+
+
+  private moveDot = (options: MD) => {
+
+    const { event, type, shiftXY } = options;
+    const rect = this.wrapElem.getBoundingClientRect();
+    const wrap = this.wrapElem;
+    const fl = this.vertical;
+
+    let wrapWH = fl ? wrap.offsetHeight : wrap.offsetWidth;
+    const position = fl ? rect.bottom : rect.left;
+    const clientXY = fl ? event.clientY : event.clientX;
+
+    this.notifyOB({
+      key: 'DotMove',
+      type,  // какая точка 
+      wrapWH, // ширина или высота враппера  
+      position,  // координаты левого или нижнего края враппера
+      clientXY, // координаты точки 
+      shiftXY, // сдвиг = координаты точки минус координаты края этой точки.
+    });
+  };
+
+  private keyDown = (e: KeyboardEvent, directions: mapKey, dot: string) => {
+    const fl = (e.key == 'ArrowRight' || e.key == 'ArrowLeft');
+    if (this.vertical && fl || !this.vertical && !fl)
+      return {};
+
+    if (!directions.get(e.key)) return {};
+    e.preventDefault();
+    const repeat = e.repeat;
+    const sign = directions.get(e.key);
+
+    if (sign)
+      this.notifyOB({
+        key: 'DotKeyDown',
+        keyRepeat: repeat,
+        keySign: sign,
+        dot: dot,
+      });
+  };
+
+
+  private mouseDown = (event: PointerEvent, elem: HTMLElement) => {
+    event.preventDefault();
+    let shiftXY = 0;
+    const rect = elem.getBoundingClientRect();
+    if (this.vertical) {
+      shiftXY = event.clientY - rect.bottom;
+    } else {
+      shiftXY = event.clientX - rect.left;
+    }
+    elem.setPointerCapture(event.pointerId);
+    return shiftXY;
+  };
 
 }
 

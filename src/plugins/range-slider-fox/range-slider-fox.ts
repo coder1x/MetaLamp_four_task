@@ -1,7 +1,6 @@
 import { Controller, Model, View } from './mvc/controller/controller';
 
-// eslint-disable-next-line no-undef
-$.fn.RangeSliderFox = function (options): JQuery {
+$.fn.RangeSliderFox = function (options) {
   return this.each(function (i: number, el: Element) {
     if (!$.data(el, 'RangeSliderFox')) {
       $.data(
@@ -12,3 +11,6 @@ $.fn.RangeSliderFox = function (options): JQuery {
     }
   });
 };
+
+const _$ = $;
+export { _$ };

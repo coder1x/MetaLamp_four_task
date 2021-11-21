@@ -26,36 +26,9 @@ class Grid extends Observer {
   }
 
 
-  private createElem(teg: string, className: string[]) {
-    const elem = document.createElement(teg);
-    for (let item of className) {
-      elem.classList.add(item);
-    }
-    return elem;
-  }
-
-
-  private init() {
-
-    this.offOn = false;
-    this.resizeF = false;
-    this.indent = 4; // отступ в пикселях между числами на шкале
-    this.elemGrid = this.createElem('div', [this.rsName + '__grid']);
-
-    const observer = new MutationObserver(() => {
-      this.shapingMark();
-    });
-
-    observer.observe(this.rsBottom, {
-      childList: true,
-    });
-  }
-
-
   setOrientation(str: string) {
     this.vertical = str == 'vertical' ? true : false;
   }
-
 
   getOrientation() {
     const width = this.rsBottom.offsetWidth;
@@ -113,6 +86,32 @@ class Grid extends Observer {
         this.elemGrid.firstChild.remove();
       }
     }
+  }
+
+
+  private createElem(teg: string, className: string[]) {
+    const elem = document.createElement(teg);
+    for (let item of className) {
+      elem.classList.add(item);
+    }
+    return elem;
+  }
+
+
+  private init() {
+
+    this.offOn = false;
+    this.resizeF = false;
+    this.indent = 4; // отступ в пикселях между числами на шкале
+    this.elemGrid = this.createElem('div', [this.rsName + '__grid']);
+
+    const observer = new MutationObserver(() => {
+      this.shapingMark();
+    });
+
+    observer.observe(this.rsBottom, {
+      childList: true,
+    });
   }
 
 

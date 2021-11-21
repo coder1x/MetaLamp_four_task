@@ -213,5 +213,3 @@ objPanel[2].createRangeSlider({
 
 
 
-
-

@@ -10,11 +10,35 @@ class Controller {
   private resetFL = false;
   private lock = false;
   private funAtrr: Function = () => { };
+  private model: Model;
+  private view: View;
 
-  // eslint-disable-next-line no-unused-vars
-  constructor(private model: Model, private view: View) {
+
+  constructor(model: Model, view: View) {
+    this.model = model;
+    this.view = view;
     this.init();
   }
+
+
+  reset = async () => {
+    if (this.lock) return false;
+    this.resetFL = await true;
+    await this.model.reset();
+    this.resetFL = false;
+    return true;
+  }
+
+
+  update = (options: RangeSliderOptions) => {
+    const lock = options.disabled !== false;
+    const orientation = typeof options.orientation !== 'string';
+    if (lock && orientation)
+      if (this.lock) return false;
+    this.model.update(options);
+    return true;
+  }
+
 
   private async init() {
     await this.createListeners();
@@ -59,24 +83,6 @@ class Controller {
     ];
 
     subscribe(this.view, SView);
-  }
-
-
-  reset = async () => {
-    if (this.lock) return false;
-    this.resetFL = await true;
-    await this.model.reset();
-    this.resetFL = false;
-  }
-
-  // eslint-disable-next-line no-unused-vars
-  update = (options: RangeSliderOptions) => {
-    const lock = options.disabled !== false;
-    const orientation = typeof options.orientation !== 'string';
-    if (lock && orientation)
-      if (this.lock) return false;
-    this.model.update(options);
-    return true;
   }
 
 
