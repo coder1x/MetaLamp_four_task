@@ -66,7 +66,7 @@ class Different {
 
   setData(options: OP) {
     const { disabled, bar, type, orientation, theme } = options;
-    let orientF: boolean;
+
 
     if (this.disabledD != disabled) {
       this.disabled.checked = disabled;
@@ -84,20 +84,23 @@ class Different {
     }
 
     if (this.orientationD != orientation) {
-      orientF = orientation == 'horizontal' ? false : true;
+      const orientF = orientation == 'horizontal' ? false : true;
       this.orientation.checked = orientF;
       this.orientationD = orientation;
+
+      if (orientF) {
+        this.panel.classList.add(this.modif);
+      } else {
+        this.panel.classList.remove(this.modif);
+      }
     }
 
     if (this.themeD != theme) {
       this.select.update(String(theme));
       this.themeD = theme;
     }
-
-    if (orientF) {
-      this.panel.classList.add(this.modif);
-    }
   }
+
 
   setAction(obj: any) {
     const modif = this.modif;
@@ -105,9 +108,6 @@ class Different {
 
     this.reset.addEventListener('click', () => {
       obj.reset();
-
-      const fl = this.orientation.checked;
-      fl ? objP.add(modif) : objP.remove(modif);
     });
 
     this.select.onChange = (val: string) => {
@@ -134,8 +134,6 @@ class Different {
         type: val
       });
     });
-
-
 
     this.orientation.addEventListener('click', function () {
       const val = this.checked ? 'vertical' : 'horizontal';
