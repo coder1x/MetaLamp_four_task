@@ -89,9 +89,34 @@ describe('Test Controller API', () => {
   test(' Input data ', () => {
 
     $(domC).RangeSliderFox({
-      // eslint-disable-next-line no-unused-vars
-      onStart: (data: RangeSliderOptions) => {
+      onStart: () => {
         expect(domC.value).toBe('1');
+      },
+    }).data('RangeSliderFox');
+
+  });
+
+
+  test(' Data-Attributes dynamically', () => {
+
+    $(domC).RangeSliderFox({
+      onStart: (data: RangeSliderOptions) => {
+        expect(data.from).toBe(1);
+        domC.setAttribute('data-from', '9');
+      },
+      onUpdate: (data: RangeSliderOptions) => {
+        expect(data.from).toBe(9);
+      },
+    }).data('RangeSliderFox');
+
+  });
+
+  test(' Data-Attributes static', async () => {
+
+    await domC.setAttribute('data-from', '5');
+    await $(domC).RangeSliderFox({
+      onUpdate: (data: RangeSliderOptions) => {
+        expect(data.from).toBe(5);
       },
     }).data('RangeSliderFox');
 

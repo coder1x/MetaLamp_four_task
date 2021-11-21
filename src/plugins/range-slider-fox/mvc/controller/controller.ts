@@ -104,6 +104,10 @@ class Controller {
     this.funAtrr = () => {
       this.update(options);
     };
+
+    if (this.startFL)
+      this.funAtrr();
+
     return true;
   };
 

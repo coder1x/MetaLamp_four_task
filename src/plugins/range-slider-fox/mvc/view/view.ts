@@ -299,7 +299,6 @@ class View extends Observer {
         if (regBoolean.test(val)) {
           return [key, (val === 'true')];
         }
-
         return [key, val];
       }
     };
@@ -312,8 +311,8 @@ class View extends Observer {
         const key = data[0];
         const val = data[1];
         mapOptions.set(key, val);
-        masDataAttr.push('data-' + item);
       }
+      masDataAttr.push('data-' + item);
     }
 
     this.objData = Object.fromEntries(mapOptions);
@@ -322,6 +321,7 @@ class View extends Observer {
       const attr = mut[0].attributeName;
       const opt = attr.replace('data-', '');
       const data = getDataAttr(opt);
+
       if (data) {
         const key = String(data[0]);
         const val = data[1];

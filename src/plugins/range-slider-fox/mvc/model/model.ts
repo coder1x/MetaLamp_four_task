@@ -140,7 +140,7 @@ class Model extends Observer {
 
 
   calcOnePercent() {
-    this.valP = this.getRange() / 100;
+    return this.valP = this.getRange() / 100;
   }
 
 
@@ -170,7 +170,7 @@ class Model extends Observer {
 
 
   setWrapWH(val: number) {
-    this.wrapWH = val;
+    return this.wrapWH = val;
   }
 
 
@@ -256,7 +256,7 @@ class Model extends Observer {
       from: from,
       to: to,
     });
-    return true;
+    return { from: from, to: to };
   }
 
 
@@ -273,23 +273,19 @@ class Model extends Observer {
       }
     }
     mas.push(this.max);
-    this.stepNum = mas;
-    return true;
+    return this.stepNum = mas;
   }
-
 
 
   calcPositionTipFrom = (tipFrom: number) => {
     const tipFromP = this.calcWidthP(tipFrom - 4);
-    const tipFromXY = this.fromP - tipFromP;
-    return tipFromXY;
+    return this.fromP - tipFromP;
   }
 
 
   calcPositionTipTo = (tipTo: number) => {
     const tipToP = this.calcWidthP(tipTo - 4);
-    const tipToXY = this.toP - tipToP;
-    return tipToXY;
+    return this.toP - tipToP;
   }
 
 
@@ -297,10 +293,8 @@ class Model extends Observer {
     const line = (this.toP - this.fromP) / 2;
     const centerFromTo = this.fromP + line;
     const tipSingleP = this.calcWidthP(singleWH);
-    const center = centerFromTo - tipSingleP;
-    return center;
+    return centerFromTo - tipSingleP;
   }
-
 
 
   createMark() {
@@ -336,6 +330,8 @@ class Model extends Observer {
       key: 'CreateGrid',
       valMark: masMark,
     });
+
+    return masMark;
   }
 
   //---------------------------------- Bar
@@ -398,6 +394,7 @@ class Model extends Observer {
       from: from,
       to: to,
     });
+    return { from: from, to: to };
   }
 
 
@@ -448,6 +445,8 @@ class Model extends Observer {
       from: from,
       to: to,
     });
+
+    return { from: from, to: to };
   }
 
 
@@ -481,7 +480,7 @@ class Model extends Observer {
     });
 
     this.onChange(this.getOptions());
-    return true;
+    return { from: this.from, to: this.to };
   }
 
   calcSnap = (snapNum: number[]) => {
@@ -489,7 +488,7 @@ class Model extends Observer {
     this.snapNum.push(this.min, ...snapNum, this.max);
     this.stepGrid = this.snapNum[1] - this.snapNum[0];
 
-    this.snapDot();
+    return this.snapDot();
   }
 
 
@@ -580,6 +579,8 @@ class Model extends Observer {
       from: from,
       to: to,
     });
+
+    return { from: from, to: to };
   }
 
 

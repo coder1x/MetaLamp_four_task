@@ -78,17 +78,17 @@ describe('Test Model API', () => {
   });
 
 
-  test(' calcOnePercent ', async () => {
+  // test(' calcOnePercent ', async () => {
 
-    const model = await new Model({});
-    await model.onHandle();
+  //   const model = await new Model({});
+  //   await model.onHandle();
 
-    const conf = await model.getOptions();
+  //   const conf = await model.getOptions();
 
-    console.log(conf.max);
+  //   console.log(conf.max);
 
 
-  });
+  // });
 
 
 
