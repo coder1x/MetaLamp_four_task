@@ -47,8 +47,6 @@ class KeyboardControl {
       this.keyStepOneD = keyStepOne;
     }
 
-    console.log(keyStepHold);
-
     if (this.keyStepHoldD != keyStepHold) {
       this.keyStepHold.value = String(keyStepHold);
       this.keyStepHoldD = keyStepHold;

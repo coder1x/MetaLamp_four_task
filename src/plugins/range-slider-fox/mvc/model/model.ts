@@ -143,17 +143,7 @@ class Model extends Observer {
     return this.valP = this.getRange() / 100;
   }
 
-
   //---------------------------------- Handle
-  getDataDotFrom() {
-    return +(this.min + (this.fromP * this.valP)).toFixed(0);
-  }
-
-
-  getDataDotTo() {
-    return +(this.min + (this.toP * this.valP)).toFixed(0);
-  }
-
 
   calcPositionDotFrom() {
     this.fromP = (this.from - this.min) / this.valP;  // позиция левой точки в процентах
@@ -175,6 +165,7 @@ class Model extends Observer {
 
 
   calcDotPosition(options: CalcDotPositionOpt) {
+
     let fromFl = false;
     let toFl = false;
     const typeFrom = options.type == 'From';
@@ -258,9 +249,6 @@ class Model extends Observer {
     });
     return { from: from, to: to };
   }
-
-
-
 
 
   calcStep() {
@@ -455,20 +443,6 @@ class Model extends Observer {
     return { from: from, to: to };
   }
 
-
-  getValStep(val: number, step: number, mas: number[]) {
-    for (let i = 0; i < mas.length; i++) {
-      const item = mas[i];
-      if (val < item) {
-        const ost = step - (item - val);
-        return ost < step / 2 ?
-          mas[i ? i - 1 : i] : item;
-      }
-    }
-    return val;
-  }
-
-
   snapDot() {
     if (!this.gridSnap) return false;
 
@@ -592,6 +566,27 @@ class Model extends Observer {
     });
 
     return { from: from, to: to };
+  }
+
+
+  private getValStep(val: number, step: number, mas: number[]) {
+    for (let i = 0; i < mas.length; i++) {
+      const item = mas[i];
+      if (val < item) {
+        const ost = step - (item - val);
+        return ost < step / 2 ?
+          mas[i ? i - 1 : i] : item;
+      }
+    }
+    return val;
+  }
+
+  private getDataDotFrom() {
+    return +(this.min + (this.fromP * this.valP)).toFixed(0);
+  }
+
+  private getDataDotTo() {
+    return +(this.min + (this.toP * this.valP)).toFixed(0);
   }
 
   private fixedNum(num: number, len: number) {
