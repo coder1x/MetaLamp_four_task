@@ -67,6 +67,8 @@ describe('Test Model API', () => {
       },
       onUpdate: () => {
         const conf = model.getOptions();
+        console.log(conf);
+
         expect(conf.type).toBe('double');
         expect(conf.from).toBeCloseTo(5);
         expect(conf.to).toBeCloseTo(9);
@@ -78,19 +80,34 @@ describe('Test Model API', () => {
   });
 
 
-  // test(' calcOnePercent ', async () => {
+  test(' calcOnePercent ', () => {
 
-  //   const model = await new Model({});
-  //   await model.onHandle();
+    const max = [1200, 134.67, 800];
+    const min = [-120, 23.54, 0];
+    const result = [13.2, 1.1113, 8];
 
-  //   const conf = await model.getOptions();
+    const test = async (min: number, max: number, result: number) => {
+      const model = await new Model({
+        min,
+        max
+      });
+      await model.onHandle();
+      expect(model.calcOnePercent()).toBeCloseTo(result);
+    };
 
-  //   console.log(conf.max);
+    for (let i = 0; i < result.length; i++) {
+      test(min[i], max[i], result[i]);
+    }
 
+  });
 
-  // });
+  test(' getDataDotFrom ', async () => {
 
+    // const model = await new Model({});
+    // await model.onHandle();
+    // expect(model.calcOnePercent()).toBeCloseTo(0.1);
 
+  });
 
 
 

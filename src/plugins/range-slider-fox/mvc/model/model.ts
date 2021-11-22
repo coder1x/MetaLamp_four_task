@@ -170,7 +170,7 @@ class Model extends Observer {
 
 
   setWrapWH(val: number) {
-    return this.wrapWH = val;
+    return this.wrapWH = val ? val : 319;
   }
 
 
@@ -260,19 +260,25 @@ class Model extends Observer {
   }
 
 
+
+
+
   calcStep() {
     if (!this.step) return false;
 
+    const len = this.trimFraction(this.step);
     let mas: number[] = [];
-    let kol = this.min + this.step;
+    let kol = this.fixedNum((this.min + this.step), len);
     mas.push(this.min);
-    for (let i = this.min; i < this.max; i++) {
-      if (kol == i) {
+    for (let i = this.min; i <= this.max;) {
+      i = this.fixedNum((i += this.step), len);
+      if (kol == i && i < this.max) {
         mas.push(kol);
-        kol += this.step;
+        kol = this.fixedNum((kol += this.step), len);
       }
     }
     mas.push(this.max);
+
     return this.stepNum = mas;
   }
 
@@ -549,10 +555,14 @@ class Model extends Observer {
       }
     } else {
       const value = (step: number) => {
+        const len = this.trimFraction(step);
+
         if (dotF) {
-          from = !signF ? from - step : from + step;
+          const num = !signF ? from - step : from + step;
+          from = this.fixedNum(num, len);
         } else {
-          to = !signF ? to - step : to + step;
+          const num = !signF ? to - step : to + step;
+          to = this.fixedNum(num, len);
         }
         if (this.type == 'double') {
           if (from > to && dotF) from = to;
@@ -565,7 +575,8 @@ class Model extends Observer {
           this.keyStepOne = 1;
         }
         if (!this.keyStepHold && this.keyStepOne) {
-          this.keyStepHold = this.keyStepOne;
+          const len = this.trimFraction(this.keyStepOne);
+          this.keyStepHold = this.fixedNum(this.keyStepOne, len);
         }
         repeat ? value(this.keyStepHold) : value(this.keyStepOne);
       } else if (this.step) {
@@ -583,6 +594,25 @@ class Model extends Observer {
     return { from: from, to: to };
   }
 
+  private fixedNum(num: number, len: number) {
+    let temp = '';
+    let fl = false;
+    let k = 0;
+    for (let item of String(num)) {
+      if (item == '.') fl = true;
+      temp += item;
+      if (fl) ++k;
+      if (k == len + 1) break;
+    }
+    return parseFloat(temp);
+  }
+
+  private trimFraction(num: number) {
+    const integer = Math.trunc(num);
+    const str = String(num).replace(integer + '.', '');
+    const len = str.length;
+    return len;
+  }
 
   private defaultConfig(options: RangeSliderOptions) {
 
@@ -904,6 +934,9 @@ class Model extends Observer {
     if (gridStep > long) {
       gridStep = long;
     }
+
+    if (gridStep > this.max)
+      gridStep = this.max;
 
     if (!gridNum && !gridStep) {
       gridNum = 4;

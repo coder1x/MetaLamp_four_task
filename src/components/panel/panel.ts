@@ -106,6 +106,7 @@ class Panel {
   private setDataC(data: RangeSliderOptions) {
     this.setValue(data);
     this.setCopyCode(data);
+    this.setKeyboardControl(data);
   }
 
   private setDataU(data: RangeSliderOptions) {
