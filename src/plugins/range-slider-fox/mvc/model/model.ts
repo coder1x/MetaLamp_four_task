@@ -166,6 +166,9 @@ class Model extends Observer {
 
   calcDotPosition(options: CalcDotPositionOpt) {
 
+    //console.log(options);
+
+
     let fromFl = false;
     let toFl = false;
     const typeFrom = options.type == 'From';
@@ -343,25 +346,26 @@ class Model extends Observer {
 
 
   clickBar = (pointXY: number) => {
+
     const vertical = this.orientation == 'vertical';
     const oneP = this.wrapWH / 100; // один процент от всей школы
 
     const verticalC = (valP: number) => {
       let remainderP = 100 - valP;
       pointXY = remainderP * oneP + pointXY;
-      this.clickLine(pointXY);
+      return this.clickLine(pointXY);
     };
 
     if (this.type == 'single') {
       if (vertical)
-        verticalC(this.fromP);
+        return verticalC(this.fromP);
       else
-        this.clickLine(pointXY);
+        return this.clickLine(pointXY);
     } else {
       if (vertical)
-        verticalC(this.toP);
+        return verticalC(this.toP);
       else
-        this.clickLine(this.fromP * oneP + pointXY);
+        return this.clickLine(this.fromP * oneP + pointXY);
     }
   }
 
