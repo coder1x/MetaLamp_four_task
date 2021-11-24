@@ -25,6 +25,16 @@ describe('Range Slider Fox - JQuery Objects', () => {
     expect(propertyFL).toBeTruthy();
   });
 
+
+  test(' initialization ', () => {
+    const wrapC = document.createElement('div');
+    const domC = document.createElement('input');
+    wrapC.appendChild(domC);
+
+    const obj = $(domC).RangeSliderFox({}).data('RangeSliderFox');
+    expect(obj).toBeDefined();
+  });
+
 });
 
 

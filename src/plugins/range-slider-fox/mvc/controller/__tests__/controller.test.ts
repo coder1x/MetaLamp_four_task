@@ -1,6 +1,5 @@
 import { RangeSliderOptions } from '../../../glob-interface';
-import { _$ as $ } from '../../../range-slider-fox';
-
+import { Controller, Model, View } from '../controller';
 
 describe('Test Controller API', () => {
 
@@ -29,7 +28,7 @@ describe('Test Controller API', () => {
 
   test('onStart, onUpdate, ubdate, onReset, reset ', () => {
 
-    const objС = $(domC).RangeSliderFox({
+    const objС = new Controller(new Model({
       onStart: (data: RangeSliderOptions) => {
 
         expect(data).toStrictEqual(defaultData);
@@ -82,24 +81,21 @@ describe('Test Controller API', () => {
       onReset: (data: RangeSliderOptions) => {
         expect(data).toStrictEqual(defaultData);
       }
-    }).data('RangeSliderFox');
+    }), new View(domC, 1));
 
   });
 
   test(' Input data ', () => {
-
-    $(domC).RangeSliderFox({
+    new Controller(new Model({
       onStart: () => {
         expect(domC.value).toBe('1');
       },
-    }).data('RangeSliderFox');
-
+    }), new View(domC, 1));
   });
 
 
   test(' Data-Attributes dynamically', () => {
-
-    $(domC).RangeSliderFox({
+    new Controller(new Model({
       onStart: (data: RangeSliderOptions) => {
         expect(data.from).toBe(1);
         domC.setAttribute('data-from', '9');
@@ -107,20 +103,16 @@ describe('Test Controller API', () => {
       onUpdate: (data: RangeSliderOptions) => {
         expect(data.from).toBe(9);
       },
-    }).data('RangeSliderFox');
-
+    }), new View(domC, 1));
   });
 
   test(' Data-Attributes static', async () => {
-
     await domC.setAttribute('data-from', '5');
-    await $(domC).RangeSliderFox({
+    new Controller(new Model({
       onUpdate: (data: RangeSliderOptions) => {
         expect(data.from).toBe(5);
       },
-    }).data('RangeSliderFox');
-
+    }), new View(domC, 1));
   });
-
 
 });

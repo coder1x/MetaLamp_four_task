@@ -165,10 +165,6 @@ class Model extends Observer {
 
 
   calcDotPosition(options: CalcDotPositionOpt) {
-
-    //console.log(options);
-
-
     let fromFl = false;
     let toFl = false;
     const typeFrom = options.type == 'From';

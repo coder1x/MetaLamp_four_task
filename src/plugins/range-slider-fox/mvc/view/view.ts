@@ -38,11 +38,9 @@ class View extends Observer {
   }
 
   setValueInput(from: number, to: number, type: string) {
-
     const typeElem = this.elem.constructor.name;
-
+    let str = '';
     if (typeElem == 'HTMLInputElement') {
-      let str = '';
       const input = this.elem as HTMLInputElement;
       input.value = str;
       str += from;
@@ -51,21 +49,29 @@ class View extends Observer {
       }
       input.value = str;
     }
+    else {
+      return false;
+    }
+
+    return str;
   }
 
   outDataAttr() {
-    if (Object.keys(this.objData).length != 0)
-      this.notifyOB({
-        key: 'DataAttributes',
-        ...this.objData,
-      });
+    if (this.objData)
+      if (Object.keys(this.objData).length != 0) {
+        this.notifyOB({
+          key: 'DataAttributes',
+          ...this.objData,
+        });
+        return this.objData;
+      }
+    return false;
   }
 
   disabledRangeSlider(flag: boolean) {
     const elem = this.wrapSlider as HTMLElement;
     const st = elem.style;
-
-    flag ? st.opacity = '0.5' : st.opacity = '1';
+    return flag ? st.opacity = '0.5' : st.opacity = '1';
   }
 
 
@@ -73,7 +79,6 @@ class View extends Observer {
     const size = (this.vertical ?
       this.rsCenter.offsetHeight :
       this.rsCenter.offsetWidth);
-
     return size;
   }
 
@@ -102,7 +107,7 @@ class View extends Observer {
     this.rangeSlider.appendChild(this.rsCenter);
     this.rangeSlider.appendChild(this.rsBottom);
 
-    this.wrapSlider.appendChild(this.rangeSlider);
+    return this.wrapSlider.appendChild(this.rangeSlider);
   }
 
 
