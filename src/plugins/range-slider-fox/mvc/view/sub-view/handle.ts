@@ -66,7 +66,7 @@ class Handle extends Observer {
         this.elemTo = null;
       }
     }
-    return true;
+    return this.wrapElem;
   }
 
 
@@ -92,14 +92,18 @@ class Handle extends Observer {
     convertStyle(this.elemFrom.style);
 
     if (this.elemTo)
-      convertStyle(this.elemTo.style);
+      return convertStyle(this.elemTo.style);
   }
 
 
   setFrom(fromP: number) {
-    const val = fromP + '%';
-    const from = this.elemFrom.style;
-    this.vertical ? from.bottom = val : from.left = val;
+    if (this.elemTo) {
+      const val = fromP + '%';
+      const from = this.elemFrom.style;
+      this.vertical ? from.bottom = val : from.left = val;
+      return from;
+    }
+    return false;
   }
 
 
@@ -108,7 +112,9 @@ class Handle extends Observer {
       const val = toP + '%';
       const to = this.elemTo.style;
       this.vertical ? to.bottom = val : to.left = val;
+      return to;
     }
+    return false;
   }
 
 
