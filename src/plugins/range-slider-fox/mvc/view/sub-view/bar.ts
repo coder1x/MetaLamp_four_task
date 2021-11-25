@@ -17,7 +17,7 @@ class Bar extends Observer {
 
 
   setVisibleBar(bar: boolean) {
-    this.bar = bar;
+    return this.bar = bar;
   }
 
 
@@ -46,16 +46,18 @@ class Bar extends Observer {
       }
       elem.width = sizeH;
       elem.height = sizeW;
+
+      return true;
     };
 
     if (this.elemBar)
-      convertStyle(this.elemBar.style);
+      return convertStyle(this.elemBar.style);
 
-    return true;
+    return false;
   }
 
 
-  setActions() {
+  private setActions() {
     this.elemBar.addEventListener('click', (event: MouseEvent) => {
       const dotXY = this.vertical ? event.offsetY : event.offsetX;
 

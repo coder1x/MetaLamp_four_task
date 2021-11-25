@@ -111,6 +111,58 @@ describe('------- Test View API -------', () => {
 
 
 
+  test(' setOrientation ', async () => {
+
+    const view = await new View(domV, 1);
+    const model = await new Model({
+      onStart: async () => {
+        view.setOrientation('vertical');
+        const elem = wrap.getElementsByClassName('range-slider-fox_vertical');
+        expect(elem[0]).toBeDefined();
+      }
+    });
+
+    new Controller(model, view);
+
+  });
+
+
+  test(' setActions ', async () => {
+
+    const view = await new View(domV, 1);
+    const model = await new Model({
+      onStart: async () => {
+
+      }
+    });
+
+    new Controller(model, view);
+  });
+
+
+  test(' setTheme ', async () => {
+
+    const view = await new View(domV, 1);
+    const model = await new Model({
+      onStart: async () => {
+        view.setTheme('dark');
+        let elem = wrap.getElementsByClassName('rs-dark');
+        expect(elem[0]).toBeDefined();
+        view.setTheme('fox');
+        elem = wrap.getElementsByClassName('rs-dark');
+        expect(elem[0]).toBeUndefined();
+        elem = wrap.getElementsByClassName('rs-fox');
+        expect(elem[0]).toBeDefined();
+      }
+    });
+
+    new Controller(model, view);
+
+  });
+
+
+
 
 
 });
+
