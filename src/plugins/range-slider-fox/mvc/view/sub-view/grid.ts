@@ -27,7 +27,7 @@ class Grid extends Observer {
 
 
   setOrientation(str: string) {
-    this.vertical = str == 'vertical' ? true : false;
+    return this.vertical = str == 'vertical' ? true : false;
   }
 
   getOrientation() {
@@ -52,11 +52,32 @@ class Grid extends Observer {
       this.vertical ? st.bottom = pos : st.left = pos;
       this.elemGrid.appendChild(gridPol);
     }
+    return this.elemGrid;
   }
 
 
-  setAction(elem: HTMLElement) {
+  createDomGrid() {
+    this.rsBottom.appendChild(this.elemGrid);
+    this.offOn = true;
+    this.setAction(this.elemGrid);
+    return this.rsBottom;
+  }
 
+
+  deleteGrid() {
+    const items = this.elemGrid.children;
+    if (items.length > 0) {
+      this.offOn = false;
+      while (this.elemGrid.firstChild) {
+        this.elemGrid.firstChild.remove();
+      }
+      return true;
+    }
+    return false;
+  }
+
+
+  private setAction(elem: HTMLElement) {
     elem.addEventListener('click', (e: Event) => {
       const mark = e.target as HTMLElement;
       //const typeElem = mark.constructor.name;
@@ -68,24 +89,6 @@ class Grid extends Observer {
         });
       }
     });
-  }
-
-
-  createDomGrid() {
-    this.rsBottom.appendChild(this.elemGrid);
-    this.offOn = true;
-    this.setAction(this.elemGrid);
-  }
-
-
-  deleteGrid() {
-    const items = this.elemGrid.children;
-    if (items.length > 0) {
-      this.offOn = false;
-      while (this.elemGrid.firstChild) {
-        this.elemGrid.firstChild.remove();
-      }
-    }
   }
 
 
