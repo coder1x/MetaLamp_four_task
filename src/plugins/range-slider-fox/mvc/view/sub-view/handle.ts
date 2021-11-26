@@ -151,8 +151,8 @@ class Handle extends Observer {
     };
 
     const mouseUpFrom = () => {
-      document.removeEventListener('pointerup', mouseUpFrom);
-      document.removeEventListener('pointermove', mouseMoveFrom);
+      this.wrapElem.removeEventListener('pointerup', mouseUpFrom);
+      this.wrapElem.removeEventListener('pointermove', mouseMoveFrom);
     };
 
     const mouseMoveTo = (event: PointerEvent) => {
@@ -165,8 +165,8 @@ class Handle extends Observer {
     };
 
     const mouseUpTo = () => {
-      document.removeEventListener('pointerup', mouseUpTo);
-      document.removeEventListener('pointermove', mouseMoveTo);
+      this.wrapElem.removeEventListener('pointerup', mouseUpTo);
+      this.wrapElem.removeEventListener('pointermove', mouseMoveTo);
     };
 
     const cancellation = (elem: HTMLElement) => {
@@ -181,8 +181,8 @@ class Handle extends Observer {
           this.elemFrom.style.zIndex = '1';
 
           shiftXY = this.mouseDown(event, this.elemTo);
-          document.addEventListener('pointermove', mouseMoveTo);
-          document.addEventListener('pointerup', mouseUpTo);
+          this.wrapElem.addEventListener('pointermove', mouseMoveTo);
+          this.wrapElem.addEventListener('pointerup', mouseUpTo);
         });
 
         cancellation(this.elemTo);
@@ -192,13 +192,14 @@ class Handle extends Observer {
 
     if (!this.eventFromF) {
       this.elemFrom.addEventListener('pointerdown', (event: PointerEvent) => {
+
         if (this.elemTo)
           this.elemTo.style.zIndex = '1';
         this.elemFrom.style.zIndex = '2';
 
         shiftXY = this.mouseDown(event, this.elemFrom);
-        document.addEventListener('pointermove', mouseMoveFrom);
-        document.addEventListener('pointerup', mouseUpFrom);
+        this.wrapElem.addEventListener('pointermove', mouseMoveFrom);
+        this.wrapElem.addEventListener('pointerup', mouseUpFrom);
       });
 
       cancellation(this.elemFrom);
