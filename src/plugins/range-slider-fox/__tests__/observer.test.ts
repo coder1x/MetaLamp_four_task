@@ -10,7 +10,7 @@ class TestOB extends Observer {
   }
 }
 
-describe('Observer - subscribe, unsubscribe, notify', () => {
+describe('------- Observer - subscribe, unsubscribe, notify -------', () => {
 
   let ob: TestOB;
   let сallback: Function;

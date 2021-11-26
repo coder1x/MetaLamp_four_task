@@ -33,26 +33,29 @@ class Hints {
   setTipFlag(tipFromTo: boolean, tipMinMax: boolean) {
     this.tipFromTo = tipFromTo;
     this.tipMinMax = tipMinMax;
+    return { tipFromTo, tipMinMax };
   }
 
   setAdditionalText(tipPrefix: string, tipPostfix: string) {
     this.tipPrefix = tipPrefix;
     this.tipPostfix = tipPostfix;
+    return { tipPrefix, tipPostfix };
   }
 
 
   setOrientation(str: string) {
     this.vertical = str == 'vertical' ? true : false;
-
+    let fl: boolean;
     if (this.tipFrom)
-      this.convertStyle(this.tipFrom.style);
+      fl = this.convertStyle(this.tipFrom.style);
 
     if (this.tipTo) {
-      this.convertStyle(this.tipTo.style);
+      fl = this.convertStyle(this.tipTo.style);
       if (this.tipSingle) {
-        this.convertStyle(this.tipSingle.style);
+        fl = this.convertStyle(this.tipSingle.style);
       }
     }
+    return fl;
   }
 
   //----------------------- создаём элементы
@@ -124,23 +127,18 @@ class Hints {
   }
 
   // --------------------------- заносим значения
-  setData(elem: HTMLElement, val: number) {
-    if (elem) {
-      return elem.innerText = this.getPrefix(val);
-    }
-  }
-
 
   setValTipMinMax(min: number, max: number) {
-    this.setData(this.tipMin, min);
-    this.setData(this.tipMax, max);
+    const tipMin = this.setData(this.tipMin, min);
+    const tipMax = this.setData(this.tipMax, max);
+    return { tipMin, tipMax };
   }
 
   setValTipFrom(from: number) {
-    this.setData(this.tipFrom, from);
+    return this.setData(this.tipFrom, from);
   }
   setValTipTo(to: number) {
-    this.setData(this.tipTo, to);
+    return this.setData(this.tipTo, to);
   }
 
   setValTipSingle() {
@@ -148,21 +146,11 @@ class Hints {
     const valFrom = this.tipFrom.innerHTML;
     const valTo = this.tipTo.innerHTML;
     const br = '<br>';
-    this.tipSingle.innerHTML = valFrom +
+    return this.tipSingle.innerHTML = valFrom +
       (this.vertical ? br + '↕' + br : ' ⟷ ') + valTo;
   }
 
   // --------------------------- изменяем позицию
-  setStylePosition(coorXY: number, st: CSSStyleDeclaration) {
-    if (this.vertical) {
-      st.bottom = coorXY + '%';
-      st.removeProperty('left');
-    } else {
-      st.left = coorXY + '%';
-      st.removeProperty('bottom');
-    }
-  }
-
 
   setPositionFrom(coorXY: number) {
     if (!this.tipFrom) return false;
@@ -238,7 +226,6 @@ class Hints {
       visibilityTipMin = tipMinXRight <= tipFromXY || !this.tipFrom;
     }
 
-
     //------------------------------------------- Изменяем отображение
     this.toggleDisplay({
       tipMaxXY,
@@ -252,6 +239,22 @@ class Hints {
     return true;
   }
 
+  private setData(elem: HTMLElement, val: number) {
+    if (elem) {
+      return elem.innerText = this.getPrefix(val);
+    }
+    return false;
+  }
+
+  private setStylePosition(coorXY: number, st: CSSStyleDeclaration) {
+    if (this.vertical) {
+      st.bottom = coorXY + '%';
+      st.removeProperty('left');
+    } else {
+      st.left = coorXY + '%';
+      st.removeProperty('bottom');
+    }
+  }
 
   private createElem(teg: string, className: string[]) {
     const elem = document.createElement(teg);

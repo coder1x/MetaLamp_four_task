@@ -1,7 +1,7 @@
 import { _$ as $ } from '../range-slider-fox';
 
 
-describe('Range Slider Fox - JQuery Objects', () => {
+describe('------- Range Slider Fox - JQuery Objects -------', () => {
 
   let wrap: HTMLElement;
   let dom: HTMLInputElement;

@@ -1,7 +1,7 @@
 import { RangeSliderOptions } from '../../../glob-interface';
 import { Controller, Model, View } from '../controller';
 
-describe('Test Controller API', () => {
+describe('------- Test Controller API -------', () => {
 
   let wrapC: HTMLElement;
   let domC: HTMLInputElement;

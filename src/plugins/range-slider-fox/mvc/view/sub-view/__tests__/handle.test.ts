@@ -29,34 +29,26 @@ describe('------- Test Handle API -------', () => {
 
 
   test(' createDomBase ', async () => {
-
     let wrapH = handle.createDomBase('double');
     expect(wrapH).toBeDefined();
-
     let child = (wrapH as HTMLElement).children;
-    expect(child[0].className).toBe('range-slider-fox__from');
-    expect(child[1].className).toBe('range-slider-fox__to');
-
+    expect(child[0].className).toBe(rsName + '__from');
+    expect(child[1].className).toBe(rsName + '__to');
     wrapH = await handle.createDomBase('double');
     expect(wrapH).toBeFalsy();
-
     await delElem(wrap);
-
     handle = await new Handle(wrap, rsName);
     wrapH = await handle.createDomBase('single');
     expect(wrapH).toBeDefined();
-
     child = (wrapH as HTMLElement).children;
-    expect(child[0].className).toBe('range-slider-fox__from');
+    expect(child[0].className).toBe(rsName + '__from');
     expect(child[1]).toBeUndefined();
-
     wrapH = handle.createDomBase('single');
     expect(wrapH).toBeFalsy();
   });
 
 
   test(' setFrom & setTo ', async () => {
-    await delElem(wrap);
     const { from, to } = await createFromTo();
     const leftF = (from as CSSStyleDeclaration).left;
     const leftT = (to as CSSStyleDeclaration).left;
@@ -67,7 +59,6 @@ describe('------- Test Handle API -------', () => {
 
 
   test(' setOrientation ', async () => {
-    await delElem(wrap);
     await createFromTo();
     let fl = handle.setOrientation('vertical');
     expect(fl).toBeTruthy();
@@ -77,7 +68,6 @@ describe('------- Test Handle API -------', () => {
 
 
   test(' setActions ', async () => {
-    await delElem(wrap);
     await createFromTo();
     const fl = handle.setActions('double');
     expect(fl).toBeTruthy();
