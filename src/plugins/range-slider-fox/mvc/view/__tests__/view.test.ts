@@ -4,16 +4,16 @@ describe('------- Test View API -------', () => {
 
   let wrap: HTMLElement;
   let domV: HTMLInputElement;
+  let view: View;
 
   beforeEach(() => {
     wrap = document.createElement('div');
     domV = document.createElement('input');
     wrap.appendChild(domV);
+    view = new View(domV, 1);
   });
 
   test(' setValueInput ', () => {
-
-    const view = new View(domV, 1);
     const model = new Model({
       min: 0,
       max: 100,
@@ -25,12 +25,9 @@ describe('------- Test View API -------', () => {
     const data = view.setValueInput(30, 70, 'double');
     expect(data).toBeTruthy();
     expect(data).toBe(domV.value);
-
   });
 
   test(' outDataAttr ', async () => {
-
-    const view = await new View(domV, 1);
     await domV.setAttribute('data-from', '45');
     await domV.setAttribute('data-to', '86');
 
@@ -46,13 +43,10 @@ describe('------- Test View API -------', () => {
     });
 
     new Controller(model, view);
-
   });
 
 
   test(' disabledRangeSlider ', async () => {
-
-    const view = await new View(domV, 1);
     const model = await new Model({
       disabled: false,
       onStart: async () => {
@@ -71,15 +65,13 @@ describe('------- Test View API -------', () => {
 
 
 
-  test(' getWrapWH ', async () => {
+  // test(' getWrapWH ', async () => {
 
 
-  });
+  // });
 
 
   test(' createDomBase ', async () => {
-
-    const view = await new View(domV, 1);
     const model = await new Model({
       disabled: false,
       onStart: async () => {
@@ -106,14 +98,11 @@ describe('------- Test View API -------', () => {
     });
 
     new Controller(model, view);
-
   });
 
 
 
   test(' setOrientation ', async () => {
-
-    const view = await new View(domV, 1);
     const model = await new Model({
       onStart: async () => {
         view.setOrientation('vertical');
@@ -123,26 +112,21 @@ describe('------- Test View API -------', () => {
     });
 
     new Controller(model, view);
-
   });
 
 
-  test(' setActions ', async () => {
+  // test(' setActions ', async () => {
+  //   const model = await new Model({
+  //     onStart: async () => {
 
-    const view = await new View(domV, 1);
-    const model = await new Model({
-      onStart: async () => {
+  //     }
+  //   });
 
-      }
-    });
-
-    new Controller(model, view);
-  });
+  //   new Controller(model, view);
+  // });
 
 
   test(' setTheme ', async () => {
-
-    const view = await new View(domV, 1);
     const model = await new Model({
       onStart: async () => {
         view.setTheme('dark');
@@ -157,7 +141,6 @@ describe('------- Test View API -------', () => {
     });
 
     new Controller(model, view);
-
   });
 
 
