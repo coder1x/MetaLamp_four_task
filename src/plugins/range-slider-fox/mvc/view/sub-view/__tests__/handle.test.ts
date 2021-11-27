@@ -1,6 +1,9 @@
 import { Handle } from '../handle';
 import { Controller, Model, View } from '../../../controller/controller';
-
+import {
+  mockPointerEvent,
+  mockKeyboardEvent
+} from '../../../../__tests__/jestUtils';
 
 describe('------- Test Handle API -------', () => {
 
@@ -8,41 +11,6 @@ describe('------- Test Handle API -------', () => {
   let wrap: HTMLElement;
   let handle: Handle;
 
-  let wrapC: HTMLElement;
-  let domC: HTMLInputElement;
-  wrapC = document.createElement('div');
-  domC = document.createElement('input');
-  wrapC.appendChild(domC);
-
-
-  function mockPointerEvent(element: HTMLElement) {
-    return function (eventType: string, clientX: number, clientY: number) {
-      const conf = {
-        bubbles: true,
-        clientX,
-        clientY,
-      };
-      const pointerEvent = new MouseEvent(eventType, conf);
-      element.setPointerCapture = jest.fn(element.setPointerCapture);
-      element.releasePointerCapture = jest.fn(element.releasePointerCapture);
-      element.dispatchEvent(pointerEvent);
-    };
-  }
-
-
-  function mockKeyboardEvent(element: HTMLElement) {
-    return function (key: string, eventType = 'keydown', repeat = false) {
-      const conf = {
-        code: key,
-        repeat: repeat,
-        bubbles: true,
-      };
-      const keyboardEvent = new KeyboardEvent(eventType, conf);
-      element.setPointerCapture = jest.fn(element.setPointerCapture);
-      element.releasePointerCapture = jest.fn(element.releasePointerCapture);
-      element.dispatchEvent(keyboardEvent);
-    };
-  }
 
 
   beforeEach(async () => {
@@ -107,6 +75,13 @@ describe('------- Test Handle API -------', () => {
 
 
   test(' setActions ', async () => {
+
+    let wrapC: HTMLElement;
+    let domC: HTMLInputElement;
+    wrapC = document.createElement('div');
+    domC = document.createElement('input');
+    wrapC.appendChild(domC);
+
     await createFromTo();
     handle.setOrientation('horizontal');
     const fl = handle.setActions('double');
@@ -115,18 +90,19 @@ describe('------- Test Handle API -------', () => {
     const model = new Model({
       type: 'double',
       onStart: async () => {
-
         const spy = await jest.spyOn(model, 'calcDotPosition');
 
         const eventDot = async (name: string, val1: number, val2: number) => {
           const dot = await wrapC.getElementsByClassName(rsName + '__' + name);
           let elem = dot[0] as HTMLElement;
           const type = name == 'from' ? 'From' : 'To';
-          await mockPointerEvent(elem)('pointerdown', val1, 0);
-          await mockPointerEvent(elem)('pointermove', val2, 0);
-          await mockPointerEvent(elem)('pointerup', 0, 0);
-          await mockKeyboardEvent(elem)('ArrowRight');
-          await mockKeyboardEvent(elem)('ArrowLeft');
+          const funP = await mockPointerEvent(elem);
+          const funK = await mockKeyboardEvent(elem);
+          await funP('pointerdown', val1, 0);
+          await funP('pointermove', val2, 0);
+          await funP('pointerup', 0, 0);
+          await funK('ArrowRight');
+          await funK('ArrowLeft');
 
           expect(spy).toBeCalledWith(
             {

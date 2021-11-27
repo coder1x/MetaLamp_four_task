@@ -1,5 +1,6 @@
 import { Grid } from '../grid';
-import { Model } from '../../../model/model';
+import { Controller, Model, View } from '../../../controller/controller';
+import { mockPointerEvent } from '../../../../__tests__/jestUtils';
 
 describe('------- Test Grid API -------', () => {
 
@@ -77,6 +78,7 @@ describe('------- Test Grid API -------', () => {
   });
 
 
+
   test(' deleteGrid ', async () => {
     let model = await new Model({
       ...getConf(),
@@ -91,6 +93,43 @@ describe('------- Test Grid API -------', () => {
       }
     });
     await model.onHandle();
+  });
+
+
+  test(' ClickMark ', async () => {
+
+    let wrapC: HTMLElement;
+    let domC: HTMLInputElement;
+    wrapC = document.createElement('div');
+    domC = document.createElement('input');
+    wrapC.appendChild(domC);
+
+    let obj: Controller;
+
+    const model = new Model({
+      type: 'double',
+      ...getConf(),
+      onStart: async () => {
+        obj.update({ bar: false });
+      },
+      onUpdate: async () => {
+        const spy = await jest.spyOn(model, 'clickMark');
+
+        const dot =
+          await wrapC.getElementsByClassName(rsName + '__grid-mark');
+        let elem = dot[0] as HTMLElement;
+
+        const funP = await mockPointerEvent(elem);
+        await funP('click', 0, 0);
+
+        expect(spy).toBeCalledTimes(1);
+        expect(spy).toBeCalledWith(+(elem.innerText));
+        await spy.mockClear();
+      },
+    });
+    const view = await new View(domC, 1);
+    obj = await new Controller(model, view);
+
   });
 
 

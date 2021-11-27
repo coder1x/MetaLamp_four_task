@@ -1,4 +1,6 @@
 import { Bar } from '../bar';
+import { Controller, Model, View } from '../../../controller/controller';
+import { mockPointerEvent } from '../../../../__tests__/jestUtils';
 
 describe('------- Test Bar API -------', () => {
 
@@ -67,6 +69,44 @@ describe('------- Test Bar API -------', () => {
     const elem = await getElem();
     const height = elem.style.height;
     expect(height).toBe('25px');
+  });
+
+
+
+  test(' сlickBar ', async () => {
+
+    let wrapC: HTMLElement;
+    let domC: HTMLInputElement;
+    wrapC = document.createElement('div');
+    domC = document.createElement('input');
+    wrapC.appendChild(domC);
+
+    let obj: Controller;
+
+    const model = new Model({
+      type: 'double',
+      min: 0,
+      max: 100,
+      from: 20,
+      to: 80,
+      bar: true,
+      onStart: async () => {
+        obj.update({ tipMinMax: false });
+      },
+      onUpdate: async () => {
+        const spy = await jest.spyOn(model, 'clickBar');
+        const dot =
+          await wrapC.getElementsByClassName(rsName + '__bar');
+        let elem = dot[0] as HTMLElement;
+        const funP = await mockPointerEvent(elem);
+        await funP('click', 34, 45);
+        expect(spy).toBeCalledTimes(1);
+        await spy.mockClear();
+      },
+    });
+    const view = await new View(domC, 1);
+    obj = await new Controller(model, view);
+
   });
 
 

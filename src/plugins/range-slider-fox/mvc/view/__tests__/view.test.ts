@@ -1,12 +1,15 @@
 import { Controller, Model, View } from '../../controller/controller';
+import { mockPointerEvent } from '../../../__tests__/jestUtils';
 
 describe('------- Test View API -------', () => {
 
   let wrap: HTMLElement;
   let domV: HTMLInputElement;
   let view: View;
+  let rsName: string;
 
   beforeEach(() => {
+    rsName = 'range-slider-fox';
     wrap = document.createElement('div');
     domV = document.createElement('input');
     wrap.appendChild(domV);
@@ -64,13 +67,6 @@ describe('------- Test View API -------', () => {
   });
 
 
-
-  // test(' getWrapWH ', async () => {
-
-
-  // });
-
-
   test(' createDomBase ', async () => {
     const model = await new Model({
       disabled: false,
@@ -81,19 +77,19 @@ describe('------- Test View API -------', () => {
         for (let item of nodes) {
           const elem = item as HTMLElement;
           const nC = elem.className;
-          if (nC == 'range-slider-fox__center')
+          if (nC == rsName + '__center')
             line = elem.children[0] as HTMLElement;
           name.push(nC);
         }
 
         const masName = [
-          'range-slider-fox__top',
-          'range-slider-fox__center',
-          'range-slider-fox__bottom'
+          rsName + '__top',
+          rsName + '__center',
+          rsName + '__bottom'
         ];
 
         expect(name).toEqual(masName);
-        expect(line.className).toBe('range-slider-fox__line');
+        expect(line.className).toBe(rsName + '__line');
       }
     });
 
@@ -106,7 +102,7 @@ describe('------- Test View API -------', () => {
     const model = await new Model({
       onStart: async () => {
         view.setOrientation('vertical');
-        const elem = wrap.getElementsByClassName('range-slider-fox_vertical');
+        const elem = wrap.getElementsByClassName(rsName + '_vertical');
         expect(elem[0]).toBeDefined();
       }
     });
@@ -115,15 +111,41 @@ describe('------- Test View API -------', () => {
   });
 
 
-  // test(' setActions ', async () => {
-  //   const model = await new Model({
-  //     onStart: async () => {
+  test(' setActions ', async () => {
 
-  //     }
-  //   });
+    let wrapC: HTMLElement;
+    let domC: HTMLInputElement;
+    wrapC = document.createElement('div');
+    domC = document.createElement('input');
+    wrapC.appendChild(domC);
 
-  //   new Controller(model, view);
-  // });
+    let obj: Controller;
+
+    const model = new Model({
+      type: 'double',
+      min: 0,
+      max: 100,
+      from: 20,
+      to: 80,
+      bar: false,
+      onStart: async () => {
+        obj.update({ tipMinMax: false });
+      },
+      onUpdate: async () => {
+        const spy = await jest.spyOn(model, 'clickLine');
+        const dot =
+          await wrapC.getElementsByClassName(rsName + '__line');
+        let elem = dot[0] as HTMLElement;
+        const funP = await mockPointerEvent(elem);
+        await funP('click', 34, 45);
+        expect(spy).toBeCalledTimes(1);
+        await spy.mockClear();
+      },
+    });
+    const view = await new View(domC, 1);
+    obj = await new Controller(model, view);
+
+  });
 
 
   test(' setTheme ', async () => {

@@ -1,6 +1,4 @@
 
-
-
 const DP = require('./isDev');
 // работа с js файлами 
 module.exports = {
@@ -18,6 +16,9 @@ module.exports = {
         //'cache-loader',
         {
           loader: 'ts-loader',
+          options: {
+            configFile: "tsconfig.web.json"
+          }
         }
       ];
     }
