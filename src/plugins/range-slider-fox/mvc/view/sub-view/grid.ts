@@ -278,7 +278,7 @@ class Grid extends Observer {
     if (this.resizeF) return false;
     this.resizeF = true;
     let sleep = 200;
-    let rtime: Date;
+    let rTime: Date;
     let timeout = false;
     this.startWidth = this.elemGrid.offsetWidth;
 
@@ -299,7 +299,7 @@ class Grid extends Observer {
     })();
 
     const resizeend = () => {
-      if (Number(new Date()) - Number(rtime) < sleep) {
+      if (Number(new Date()) - Number(rTime) < sleep) {
         setTimeout(resizeend, sleep);
       } else {
         timeout = false;
@@ -314,7 +314,7 @@ class Grid extends Observer {
     };
 
     window.addEventListener("optimizedResize", function () {
-      rtime = new Date();
+      rTime = new Date();
       if (timeout === false) {
         timeout = true;
         setTimeout(resizeend, sleep);

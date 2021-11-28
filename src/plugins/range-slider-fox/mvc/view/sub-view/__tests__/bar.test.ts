@@ -73,7 +73,7 @@ describe('------- Test Bar API -------', () => {
 
 
 
-  test(' сlickBar ', async () => {
+  test(' clickBar ', async () => {
 
     let wrapC: HTMLElement;
     let domC: HTMLInputElement;

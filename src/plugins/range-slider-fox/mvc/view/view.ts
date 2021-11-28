@@ -1,5 +1,5 @@
 
-import { UbdateTip } from './view.d';
+import { UpdateTip } from './view.d';
 import { Handle } from './sub-view/handle';
 import { Hints } from './sub-view/hints';
 import { Bar } from './sub-view/bar';
@@ -113,10 +113,10 @@ class View extends Observer {
 
   async setOrientation(str: string) {
 
-    const modif = this.rsName + '_vertical';
+    const modify = this.rsName + '_vertical';
     const objP = this.rangeSlider.classList;
     this.vertical = str == 'vertical' ? true : false;
-    this.vertical ? objP.add(modif) : objP.remove(modif);
+    this.vertical ? objP.add(modify) : objP.remove(modify);
 
     await this.handle.setOrientation(str);
     await this.hints.setOrientation(str);
@@ -196,7 +196,7 @@ class View extends Observer {
     }
   }
 
-  ubdateTipMinMax(min: number, max: number) {
+  updateTipMinMax(min: number, max: number) {
     this.hints.setValTipMinMax(min, max);
   }
 
@@ -215,7 +215,7 @@ class View extends Observer {
   }
 
 
-  ubdateTipValue(from: number, to: number, type: string) {
+  updateTipValue(from: number, to: number, type: string) {
     this.hints.setValTipFrom(from);
     if (type == 'double') {
       this.hints.setValTipTo(to);
@@ -223,7 +223,7 @@ class View extends Observer {
     }
   }
 
-  ubdateTipPosition(op: UbdateTip) {
+  updateTipPosition(op: UpdateTip) {
     this.hints.setPositionFrom(op.fromXY);
     if (op.toXY && op.singleXY) {
       this.hints.setPositionTo(op.toXY);
@@ -321,7 +321,6 @@ class View extends Observer {
     }
 
     this.objData = Object.fromEntries(mapOptions);
-
     let observer = new MutationObserver(mut => {
       const attr = mut[0].attributeName;
       const opt = attr.replace('data-', '');
@@ -343,9 +342,7 @@ class View extends Observer {
   }
 
   private init() {
-
     this.onHandle = async () => {
-
       await this.createDomBase(); // создаём базовые дом элементы. 
       await this.setActions();  // вешаем события.
 
@@ -357,7 +354,6 @@ class View extends Observer {
       await this.createListeners();
       await this.attributesChange();
     };
-
   }
 
 

@@ -1,7 +1,7 @@
 
 
 
-interface UbdateTip {
+interface UpdateTip {
   fromXY?: number,
   toXY?: number,
   singleXY?: number,
@@ -9,5 +9,5 @@ interface UbdateTip {
 
 
 export {
-  UbdateTip
+  UpdateTip
 };

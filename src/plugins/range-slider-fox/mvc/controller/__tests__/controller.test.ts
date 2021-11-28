@@ -26,7 +26,7 @@ describe('------- Test Controller API -------', () => {
   });
 
 
-  test('onStart, onUpdate, ubdate, onReset, reset ', () => {
+  test('onStart, onUpdate, update, onReset, reset ', () => {
 
     const objС = new Controller(new Model({
       onStart: (data: RangeSliderOptions) => {
@@ -82,7 +82,6 @@ describe('------- Test Controller API -------', () => {
         expect(data).toStrictEqual(defaultData);
       }
     }), new View(domC, 1));
-
   });
 
   test(' Input data ', () => {

@@ -152,26 +152,26 @@ class Hints {
 
   // --------------------------- изменяем позицию
 
-  setPositionFrom(coorXY: number) {
+  setPositionFrom(coordXY: number) {
     if (!this.tipFrom) return false;
     const st = this.tipFrom.style;
-    this.setStylePosition(coorXY, st);
+    this.setStylePosition(coordXY, st);
     return true;
   }
 
 
-  setPositionTo(coorXY: number) {
+  setPositionTo(coordXY: number) {
     if (!this.tipTo) return false;
     const st = this.tipTo.style;
-    this.setStylePosition(coorXY, st);
+    this.setStylePosition(coordXY, st);
     return true;
   }
 
 
-  setPositionSingle(coorXY: number) {
+  setPositionSingle(coordXY: number) {
     if (!this.tipSingle) return false;
     const st = this.tipSingle.style;
-    this.setStylePosition(coorXY, st);
+    this.setStylePosition(coordXY, st);
     return true;
   }
 
@@ -246,12 +246,12 @@ class Hints {
     return false;
   }
 
-  private setStylePosition(coorXY: number, st: CSSStyleDeclaration) {
+  private setStylePosition(coordXY: number, st: CSSStyleDeclaration) {
     if (this.vertical) {
-      st.bottom = coorXY + '%';
+      st.bottom = coordXY + '%';
       st.removeProperty('left');
     } else {
-      st.left = coorXY + '%';
+      st.left = coordXY + '%';
       st.removeProperty('bottom');
     }
   }
@@ -329,13 +329,11 @@ class Hints {
       const fl = this.vertical;
       tipMinXY = fl ? crMin.bottom : crMin.left;
       tipMinWH = fl ? tip.offsetHeight : tip.offsetWidth;
-
       if (this.tipMax) {
         const crMax = this.tipMax.getBoundingClientRect();
         tipMaxXY = fl ? crMax.bottom : crMax.left;
       }
     }
-
     return { tipMinXY, tipMinWH, tipMaxXY };
   }
 
@@ -345,20 +343,17 @@ class Hints {
     let tipSingleWH = 0;
     let tipSingleB = 0;
     const fl = this.vertical;
-
     const tip = this.tipSingle;
     if (tip) {
       const cr = tip.getBoundingClientRect();
       tipSingleXY = fl ? cr.bottom : cr.left;
       tipSingleWH = fl ? tip.offsetHeight : tip.offsetWidth;
     }
-
     if (fl) {
       tipSingleB = tipSingleXY - tipSingleWH;
     } else {
       tipSingleB = tipSingleXY + tipSingleWH;
     }
-
     return { tipSingleXY, tipSingleB };
   }
 
@@ -398,7 +393,6 @@ class Hints {
             if (tipMinXRight >= tipSingleXY)
               visibilityTipMin = false;
           }
-
         }
       } else {
         display(this.tipFrom, true);

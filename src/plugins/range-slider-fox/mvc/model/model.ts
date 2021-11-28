@@ -4,7 +4,7 @@ import { Observer } from '../../observer';
 
 class Model extends Observer {
 
-  // --- данные конфига
+  // --- data config
   private type: string;
   private orientation: string;
   private theme: string;
@@ -28,7 +28,7 @@ class Model extends Observer {
   private disabled: boolean;
   private defaultData: RangeSliderOptions;
 
-  // --- внутренние данные. 
+  // --- internal data. 
   private valP: number;
   private fromP: number;
   private toP: number;
@@ -41,7 +41,7 @@ class Model extends Observer {
   private MAX_VAL = 999999999999999;
   private MIN_VAL = -999999999999999;
   private startConfFl: boolean;
-  private ubdateConfFl: boolean;
+  private updateConfFl: boolean;
   onHandle: Function;
   onChange: Function;
   onUpdate: Function;
@@ -119,7 +119,7 @@ class Model extends Observer {
 
   async update(options: RangeSliderOptions) {
 
-    this.ubdateConfFl = true;
+    this.updateConfFl = true;
 
     await this.setRangeData(options);
     await this.setStep(options);
@@ -135,7 +135,7 @@ class Model extends Observer {
     if (this.startConfFl)
       this.onUpdate(this.getOptions());
     this.startConfFl = true;
-    this.ubdateConfFl = false;
+    this.updateConfFl = false;
   }
 
 
@@ -612,7 +612,7 @@ class Model extends Observer {
   private defaultConfig(options: RangeSliderOptions) {
 
     this.startConfFl = false;
-    this.ubdateConfFl = false;
+    this.updateConfFl = false;
 
     return Object.assign({
       type: 'single',   // тип - одна или две точки
@@ -752,7 +752,7 @@ class Model extends Observer {
       });
 
       // если обновили Диапазон то пересчитать все зависимые данные.
-      if (this.ubdateConfFl) {
+      if (this.updateConfFl) {
         this.setDotData({
           from: this.from,
           to: this.to,
@@ -864,7 +864,7 @@ class Model extends Observer {
 
     }
 
-    if (!this.startConfFl && !this.ubdateConfFl)
+    if (!this.startConfFl && !this.updateConfFl)
       if (this.gridSnap && !this.step) {
         this.from = this.getValStep(this.from, this.stepGrid, this.snapNum);
         if (type == 'double')
@@ -878,7 +878,7 @@ class Model extends Observer {
       to: this.to,
     });
 
-    if (this.startConfFl && !this.ubdateConfFl)
+    if (this.startConfFl && !this.updateConfFl)
       this.onChange(this.getOptions());
 
     return true;

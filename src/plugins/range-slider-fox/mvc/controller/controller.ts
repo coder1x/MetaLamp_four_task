@@ -9,7 +9,7 @@ class Controller {
   private startFL = false;
   private resetFL = false;
   private lock = false;
-  private funAtrr: Function = () => { };
+  private funAttributes: Function = () => { };
   private model: Model;
   private view: View;
 
@@ -91,7 +91,7 @@ class Controller {
     if (key != 'Start') return false;
 
     await this.view.outDataAttr();
-    await this.funAtrr();
+    await this.funAttributes();
     this.startFL = true;
     return true;
   };
@@ -101,12 +101,12 @@ class Controller {
     const key = options.key;
     if (key != 'DataAttributes') return false;
 
-    this.funAtrr = () => {
+    this.funAttributes = () => {
       this.update(options);
     };
 
     if (this.startFL)
-      this.funAtrr();
+      this.funAttributes();
 
     return true;
   };
@@ -120,7 +120,7 @@ class Controller {
     const lockFl = this.startFL && !this.resetFL;
 
     if (lockFl)
-      this.view.ubdateTipMinMax(options.min, options.max);
+      this.view.updateTipMinMax(options.min, options.max);
 
     const obj = this.model.getOptions();
     if (obj.grid && lockFl) {
@@ -159,7 +159,7 @@ class Controller {
     const type = options.type;
 
     const lockFl = this.startFL && !this.resetFL;
-    this.view.createDotElem(type); // создаём точки
+    this.view.createDotElem(type); // create dot
     const from = this.model.calcPositionDotFrom();
     this.view.setDotFrom(from);
 
@@ -175,7 +175,7 @@ class Controller {
       this.view.toggleTipTo(options.to);
 
     if (lockFl) {
-      this.ubdateHints(options.type, options.from, options.to);
+      this.updateHints(options.type, options.from, options.to);
     }
 
 
@@ -238,7 +238,7 @@ class Controller {
 
     await this.view.setOrientation(options.orientation);
     const obj = await this.model.getOptions();
-    this.ubdateHints(obj.type, obj.from, obj.to);
+    this.updateHints(obj.type, obj.from, obj.to);
 
     //-------- grid
 
@@ -271,14 +271,14 @@ class Controller {
     const lockFl = this.startFL && !this.resetFL;
 
     if (lockFl)
-      this.ubdateHints(options.type, options.from, options.to);
+      this.updateHints(options.type, options.from, options.to);
     return true;
   };
 
 
-  private async ubdateHints(type: string, from: number, to: number) {
+  private async updateHints(type: string, from: number, to: number) {
 
-    await this.view.ubdateTipValue(from, to, type);
+    await this.view.updateTipValue(from, to, type);
     const objTip = await this.view.getWidthTip(this.startFL, this.resetFL);
 
     if (objTip.fromWH || objTip.toWH) {
@@ -292,7 +292,7 @@ class Controller {
         await this.view.deleteTipTo();
       }
 
-      await this.view.ubdateTipPosition({
+      await this.view.updateTipPosition({
         fromXY,
         toXY,
         singleXY,
