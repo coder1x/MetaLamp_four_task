@@ -11,33 +11,16 @@ class KeyboardControl {
   private elem: HTMLElement;
   private keyStepOne: HTMLInputElement;
   private keyStepHold: HTMLInputElement;
-
   private keyStepOneD: number;
   private keyStepHoldD: number;
+  private nameClass: string;
 
-  // eslint-disable-next-line no-unused-vars
-  constructor(public nameClass: string, elem: HTMLElement) {
 
+  constructor(nameClass: string, elem: HTMLElement) {
+    this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
   }
-
-  private setDom() {
-
-    const getDom = (str: string) => {
-      return this.elem.querySelector(
-        this.nameClass +
-        '__' +
-        str +
-        '-wrap input'
-      ) as HTMLInputElement;
-    };
-
-    this.keyStepOne = getDom('one');
-    this.keyStepHold = getDom('hold');
-
-  }
-
 
   setData(options: OP) {
     const { keyStepOne, keyStepHold } = options;
@@ -70,7 +53,6 @@ class KeyboardControl {
     const inputProcessing = (e: Event) => {
       const elem = e.target as HTMLInputElement;
       let val = elem.value.replace(/[^-.\d]/g, '');
-
       let regexp = /^-?\d*?[.]?\d*$/;
       const valid = regexp.test(val);
 
@@ -88,7 +70,20 @@ class KeyboardControl {
       item.addEventListener('change', data);
       item.addEventListener('input', inputProcessing);
     }
+  }
 
+  private setDom() {
+    const getDom = (str: string) => {
+      return this.elem.querySelector(
+        this.nameClass +
+        '__' +
+        str +
+        '-wrap input'
+      ) as HTMLInputElement;
+    };
+
+    this.keyStepOne = getDom('one');
+    this.keyStepHold = getDom('hold');
   }
 
 }

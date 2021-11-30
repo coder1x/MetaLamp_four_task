@@ -146,14 +146,14 @@ class Model extends Observer {
   //---------------------------------- Handle
 
   calcPositionDotFrom() {
-    this.fromP = (this.from - this.min) / this.valP;  // позиция левой точки в процентах
+    this.fromP = (this.from - this.min) / this.valP;  //left dot position (in %)
     this.limitFrom = this.fromP;
     return this.fromP;
   }
 
 
   calcPositionDotTo() {
-    this.toP = (this.to - this.min) / this.valP;      // позиция правой точки в процентах
+    this.toP = (this.to - this.min) / this.valP;      // right dot position (in %)
     this.limitTo = this.toP;
     return this.toP;
   }
@@ -185,11 +185,11 @@ class Model extends Observer {
 
     const typeF = this.type == 'single';
 
-    if (typeF) {  // если одна точка
+    if (typeF) {  // if single dot 
       this.fromP = percent;
       fromFl = true;
-    } else if (limitDot) {  // если две точки и from меньше to
-      // в зависемости от того какая точка движется
+    } else if (limitDot) {  //if double dot and FROM is less than TO
+      // depending on which dot is mooving
       if (typeFrom) {
         this.fromP = percent;
         fromFl = true;
@@ -199,8 +199,8 @@ class Model extends Observer {
         toFl = true;
       }
     }
-    else { // если from больше to
-      // берём значения точки к которой подъезжаем в плотную.
+    else { // if FROM is greater than TO
+      // take value of another dot (which the mooving dot is approaching closely)
       if (typeFrom)
         this.fromP = this.toP;
       else
@@ -214,11 +214,11 @@ class Model extends Observer {
     let to: number;
 
     if (fromFl) {
-      from = this.getDataDotFrom(); // получаем значение from
+      from = this.getDataDotFrom(); // get FROM value
     }
 
     if (toFl) {
-      to = this.getDataDotTo(); // получаем значение to
+      to = this.getDataDotTo(); //  get TO value
     }
 
     if (this.gridSnap && !this.step) {
@@ -344,7 +344,7 @@ class Model extends Observer {
   clickBar = (pointXY: number) => {
 
     const vertical = this.orientation == 'vertical';
-    const oneP = this.wrapWH / 100; // один процент от всей школы
+    const oneP = this.wrapWH / 100; // one percent of the entire scale
 
     const verticalC = (valP: number) => {
       let remainderP = 100 - valP;
@@ -373,13 +373,13 @@ class Model extends Observer {
     if (this.type == 'single') {
       from = value;
     }
-    else if (value > to) {       // если это значение больше чем To
-      to = value;                // To  на эту точку
-    } else if (value > from) {   // если меньше To то больше From
-      const To = to - value;     // из To вычетаем Val
-      const From = value - from; // из Val вычетаем From
-      From > To ? to = value : from = value; // то число что меньше та точка и ближе
-    } else {                              // Если Val меньше From то подвигать From
+    else if (value > to) {       // if the value is greater than TO
+      to = value;                // set on this dot
+    } else if (value > from) {   // if the value is greater than FROM
+      const To = to - value;     // extract Val from TO
+      const From = value - from; // extract FROM from VAL
+      From > To ? to = value : from = value; // that dot is closer which value is smaller
+    } else {                              // if VAL is smaller than FROM, then move FROM
       from = value;
     }
 
@@ -400,38 +400,38 @@ class Model extends Observer {
     let fromFl = false;
     let toFl = false;
 
-    const oneP = this.wrapWH / 100; // один процент от всей школы
+    const oneP = this.wrapWH / 100; // one percent of the entire scale
     let pointP = 0;
 
     if (vertical) {
-      pointP = 100 - (pointXY / oneP); // кол. процентов в области где кликнули
+      pointP = 100 - (pointXY / oneP); // total percentage in the clicked area
     } else {
-      pointP = pointXY / oneP; // кол. процентов в области где кликнули
+      pointP = pointXY / oneP; // total percentage in the clicked area
     }
 
     if (this.type == 'single') {
       this.fromP = pointP;
       fromFl = true;
     }
-    else if (pointP > this.toP) {       // если это значение больше чем To
-      this.toP = pointP;                // To  на эту точку
+    else if (pointP > this.toP) {       // if the value is greater than TO
+      this.toP = pointP;                // set on this dot
       toFl = true;
-    } else if (pointP > this.fromP) {   // если меньше To то больше From
-      const To = this.toP - pointP;     // из To вычетаем Val
-      const From = pointP - this.fromP; // из Val вычетаем From
-      From > To ? this.toP = pointP : this.fromP = pointP; // то число что меньше та точка и ближе
+    } else if (pointP > this.fromP) {   // if TO is smaller then FROM is greater
+      const To = this.toP - pointP;     // extract VAL from TO
+      const From = pointP - this.fromP; //extract FROM from VAL
+      From > To ? this.toP = pointP : this.fromP = pointP; //that dot is closer which value is smaller
       From > To ? toFl = true : fromFl = true;
-    } else {                              // Если Val меньше From то подвигать From
+    } else {                              //  if VAL is smaller than FROM, then move FROM
       this.fromP = pointP;
       fromFl = true;
     }
 
     if (fromFl) {
-      from = this.getDataDotFrom(); // получаем значение from
+      from = this.getDataDotFrom(); // get value FROM
     }
 
     if (toFl) {
-      to = this.getDataDotTo(); // получаем значение to
+      to = this.getDataDotTo(); // get value TO
     }
 
     this.setDotData({
@@ -615,27 +615,27 @@ class Model extends Observer {
     this.updateConfFl = false;
 
     return Object.assign({
-      type: 'single',   // тип - одна или две точки
-      orientation: 'horizontal',  // положение слайдера
-      theme: 'base',    // тема слайдера
-      min: 0,           // минимальное значение на школе
-      max: 10,          // максимальное значение на школе
-      from: 1,          // позиция первой точки
-      to: 2,            // позиция второй точки
-      step: 0,           // Шаг для ползунков
-      keyStepOne: 0,    // Шаг при нажатии кнопки с клавиатуры
-      keyStepHold: 0,   // Шаг при удержании кнопки с клавиатуры
-      bar: false,       // Показать или скрыть полусу диапазона
-      tipPrefix: '',    // Префикс для подсказок не больше 15 символов.
-      tipPostfix: '',   // Префикс для подсказок не больше 15 символов.
-      tipMinMax: true,  // подсказки включены
-      tipFromTo: true,  // подсказки точек включены
-      grid: false,      // Шкала выключена
-      gridSnap: false,  // точка переходит по ризкам на Шкале
-      gridNum: 0,       // интервал в шкале
-      gridStep: 0,      // Шаг шкалы
-      gridRound: 0,     // округление дробной части
-      disabled: false,  // Включен или Выключен.
+      type: 'single',   // type - single or double dot
+      orientation: 'horizontal',  // slider orientation
+      theme: 'base',    // slider theme
+      min: 0,           // minimal value on the scale
+      max: 10,          // maximal value on the scale
+      from: 1,          // first dot position
+      to: 2,            // second dot position
+      step: 0,           // step of the dot mooving
+      keyStepOne: 0,    // step of the dot mooving on keyboard key single pressing
+      keyStepHold: 0,   // step of the dot mooving on keyboard key holding
+      bar: false,       // show or hide a bar
+      tipPrefix: '',    // prefix for hints (15 characters maximum)
+      tipPostfix: '',   // postfix for hints (15 characters maximum)
+      tipMinMax: true,  // hints are on
+      tipFromTo: true,  // hints are off
+      grid: false,      // scale is off
+      gridSnap: false,  // dot can't stop between scale marks
+      gridNum: 0,       // amount of intervals the scale is split into
+      gridStep: 0,      // amount of steps in the interval
+      gridRound: 0,     // fractional rounding 
+      disabled: false,  // slider enabled or disabled
     }, options);
   }
 
@@ -728,7 +728,7 @@ class Model extends Observer {
       max = temp;
     }
 
-    // нужно првоерять чно новые данные отличаються от тех которые есть в модели.
+    // need to check if new data is differ from the existing data in model
     if (min != this.min || max != this.max) {
       this.min = +min;
       this.max = +max;
@@ -751,7 +751,7 @@ class Model extends Observer {
         max: this.max,
       });
 
-      // если обновили Диапазон то пересчитать все зависимые данные.
+      // if range is renewed, then recalculate all related data
       if (this.updateConfFl) {
         this.setDotData({
           from: this.from,
@@ -813,7 +813,7 @@ class Model extends Observer {
     let from: PROP = options.from;
     let to: PROP = options.to;
 
-    // проверяем что необходимые нам данные есть.
+    //check if all necessary data exists
     if (!this.isEmptu(this.min)) return false;
     if (!this.isEmptu(this.max)) return false;
 
@@ -838,7 +838,7 @@ class Model extends Observer {
         this.from = this.max;
     }
 
-    if (type == 'double') // проверяем from и to 
+    if (type == 'double') // check FROM and TO
     {
       to = this.checkValue(to, 'to') as PROP;
       if (to == null) return false;
@@ -1137,12 +1137,12 @@ class Model extends Observer {
     let interval = 0;
     let step = 0;
 
-    if (this.gridStep && !this.gridNum) {     // если задан Шаг а интервал по умолчанию стоит
+    if (this.gridStep && !this.gridNum) {     // if STEP is defined and interval is set by default
       step = this.gridStep;
-      interval = this.getRange() / step;          // находим новый интервал
-    } else {                                      // делаем только по интервалу
+      interval = this.getRange() / step;          // define new interval
+    } else {                                      // calculate in line with interval
       interval = this.gridNum;
-      step = (this.max - this.min) / interval;    // находим шаг
+      step = (this.max - this.min) / interval;    // define step
     }
 
     return { interval, step };

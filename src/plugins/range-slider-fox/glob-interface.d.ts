@@ -1,29 +1,29 @@
 interface RangeSliderOptions {
-  type?: string;
-  orientation?: string;
-  theme?: string;
-  min?: number;
-  max?: number;
-  from?: number;
-  to?: number;
-  step?: number,
-  keyStepOne?: number,
-  keyStepHold?: number,
-  bar?: boolean;
-  grid?: boolean;
-  gridSnap?: boolean;
-  tipPrefix?: string;
-  tipPostfix?: string;
-  tipMinMax?: boolean;
-  tipFromTo?: boolean;
-  gridNum?: number;
-  gridStep?: number;
-  gridRound?: number;
-  disabled?: boolean;
-  onStart?: Function;
-  onChange?: Function;
-  onUpdate?: Function;
-  onReset?: Function;
+  readonly type?: string;
+  readonly orientation?: string;
+  readonly theme?: string;
+  readonly min?: number;
+  readonly max?: number;
+  readonly from?: number;
+  readonly to?: number;
+  readonly step?: number,
+  readonly keyStepOne?: number,
+  readonly keyStepHold?: number,
+  readonly bar?: boolean;
+  readonly grid?: boolean;
+  readonly gridSnap?: boolean;
+  readonly tipPrefix?: string;
+  readonly tipPostfix?: string;
+  readonly tipMinMax?: boolean;
+  readonly tipFromTo?: boolean;
+  readonly gridNum?: number;
+  readonly gridStep?: number;
+  readonly gridRound?: number;
+  readonly disabled?: boolean;
+  readonly onStart?: Function;
+  readonly onChange?: Function;
+  readonly onUpdate?: Function;
+  readonly onReset?: Function;
 }
 
 export { RangeSliderOptions };

@@ -25,9 +25,35 @@ class Select {
   constructor(className: string, elem: HTMLElement) {
     this.className = className;
     this.elem = elem;
+    this.init();
+  }
 
-    // eslint-disable-next-line no-unused-vars
-    const emptyFun = (val: string) => { };
+
+  getData() {
+    return this.input.value;
+  }
+
+  update(val: string) {
+    this.updateFlag = true;
+    let flag = false;
+    for (let item of this.items) {
+      const data = item.getAttribute('data-val');
+      if (data == val) {
+        flag = true;
+        this.setValSelect(item);
+        break;
+      }
+    }
+
+    this.updateFlag = false;
+    if (flag) {
+      this.onUpdate(val);
+    }
+  }
+
+
+  private init() {
+    const emptyFun = (val: string) => { return val; };
     this.onChange = emptyFun;
     this.onUpdate = emptyFun;
 
@@ -47,30 +73,6 @@ class Select {
       elem = dom.querySelector(name);
     }
     return elem;
-  }
-
-  getData() {
-    return this.input.value;
-  }
-
-  update(val: string) {
-    this.updateFlag = true;
-
-    let flag = false;
-    for (let item of this.items) {
-      const data = item.getAttribute('data-val');
-      if (data == val) {
-        flag = true;
-        this.setValSelect(item);
-        break;
-      }
-    }
-
-    this.updateFlag = false;
-    if (flag) {
-      this.onUpdate(val);
-    }
-
   }
 
 
@@ -109,7 +111,6 @@ class Select {
 
     if (!this.updateFlag && !this.startFlag)
       this.onChange(val);
-
   }
 
   private setDisplayed() {
@@ -131,22 +132,21 @@ class Select {
   private toggle(flag = false) {
     const UlVisible: boolean = this.getVisible(this.options);
     let flagVis = !UlVisible && !flag;
-    this.toggleModif(this.elem, flagVis);
+    this.toggleModify(this.elem, flagVis);
   }
 
-  private getModif() {
+  private getModify() {
     const selector = this.className + '_visible';
     return selector.replace(/^\./, '');
   }
 
-  private toggleModif(elem: Element, flag = false) {
-    const clearName = this.getModif();
+  private toggleModify(elem: Element, flag = false) {
+    const clearName = this.getModify();
     const objClass = elem.classList;
     flag ? objClass.add(clearName) : objClass.remove(clearName);
   }
 
   private setActions() {
-
     this.displayedWrap.addEventListener('click', () => {
       this.toggle();
     });
@@ -198,7 +198,7 @@ class Select {
 
     document.addEventListener('click', (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      const domEl = target.closest('.' + this.getModif()) ?? false;
+      const domEl = target.closest('.' + this.getModify()) ?? false;
       if (!domEl) {
         this.toggle(true);
       }
@@ -210,30 +210,14 @@ class Select {
       const linkEl = target.closest(
         this.className + '__options'
       ) ?? false;
-      const ulEl = target.closest('.' + this.getModif()) ?? false;
+      const ulEl = target.closest('.' + this.getModify()) ?? false;
       if (!linkEl && !ulEl) { this.toggle(true); }
     });
 
-
-
   }
-
-
 
 }
 
 
-//==========================================================================
-
-// function renderSelect(className: string) {
-//   let components = document.querySelectorAll(className);
-//   let objMas = [];
-//   for (let elem of components) {
-//     objMas.push(new Select(className, elem as HTMLElement));
-//   }
-//   return objMas;
-// }
-
-// renderSelect('.select');
 
 export { Select };

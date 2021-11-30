@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.82% </span>
+                <span class="strong">92.98% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>207/223</span>
+                <span class='fraction'>212/228</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.82% </span>
+                <span class="strong">92.98% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>207/223</span>
+                <span class='fraction'>212/228</span>
             </div>
         
             
@@ -473,8 +473,7 @@
 <a name='L414'></a><a href='#L414'>414</a>
 <a name='L415'></a><a href='#L415'>415</a>
 <a name='L416'></a><a href='#L416'>416</a>
-<a name='L417'></a><a href='#L417'>417</a>
-<a name='L418'></a><a href='#L418'>418</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L417'></a><a href='#L417'>417</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -521,6 +520,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-yes">17x</span>
@@ -533,6 +534,7 @@
 <span class="cline-any cline-yes">19x</span>
 <span class="cline-any cline-yes">19x</span>
 <span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-yes">19x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">14x</span>
@@ -540,10 +542,12 @@
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
@@ -703,7 +707,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">72x</span>
 <span class="cline-any cline-yes">72x</span>
-<span class="cline-any cline-yes">72x</span>
+<span class="cline-any cline-yes">144x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">72x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -885,12 +889,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
 interface CH {
   tipMaxXY: number,
@@ -951,11 +949,13 @@ class Hints {
     return fl;
   }
 &nbsp;
-  //----------------------- создаём элементы
+  //----------------------- create elements
   createTipMinMax() {
     if (this.tipMin &amp;&amp; this.tipMax) return false;
-    this.tipMin = this.createElem('div', [this.rsName + '__tip-min']);
-    this.tipMax = this.createElem('div', [this.rsName + '__tip-max']);
+    const minName = this.rsName + '__tip-min';
+    this.tipMin = this.createElem('div', [minName, 'js-' + minName]);
+    const maxName = this.rsName + '__tip-max';
+    this.tipMax = this.createElem('div', [maxName, 'js-' + maxName]);
     this.rsTop.appendChild(this.tipMin);
     this.rsTop.appendChild(this.tipMax);
     return true;
@@ -963,27 +963,30 @@ class Hints {
 &nbsp;
   createTipFrom() {
     if (this.tipFrom) return false;
-    this.tipFrom = this.createElem('div', [this.rsName + '__tip-from']);
+    const fromName = this.rsName + '__tip-from';
+    this.tipFrom = this.createElem('div', [fromName, 'js-' + fromName]);
     this.rsTop.appendChild(this.tipFrom);
     return true;
   }
 &nbsp;
   createTipTo() {
     if (this.tipTo) return false;
-    this.tipTo = this.createElem('div', [this.rsName + '__tip-to']);
+    const toName = this.rsName + '__tip-to';
+    this.tipTo = this.createElem('div', [toName, 'js-' + toName]);
     this.rsTop.appendChild(this.tipTo);
     return true;
   }
 &nbsp;
   createTipSingle() {
     if (this.tipSingle) return false;
-    this.tipSingle = this.createElem('div', [this.rsName + '__tip-single']);
+    const singleName = this.rsName + '__tip-single';
+    this.tipSingle = this.createElem('div', [singleName, 'js-' + singleName]);
     this.tipSingle.style.visibility = 'hidden';
     this.rsTop.appendChild(this.tipSingle);
     return true;
   }
 &nbsp;
-  //------------------- удаляем элементы
+  //------------------- remove elements
   deleteTipMinMax() {
     if (!this.tipMin &amp;&amp; !this.tipMax) return false;
     this.tipMin.remove();
@@ -1019,7 +1022,7 @@ class Hints {
     return this.tipTo || !this.tipFromTo ? true : false;
   }
 &nbsp;
-  // ------------------------<span class="branch-0 cbranch-no" title="branch not covered" >--- заносим зн</span>ачения
+  // ------------------------<span class="branch-0 cbranch-no" title="branch not covered" >--- save value</span>s
 &nbsp;
   setValTipMinMax(min: number, max: number) {
     const tipMin = this.setData(this.tipMin, min);
@@ -1043,28 +1046,28 @@ class Hints {
       (this.vertical ? br + '↕' + br : ' ⟷ ') + valTo;
   }
 &nbsp;
-  // --------------------------- изменяем позицию
+  // --------------------------- change position
 &nbsp;
-  setPositionFrom(coorXY: number) {
+  setPositionFrom(coordXY: number) {
     if (!this.tipFrom) return false;
     const st = this.tipFrom.style;
-    this.setStylePosition(coorXY, st);
+    this.setStylePosition(coordXY, st);
     return true;
   }
 &nbsp;
 &nbsp;
-  setPositionTo(coorXY: number) {
+  setPositionTo(coordXY: number) {
     if (!this.tipTo) return false;
     const st = this.tipTo.style;
-    this<span class="missing-if-branch" title="if path not taken" >I</span>.setStylePosition(coorXY, st);
+    this<span class="missing-if-branch" title="if path not taken" >I</span>.setStylePosition(coordXY, st);
     return t<span class="cstat-no" title="statement not covered" >rue;</span>
   }
 &nbsp;
 &nbsp;
-  setPositionSingle(coorXY: number) {
+  setPositionSingle(coordXY: number) {
     if (!this.tipSingle) return false;
     const st = this.tipSingle.style;
-    this.setStylePosition(coorXY, st);
+    this.setStylePosition(coordXY, st);
     return true;
   }
 &nbsp;
@@ -1086,7 +1089,7 @@ class Hints {
   checkVisibleTip() {
     if (!this.tipMinMax &amp;&amp; !this.tipFromTo) return false;
 &nbsp;
-    //------------------------------------------- Получаем данные
+    //------------------------------------------- get data
     let { tipFromXY, tipFromWH } = this.getBoundingDot(thi<span class="branch-1 cbranch-no" title="branch not covered" >s.tipFrom);</span>
     let { tipToXY, tipToWH } = this.getBoundingDot(this.tipT<span class="branch-1 cbranch-no" title="branch not covered" >o);</span>
     let { tipMinXY, tipMinWH, tipMaxXY } = this.getBoundingMinMax();
@@ -1098,7 +1101,7 @@ class Hints {
     let tipMinYTop = 0;
     let tipMinXRight = 0;
 &nbsp;
-    //------------------------------------------- Определяем логику
+    //------------------------------------------- define logic
     if (this.vertical) {
       tipMinYTop = tipMinXY - tipMinWH;
       const tipFromYTop = tipFromXY - tipFromWH;
@@ -1109,7 +1112,7 @@ class Hints {
       } else {
         visibilityTipMax = tipMaxXY &gt;= tipFromYTop;
       }<span class="missing-if-branch" title="if path not taken" >I</span>
-      visibi<span class="cstat-no" title="statement not covered" >lityTipMin = tipMinYTop &gt;=</span> tipFromXY || !this.tipFrom;
+      visibi<span class="cstat-no" title="statement not covered" >lityTipMin = tipMinYTop &gt;= </span>tipFromXY || !this.tipFrom;
     } else {<span class="cstat-no" title="statement not covered" ></span>
       tipMinXRight = tipMinXY + tipMinWH;
       const tipFromXRight = tipFromXY + tipFromWH;
@@ -1119,7 +1122,7 @@ class Hints {
       visibilityTipMin = tipMinXRight &lt;= tipFromXY || !this.tipFrom;
     }
 &nbsp;
-    //------------------------------------------- Изменяем отображение
+    //------------------------------------------- change view
     this.toggleDisplay({
       tipMaxXY,
       visibilityTipSingle,
@@ -1139,12 +1142,12 @@ class Hints {
     return false;
   }
 &nbsp;
-  private setStylePosition(coorXY: number, st: CSSStyleDeclaration) {
+  private setStylePosition(coordXY: number, st: CSSStyleDeclaration) {
     if (this.vertical) {
-      st.bottom = coorXY + '%';
+      st.bottom = coordXY + '%';
       st.removeProperty('left');
     } else {
-      st.lef<span class="cstat-no" title="statement not covered" >t = coorXY + '%';</span>
+      st.lef<span class="cstat-no" title="statement not covered" >t = coordXY + '%';</span>
       st.rem<span class="cstat-no" title="statement not covered" >oveProperty('bottom');</span>
     }<span class="cstat-no" title="statement not covered" ></span>
   }
@@ -1222,14 +1225,12 @@ class Hints {
       const fl = this.vertical;
       tipMinXY = fl ? crMin.bottom : crMin.left;
       tipMinWH = fl ? tip.offsetHeight : tip.offsetWidth;
-&nbsp;
-      if (this.tipMa<span class="missing-if-branch" title="if path not taken" >I</span>x) {
-        const crMax = th<span class="cstat-no" title="statement not covered" >is.tipMax.getBoundingClientRect();</span>
-        tipMaxXY = fl ? crMa<span class="cstat-no" title="statement not covered" >x.bottom : crMax.left;</span>
+      if (this.tipMax) {
+        const crMax <span class="missing-if-branch" title="if path not taken" >I</span>= this.tipMax.getBoundingClientRect();
+        tipMaxXY = fl ? <span class="cstat-no" title="statement not covered" >crMax.bottom : crMax.left;</span>
       }<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-    return { tipMinXY, tipMinWH, tipMaxXY };
+    return { tipMinXY, tipMi<span class="cstat-no" title="statement not covered" >nWH, tipMaxXY };</span>
   }
 &nbsp;
 &nbsp;
@@ -1238,20 +1239,17 @@ class Hints {
     let tipSingleWH = 0;
     let tipSingleB = 0;
     const fl = this.vertical;
-&nbsp;
     const tip = this.tipSingle;
     if (tip) {
       const cr = tip.getBoundingClientRect();
-      tipSingleXY = fl ? cr.bottom : cr.left;<span class="branch-1 cbranch-no" title="branch not covered" ></span>
+      tipSingleXY = fl ? cr.bottom : cr.left;
       tipSingleWH = fl ? tip.offsetHeight : tip.offsetWidth;
     }
-&nbsp;
-    if (fl) {
+    if (fl) {<span class="branch-1 cbranch-no" title="branch not covered" ></span>
       tipSingleB = tipSingleXY - tipSingleWH;
     } else {
       tipSingleB = tipSingleXY + tipSingleWH;
     }
-&nbsp;
     return { tipSingleXY, tipSingleB };
   }
 &nbsp;
@@ -1291,7 +1289,6 @@ class Hints {
             if (tipMinXRight &gt;= tipSingleXY)
               visibilityTipMin = false;
           }
-&nbsp;
         }
       } else {
         display(this.tipFrom, true);
@@ -1315,7 +1312,7 @@ export { Hints };</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Nov 28 2021 20:01:17 GMT+0300 (Москва, стандартное время)
+                at Tue Nov 30 2021 22:33:40 GMT+0300 (Москва, стандартное время)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

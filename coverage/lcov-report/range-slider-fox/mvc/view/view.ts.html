@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.74% </span>
+                <span class="strong">90.68% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>147/162</span>
+                <span class='fraction'>146/161</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.74% </span>
+                <span class="strong">90.68% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>147/162</span>
+                <span class='fraction'>146/161</span>
             </div>
         
             
@@ -448,13 +448,7 @@
 <a name='L389'></a><a href='#L389'>389</a>
 <a name='L390'></a><a href='#L390'>390</a>
 <a name='L391'></a><a href='#L391'>391</a>
-<a name='L392'></a><a href='#L392'>392</a>
-<a name='L393'></a><a href='#L393'>393</a>
-<a name='L394'></a><a href='#L394'>394</a>
-<a name='L395'></a><a href='#L395'>395</a>
-<a name='L396'></a><a href='#L396'>396</a>
-<a name='L397'></a><a href='#L397'>397</a>
-<a name='L398'></a><a href='#L398'>398</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L392'></a><a href='#L392'>392</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
@@ -480,8 +474,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-yes">16x</span>
@@ -531,18 +523,19 @@
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-yes">80x</span>
 <span class="cline-any cline-yes">80x</span>
-<span class="cline-any cline-yes">96x</span>
+<span class="cline-any cline-yes">160x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">80x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">16x</span>
-<span class="cline-any cline-yes">16x</span>
-<span class="cline-any cline-yes">16x</span>
-<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-yes">16x</span>
@@ -846,13 +839,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
-import { UbdateTip } from './view.d';
+import { UpdateTip } from './view.d';
 import { Handle } from './sub-view/handle';
 import { Hints } from './sub-view/hints';
 import { Bar } from './sub-view/bar';
@@ -877,13 +865,11 @@ class View extends Observer {
   private objData: TOB;
   onHandle: Function;
   elem: Element;
-  numElem: Number;
 &nbsp;
 &nbsp;
-  constructor(elem: Element, numElem: Number) {
+  constructor(elem: Element) {
     super();
     this.elem = elem;
-    this.numElem = numElem;
     this.rsName = 'range-slider-fox';
     this.wrapSlider = this.elem.parentElement;
 &nbsp;
@@ -945,15 +931,15 @@ class View extends Observer {
       return elem;
     };
 &nbsp;
-    this.rangeSlider = createElem('div', [
-      this.rsName,
-      'js-rs-' + this.numElem,
-    ]);
-&nbsp;
-    this.rsTop = createElem('div', [this.rsName + '__top']);
-    this.rsCenter = createElem('div', [this.rsName + '__center']);
-    this.rsBottom = createElem('div', [this.rsName + '__bottom']);
-    this.rsLine = createElem('span', [this.rsName + '__line']);
+    this.rangeSlider = createElem('div', [this.rsName, 'js-' + this.rsName]);
+    this.rsTop = createElem('div', [this.rsName + '__top',
+    'js-' + this.rsName + '__top']);
+    this.rsCenter = createElem('div', [this.rsName + '__center',
+    'js-' + this.rsName + '__center']);
+    this.rsBottom = createElem('div', [this.rsName + '__bottom',
+    'js-' + this.rsName + '__bottom']);
+    this.rsLine = createElem('span', [this.rsName + '__line',
+    'js-' + this.rsName + '__line']);
 &nbsp;
     this.rsCenter.appendChild(this.rsLine);
     this.rangeSlider.appendChild(this.rsTop);
@@ -961,15 +947,15 @@ class View extends Observer {
     this.rangeSlider.appendChild(this.rsBottom);
 &nbsp;
     return this.wrapSlider.appendChild(this.rangeSlider);
-  }<span class="branch-0 cbranch-no" title="branch not covered" ></span>
-&nbsp;
+  }
+<span class="branch-0 cbranch-no" title="branch not covered" ></span>
 &nbsp;
   async setOrientation(str: string) {
 &nbsp;
-    const modif = this.rsName + '_vertical';
+    const modify = this.rsName + '_vertical';
     const objP = this.rangeSlider.classList;
     this.vertical = str == 'vertical' ? true : false;
-    this.vertical ? objP.add(modif) : objP.remove(modif);
+    this.vertical ? objP.add(modify) : objP.remove(modify);
 &nbsp;
     await this.handle.setOrientation(str);
     await this.hints.setOrientation(str);
@@ -1003,12 +989,12 @@ class View extends Observer {
   }
 &nbsp;
   setDotFrom(fromP: number) {
-    this.hand<span class="missing-if-branch" title="else path not taken" >E</span>le.setFrom(fromP);
-  }<span class="cstat-no" title="statement not covered" ></span>
+    this.handle.setFrom(fromP);
+  }<span class="missing-if-branch" title="else path not taken" >E</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  setDotTo(toP: <span class="cstat-no" title="statement not covered" >number) {</span>
+  setDotTo(t<span class="cstat-no" title="statement not covered" >oP: number) {</span>
     this.handle.<span class="cstat-no" title="statement not covered" >setTo(toP);</span>
-  }
+  }<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
   setDotActions(type: string) {
     this.handle.setActions(type);
@@ -1017,17 +1003,17 @@ class View extends Observer {
   //--------------------------------- hints
 &nbsp;
   setHintsData(options: TOB) {
-<span class="fstat-no" title="function not covered" >    th</span>is.hints.setAdditionalText(options.tipPrefix, options.tipPostfix);
-    this<span class="cstat-no" title="statement not covered" >.hints.setTipFlag(options.tipFromTo, o</span>ptions.tipMinMax);
-    if (options.tipMinMax) {
+    this.hints.setAdditionalText(options.tipPrefix, options.tipPostfix);
+<span class="fstat-no" title="function not covered" >    th</span>is.hints.setTipFlag(options.tipFromTo, options.tipMinMax);
+    if (<span class="cstat-no" title="statement not covered" >options.tipMinMax) {</span>
       this.hints.createTipMinMax();
       this.hints.setValTipMinMax(options.min, options.max);
     }
     else {
       this.hints.deleteTipMinMax();
-<span class="fstat-no" title="function not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" ></span>
-    if (options.tipFromTo) {
+    }
+<span class="fstat-no" title="function not covered" ></span>
+    if (<span class="cstat-no" title="statement not covered" >options.tipFromTo) {</span>
       this.hints.createTipFrom();
       if (options.type == 'double') {
         this.hints.createTipTo();
@@ -1038,12 +1024,12 @@ class View extends Observer {
       if (options.type == 'double') {
         this.hints.deleteTipTo();
         this.hints.deleteTipSingle();
-<span class="fstat-no" title="function not covered" ></span>      }
-    }<span class="cstat-no" title="statement not covered" ></span>
+      }
+<span class="fstat-no" title="function not covered" >    }</span>
   }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
   toggleTipT<span class="cstat-no" title="statement not covered" >o(to: number) {</span>
-    if (!this.hints.checkTipTo()) {
+    if (!thi<span class="cstat-no" title="statement not covered" >s.hints.checkTipTo()) {</span>
       this.hints.createTipTo();
       this.hints.setValTipTo(to);
     }
@@ -1076,7 +1062,7 @@ class View extends Observer {
     }
   }
 &nbsp;
-  updateTipPosition(op: UbdateTip) {
+  updateTipPosition(op: UpdateTip) {
     this.hints.setPositionFrom(op.fromXY);
     if (op.toXY &amp;&amp; op.singleXY) {
       this.hints.setPositionTo(op.toXY);
@@ -1097,12 +1083,12 @@ class View extends Observer {
 &nbsp;
   setBar(barX: number, widthBar: number) {
     this.bar.setBar(barX, widthBar);
-  }<span class="cstat-no" title="statement not covered" ></span>
+  }
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  //--------------------------------- Grid
-<span class="cstat-no" title="statement not covered" ></span>
-  deleteGrid() {
+  //----------------<span class="cstat-no" title="statement not covered" >----------------- Grid</span>
+&nbsp;
+  deleteGrid() {<span class="cstat-no" title="statement not covered" ></span>
     this.grid.deleteGrid();
   }
 &nbsp;
@@ -1174,7 +1160,6 @@ class View extends Observer {
     }
 &nbsp;
     this.objData = Object.fromEntries(mapOptions);
-&nbsp;
     let observer = new MutationObserver(mut =&gt; {
       const attr = mut[0].attributeName;
       const opt = attr.replace('data-', '');
@@ -1196,11 +1181,9 @@ class View extends Observer {
   }
 &nbsp;
   private init() {
-&nbsp;
     this.onHandle = async () =&gt; {
-&nbsp;
-      await this.createDomBase(); // создаём базовые дом элементы. 
-      await this.setActions();  // вешаем события.
+      await this.createDomBase(); // create basic DOM elements
+      await this.setActions();  // add event listeners
 &nbsp;
       this.handle = await new Handle(this.rsCenter, this.rsName);
       this.hints = await new Hints(this.rsTop, this.rsName);
@@ -1210,7 +1193,6 @@ class View extends Observer {
       await this.createListeners();
       await this.attributesChange();
     };
-&nbsp;
   }
 &nbsp;
 &nbsp;
@@ -1255,7 +1237,7 @@ export { View };</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Nov 28 2021 20:01:17 GMT+0300 (Москва, стандартное время)
+                at Tue Nov 30 2021 22:33:40 GMT+0300 (Москва, стандартное время)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

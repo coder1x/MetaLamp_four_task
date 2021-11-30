@@ -5,17 +5,26 @@ describe('------- Test Hints API -------', () => {
   let rsName: string;
   let wrap: HTMLElement;
   let hints: Hints;
+  let jsRsName: string;
 
   beforeEach(() => {
     rsName = 'range-slider-fox';
+    jsRsName = 'js-' + rsName;
     wrap = document.createElement('div');
     wrap.classList.add(rsName + '__top');
+    wrap.classList.add(jsRsName + '__top');
     hints = new Hints(wrap, rsName);
   });
 
+  function searchStr(text: string, str: string) {
+    const regexp = new RegExp(str, 'g');
+    return regexp.test(text);
+  }
+
   const checkDom = async (name: string) => {
     const dom = await wrap.firstChild as HTMLElement;
-    expect(dom.className).toBe(rsName + '__tip-' + name);
+    const fl = searchStr(dom.className, jsRsName + '__tip-' + name);
+    expect(fl).toBeTruthy();
   };
 
   const checkStyle = async (val: string) => {
@@ -41,8 +50,13 @@ describe('------- Test Hints API -------', () => {
     const fl = await hints.createTipMinMax();
     expect(fl).toBeTruthy();
     const tips = await wrap.children;
-    expect(tips[0].className).toBe(rsName + '__tip-min');
-    expect(tips[1].className).toBe(rsName + '__tip-max');
+
+    let classNameF = searchStr(tips[0].className,
+      jsRsName + '__tip-min');
+    expect(classNameF).toBeTruthy();
+    classNameF = searchStr(tips[1].className,
+      jsRsName + '__tip-max');
+    expect(classNameF).toBeTruthy();
     expect(hints.createTipMinMax()).toBeFalsy();
   });
 

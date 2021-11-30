@@ -6,14 +6,17 @@ class InputData {
 
   private value: HTMLInputElement;
   private input: HTMLInputElement;
+  private className: string;
+  private elem: HTMLElement;
 
-  // eslint-disable-next-line no-unused-vars
-  constructor(public className: string, public elem: HTMLElement) {
+
+  constructor(className: string, elem: HTMLElement) {
+    this.className = className;
+    this.elem = elem;
     this.setDom();
   }
 
   private setDom() {
-
     this.input = this.elem.querySelector(
       this.className + '__slider-wrap input'
     ) as HTMLInputElement;
@@ -34,7 +37,6 @@ class InputData {
     } else {
       this.value.disabled = true;
     }
-
   }
 }
 

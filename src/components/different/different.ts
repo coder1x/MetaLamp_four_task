@@ -22,51 +22,25 @@ class Different {
   private select: Select;
   private reset: HTMLButtonElement;
   private panel: HTMLElement;
-  private modif: string;
-
+  private modify: string;
   private disabledD: boolean;
   private barD: boolean;
   private typeD: string;
   private orientationD: string;
   private themeD: string;
+  private nameClass: string;
 
 
-  // eslint-disable-next-line no-unused-vars
-  constructor(public nameClass: string, elem: HTMLElement, panel: HTMLElement) {
+  constructor(nameClass: string, elem: HTMLElement, panel: HTMLElement) {
+    this.nameClass = nameClass;
     this.panel = panel;
     this.elem = elem;
     this.setDom();
   }
 
-  private setDom() {
-
-    this.modif = this.panel.className + '_vertical';
-
-    const getDom = (str: string) => {
-      return this.elem.querySelector(
-        this.nameClass +
-        '__' +
-        str +
-        '-wrap input'
-      ) as HTMLInputElement;
-    };
-
-    this.type = getDom('double');
-    this.disabled = getDom('disabled');
-    this.bar = getDom('bar');
-    this.orientation = getDom('vertical');
-    this.reset =
-      this.elem.querySelector(this.nameClass + '__reset') as HTMLButtonElement;
-
-    const selectE = this.elem.querySelector('.select');
-    this.select = new Select('.select', selectE as HTMLElement);
-
-  }
-
 
   setData(options: OP) {
     const { disabled, bar, type, orientation, theme } = options;
-
 
     if (this.disabledD != disabled) {
       this.disabled.checked = disabled;
@@ -89,9 +63,9 @@ class Different {
       this.orientationD = orientation;
 
       if (orientF) {
-        this.panel.classList.add(this.modif);
+        this.panel.classList.add(this.modify);
       } else {
-        this.panel.classList.remove(this.modif);
+        this.panel.classList.remove(this.modify);
       }
     }
 
@@ -103,7 +77,7 @@ class Different {
 
 
   setAction(obj: any) {
-    const modif = this.modif;
+    const modify = this.modify;
     const objP = this.panel.classList;
 
     this.reset.addEventListener('click', () => {
@@ -137,16 +111,35 @@ class Different {
 
     this.orientation.addEventListener('click', function () {
       const val = this.checked ? 'vertical' : 'horizontal';
-      this.checked ? objP.add(modif) : objP.remove(modif);
+      this.checked ? objP.add(modify) : objP.remove(modify);
 
       obj.update({
         orientation: val
       });
     });
-
-
   }
 
+  private setDom() {
+    this.modify = this.panel.className + '_vertical';
+
+    const getDom = (str: string) => {
+      return this.elem.querySelector(
+        this.nameClass +
+        '__' +
+        str +
+        '-wrap input'
+      ) as HTMLInputElement;
+    };
+
+    this.type = getDom('double');
+    this.disabled = getDom('disabled');
+    this.bar = getDom('bar');
+    this.orientation = getDom('vertical');
+    this.reset =
+      this.elem.querySelector(this.nameClass + '__reset') as HTMLButtonElement;
+    const selectE = this.elem.querySelector('.select');
+    this.select = new Select('.select', selectE as HTMLElement);
+  }
 
 }
 

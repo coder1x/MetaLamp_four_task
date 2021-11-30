@@ -23,33 +23,14 @@ class Values {
   private fromD: number;
   private toD: number;
   private stepD: number;
+  private nameClass: string;
 
 
-  // eslint-disable-next-line no-unused-vars
-  constructor(public nameClass: string, elem: HTMLElement) {
-
+  constructor(nameClass: string, elem: HTMLElement) {
+    this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
   }
-
-  private setDom() {
-
-    const getDom = (str: string) => {
-      return this.elem.querySelector(
-        this.nameClass +
-        '__' +
-        str +
-        '-wrap input'
-      ) as HTMLInputElement;
-    };
-
-    this.min = getDom('min');
-    this.max = getDom('max');
-    this.from = getDom('from');
-    this.to = getDom('to');
-    this.step = getDom('step');
-  }
-
 
   setData(options: OP) {
     const { min, max, from, to, step } = options;
@@ -82,7 +63,6 @@ class Values {
 
 
   setAction(obj: any) {
-
     let mapInput = new Map();
     mapInput.set('min', this.min.value);
     mapInput.set('max', this.max.value);
@@ -112,14 +92,28 @@ class Values {
       }
     };
 
-
     const masE = [this.min, this.max, this.from, this.to, this.step];
-
     for (let item of masE) {
       item.addEventListener('change', data);
       item.addEventListener('input', inputProcessing);
     }
+  }
 
+  private setDom() {
+    const getDom = (str: string) => {
+      return this.elem.querySelector(
+        this.nameClass +
+        '__' +
+        str +
+        '-wrap input'
+      ) as HTMLInputElement;
+    };
+
+    this.min = getDom('min');
+    this.max = getDom('max');
+    this.from = getDom('from');
+    this.to = getDom('to');
+    this.step = getDom('step');
   }
 
 }

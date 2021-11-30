@@ -10,15 +10,22 @@ describe('------- Test Handle API -------', () => {
   let rsName: string;
   let wrap: HTMLElement;
   let handle: Handle;
-
+  let jsRsName: string;
 
 
   beforeEach(async () => {
     rsName = 'range-slider-fox';
+    jsRsName = 'js-' + rsName;
     wrap = document.createElement('div');
     wrap.classList.add(rsName + '__center');
+    wrap.classList.add(jsRsName + '__center');
     handle = await new Handle(wrap, rsName);
   });
+
+  function searchStr(text: string, str: string) {
+    const regexp = new RegExp(str, 'g');
+    expect(regexp.test(text)).toBeTruthy();
+  }
 
   const delElem = (elem: HTMLElement) => {
     while (elem.firstChild) {
@@ -39,8 +46,10 @@ describe('------- Test Handle API -------', () => {
     let wrapH = handle.createDomBase('double');
     expect(wrapH).toBeDefined();
     let child = (wrapH as HTMLElement).children;
-    expect(child[0].className).toBe(rsName + '__from');
-    expect(child[1].className).toBe(rsName + '__to');
+
+    searchStr(child[0].className, jsRsName + '__from');
+    searchStr(child[1].className, jsRsName + '__to');
+
     wrapH = await handle.createDomBase('double');
     expect(wrapH).toBeFalsy();
     await delElem(wrap);
@@ -48,7 +57,8 @@ describe('------- Test Handle API -------', () => {
     wrapH = await handle.createDomBase('single');
     expect(wrapH).toBeDefined();
     child = (wrapH as HTMLElement).children;
-    expect(child[0].className).toBe(rsName + '__from');
+
+    searchStr(child[0].className, jsRsName + '__from');
     expect(child[1]).toBeUndefined();
     wrapH = handle.createDomBase('single');
     expect(wrapH).toBeFalsy();
@@ -93,7 +103,8 @@ describe('------- Test Handle API -------', () => {
         const spy = await jest.spyOn(model, 'calcDotPosition');
 
         const eventDot = async (name: string, val1: number, val2: number) => {
-          const dot = await wrapC.getElementsByClassName(rsName + '__' + name);
+          const dot =
+            await wrapC.getElementsByClassName(jsRsName + '__' + name);
           let elem = dot[0] as HTMLElement;
           const type = name == 'from' ? 'From' : 'To';
           const funP = await mockPointerEvent(elem);
@@ -121,7 +132,7 @@ describe('------- Test Handle API -------', () => {
         await eventDot('to', 87, 83);
       }
     });
-    const view = await new View(domC, 1);
+    const view = await new View(domC);
     await new Controller(model, view);
 
 

@@ -58,11 +58,13 @@ class Hints {
     return fl;
   }
 
-  //----------------------- создаём элементы
+  //----------------------- create elements
   createTipMinMax() {
     if (this.tipMin && this.tipMax) return false;
-    this.tipMin = this.createElem('div', [this.rsName + '__tip-min']);
-    this.tipMax = this.createElem('div', [this.rsName + '__tip-max']);
+    const minName = this.rsName + '__tip-min';
+    this.tipMin = this.createElem('div', [minName, 'js-' + minName]);
+    const maxName = this.rsName + '__tip-max';
+    this.tipMax = this.createElem('div', [maxName, 'js-' + maxName]);
     this.rsTop.appendChild(this.tipMin);
     this.rsTop.appendChild(this.tipMax);
     return true;
@@ -70,27 +72,30 @@ class Hints {
 
   createTipFrom() {
     if (this.tipFrom) return false;
-    this.tipFrom = this.createElem('div', [this.rsName + '__tip-from']);
+    const fromName = this.rsName + '__tip-from';
+    this.tipFrom = this.createElem('div', [fromName, 'js-' + fromName]);
     this.rsTop.appendChild(this.tipFrom);
     return true;
   }
 
   createTipTo() {
     if (this.tipTo) return false;
-    this.tipTo = this.createElem('div', [this.rsName + '__tip-to']);
+    const toName = this.rsName + '__tip-to';
+    this.tipTo = this.createElem('div', [toName, 'js-' + toName]);
     this.rsTop.appendChild(this.tipTo);
     return true;
   }
 
   createTipSingle() {
     if (this.tipSingle) return false;
-    this.tipSingle = this.createElem('div', [this.rsName + '__tip-single']);
+    const singleName = this.rsName + '__tip-single';
+    this.tipSingle = this.createElem('div', [singleName, 'js-' + singleName]);
     this.tipSingle.style.visibility = 'hidden';
     this.rsTop.appendChild(this.tipSingle);
     return true;
   }
 
-  //------------------- удаляем элементы
+  //------------------- remove elements
   deleteTipMinMax() {
     if (!this.tipMin && !this.tipMax) return false;
     this.tipMin.remove();
@@ -126,7 +131,7 @@ class Hints {
     return this.tipTo || !this.tipFromTo ? true : false;
   }
 
-  // --------------------------- заносим значения
+  // --------------------------- save values
 
   setValTipMinMax(min: number, max: number) {
     const tipMin = this.setData(this.tipMin, min);
@@ -150,7 +155,7 @@ class Hints {
       (this.vertical ? br + '↕' + br : ' ⟷ ') + valTo;
   }
 
-  // --------------------------- изменяем позицию
+  // --------------------------- change position
 
   setPositionFrom(coordXY: number) {
     if (!this.tipFrom) return false;
@@ -193,7 +198,7 @@ class Hints {
   checkVisibleTip() {
     if (!this.tipMinMax && !this.tipFromTo) return false;
 
-    //------------------------------------------- Получаем данные
+    //------------------------------------------- get data
     let { tipFromXY, tipFromWH } = this.getBoundingDot(this.tipFrom);
     let { tipToXY, tipToWH } = this.getBoundingDot(this.tipTo);
     let { tipMinXY, tipMinWH, tipMaxXY } = this.getBoundingMinMax();
@@ -205,7 +210,7 @@ class Hints {
     let tipMinYTop = 0;
     let tipMinXRight = 0;
 
-    //------------------------------------------- Определяем логику
+    //------------------------------------------- define logic
     if (this.vertical) {
       tipMinYTop = tipMinXY - tipMinWH;
       const tipFromYTop = tipFromXY - tipFromWH;
@@ -226,7 +231,7 @@ class Hints {
       visibilityTipMin = tipMinXRight <= tipFromXY || !this.tipFrom;
     }
 
-    //------------------------------------------- Изменяем отображение
+    //------------------------------------------- change view
     this.toggleDisplay({
       tipMaxXY,
       visibilityTipSingle,

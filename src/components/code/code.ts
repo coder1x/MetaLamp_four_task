@@ -1,5 +1,4 @@
 import './code.scss';
-
 import { RangeSliderOptions } from
   '../../plugins/range-slider-fox/glob-interface';
 
@@ -15,16 +14,8 @@ class CopyCode {
 
   constructor(className: string, component: HTMLElement) {
     this.className = className;
-
     this.elem = component;
     this.init();
-  }
-
-  private init() {
-    this.ul = this.elem.querySelector(this.className + '__options');
-    this.button = this.elem.querySelector(this.className + '__copy');
-
-    this.setActions();
   }
 
   setData(options: RangeSliderOptions) {
@@ -52,6 +43,11 @@ class CopyCode {
     }
   }
 
+  private init() {
+    this.ul = this.elem.querySelector(this.className + '__options');
+    this.button = this.elem.querySelector(this.className + '__copy');
+    this.setActions();
+  }
 
   private createElem(teg: string, className: string[]) {
     const elem = document.createElement(teg);
@@ -62,9 +58,7 @@ class CopyCode {
   }
 
   private setActions() {
-
     const child = this.ul.childNodes;
-
     this.button.addEventListener('click', () => {
       let text = '$(\'.demo\').RangeSliderFox({\n';
       for (let item of child) {

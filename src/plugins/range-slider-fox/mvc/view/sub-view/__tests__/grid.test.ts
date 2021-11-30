@@ -7,11 +7,14 @@ describe('------- Test Grid API -------', () => {
   let rsName: string;
   let wrap: HTMLElement;
   let grid: Grid;
+  let jsRsName: string;
 
   beforeEach(async () => {
     rsName = 'range-slider-fox';
+    jsRsName = 'js-' + rsName;
     wrap = document.createElement('div');
     wrap.classList.add(rsName + '__bottom');
+    wrap.classList.add(jsRsName + '__bottom');
     grid = await new Grid(wrap, rsName);
   });
 
@@ -116,7 +119,7 @@ describe('------- Test Grid API -------', () => {
         const spy = await jest.spyOn(model, 'clickMark');
 
         const dot =
-          await wrapC.getElementsByClassName(rsName + '__grid-mark');
+          await wrapC.getElementsByClassName(jsRsName + '__grid-mark');
         let elem = dot[0] as HTMLElement;
 
         const funP = await mockPointerEvent(elem);
@@ -127,7 +130,7 @@ describe('------- Test Grid API -------', () => {
         await spy.mockClear();
       },
     });
-    const view = await new View(domC, 1);
+    const view = await new View(domC);
     obj = await new Controller(model, view);
 
   });

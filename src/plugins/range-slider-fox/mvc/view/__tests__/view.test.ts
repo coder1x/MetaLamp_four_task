@@ -7,14 +7,21 @@ describe('------- Test View API -------', () => {
   let domV: HTMLInputElement;
   let view: View;
   let rsName: string;
+  let jsRsName: string;
 
   beforeEach(() => {
     rsName = 'range-slider-fox';
+    jsRsName = 'js-' + rsName;
     wrap = document.createElement('div');
     domV = document.createElement('input');
     wrap.appendChild(domV);
-    view = new View(domV, 1);
+    view = new View(domV);
   });
+
+  function searchStr(text: string, str: string) {
+    const regexp = new RegExp(str, 'g');
+    return regexp.test(text);
+  }
 
   test(' setValueInput ', () => {
     const model = new Model({
@@ -77,19 +84,15 @@ describe('------- Test View API -------', () => {
         for (let item of nodes) {
           const elem = item as HTMLElement;
           const nC = elem.className;
-          if (nC == rsName + '__center')
+          if (searchStr(nC, jsRsName + '__center'))
             line = elem.children[0] as HTMLElement;
           name.push(nC);
         }
 
-        const masName = [
-          rsName + '__top',
-          rsName + '__center',
-          rsName + '__bottom'
-        ];
-
-        expect(name).toEqual(masName);
-        expect(line.className).toBe(rsName + '__line');
+        expect(searchStr(name[0], jsRsName + '__top')).toBeTruthy();
+        expect(searchStr(name[1], jsRsName + '__center')).toBeTruthy();
+        expect(searchStr(name[2], jsRsName + '__bottom')).toBeTruthy();
+        expect(searchStr(line.className, jsRsName + '__line')).toBeTruthy();
       }
     });
 
@@ -134,7 +137,7 @@ describe('------- Test View API -------', () => {
       onUpdate: async () => {
         const spy = await jest.spyOn(model, 'clickLine');
         const dot =
-          await wrapC.getElementsByClassName(rsName + '__line');
+          await wrapC.getElementsByClassName(jsRsName + '__line');
         let elem = dot[0] as HTMLElement;
         const funP = await mockPointerEvent(elem);
         await funP('click', 34, 45);
@@ -142,7 +145,7 @@ describe('------- Test View API -------', () => {
         await spy.mockClear();
       },
     });
-    const view = await new View(domC, 1);
+    const view = await new View(domC);
     obj = await new Controller(model, view);
 
   });

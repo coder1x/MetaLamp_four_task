@@ -1,17 +1,17 @@
 
 interface CalcDotPositionOpt {
-  type: string,
-  wrapWH: number,
-  position: number,
-  clientXY: number,
-  shiftXY: number
+  readonly type: string,
+  readonly wrapWH: number,
+  readonly position: number,
+  readonly clientXY: number,
+  readonly shiftXY: number
 }
 
 interface TP {
-  fl: boolean,
-  clientXY: number,
-  shiftXY: number,
-  position: number,
+  readonly fl: boolean,
+  readonly clientXY: number,
+  readonly shiftXY: number,
+  readonly position: number,
 }
 
 type PROP = number | string | boolean | undefined | null;

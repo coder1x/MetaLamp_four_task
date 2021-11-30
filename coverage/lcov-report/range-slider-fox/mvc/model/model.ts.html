@@ -2515,14 +2515,14 @@ class Model extends Observer {
   //---------------------------------- Handle
 &nbsp;
   calcPositionDotFrom() {
-    this.fromP = (this.from - this.min) / this.valP;  // позиция левой точки в процентах
+    this.fromP = (this.from - this.min) / this.valP;  //left dot position (in %)
     this.limitFrom = this.fromP;
     return this.fromP;
   }
 &nbsp;
 &nbsp;
   calcPositionDotTo() {
-    this.toP = (this.to - this.min) / this.valP;      // позиция правой точки в процентах
+    this.toP = (this.to - this.min) / this.valP;      // right dot position (in %)
     this<span class="missing-if-branch" title="if path not taken" >I</span>.limitTo = this.toP;
     return t<span class="cstat-no" title="statement not covered" >his.toP;</span>
   }<span class="cstat-no" title="statement not covered" ></span>
@@ -2554,11 +2554,11 @@ class Model extends Observer {
 &nbsp;
     const typeF = this.type == 'single';
 &nbsp;
-    if (typeF) {  // если одна точка
+    if (typeF) {  // if single dot 
       th<span class="missing-if-branch" title="if path not taken" >I</span>is.fromP = percent;<span class="branch-1 cbranch-no" title="branch not covered" ></span>
       fromFl<span class="cstat-no" title="statement not covered" > = true;</span>
-    } else if (l<span class="cstat-no" title="statement not covered" >imitDot) {  // если две точки и from меньше to</span>
-      // в з<span class="cstat-no" title="statement not covered" >ависемости от того какая точка движется</span>
+    } else if (l<span class="cstat-no" title="statement not covered" >imitDot) {  //if double dot and FROM is less than TO</span>
+      // dep<span class="cstat-no" title="statement not covered" >ending on which dot is mooving</span>
       if (typeFr<span class="cstat-no" title="statement not covered" >om) {</span>
         this.fromP = percent;
         fromFl = true;
@@ -2568,8 +2568,8 @@ class Model extends Observer {
         toFl = true;
       }
     }
-    else { // если from больше to
-      // берём значения точки к которой подъезжаем в плотную.
+    else { // if FROM is greater than TO
+      // take value of another dot (which the mooving dot is approaching closely)
       if<span class="missing-if-branch" title="if path not taken" >I</span> (typeFrom)
         this<span class="cstat-no" title="statement not covered" >.fromP = this.</span>toP;
       el<span class="missing-if-branch" title="if path not taken" >I</span>se
@@ -2583,11 +2583,11 @@ class Model extends Observer {
     let to: number;
 &nbsp;
     if (fromFl) {
-      from = this.getDataDotFrom(); // получаем значение from
+      from = this.getDataDotFrom(); // get FROM value
     }
 &nbsp;
     if (toFl) {
-      to = this.getDataDotTo(); // получаем значение to
+      to = this.getDataDotTo(); //  get TO value
     }
 &nbsp;
     if (this.gridSnap &amp;&amp; !this.step) {
@@ -2713,7 +2713,7 @@ class Model extends Observer {
   clickBar =<span class="cstat-no" title="statement not covered" > (pointXY: number) =&gt; {</span>
 &nbsp;
     const vertical = this.orientation == 'vertical';
-    const oneP = this.wrapWH / 100; // один процент от всей школы
+    const oneP = this.wrapWH / 100; // one percent of the entire scale
 &nbsp;
     cons<span class="missing-if-branch" title="if path not taken" >I</span>t verticalC = (valP: number) =&gt; {
       let re<span class="cstat-no" title="statement not covered" >mainderP = 100 - valP</span>;
@@ -2742,13 +2742,13 @@ class Model extends Observer {
     if (this.type == 'single') {
       from = value;
     }
-    else if (value &gt; to) {       // если это значение больше чем To
-      to = value;                // To  на эту точку
-    } else if (value &gt; from) {   // если меньше To то больше From
-      const To = to - value;     // из To вычетаем Val
-      const From = value - from; // из Val вычетаем From
-      From &gt; To ? to = value : from = value; // то число что меньше та точка и ближе
-    } else {                              // Если Val меньше From то подвигать From
+    else if (value &gt; to) {       // if the value is greater than TO
+      to = value;                // set on this dot
+    } else if (value &gt; from) {   // if the value is greater than FROM
+      const To = to - value;     // extract Val from TO
+      const From = value - from; // extract FROM from VAL
+      From &gt; To ? to = value : from = value; // that dot is closer which value is smaller
+    } else {                              // if VAL is smaller than FROM, then move FROM
       from = value;
     }
 &nbsp;
@@ -2769,38 +2769,38 @@ class Model extends Observer {
     let fromFl = false;
     let toFl = false;
 &nbsp;
-    const oneP = this.wrapWH / 100; // один процент от всей школы
+    const oneP = this.wrapWH / 100; // one percent of the entire scale
     let pointP = 0;
 &nbsp;
     if (vertical) {
-      pointP = 100 - (pointXY / oneP); // кол. процентов в области где кликнули
+      pointP = 100 - (pointXY / oneP); // total percentage in the clicked area
     } else {<span class="branch-1 cbranch-no" title="branch not covered" ></span>
-      po<span class="missing-if-branch" title="if path not taken" >I</span>intP = pointXY / oneP<span class="branch-1 cbranch-no" title="branch not covered" >; // кол. п</span>роц<span class="branch-2 cbranch-no" title="branch not covered" >ентов</span> в области где кликнули
+      po<span class="missing-if-branch" title="if path not taken" >I</span>intP = pointXY / oneP<span class="branch-1 cbranch-no" title="branch not covered" >; // total </span>per<span class="branch-2 cbranch-no" title="branch not covered" >centa</span>ge in the clicked area
     }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     if (this.type == 'single<span class="cstat-no" title="statement not covered" >') {</span>
       this.fromP<span class="cstat-no" title="statement not covered" > = pointP;</span>
       fromFl = true;
     }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    else if (poi<span class="cstat-no" title="statement not covered" >ntP &gt; this.toP) {       // если это значение больше чем To</span>
-      this.toP = poi<span class="cstat-no" title="statement not covered" >ntP;                // To  на эту точку</span>
+    else if (poi<span class="cstat-no" title="statement not covered" >ntP &gt; this.toP) {       // if the value is greater than TO</span>
+      this.toP = poi<span class="cstat-no" title="statement not covered" >ntP;                // set on this dot</span>
       toFl = true;<span class="cstat-no" title="statement not covered" ></span>
-    } else if (point<span class="cstat-no" title="statement not covered" >P &gt; this.f</span>romP) {   // если меньше To то больше From
-      const To = thi<span class="cstat-no" title="statement not covered" >s.toP - pointP</span>;     // из To вычетаем Val
-      const From = pointP - this.fromP; // из Val вычетаем From
-      From &gt; To ? thi<span class="cstat-no" title="statement not covered" >s.toP = pointP : this.fromP = pointP; // то число что меньше та точка и ближе</span>
+    } else if (point<span class="cstat-no" title="statement not covered" >P &gt; this.f</span>romP) {   // if TO is smaller then FROM is greater
+      const To = thi<span class="cstat-no" title="statement not covered" >s.toP - pointP</span>;     // extract VAL from TO
+      const From = pointP - this.fromP; //extract FROM from VAL
+      From &gt; To ? thi<span class="cstat-no" title="statement not covered" >s.toP = pointP : this.fromP = pointP; //that dot is closer which value is smaller</span>
       From &gt; To ? to<span class="cstat-no" title="statement not covered" >Fl = true : fromFl = true;</span>
-    } else {            <span class="cstat-no" title="statement not covered" >                  // Есл</span>и Val меньше From то подвигать From
+    } else {            <span class="cstat-no" title="statement not covered" >                  //  if</span> VAL is smaller than FROM, then move FROM
       this.fromP = point<span class="cstat-no" title="statement not covered" >P;</span>
       fromFl = true;
     }
 <span class="cstat-no" title="statement not covered" ></span>
     if (fromFl) {<span class="cstat-no" title="statement not covered" ></span>
-      from = this.getDat<span class="cstat-no" title="statement not covered" >aDotFrom(); /</span>/ получаем значение from
+      from = this.getDat<span class="cstat-no" title="statement not covered" >aDotFrom(); /</span>/ get value FROM
     }<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
     if (toFl) {
-      to = this.<span class="cstat-no" title="statement not covered" >getDataDotTo(</span>); // получаем значение to
+      to = this.<span class="cstat-no" title="statement not covered" >getDataDotTo(</span>); // get value TO
     }
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
     this.setDotD<span class="cstat-no" title="statement not covered" >ata({</span>
@@ -2984,27 +2984,27 @@ class Model extends Observer {
     this.updateConfFl = false;
 &nbsp;
     return Object.assign({
-      type: 'single',   // тип - одна или две точки
-      orientation: 'horizontal',  // положение слайдера
-      th<span class="missing-if-branch" title="if path not taken" >I</span>eme: 'base',    // тема слайдера
-      min: 0<span class="cstat-no" title="statement not covered" >,           //</span> минимальное значение на школе
-      max: 10,          // максимальное значение на школе
-      fr<span class="missing-if-branch" title="if path not taken" >I</span>om: 1,          // позиция первой точки
-      to: 2,<span class="cstat-no" title="statement not covered" >            //</span> позиция второй точки
-      st<span class="missing-if-branch" title="if path not taken" >I</span>ep: 0,           // Шаг для ползунков
-      keySte<span class="cstat-no" title="statement not covered" >pOne: 0,    //</span> Шаг при нажатии кнопки с клавиатуры
-      ke<span class="missing-if-branch" title="if path not taken" >I</span>yStepHold: 0,   // Шаг при удержании кнопки с клавиатуры
-      bar: false,       /<span class="cstat-no" title="statement not covered" >/ По</span>казать или скрыть полусу диапазона
-      tipPre<span class="cstat-no" title="statement not covered" >fix: '',   </span> // Префикс для подсказок не больше 15 символов.
-      tipPos<span class="cstat-no" title="statement not covered" >tfix: '',   </span>// Префикс для подсказок не больше 15 символов.
-      tipMinMax: true,  // подсказки включены
-      tipFromTo: true,  // подсказки точек включены
-      grid: false,      // Шкал<span class="branch-1 cbranch-no" title="branch not covered" >а выключена</span>
-      gridSnap: false,  // точка переходит по ризкам на Шкале
-      gridNum: 0,       // интервал в шкале
-      gridStep: 0,      // Шаг шкалы
-      gridRound: 0,     // округление дробной части
-      disabl<span class="missing-if-branch" title="if path not taken" >I</span>ed: false,  // Включен или Выключен.
+      type: 'single',   // type - single or double dot
+      orientation: 'horizontal',  // slider orientation
+      th<span class="missing-if-branch" title="if path not taken" >I</span>eme: 'base',    // slider theme
+      min: 0<span class="cstat-no" title="statement not covered" >,           //</span> minimal value on the scale
+      max: 10,          // maximal value on the scale
+      fr<span class="missing-if-branch" title="if path not taken" >I</span>om: 1,          // first dot position
+      to: 2,<span class="cstat-no" title="statement not covered" >            //</span> second dot position
+      st<span class="missing-if-branch" title="if path not taken" >I</span>ep: 0,           // step of the dot mooving
+      keySte<span class="cstat-no" title="statement not covered" >pOne: 0,    //</span> step of the dot mooving on keyboard key single pressing
+      ke<span class="missing-if-branch" title="if path not taken" >I</span>yStepHold: 0,   // step of the dot mooving on keyboard key holding
+      bar: false,       /<span class="cstat-no" title="statement not covered" >/ sh</span>ow or hide a bar
+      tipPre<span class="cstat-no" title="statement not covered" >fix: '',   </span> // prefix for hints (15 characters maximum)
+      tipPos<span class="cstat-no" title="statement not covered" >tfix: '',   </span>// postfix for hints (15 characters maximum)
+      tipMinMax: true,  // hints are on
+      tipFromTo: true,  // hints are off
+      grid: false,      // scal<span class="branch-1 cbranch-no" title="branch not covered" >e is off</span>
+      gridSnap: false,  // dot can't stop between scale marks
+      gridNum: 0,       // amount of intervals the scale is split into
+      gridStep: 0,      // amount of steps in the interval
+      gridRound: 0,     // fractional rounding 
+      disabl<span class="missing-if-branch" title="if path not taken" >I</span>ed: false,  // slider enabled or disabled
     }, options);<span class="cstat-no" title="statement not covered" ></span>
   }<span class="missing-if-branch" title="if path not taken" >I</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -3097,7 +3097,7 @@ class Model extends Observer {
       max = temp;
     }
 &nbsp;
-    // нужно<span class="missing-if-branch" title="if path not taken" >I</span> првоерять чно новые данные отличаються от тех которые есть в модели.
+    // need <span class="missing-if-branch" title="if path not taken" >I</span>to check if new data is differ from the existing data in model
     if (min != t<span class="cstat-no" title="statement not covered" >his.min || max</span> != this.max) {
       this.m<span class="missing-if-branch" title="if path not taken" >I</span>in = +min;
       this.max = +max;<span class="cstat-no" title="statement not covered" ></span>
@@ -3120,7 +3120,7 @@ class Model extends Observer {
         max: this.max,
       });
 <span class="missing-if-branch" title="if path not taken" >I</span>
-      // есл<span class="cstat-no" title="statement not covered" >и обновили Диапазон то пересчитать все зависимые данные.</span>
+      // if <span class="cstat-no" title="statement not covered" >range is renewed, then recalculate all related data</span>
       if (this.u<span class="cstat-no" title="statement not covered" >pdateConfFl) {</span>
         this.set<span class="cstat-no" title="statement not covered" >DotData({</span>
           from: this<span class="cstat-no" title="statement not covered" >.from,</span>
@@ -3182,7 +3182,7 @@ class Model extends Observer {
     let from: PROP = options.from;
     let to: PROP = options.to;
 &nbsp;
-    // проверяем что необходимые нам данные есть.
+    //check if all necessary data exists
     if (!thi<span class="missing-if-branch" title="if path not taken" >I</span>s.isEmptu(this.min)) return false;
     if (!this.is<span class="cstat-no" title="statement not covered" >Emptu(this.max)) return</span> false;
 <span class="cstat-no" title="statement not covered" ></span>
@@ -3207,7 +3207,7 @@ class Model extends Observer {
         this.from = this.max;
     }
 &nbsp;
-    if (type == 'double') // проверяем from и to 
+    if (type == 'double') // check FROM and TO
     {
       to = t<span class="cstat-no" title="statement not covered" ><span class="missing-if-branch" title="else path not taken" >E</span>his.checkValue</span>(to, 'to') as PROP;
       if (to == null) return false;
@@ -3506,12 +3506,12 @@ class Model extends Observer {
     let interval = 0;
     let step = 0;
 &nbsp;
-    if (this.gridStep &amp;&amp; !this.gridNum) {     // если задан Шаг а интервал по умолчанию стоит
+    if (this.gridStep &amp;&amp; !this.gridNum) {     // if STEP is defined and interval is set by default
       step = this.gridStep;
-      interval = this.getRange() / step;          // находим новый интервал
-    } else {                                      // делаем только по интервалу
+      interval = this.getRange() / step;          // define new interval
+    } else {                                      // calculate in line with interval
       interval = this.gridNum;
-      step = (this.max - this.min) / interval;    // находим шаг
+      step = (this.max - this.min) / interval;    // define step
     }
 &nbsp;
     return { interval, step };
@@ -3529,7 +3529,7 @@ export { Model };</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Nov 28 2021 20:01:17 GMT+0300 (Москва, стандартное время)
+                at Tue Nov 30 2021 22:33:40 GMT+0300 (Москва, стандартное время)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

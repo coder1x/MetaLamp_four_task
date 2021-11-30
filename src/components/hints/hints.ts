@@ -13,33 +13,16 @@ class Hints {
   private tipFromTo: HTMLInputElement;
   private tipPrefix: HTMLInputElement;
   private tipPostfix: HTMLInputElement;
-
   private tipMinMaxD: boolean;
   private tipFromToD: boolean;
   private tipPrefixD: string;
   private tipPostfixD: string;
+  private nameClass: string;
 
-
-  // eslint-disable-next-line no-unused-vars
-  constructor(public nameClass: string, elem: HTMLElement) {
+  constructor(nameClass: string, elem: HTMLElement) {
+    this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
-  }
-
-  private setDom() {
-    const getDom = (str: string) => {
-      return this.elem.querySelector(
-        this.nameClass +
-        '__' +
-        str +
-        '-wrap input'
-      ) as HTMLInputElement;
-    };
-
-    this.tipMinMax = getDom('minmax');
-    this.tipFromTo = getDom('fromto');
-    this.tipPrefix = getDom('prefix');
-    this.tipPostfix = getDom('postfix');
   }
 
   setData(options: OP) {
@@ -87,6 +70,22 @@ class Hints {
         tipFromTo: this.checked
       });
     });
+  }
+
+  private setDom() {
+    const getDom = (str: string) => {
+      return this.elem.querySelector(
+        this.nameClass +
+        '__' +
+        str +
+        '-wrap input'
+      ) as HTMLInputElement;
+    };
+
+    this.tipMinMax = getDom('minmax');
+    this.tipFromTo = getDom('fromto');
+    this.tipPrefix = getDom('prefix');
+    this.tipPostfix = getDom('postfix');
   }
 
 }

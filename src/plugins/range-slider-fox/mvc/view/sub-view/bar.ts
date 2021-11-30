@@ -78,7 +78,8 @@ class Bar extends Observer {
     if (this.bar && this.elemBar) return false;
     if (!this.bar && !this.elemBar) return false;
 
-    this.elemBar = this.createElem('span', [this.rsName + '__bar']);
+    const barName = this.rsName + '__bar';
+    this.elemBar = this.createElem('span', [barName, 'js-' + barName]);
     this.rsCenter.appendChild(this.elemBar);
 
     this.setActions();

@@ -17,36 +17,19 @@ class Grid {
   private interval: HTMLInputElement;
   private step: HTMLInputElement;
   private gridRound: HTMLInputElement;
-
   private gridD: boolean;
   private gridSnapD: boolean;
   private gridNumD: number;
   private gridStepD: number;
   private gridRoundD: number;
+  private nameClass: string;
 
-  // eslint-disable-next-line no-unused-vars
-  constructor(public nameClass: string, elem: HTMLElement) {
-
+  constructor(nameClass: string, elem: HTMLElement) {
+    this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
   }
 
-  private setDom() {
-    const getDom = (str: string) => {
-      return this.elem.querySelector(
-        this.nameClass +
-        '__' +
-        str +
-        '-wrap input'
-      ) as HTMLInputElement;
-    };
-
-    this.grid = getDom('grid');
-    this.snap = getDom('snap');
-    this.interval = getDom('interval');
-    this.step = getDom('step');
-    this.gridRound = getDom('round');
-  }
 
   setData(options: OP) {
     const { grid, gridSnap, gridNum, gridStep, gridRound } = options;
@@ -74,7 +57,6 @@ class Grid {
   }
 
   setAction(obj: any) {
-
     let mapInput = new Map();
     mapInput.set('gridNum', this.interval.value);
     mapInput.set('gridStep', this.step.value);
@@ -118,9 +100,7 @@ class Grid {
       }
     };
 
-
     const masE = [this.interval, this.step, this.gridRound];
-
     for (let item of masE) {
       item.addEventListener('input', inputProcessing);
     }
@@ -140,9 +120,24 @@ class Grid {
       } else {
         e.preventDefault();
       }
-
     });
+  }
 
+  private setDom() {
+    const getDom = (str: string) => {
+      return this.elem.querySelector(
+        this.nameClass +
+        '__' +
+        str +
+        '-wrap input'
+      ) as HTMLInputElement;
+    };
+
+    this.grid = getDom('grid');
+    this.snap = getDom('snap');
+    this.interval = getDom('interval');
+    this.step = getDom('step');
+    this.gridRound = getDom('round');
   }
 
 

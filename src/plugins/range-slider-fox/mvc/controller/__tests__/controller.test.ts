@@ -50,7 +50,8 @@ describe('------- Test Controller API -------', () => {
       },
       onUpdate: (data: RangeSliderOptions) => {
 
-        const node = wrapC.getElementsByClassName('range-slider-fox__grid-pol');
+        const gridPol = 'js-range-slider-fox__grid-pol';
+        const node = wrapC.getElementsByClassName(gridPol);
 
         expect(node).toHaveLength(35);
         expect(data.type).toBe('double');
@@ -81,7 +82,7 @@ describe('------- Test Controller API -------', () => {
       onReset: (data: RangeSliderOptions) => {
         expect(data).toStrictEqual(defaultData);
       }
-    }), new View(domC, 1));
+    }), new View(domC));
   });
 
   test(' Input data ', () => {
@@ -89,7 +90,7 @@ describe('------- Test Controller API -------', () => {
       onStart: () => {
         expect(domC.value).toBe('1');
       },
-    }), new View(domC, 1));
+    }), new View(domC));
   });
 
 
@@ -102,7 +103,7 @@ describe('------- Test Controller API -------', () => {
       onUpdate: (data: RangeSliderOptions) => {
         expect(data.from).toBe(9);
       },
-    }), new View(domC, 1));
+    }), new View(domC));
   });
 
   test(' Data-Attributes static', async () => {
@@ -111,7 +112,7 @@ describe('------- Test Controller API -------', () => {
       onUpdate: (data: RangeSliderOptions) => {
         expect(data.from).toBe(5);
       },
-    }), new View(domC, 1));
+    }), new View(domC));
   });
 
 });

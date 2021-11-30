@@ -44,23 +44,24 @@ class Handle extends Observer {
     const fromClassName = this.rsName + '__from';
     const toClassName = this.rsName + '__to';
 
-    const fromE = this.getElem(this.wrapElem, fromClassName);
-    const toE = this.getElem(this.wrapElem, toClassName);
+    const fromE = this.getElem(this.wrapElem, 'js-' + fromClassName);
+    const toE = this.getElem(this.wrapElem, 'js-' + toClassName);
 
-    // не создаём если элемент уже существует
+    // don't create the element if it is already exist
     if (!fromE) {
-      this.elemFrom = createElem('span', [fromClassName]);
+      this.elemFrom = createElem('span', [fromClassName,
+        'js-' + fromClassName]);
       this.wrapElem.appendChild(this.elemFrom);
     }
 
     if (double) {
-      // не создаём если элемент уже существует
+      // don't create the element if it is already exist
       if (!toE) {
-        this.elemTo = createElem('span', [toClassName]);
+        this.elemTo = createElem('span', [toClassName, 'js-' + toClassName]);
         this.wrapElem.appendChild(this.elemTo);
       }
     } else {
-      // удаляем точку если есть
+      // remove the dot if it exists
       if (toE) {
         toE.remove();
         this.elemTo = null;
@@ -227,11 +228,11 @@ class Handle extends Observer {
 
     this.notifyOB({
       key: 'DotMove',
-      type,  // какая точка 
-      wrapWH, // ширина или высота враппера  
-      position,  // координаты левого или нижнего края враппера
-      clientXY, // координаты точки 
-      shiftXY, // сдвиг = координаты точки минус координаты края этой точки.
+      type,  // dot type
+      wrapWH, // wrapper width or height
+      position,  // left or bottom coordinates of the wrapper
+      clientXY, // coordinates of the dot
+      shiftXY, // shift = coordinates of the dot minus coordinates of the dot border
     });
   };
 

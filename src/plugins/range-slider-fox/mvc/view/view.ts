@@ -24,13 +24,11 @@ class View extends Observer {
   private objData: TOB;
   onHandle: Function;
   elem: Element;
-  numElem: Number;
 
 
-  constructor(elem: Element, numElem: Number) {
+  constructor(elem: Element) {
     super();
     this.elem = elem;
-    this.numElem = numElem;
     this.rsName = 'range-slider-fox';
     this.wrapSlider = this.elem.parentElement;
 
@@ -92,15 +90,15 @@ class View extends Observer {
       return elem;
     };
 
-    this.rangeSlider = createElem('div', [
-      this.rsName,
-      'js-rs-' + this.numElem,
-    ]);
-
-    this.rsTop = createElem('div', [this.rsName + '__top']);
-    this.rsCenter = createElem('div', [this.rsName + '__center']);
-    this.rsBottom = createElem('div', [this.rsName + '__bottom']);
-    this.rsLine = createElem('span', [this.rsName + '__line']);
+    this.rangeSlider = createElem('div', [this.rsName, 'js-' + this.rsName]);
+    this.rsTop = createElem('div', [this.rsName + '__top',
+    'js-' + this.rsName + '__top']);
+    this.rsCenter = createElem('div', [this.rsName + '__center',
+    'js-' + this.rsName + '__center']);
+    this.rsBottom = createElem('div', [this.rsName + '__bottom',
+    'js-' + this.rsName + '__bottom']);
+    this.rsLine = createElem('span', [this.rsName + '__line',
+    'js-' + this.rsName + '__line']);
 
     this.rsCenter.appendChild(this.rsLine);
     this.rangeSlider.appendChild(this.rsTop);
@@ -343,8 +341,8 @@ class View extends Observer {
 
   private init() {
     this.onHandle = async () => {
-      await this.createDomBase(); // создаём базовые дом элементы. 
-      await this.setActions();  // вешаем события.
+      await this.createDomBase(); // create basic DOM elements
+      await this.setActions();  // add event listeners
 
       this.handle = await new Handle(this.rsCenter, this.rsName);
       this.hints = await new Hints(this.rsTop, this.rsName);

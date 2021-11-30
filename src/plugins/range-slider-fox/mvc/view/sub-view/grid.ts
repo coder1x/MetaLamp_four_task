@@ -1,5 +1,6 @@
 
 import { Observer } from '../../../observer';
+import { Resize } from '../resize';
 
 class Grid extends Observer {
 
@@ -12,10 +13,9 @@ class Grid extends Observer {
   private evenElements: HTMLElement[][] = [[]];
   private lastElem: HTMLElement;
   private previousElem: HTMLElement;
-  private startWidth: number;
   private offOn: boolean;
-  private resizeF: boolean;
   private vertical: boolean;
+  private resizeF: boolean = false;
 
 
   constructor(elem: HTMLElement | Element, rsName: string) {
@@ -43,8 +43,10 @@ class Grid extends Observer {
   }[]) => {
     for (let item of valMark) {
       const { val, position } = item;
-      const gridPol = this.createElem('div', [this.rsName + '__grid-pol']);
-      const gridMark = this.createElem('span', [this.rsName + '__grid-mark']);
+      const polName = this.rsName + '__grid-pol';
+      const gridPol = this.createElem('div', [polName, 'js-' + polName]);
+      const markName = this.rsName + '__grid-mark';
+      const gridMark = this.createElem('span', [markName, 'js-' + markName]);
       gridMark.innerText = String(val);
       gridPol.appendChild(gridMark);
       const st = gridPol.style;
@@ -77,12 +79,16 @@ class Grid extends Observer {
   }
 
 
+  private searchStr(text: string, str: string) {
+    const regexp = new RegExp(str, 'g');
+    return regexp.test(text);
+  }
+
   private setAction(elem: HTMLElement) {
     elem.addEventListener('click', (e: Event) => {
       const mark = e.target as HTMLElement;
-      //const typeElem = mark.constructor.name;
-      const selector = this.rsName + '__grid-mark';
-      if (mark.className == selector) {
+      const selector = 'js-' + this.rsName + '__grid-mark';
+      if (this.searchStr(mark.className, selector)) {
         this.notifyOB({
           key: 'ClickMark',
           valueG: Number(mark.innerText)
@@ -102,11 +108,10 @@ class Grid extends Observer {
 
 
   private init() {
-
     this.offOn = false;
-    this.resizeF = false;
-    this.indent = 4; // отступ в пикселях между числами на шкале
-    this.elemGrid = this.createElem('div', [this.rsName + '__grid']);
+    this.indent = 4; //indent in pixels between values on the scale
+    const gridName = this.rsName + '__grid';
+    this.elemGrid = this.createElem('div', [gridName, 'js-' + gridName]);
 
     const observer = new MutationObserver(() => {
       this.shapingMark();
@@ -137,11 +142,11 @@ class Grid extends Observer {
     this.previousElem = null;
 
     const gridMarks = this.elemGrid.getElementsByClassName(
-      this.rsName + '__grid-mark'
+      'js-' + this.rsName + '__grid-mark'
     );
 
     const gridPols = this.elemGrid.getElementsByClassName(
-      this.rsName + '__grid-pol'
+      'js-' + this.rsName + '__grid-pol'
     );
 
     const len = gridMarks.length;
@@ -179,7 +184,7 @@ class Grid extends Observer {
     const breakIntoPieces = (mas: HTMLElement[]) => {
       elemWH = 0;
       const newMas = mas.filter((elem, i) => {
-        if (i % 2 == 0) { // каждый второй элемент массива
+        if (i % 2 == 0) { // every second element of the array
           evenMas.push(elem);
           return false;
         }
@@ -202,15 +207,24 @@ class Grid extends Observer {
     breakIntoPieces(this.oddElements[0]);
 
     this.evenElements.shift();
-
     this.visibleMark();
-    this.getResizeWrap();
+
+    if (!this.resizeF) {
+      this.resizeF = true;
+      new Resize(this.elemGrid, 200, () => {
+        if (this.offOn && !this.vertical) {
+          this.visibleMark();
+        }
+      }
+      );
+    }
+
   }
 
 
-  // скрываем или показываем цифры на шкале.
+  // hide or show values on the scale
   private visibleMark() {
-    // находим индекс элементов - для нечётных - показать для чётных скрыть.
+    // define element index: show odd values and hide honest ones 
     const width = this.elemGrid.offsetWidth;
     const height = this.elemGrid.offsetHeight;
     const size = this.vertical ? height : width;
@@ -222,7 +236,7 @@ class Grid extends Observer {
         break;
     }
 
-    for (let n = 0; n <= i; n++) { // скрываем все чётные элементы до необходимого уровня.
+    for (let n = 0; n <= i; n++) { //hide honest elements till the necessary level
       if (this.evenElements[n])
         for (let elem of this.evenElements[n]) {
           this.toggleElem(elem, 'hidden', '0.4');
@@ -231,7 +245,7 @@ class Grid extends Observer {
 
     let snapNum: number[] = [];
 
-    this.oddElements[i].map((elem) => { // делаем видемыми только нужные.
+    this.oddElements[i].map((elem) => { // show the necessary elements only
       this.toggleElem(elem, 'visible', '1');
       snapNum.push(+elem.innerText);
     });
@@ -269,56 +283,6 @@ class Grid extends Observer {
     this.notifyOB({
       key: 'SnapNum',
       snapNum: snapNum,
-    });
-    return true;
-  }
-
-
-  private getResizeWrap() {
-    if (this.resizeF) return false;
-    this.resizeF = true;
-    let sleep = 200;
-    let rTime: Date;
-    let timeout = false;
-    this.startWidth = this.elemGrid.offsetWidth;
-
-    (function () {
-      let throttle = function (type: string, name: string, obj = window) {
-        let running = false;
-        let func = function () {
-          if (running) { return false; }
-          running = true;
-          requestAnimationFrame(function () {
-            obj.dispatchEvent(new CustomEvent(name));
-            running = false;
-          });
-        };
-        obj.addEventListener(type, func);
-      };
-      throttle("resize", "optimizedResize");
-    })();
-
-    const resizeend = () => {
-      if (Number(new Date()) - Number(rTime) < sleep) {
-        setTimeout(resizeend, sleep);
-      } else {
-        timeout = false;
-        let totalWidth = this.elemGrid.offsetWidth;
-        if (totalWidth != this.startWidth) {
-          if (this.offOn && !this.vertical) {
-            this.visibleMark();
-          }
-          this.startWidth = totalWidth;
-        }
-      }
-    };
-
-    window.addEventListener("optimizedResize", function () {
-      rTime = new Date();
-      if (timeout === false) {
-        timeout = true;
-        setTimeout(resizeend, sleep);
-      }
     });
     return true;
   }

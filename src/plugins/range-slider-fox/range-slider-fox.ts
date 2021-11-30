@@ -6,7 +6,7 @@ $.fn.RangeSliderFox = function (options) {
       $.data(
         el,
         'RangeSliderFox',
-        new Controller(new Model(options), new View(el, i))
+        new Controller(new Model(options), new View(el))
       );
     }
   });

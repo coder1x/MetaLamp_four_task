@@ -31,8 +31,34 @@ class Panel {
     this.init();
   }
 
-  private getDom(str: string) {
-    return this.elem.querySelector(str) as HTMLElement;
+
+  createRangeSlider(options: RangeSliderOptions) {
+    const selector = this.className + '__slider-wrap';
+    const elem = this.elem.querySelector(selector);
+
+    const obj = $(elem.firstElementChild).RangeSliderFox({
+      ...options
+      ,
+      onStart: (data: RangeSliderOptions) => {
+        this.setDataS(data);
+      },
+      onChange: (data: RangeSliderOptions) => {
+        this.setDataC(data);
+      },
+      onUpdate: (data: RangeSliderOptions) => {
+        this.setDataU(data);
+      },
+      onReset: (data: RangeSliderOptions) => {
+        this.setDataR(data);
+      }
+    }).data('RangeSliderFox'); // will return an object for one item
+
+
+    this.objValues.setAction(obj);
+    this.objGrid.setAction(obj);
+    this.objHints.setAction(obj);
+    this.objDifferent.setAction(obj);
+    this.objKeyboardControl.setAction(obj);
   }
 
   private init() {
@@ -52,110 +78,41 @@ class Panel {
     );
   }
 
-
-  private setValue(data: RangeSliderOptions) {
-    this.objValues.setData({
-      ...data
-    });
-  }
-
-
-  private setCopyCode(data: RangeSliderOptions) {
-    this.objCopyCode.setData({
-      ...data
-    });
-  }
-
-
-  private setDifferent(data: RangeSliderOptions) {
-    this.objDifferent.setData({
-      ...data
-    });
-  }
-
-
-  private setKeyboardControl(data: RangeSliderOptions) {
-    this.objKeyboardControl.setData({
-      ...data
-    });
-  }
-
-
-  private setGrid(data: RangeSliderOptions) {
-    this.objGrid.setData({
-      ...data
-    });
-  }
-
-
-  private setHints(data: RangeSliderOptions) {
-    this.objHints.setData({
-      ...data
-    });
+  private getDom(str: string) {
+    return this.elem.querySelector(str) as HTMLElement;
   }
 
   private setDataS(data: RangeSliderOptions) {
-    this.setValue(data);
-    this.setCopyCode(data);
-    this.setDifferent(data);
-    this.setKeyboardControl(data);
-    this.setGrid(data);
-    this.setHints(data);
+    this.objValues.setData({ ...data });
+    this.objCopyCode.setData({ ...data });
+    this.objDifferent.setData({ ...data });
+    this.objKeyboardControl.setData({ ...data });
+    this.objGrid.setData({ ...data });
+    this.objHints.setData({ ...data });
   }
 
   private setDataC(data: RangeSliderOptions) {
-    this.setValue(data);
-    this.setCopyCode(data);
-    this.setKeyboardControl(data);
+    this.objValues.setData({ ...data });
+    this.objCopyCode.setData({ ...data });
+    this.objKeyboardControl.setData({ ...data });
   }
 
   private setDataU(data: RangeSliderOptions) {
-    this.setValue(data);
-    this.setCopyCode(data);
-    this.setDifferent(data);
-    this.setKeyboardControl(data);
-    this.setGrid(data);
-    this.setHints(data);
+    this.objValues.setData({ ...data });
+    this.objCopyCode.setData({ ...data });
+    this.objDifferent.setData({ ...data });
+    this.objKeyboardControl.setData({ ...data });
+    this.objGrid.setData({ ...data });
+    this.objHints.setData({ ...data });
   }
 
   private setDataR(data: RangeSliderOptions) {
-    this.setValue(data);
-    this.setCopyCode(data);
-    this.setDifferent(data);
-    this.setKeyboardControl(data);
-    this.setGrid(data);
-    this.setHints(data);
-  }
-
-
-  createRangeSlider(options: RangeSliderOptions) {
-
-    const selector = this.className + '__slider-wrap';
-    const elem = this.elem.querySelector(selector);
-
-    const obj = $(elem.firstElementChild).RangeSliderFox({
-      ...options
-      ,
-      onStart: (data: RangeSliderOptions) => {
-        this.setDataS(data);
-      },
-      onChange: (data: RangeSliderOptions) => {
-        this.setDataC(data);
-      },
-      onUpdate: (data: RangeSliderOptions) => {
-        this.setDataU(data);
-      },
-      onReset: (data: RangeSliderOptions) => {
-        this.setDataR(data);
-      }
-    }).data('RangeSliderFox'); // вернёт объект для одного элемента
-
-
-    this.objValues.setAction(obj);
-    this.objGrid.setAction(obj);
-    this.objHints.setAction(obj);
-    this.objDifferent.setAction(obj);
-    this.objKeyboardControl.setAction(obj);
+    this.objValues.setData({ ...data });
+    this.objCopyCode.setData({ ...data });
+    this.objDifferent.setData({ ...data });
+    this.objKeyboardControl.setData({ ...data });
+    this.objGrid.setData({ ...data });
+    this.objHints.setData({ ...data });
   }
 }
 

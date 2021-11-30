@@ -7,6 +7,7 @@ describe('------- Test Bar API -------', () => {
   let rsName: string;
   let wrap: HTMLElement;
   let bar: Bar;
+  let jsRsName: string;
 
   const createBar = async () => {
     await bar.setVisibleBar(true);
@@ -22,8 +23,10 @@ describe('------- Test Bar API -------', () => {
 
   beforeEach(() => {
     rsName = 'range-slider-fox';
+    jsRsName = 'js-' + rsName;
     wrap = document.createElement('div');
     wrap.classList.add(rsName + '__center');
+    wrap.classList.add(jsRsName + '__center');
     bar = new Bar(wrap, rsName);
   });
 
@@ -96,7 +99,7 @@ describe('------- Test Bar API -------', () => {
       onUpdate: async () => {
         const spy = await jest.spyOn(model, 'clickBar');
         const dot =
-          await wrapC.getElementsByClassName(rsName + '__bar');
+          await wrapC.getElementsByClassName(jsRsName + '__bar');
         let elem = dot[0] as HTMLElement;
         const funP = await mockPointerEvent(elem);
         await funP('click', 34, 45);
@@ -104,7 +107,7 @@ describe('------- Test Bar API -------', () => {
         await spy.mockClear();
       },
     });
-    const view = await new View(domC, 1);
+    const view = await new View(domC);
     obj = await new Controller(model, view);
 
   });

@@ -1,27 +1,27 @@
 import { RangeSliderOptions } from './glob-interface';
 
 interface insideOptions extends RangeSliderOptions {
-  fromX?: number,
-  toX?: number,
-  valP?: number,
-  fromP?: number,
-  toP?: number,
-  limitFrom?: number,
-  limitTo?: number,
-  fromTo?: number,
-  valueG?: number,
-  valMark?: {
+  readonly fromX?: number,
+  readonly toX?: number,
+  readonly valP?: number,
+  readonly fromP?: number,
+  readonly toP?: number,
+  readonly limitFrom?: number,
+  readonly limitTo?: number,
+  readonly fromTo?: number,
+  readonly valueG?: number,
+  readonly valMark?: {
     val: number,
     position: number,
   }[],
-  snapNum?: number[],
-  wrapWH?: number,
-  position?: number,
-  clientXY?: number,
-  shiftXY?: number,
-  keyRepeat?: boolean,
-  keySign?: string,
-  dot?: string,
+  readonly snapNum?: number[],
+  readonly wrapWH?: number,
+  readonly position?: number,
+  readonly clientXY?: number,
+  readonly shiftXY?: number,
+  readonly keyRepeat?: boolean,
+  readonly keySign?: string,
+  readonly dot?: string,
 }
 
 

@@ -2,9 +2,9 @@
 
 
 interface UpdateTip {
-  fromXY?: number,
-  toXY?: number,
-  singleXY?: number,
+  readonly fromXY?: number,
+  readonly toXY?: number,
+  readonly singleXY?: number,
 }
 
 
