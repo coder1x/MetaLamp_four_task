@@ -57,7 +57,6 @@ interface ParentNode extends Node {
 //-------------------------------------------------
 
 
-
 interface RangeSliderOptions {
   readonly type?: string;
   readonly orientation?: string;
@@ -85,7 +84,6 @@ interface RangeSliderOptions {
   readonly onUpdate?: Function;
   readonly onReset?: Function;
 }
-
 
 
 

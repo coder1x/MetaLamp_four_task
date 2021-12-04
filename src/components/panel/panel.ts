@@ -1,5 +1,4 @@
 import './panel.scss';
-
 import { RangeSliderOptions, HElem } from
   '../../components/interface/glob-interface';
 
