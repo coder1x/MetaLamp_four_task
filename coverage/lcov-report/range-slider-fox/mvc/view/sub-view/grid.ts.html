@@ -356,7 +356,8 @@
 <a name='L291'></a><a href='#L291'>291</a>
 <a name='L292'></a><a href='#L292'>292</a>
 <a name='L293'></a><a href='#L293'>293</a>
-<a name='L294'></a><a href='#L294'>294</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L294'></a><a href='#L294'>294</a>
+<a name='L295'></a><a href='#L295'>295</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
@@ -649,21 +650,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
 import { Observer } from '../../../observer';
 import { Resize } from '../resize';
+import { HElem, HTElem, HPElem } from '../../../glob-interface';
 &nbsp;
 class Grid extends Observer {
 &nbsp;
-  private rsBottom: HTMLElement;
+  private rsBottom: HElem;
   private rsName: string;
   private elemGrid: HTMLElement;
   private indent: number;
   private masWH: number[] = [];
-  private oddElements: HTMLElement[][] = [[]];
-  private evenElements: HTMLElement[][] = [[]];
-  private lastElem: HTMLElement;
-  private previousElem: HTMLElement;
+  private oddElements: HElem[][] = [[]];
+  private evenElements: HElem[][] = [[]];
+  private lastElem: HElem;
+  private previousElem: HElem;
   private offOn: boolean;
   private vertical: boolean;
   private resizeF: boolean = false;
@@ -672,14 +675,14 @@ class Grid extends Observer {
   constructor(elem: HTMLElement | Element, rsName: string) {
     super();
     this.rsName = rsName;
-    this.rsBottom = (elem as HTMLElement);
+    this.rsBottom = elem;
     this.init();
   }
 &nbsp;
 &nbsp;
   setOrientation(str: string) {
-    return this.vertical = str == 'vertical' ? true : false;
-  }<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+    return this.vertical = str =<span class="branch-0 cbranch-no" title="branch not covered" >= 'ver</span>tical' ? true : false;
+  }
 &nbsp;
   getOrientation() {
     const width = this.rsBottom.offsetWidth;
@@ -691,8 +694,8 @@ class Grid extends Observer {
   createMark = (valMark: {
     val: number,
     position: number,
-  }[]) =&gt; {
-    for (let item of valMark<span class="branch-0 cbranch-no" title="branch not covered" >) {</span>
+  }[]) =&gt; {<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+    for (let item of valMark) {
       const { val, position } = item;
       const polName = this.rsName + '__grid-pol';
       const gridPol = this.createElem('div', [polName, 'js-' + polName]);
@@ -737,7 +740,7 @@ class Grid extends Observer {
 &nbsp;
   private setAction(elem: HTMLElement) {
     elem.addEventListener('click', (e: Event) =&gt; {
-      const mark = e.target as HTMLElement;
+      const mark: HTElem = e.target;
       const selector = 'js-' + this.rsName + '__grid-mark';
       if (this.searchStr(mark.className, selector)) {
         this.notifyOB({
@@ -773,11 +776,11 @@ class Grid extends Observer {
     });
   }
 &nbsp;
-&nbsp;
-  private to<span class="missing-if-branch" title="if path not taken" >I</span>ggleElem(elem: HTMLElement, display: string, opacity: string) {
+<span class="missing-if-branch" title="if path not taken" >I</span>
+  private toggle<span class="cstat-no" title="statement not covered" >Elem(elem: HElem, display: string, opacity: strin</span>g) {
     const st = e<span class="cstat-no" title="statement not covered" >lem.style;</span>
     st.visibilit<span class="cstat-no" title="statement not covered" >y = display;</span>
-    const wrapE <span class="cstat-no" title="statement not covered" >= (elem.parentNode as HTMLElement);</span>
+    const wrapE: HPElem = elem.parentNode;
     wrapE.style.opacity = opacity;
   }
 &nbsp;
@@ -797,28 +800,28 @@ class Grid extends Observer {
     );
 &nbsp;
     const gridPols = this.elemGrid.getElementsByClassName(
-      'js-' + this.rsName + '__grid-pol'
-    );<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+      'js-' + this.rsName + '__grid-pol'<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+    );
 &nbsp;
     const len = gridMarks.length;
     if (len &gt; 1) {
-      this.lastElem = (gridMarks[len - 1] as HTMLElement);
+      this.lastElem = gridMarks[len - 1];
     }
 &nbsp;
 &nbsp;
     let k = 0;
     for (let item of gridMarks) {
-      const mark = (item as HTMLElement);
-      const pol = (gridPols[k++] as HTMLElement);
+      const mark: HElem = item;
+      const pol: HElem = gridPols[k++];
 &nbsp;
       const stMark = mark.style;
 &nbsp;
       if (this.vertical) {
         stMark.top = '-' + mark.offsetHeight / 2 + 'px';
-        stMark.left = pol.offsetWidth + 2 + 'px';
-        elemWH += mark.offsetHeight + this.indent;<span class="fstat-no" title="function not covered" ></span>
+        stMark.left = pol.offsetWidth + 2 + 'px';<span class="fstat-no" title="function not covered" ></span>
+        elemWH +<span class="cstat-no" title="statement not covered" >= mark.offsetHeight + this.indent;</span>
       } else {<span class="cstat-no" title="statement not covered" ></span>
-        stMark.left <span class="cstat-no" title="statement not covered" >= '-' + mark.offsetW</span>idth / 2 + 'px';
+        stMark.left = '-' + mark.offsetWidth / 2 + 'px';
         stMark.top = pol.offsetHeight + 2 + 'px';
         elemWH += mark.offsetWidth + this.indent;
       }
@@ -827,13 +830,13 @@ class Grid extends Observer {
     }
 &nbsp;
     this.masWH.push(elemWH);
-    this.oddElements[0].shift();
-    this.oddElements[0].pop();<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+    this.oddElements[0].shift();<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+    this.oddElements[0].pop();
 &nbsp;
-    let evenMas: HTMLElement[] = [];
-&nbsp;
-    const br<span class="missing-if-branch" title="if path not taken" >I</span>eakIntoPieces = (mas: HTMLElement[]) =&gt; {
-      elemWH = 0<span class="cstat-no" title="statement not covered" >;</span>
+    let evenMas: HElem[] = [];
+<span class="missing-if-branch" title="if path not taken" >I</span>
+    const breakI<span class="cstat-no" title="statement not covered" >ntoPiec</span>es = (mas: HElem[]) =&gt; {
+      elemWH = 0;
       const newMas = mas.filter((elem, i) =&gt; {
         if (i % 2 == 0) { // every second element of the array
           evenMas.push(elem);
@@ -854,21 +857,21 @@ class Grid extends Observer {
         breakIntoPieces(newMas);
       }
     };
-&nbsp;
-    breakIntoPieces(this.oddElements[0]<span class="branch-0 cbranch-no" title="branch not covered" >);</span>
 <span class="branch-0 cbranch-no" title="branch not covered" ></span>
-    this.evenElements.shift();
-    this.visibleMark();<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+    breakIntoPieces(this.oddElements[0]);<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+&nbsp;
+    this.evenElements.shift();<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+    this.visibleMark();
 &nbsp;
     if (!this.resizeF) {
       this.resizeF = true;
       new Resize(this.elemGrid, 200, () =&gt; {
-        if (this.offOn &amp;&amp; !this.vertical) {
-          thi<span class="missing-if-branch" title="else path not taken" >E</span>s.visibleMark();
+        if (t<span class="missing-if-branch" title="else path not taken" >E</span>his.offOn &amp;&amp; !this.vertical) {
+          th<span class="cstat-no" title="statement not covered" >is.visibleMark();</span>
         }<span class="cstat-no" title="statement not covered" ></span>
       }<span class="cstat-no" title="statement not covered" ></span>
       );<span class="cstat-no" title="statement not covered" ></span>
-    }<span class="cstat-no" title="statement not covered" ></span>
+    }
 &nbsp;
   }
 &nbsp;
@@ -949,7 +952,7 @@ export { Grid };</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Dec 01 2021 17:00:41 GMT+0300 (Москва, стандартное время)
+                at Sat Dec 04 2021 16:39:46 GMT+0300 (Москва, стандартное время)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

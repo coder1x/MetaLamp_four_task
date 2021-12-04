@@ -1,7 +1,7 @@
 import './panel.scss';
 
 import { RangeSliderOptions, HElem } from
-  '../../plugins/range-slider-fox/glob-interface';
+  '../../components/interface/glob-interface';
 
 import { Values } from '../values/values';
 import { InputData } from '../input-data/input-data';

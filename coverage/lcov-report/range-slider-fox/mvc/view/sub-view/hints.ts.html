@@ -479,7 +479,8 @@
 <a name='L414'></a><a href='#L414'>414</a>
 <a name='L415'></a><a href='#L415'>415</a>
 <a name='L416'></a><a href='#L416'>416</a>
-<a name='L417'></a><a href='#L417'>417</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L417'></a><a href='#L417'>417</a>
+<a name='L418'></a><a href='#L418'>418</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -895,7 +896,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
+&nbsp;
 interface CH {
   tipMaxXY: number,
   visibilityTipSingle: boolean,
@@ -908,7 +911,7 @@ interface CH {
 &nbsp;
 class Hints {
 &nbsp;
-  private rsTop: HTMLElement;
+  private rsTop: Element;
   private rsName: string;
   private tipFrom: HTMLElement;
   private tipTo: HTMLElement;
@@ -923,7 +926,7 @@ class Hints {
 &nbsp;
   constructor(elem: HTMLElement | Element, rsName: string) {
     this.rsName = rsName;
-    this.rsTop = (elem as HTMLElement);
+    this.rsTop = elem;
   }
 &nbsp;
 &nbsp;
@@ -1027,27 +1030,27 @@ class Hints {
   checkTipTo() {
     return this.tipTo || !this.tipFromTo ? true : false;
   }
-&nbsp;
-  // ------------------------<span class="branch-0 cbranch-no" title="branch not covered" >--- save value</span>s
+<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+  // --------------------------- save values
 &nbsp;
   setValTipMinMax(min: number, max: number) {
-    const tipMin = this.setData(this.tipMin, min);
-    cons<span class="missing-if-branch" title="if path not taken" >I</span>t tipMax = this.setData(this.tipMax, max);
-    return {<span class="cstat-no" title="statement not covered" > tipMin, tipMa</span>x };
+    cons<span class="missing-if-branch" title="if path not taken" >I</span>t tipMin = this.setData(this.tipMin, min);
+    const ti<span class="cstat-no" title="statement not covered" >pMax = this.se</span>tData(this.tipMax, max);
+    return { tipMin, tipMax };
   }
 &nbsp;
   setValTipFrom(from: number) {
     return this.setData(this.tipFrom, from);
-  }
-  setVal<span class="missing-if-branch" title="if path not taken" >I</span>TipTo(to: number) {
-    return t<span class="cstat-no" title="statement not covered" >his.setData(th</span>is.tipTo, to);
+  }<span class="missing-if-branch" title="if path not taken" >I</span>
+  setValTipT<span class="cstat-no" title="statement not covered" >o(to: number) </span>{
+    return this.setData(this.tipTo, to);
   }
 &nbsp;
   setValTipSingle() {
     if (!this.tipSingle) return false;
-    const valFrom = this.tipFrom.innerHTML;
-    cons<span class="missing-if-branch" title="if path not taken" >I</span>t valTo = this.tipTo.innerHTML;
-    const br<span class="cstat-no" title="statement not covered" > = '&lt;br&gt;';</span>
+    cons<span class="missing-if-branch" title="if path not taken" >I</span>t valFrom = this.tipFrom.innerHTML;
+    const va<span class="cstat-no" title="statement not covered" >lTo = this.tip</span>To.innerHTML;
+    const br = '&lt;br&gt;';
     return this.tipSingle.innerHTML = valFrom +
       (this.vertical ? br + '↕' + br : ' ⟷ ') + valTo;
   }
@@ -1064,9 +1067,9 @@ class Hints {
 &nbsp;
   setPositionTo(coordXY: number) {
     if (!this.tipTo) return false;
-    const st = this.tipTo.style;
-    this<span class="missing-if-branch" title="if path not taken" >I</span>.setStylePosition(coordXY, st);
-    return t<span class="cstat-no" title="statement not covered" >rue;</span>
+    cons<span class="missing-if-branch" title="if path not taken" >I</span>t st = this.tipTo.style;
+    this.set<span class="cstat-no" title="statement not covered" >StylePosition(</span>coordXY, st);
+    return true;
   }
 &nbsp;
 &nbsp;
@@ -1082,22 +1085,22 @@ class Hints {
     let fromWH = 0;
     let toWH = 0;
     let singleWH = 0;
-    if (this.tipFrom)
-      fromWH<span class="missing-if-branch" title="if path not taken" >I</span> = this.getSizeElem(this.tipFrom);
-    if (this.tip<span class="cstat-no" title="statement not covered" >To)</span>
+    if (this<span class="missing-if-branch" title="if path not taken" >I</span>.tipFrom)
+      fromWH = t<span class="cstat-no" title="statement not covered" >his.getSizeElem(this.tipFrom);</span>
+    if (this.tipTo)
       toWH = this.getSizeElem(this.tipTo);
     if (this.tipSingle)
       singleWH = this.getSizeElem(this.tipSingle);
-    return { fromWH, toWH, singleWH, };
-  }<span class="branch-1 cbranch-no" title="branch not covered" ></span>
+    return { fromWH, toWH, singleWH, };<span class="branch-1 cbranch-no" title="branch not covered" ></span>
+  }
 &nbsp;
 &nbsp;
   checkVisibleTip() {
     if (!this.tipMinMax &amp;&amp; !this.tipFromTo) return false;
 &nbsp;
-    //------------------------------------------- get data
-    let { tipFromXY, tipFromWH } = this.getBoundingDot(thi<span class="branch-1 cbranch-no" title="branch not covered" >s.tipFrom);</span>
-    let { tipToXY, tipToWH } = this.getBoundingDot(this.tipT<span class="branch-1 cbranch-no" title="branch not covered" >o);</span>
+    //------------------------------------------- get data<span class="branch-1 cbranch-no" title="branch not covered" ></span>
+    let { tipFromXY, tipFromWH } = this.getBoundingDot(this.<span class="branch-1 cbranch-no" title="branch not covered" >tipFrom);</span>
+    let { tipToXY, tipToWH } = this.getBoundingDot(this.tipTo);
     let { tipMinXY, tipMinWH, tipMaxXY } = this.getBoundingMinMax();
     //-------------------------------------------
 &nbsp;
@@ -1113,13 +1116,13 @@ class Hints {
       const tipFromYTop = tipFromXY - tipFromWH;
       const tipToYTop = tipToXY - tipToWH;
       visibilityTipSingle = tipFromYTop &lt;= tipToXY;
-      if (this.tipTo) {
-<span class="cstat-no" title="statement not covered" >        visibilityTipM</span>ax = tipMaxXY &gt;= tipToYTop || tipMaxXY &gt;= tipFromYTop;
+      if<span class="cstat-no" title="statement not covered" > (this.tipTo) </span>{
+        visibilityTipMax = tipMaxXY &gt;= tipToYTop || tipMaxXY &gt;= tipFromYTop;
       } else {
-        visibilityTipMax = tipMaxXY &gt;= tipFromYTop;
-      }<span class="missing-if-branch" title="if path not taken" >I</span>
+        <span class="missing-if-branch" title="if path not taken" >I</span>visibilityTipMax = tipMaxXY &gt;= tipFromYTop;
+      }<span class="cstat-no" title="statement not covered" ></span>
       visibi<span class="cstat-no" title="statement not covered" >lityTipMin = tipMinYTop &gt;= </span>tipFromXY || !this.tipFrom;
-    } else {<span class="cstat-no" title="statement not covered" ></span>
+    } else {
       tipMinXRight = tipMinXY + tipMinWH;
       const tipFromXRight = tipFromXY + tipFromWH;
       const tipToXRight = tipToXY + tipToWH;
@@ -1152,10 +1155,10 @@ class Hints {
     if (this.vertical) {
       st.bottom = coordXY + '%';
       st.removeProperty('left');
-    } else {
+    } else {<span class="cstat-no" title="statement not covered" ></span>
       st.lef<span class="cstat-no" title="statement not covered" >t = coordXY + '%';</span>
-      st.rem<span class="cstat-no" title="statement not covered" >oveProperty('bottom');</span>
-    }<span class="cstat-no" title="statement not covered" ></span>
+      st.rem<span class="cstat-no" title="statement not covered" >oveProperty('bott</span>om');
+    }
   }
 &nbsp;
   private createElem(teg: string, className: string[]) {
@@ -1206,12 +1209,12 @@ class Hints {
       const cr = elem.getBoundingClientRect();
       tipDotXY = this.vertical ? cr.bottom : cr.left;
       tipDotWH = this.vertical ?
-        elem.offsetHeight : elem.offsetWidth;
+        elem.offsetHeight : ele<span class="branch-0 cbranch-no" title="branch not covered" >m.offsetWi</span>dth;
     }<span class="branch-0 cbranch-no" title="branch not covered" ></span>
-    if (elem == this.tipFrom) {<span class="branch-0 cbranch-no" title="branch not covered" ></span>
-      return {
-        <span class="missing-if-branch" title="if path not taken" >I</span>tipFromXY: tipDotXY,
-        tipF<span class="cstat-no" title="statement not covered" >romWH: tipDotWH</span>
+    if (elem == this.tipFrom) {
+      re<span class="missing-if-branch" title="if path not taken" >I</span>turn {
+        tipF<span class="cstat-no" title="statement not covered" >romXY: tipDotXY,</span>
+        tipFromWH: tipDotWH
       };
     }
     return {
@@ -1225,18 +1228,18 @@ class Hints {
     let tipMinXY = 0;
     let tipMinWH = 0;
     let tipMaxXY = 0;
-    if (this.tipMin) {
-      const tip = this.tipMin;<span class="branch-1 cbranch-no" title="branch not covered" ></span>
+    if (this.tipMin) {<span class="branch-1 cbranch-no" title="branch not covered" ></span>
+      const tip = this.tipMin;
       const crMin = tip.getBoundingClientRect();
       const fl = this.vertical;
       tipMinXY = fl ? crMin.bottom : crMin.left;
       tipMinWH = fl ? tip.offsetHeight : tip.offsetWidth;
-      if (this.tipMax) {
-        const crMax <span class="missing-if-branch" title="if path not taken" >I</span>= this.tipMax.getBoundingClientRect();
-        tipMaxXY = fl ? <span class="cstat-no" title="statement not covered" >crMax.bottom : crMax.left;</span>
+      if (this.tipMa<span class="missing-if-branch" title="if path not taken" >I</span>x) {
+        const crMax = th<span class="cstat-no" title="statement not covered" >is.tipMax.getBoundingClientRect();</span>
+        tipMaxXY = fl ? crMa<span class="cstat-no" title="statement not covered" >x.bottom : crMax.left;</span>
       }<span class="cstat-no" title="statement not covered" ></span>
     }<span class="cstat-no" title="statement not covered" ></span>
-    return { tipMinXY, tipMi<span class="cstat-no" title="statement not covered" >nWH, tipMaxXY };</span>
+    return { tipMinXY, tipMinWH, tipMaxXY };
   }
 &nbsp;
 &nbsp;
@@ -1250,8 +1253,8 @@ class Hints {
       const cr = tip.getBoundingClientRect();
       tipSingleXY = fl ? cr.bottom : cr.left;
       tipSingleWH = fl ? tip.offsetHeight : tip.offsetWidth;
-    }
-    if (fl) {<span class="branch-1 cbranch-no" title="branch not covered" ></span>
+    }<span class="branch-1 cbranch-no" title="branch not covered" ></span>
+    if (fl) {
       tipSingleB = tipSingleXY - tipSingleWH;
     } else {
       tipSingleB = tipSingleXY + tipSingleWH;
@@ -1318,7 +1321,7 @@ export { Hints };</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Dec 01 2021 17:00:41 GMT+0300 (Москва, стандартное время)
+                at Sat Dec 04 2021 16:39:46 GMT+0300 (Москва, стандартное время)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

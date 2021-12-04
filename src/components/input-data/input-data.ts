@@ -2,7 +2,7 @@ import './input-data.scss';
 import {
   HInput,
   HElem
-} from '../../plugins/range-slider-fox/glob-interface';
+} from '../../components/interface/glob-interface';
 
 
 class InputData {

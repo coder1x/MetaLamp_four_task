@@ -337,7 +337,8 @@
 <a name='L272'></a><a href='#L272'>272</a>
 <a name='L273'></a><a href='#L273'>273</a>
 <a name='L274'></a><a href='#L274'>274</a>
-<a name='L275'></a><a href='#L275'>275</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L275'></a><a href='#L275'>275</a>
+<a name='L276'></a><a href='#L276'>276</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
@@ -611,7 +612,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Observer } from '../../../observer';
+&nbsp;
 &nbsp;
 interface MD {
   event: PointerEvent,
@@ -697,8 +700,8 @@ class Handle extends Observer {
       } else {
         if (elem.bottom == '') return false;
         val = elem.bottom;
-        elem.removeProperty('bottom');
-        elem.left = val;<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+        elem.removeProperty(<span class="branch-0 cbranch-no" title="branch not covered" >'bottom');</span>
+        elem.left = val;
       }
       return true;
     };
@@ -706,11 +709,11 @@ class Handle extends Observer {
     convertStyle(this.elemFrom.style);
 &nbsp;
     if (this.elemTo)
-      return convertStyle(this.elemTo.style);
-  }<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+      return convertStyle(th<span class="branch-0 cbranch-no" title="branch not covered" >is.elemTo.style)</span>;
+  }
 &nbsp;
-&nbsp;
-  setFro<span class="cstat-no" title="statement not covered" >m(fromP: numbe</span>r) {
+<span class="cstat-no" title="statement not covered" ></span>
+  setFrom(fromP: number) {
     if (this.elemTo) {
       const val = fromP + '%';
       const from = this.elemFrom.style;
@@ -756,9 +759,9 @@ class Handle extends Observer {
         this.keyDown(e, directions, 'to');
       });
 &nbsp;
-    const mouseMoveFrom = (event: PointerEvent) =&gt; {
+    const mouseMoveFrom = (even<span class="fstat-no" title="function not covered" >t:</span> PointerEven<span class="cstat-no" title="statement not covered" >t) =&gt; {</span>
       this.moveDot({<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-        event: event,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        event: event,
         type: 'From',
         shiftXY
       });
@@ -794,10 +797,10 @@ class Handle extends Observer {
           this.elemTo.style.zIndex = '2';
           this.elemFrom.style.zIndex = '1';
 &nbsp;
-          shiftXY = this.mouseDown(event, this.elemTo);
-          this.wrapElem.ad<span class="branch-0 cbranch-no" title="branch not covered" >dEventListener('po</span>intermove', mouseMoveTo);
-          this.wrapElem.addEve<span class="branch-0 cbranch-no" title="branch not covered" >ntListener('</span>pointerup', mouseUpTo);
-        });<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+          shiftXY = this.m<span class="branch-0 cbranch-no" title="branch not covered" >ouseDown(event, th</span>is.elemTo);
+          this.wrapElem.addEve<span class="branch-0 cbranch-no" title="branch not covered" >ntListener('</span>pointermove', mouseMoveTo);
+          this.wrapElem.addEve<span class="branch-0 cbranch-no" title="branch not covered" >ntListener('po</span>interup', mouseUpTo);
+        });
 &nbsp;
         cancellation(this.elemTo);
         this.eventToF = true;
@@ -808,28 +811,28 @@ class Handle extends Observer {
       this.elemFrom.addEventListener('pointerdown', (event: PointerEvent) =&gt; {
 &nbsp;
         if (this.elemTo)
-          this.elemTo.style.zIndex = '1';
-        this.elemFrom.style.z<span class="branch-1 cbranch-no" title="branch not covered" >Ind</span>ex = '2';
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        shiftXY = this.mouseDown(event, this.elemFrom);</span>
-        this<span class="cstat-no" title="statement not covered" >.wrapElem.a</span>ddEventListener('pointermove', mouseMoveFrom);
-<span class="cstat-no" title="statement not covered" >        this.wrapElem.addEve</span>ntListener('pointerup', mouseUpFrom);
+          this.elemTo.style.z<span class="branch-1 cbranch-no" title="branch not covered" >Ind</span>ex = '1';
+        this.elemFrom.style.zIndex = '2';
+<span class="cstat-no" title="statement not covered" ></span>
+        shif<span class="cstat-no" title="statement not covered" >tXY = this.</span>mouseDown(event, this.elemFrom);
+<span class="cstat-no" title="statement not covered" >        this.wrapElem.addEve</span>ntListener('pointermove', mouseMoveFrom);
+        this.wrapElem.a<span class="cstat-no" title="statement not covered" >ddEventLi</span>stener('pointerup', mouseUpFrom);
       });<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-      ca<span class="cstat-no" title="statement not covered" >ncellation(this.elemFrom);</span>
-      this.e<span class="cstat-no" title="statement not covered" >ventFromF = true;</span>
+      cancel<span class="cstat-no" title="statement not covered" >lation(this.elemFrom);</span>
+      this.eventFromF = true;
     }
     return true;
   }
 &nbsp;
 &nbsp;
   private getElem = (elem: Element, str: string) =&gt; {
-    return elem.getElementsByClassName(str)[0] as HTMLElement;
+    return elem.getElementsByClassName(str)[0];
   };
 &nbsp;
+<span class="missing-if-branch" title="if path not taken" >I</span>
+  private mo<span class="cstat-no" title="statement not covered" >veDot = (options: MD) =&gt; {</span>
 &nbsp;
-  privat<span class="missing-if-branch" title="if path not taken" >I</span>e moveDot = (options: MD) =&gt; {
-<span class="cstat-no" title="statement not covered" ></span>
     const { event, type, shiftXY } = options;
     const rect = this.wrapElem.getBoundingClientRect();
     const wrap = this.wrapElem;
@@ -892,7 +895,7 @@ export { Handle };</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Dec 01 2021 17:00:41 GMT+0300 (Москва, стандартное время)
+                at Sat Dec 04 2021 16:39:46 GMT+0300 (Москва, стандартное время)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

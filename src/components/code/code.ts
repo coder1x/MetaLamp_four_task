@@ -1,6 +1,6 @@
 import './code.scss';
 import { RangeSliderOptions, HCElem, HElem } from
-  '../../plugins/range-slider-fox/glob-interface';
+  '../../components/interface/glob-interface';
 
 
 class CopyCode {

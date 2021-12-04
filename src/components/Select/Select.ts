@@ -3,7 +3,7 @@ import {
   HElem,
   HInput,
   HTElem
-} from '../../plugins/range-slider-fox/glob-interface';
+} from '../../components/interface/glob-interface';
 
 interface optE {
   str: string,

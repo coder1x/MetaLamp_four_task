@@ -3,7 +3,7 @@ import {
   HInput,
   HInputEv,
   HElem
-} from '../../plugins/range-slider-fox/glob-interface';
+} from '../../components/interface/glob-interface';
 
 interface OP {
   keyStepOne?: number;

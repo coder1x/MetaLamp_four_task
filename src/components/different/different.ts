@@ -4,7 +4,7 @@ import { Select } from '../select/select';
 
 
 import { HInput, HInputEv, HElem } from
-  '../../plugins/range-slider-fox/glob-interface';
+  '../../components/interface/glob-interface';
 
 
 interface OP {

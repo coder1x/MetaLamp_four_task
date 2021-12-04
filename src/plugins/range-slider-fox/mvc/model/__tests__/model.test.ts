@@ -268,6 +268,33 @@ describe('------- Test Model API -------', () => {
     });
     await model.onHandle();
 
+
+    model = await new Model({
+      type: 'single',
+      orientation: 'vertical',
+      min: -120,
+      max: 800,
+      to: 500,
+      from: 80,
+      onStart: async () => {
+        await model.calcOnePercent();
+        await model.calcPositionDotFrom();
+        await model.calcPositionDotTo();
+        wrapWH = 522;
+        position = 721.1786041259766;
+
+        positionD({
+          clientXY: 521,
+          shiftXY: -1.98211669921875,
+          val: 229,
+          fl: true
+        });
+      }
+    });
+    await model.onHandle();
+
+
+
   });
 
 
@@ -430,6 +457,25 @@ describe('------- Test Model API -------', () => {
       }
     });
     await model.onHandle();
+
+    model = await new Model({
+      type: 'single',
+      orientation: 'vertical',
+      min: -120,
+      max: 800,
+      from: 100,
+
+      onStart: async () => {
+        await model.setWrapWH(1120);
+        await model.calcOnePercent();
+        await model.calcPositionDotFrom();
+
+
+        expect(model.clickLine(300).from).toBeCloseTo(554);
+      }
+    });
+    await model.onHandle();
+
   });
 
 
