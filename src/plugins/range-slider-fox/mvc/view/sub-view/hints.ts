@@ -1,4 +1,5 @@
 
+
 interface CH {
   tipMaxXY: number,
   visibilityTipSingle: boolean,
@@ -11,7 +12,7 @@ interface CH {
 
 class Hints {
 
-  private rsTop: HTMLElement;
+  private rsTop: Element;
   private rsName: string;
   private tipFrom: HTMLElement;
   private tipTo: HTMLElement;
@@ -26,7 +27,7 @@ class Hints {
 
   constructor(elem: HTMLElement | Element, rsName: string) {
     this.rsName = rsName;
-    this.rsTop = (elem as HTMLElement);
+    this.rsTop = elem;
   }
 
 

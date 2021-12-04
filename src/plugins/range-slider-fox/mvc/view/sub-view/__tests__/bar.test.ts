@@ -1,6 +1,7 @@
 import { Bar } from '../bar';
 import { Controller, Model, View } from '../../../controller/controller';
 import { mockPointerEvent } from '../../../../__tests__/jestUtils';
+import { HElem } from '../../../../glob-interface';
 
 describe('------- Test Bar API -------', () => {
 
@@ -13,12 +14,6 @@ describe('------- Test Bar API -------', () => {
     await bar.setVisibleBar(true);
     const domF = await bar.createDomBar();
     expect(domF).toBeTruthy();
-  };
-
-  const getElem = async () => {
-    const barDom = await wrap.firstElementChild;
-    const elem = await barDom as HTMLDivElement;
-    return elem;
   };
 
   beforeEach(() => {
@@ -45,7 +40,7 @@ describe('------- Test Bar API -------', () => {
     await createBar();
     const sbF = await bar.setBar(12, 23);
     expect(sbF).toBeTruthy();
-    const elem = await getElem();
+    const elem: HElem = await wrap.firstElementChild;
     const left = elem.style.left;
     const width = elem.style.width;
     expect(left).toBe('12%');
@@ -59,7 +54,7 @@ describe('------- Test Bar API -------', () => {
     expect(sbF).toBeTruthy();
     const orF = await bar.setOrientation('vertical');
     expect(orF).toBeTruthy();
-    const elem = await getElem();
+    const elem: HElem = await wrap.firstElementChild;
     const bottom = elem.style.bottom;
     const height = elem.style.height;
     expect(bottom).toBe('34%');
@@ -69,7 +64,7 @@ describe('------- Test Bar API -------', () => {
   test(' setSizeWH ', async () => {
     await createBar();
     bar.setSizeWH(25);
-    const elem = await getElem();
+    const elem: HElem = await wrap.firstElementChild;
     const height = elem.style.height;
     expect(height).toBe('25px');
   });
@@ -100,8 +95,7 @@ describe('------- Test Bar API -------', () => {
         const spy = await jest.spyOn(model, 'clickBar');
         const dot =
           await wrapC.getElementsByClassName(jsRsName + '__bar');
-        let elem = dot[0] as HTMLElement;
-        const funP = await mockPointerEvent(elem);
+        const funP = await mockPointerEvent(dot[0]);
         await funP('click', 34, 45);
         expect(spy).toBeCalledTimes(1);
         await spy.mockClear();

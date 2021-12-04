@@ -1,5 +1,6 @@
 import { Controller, Model, View } from '../../controller/controller';
 import { mockPointerEvent } from '../../../__tests__/jestUtils';
+import { HCElem } from '../../../glob-interface';
 
 describe('------- Test View API -------', () => {
 
@@ -80,12 +81,12 @@ describe('------- Test View API -------', () => {
       onStart: async () => {
         let nodes = view.createDomBase().childNodes;
         let name: string[] = [];
-        let line: HTMLElement;
+        let line: HCElem;
         for (let item of nodes) {
-          const elem = item as HTMLElement;
+          const elem: HCElem = item;
           const nC = elem.className;
           if (searchStr(nC, jsRsName + '__center'))
-            line = elem.children[0] as HTMLElement;
+            line = elem.children[0];
           name.push(nC);
         }
 
@@ -138,8 +139,7 @@ describe('------- Test View API -------', () => {
         const spy = await jest.spyOn(model, 'clickLine');
         const dot =
           await wrapC.getElementsByClassName(jsRsName + '__line');
-        let elem = dot[0] as HTMLElement;
-        const funP = await mockPointerEvent(elem);
+        const funP = await mockPointerEvent(dot[0]);
         await funP('click', 34, 45);
         expect(spy).toBeCalledTimes(1);
         await spy.mockClear();

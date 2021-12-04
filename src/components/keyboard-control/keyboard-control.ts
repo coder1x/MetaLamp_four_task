@@ -1,4 +1,9 @@
 import './keyboard-control.scss';
+import {
+  HInput,
+  HInputEv,
+  HElem
+} from '../../plugins/range-slider-fox/glob-interface';
 
 interface OP {
   keyStepOne?: number;
@@ -8,15 +13,15 @@ interface OP {
 
 class KeyboardControl {
 
-  private elem: HTMLElement;
-  private keyStepOne: HTMLInputElement;
-  private keyStepHold: HTMLInputElement;
+  private elem: HElem;
+  private keyStepOne: HInput;
+  private keyStepHold: HInput;
   private keyStepOneD: number;
   private keyStepHoldD: number;
   private nameClass: string;
 
 
-  constructor(nameClass: string, elem: HTMLElement) {
+  constructor(nameClass: string, elem: HElem) {
     this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
@@ -44,14 +49,14 @@ class KeyboardControl {
     mapInput.set('keyStepHold', this.keyStepHold.value);
 
     const data = (e: Event) => {
-      const elem = e.target as HTMLInputElement;
+      const elem: HInputEv = e.target;
       obj.update({
         [elem.name]: +mapInput.get(elem.name)
       });
     };
 
     const inputProcessing = (e: Event) => {
-      const elem = e.target as HTMLInputElement;
+      const elem: HInputEv = e.target;
       let val = elem.value.replace(/[^-.\d]/g, '');
       let regexp = /^-?\d*?[.]?\d*$/;
       const valid = regexp.test(val);
@@ -79,7 +84,7 @@ class KeyboardControl {
         '__' +
         str +
         '-wrap input'
-      ) as HTMLInputElement;
+      );
     };
 
     this.keyStepOne = getDom('one');

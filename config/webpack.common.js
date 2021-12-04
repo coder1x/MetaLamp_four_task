@@ -13,7 +13,8 @@ const devServ = require('./webpack.devServer.js');
 
 module.exports = merge(devServ, {
 
-  target: DP.isDev ? 'web' : 'browserslist',
+  // target: DP.isDev ? 'web' : 'browserslist',
+  target: 'web',
   //devtool: DP.isDev ? 'eval-cheap-module-source-map' : 'source-map', //  (карта для браузеров) 
   devtool: DP.isDev ? false : false,
 

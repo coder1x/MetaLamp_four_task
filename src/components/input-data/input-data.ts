@@ -1,16 +1,18 @@
 import './input-data.scss';
-
+import {
+  HInput,
+  HElem
+} from '../../plugins/range-slider-fox/glob-interface';
 
 
 class InputData {
 
-  private value: HTMLInputElement;
-  private input: HTMLInputElement;
+  private value: HInput;
+  private input: HInput;
   private className: string;
-  private elem: HTMLElement;
+  private elem: HElem;
 
-
-  constructor(className: string, elem: HTMLElement) {
+  constructor(className: string, elem: HElem) {
     this.className = className;
     this.elem = elem;
     this.setDom();
@@ -19,11 +21,11 @@ class InputData {
   private setDom() {
     this.input = this.elem.querySelector(
       this.className + '__slider-wrap input'
-    ) as HTMLInputElement;
+    );
 
     this.value = this.elem.querySelector(
       '.input-data input'
-    ) as HTMLInputElement;
+    );
 
     if (this.input) {
       const _this = this;

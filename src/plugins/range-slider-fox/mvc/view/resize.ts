@@ -20,8 +20,6 @@ class Resize {
     let timeout = false;
     let startWidth = this.wrapper.offsetWidth;
 
-    this.throttle("resize", "optimizedResize");
-
     const resizeEnd = () => {
       if (Number(new Date()) - Number(rTime) < this.sleep) {
         setTimeout(resizeEnd, this.sleep);
@@ -35,14 +33,15 @@ class Resize {
       }
     };
 
-    window.addEventListener("optimizedResize", () => {
+    this.throttle('resize', 'optimizedResize');
+
+    window.addEventListener('optimizedResize', () => {
       rTime = new Date();
       if (timeout === false) {
         timeout = true;
         setTimeout(resizeEnd, this.sleep);
       }
     });
-    return true;
   }
 
   private throttle(type: string, name: string, obj = window) {

@@ -37,7 +37,7 @@ describe('------- Test Resize API -------', () => {
     return mockElement;
   }
 
-  function mockCustomEvent(element: any,
+  function mockCustomEvent(element: Window,
     { eventType }: { eventType: string }): void {
     const customEvent = new CustomEvent(eventType,
       { bubbles: true }
@@ -48,9 +48,7 @@ describe('------- Test Resize API -------', () => {
 
   test(' Resize ', async () => {
 
-
     let change = false;
-
     let wrap = await document.createElement('div');
     await mockElementDimensions(wrap, {
       width: 300,
@@ -60,10 +58,8 @@ describe('------- Test Resize API -------', () => {
     jest.useFakeTimers();
     jest.spyOn(global, 'setTimeout');
 
-    const resize = await new Resize(wrap, 200, () => {
+    const resize = await new Resize(wrap, 100, () => {
       change = true;
-
-      expect(false).toBeTruthy();
     });
 
     let wrap2 = await document.createElement('div');
@@ -73,12 +69,12 @@ describe('------- Test Resize API -------', () => {
     });
     resize.wrapper = await wrap2;
 
-    await mockCustomEvent(window,
-      { eventType: 'optimizedResize' });
+    await mockCustomEvent(window, { eventType: 'resize' });
+    await jest.runOnlyPendingTimers();
+    await jest.runOnlyPendingTimers();
 
-
+    expect(change).toBeTruthy();
     expect(setTimeout).toHaveBeenCalledTimes(1);
-
   });
 
 

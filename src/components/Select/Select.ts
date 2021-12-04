@@ -1,4 +1,9 @@
 import './select.scss';
+import {
+  HElem,
+  HInput,
+  HTElem
+} from '../../plugins/range-slider-fox/glob-interface';
 
 interface optE {
   str: string,
@@ -10,19 +15,19 @@ interface optE {
 class Select {
 
   private className: string;
-  private elem: HTMLElement;
-  private button: HTMLElement;
-  private input: HTMLInputElement;
-  private items: HTMLElement[];
-  private displayedWrap: HTMLElement;
-  private options: HTMLElement;
+  private elem: HElem;
+  private button: HElem;
+  private input: HInput;
+  private items: HElem[];
+  private displayedWrap: HElem;
+  private options: HElem;
   onChange: Function;
   onUpdate: Function;
   private updateFlag = false;
   private startFlag = true;
 
 
-  constructor(className: string, elem: HTMLElement) {
+  constructor(className: string, elem: HElem) {
     this.className = className;
     this.elem = elem;
     this.init();
@@ -78,32 +83,51 @@ class Select {
 
   private setDomElem() {
 
-    this.button = this.getElem({
+
+
+    const butElem = this.getElem({
       str: '__displayed'
-    }) as HTMLButtonElement;
+    });
 
-    this.input = this.getElem({
+    if (!Array.isArray(butElem))
+      this.button = butElem;
+
+    const inputElem = this.getElem({
       str: '__input'
-    }) as HTMLInputElement;
+    });
 
-    this.items = this.getElem({
+    if (!Array.isArray(inputElem))
+      this.input = inputElem;
+
+    const itemsElem = this.getElem({
       str: '__item',
       fl: true
-    }) as HTMLElement[];
+    });
 
-    this.options = this.getElem({
+
+    if (Array.isArray(itemsElem))
+      this.items = itemsElem;
+
+
+    const optionsElem = this.getElem({
       str: '__options',
-    }) as HTMLElement;
+    });
+
+    if (!Array.isArray(optionsElem))
+      this.options = optionsElem;
 
 
-    this.displayedWrap = this.getElem({
+    const displayedWrapElem = this.getElem({
       str: '__displayed-wrap'
-    }) as HTMLElement;
+    });
+
+    if (!Array.isArray(displayedWrapElem))
+      this.displayedWrap = displayedWrapElem;
 
     this.setDisplayed();
   }
 
-  private setValSelect(elem: HTMLElement) {
+  private setValSelect(elem: HElem | HTElem) {
     const text = elem.innerText;
     this.button.innerText = text;
     const val = elem.getAttribute('data-val');
@@ -123,7 +147,7 @@ class Select {
     }
   }
 
-  private getVisible(elem: Element) {
+  private getVisible(elem: HElem) {
     let display = window.getComputedStyle(elem, null)
       .getPropertyValue('display');
     return display === 'none' ? false : true;
@@ -173,8 +197,16 @@ class Select {
     const setValue = (e: MouseEvent | KeyboardEvent) => {
 
       let flag = false;
-      const keyE = e as KeyboardEvent;
-      const mousE = e as MouseEvent;
+      let mousE: MouseEvent;
+      let keyE: KeyboardEvent;
+
+      if (e instanceof MouseEvent) {
+        mousE = e;
+      }
+
+      if (e instanceof KeyboardEvent) {
+        keyE = e;
+      }
 
       if (keyE.key == 'Enter' || keyE.key == ' ') {
         e.preventDefault();
@@ -183,7 +215,7 @@ class Select {
         flag = true;
 
       if (flag) {
-        const target = e.target as HTMLElement;
+        const target: HTElem = e.target;
         this.setValSelect(target);
         this.toggle(true);
       }
@@ -197,7 +229,7 @@ class Select {
 
 
     document.addEventListener('click', (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
+      const target: HTElem = e.target;
       const domEl = target.closest('.' + this.getModify()) ?? false;
       if (!domEl) {
         this.toggle(true);
@@ -206,7 +238,7 @@ class Select {
 
 
     document.addEventListener('focusin', (e: FocusEvent) => {
-      const target = e.target as HTMLElement;
+      const target: HTElem = e.target;
       const linkEl = target.closest(
         this.className + '__options'
       ) ?? false;

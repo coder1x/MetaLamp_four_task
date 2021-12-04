@@ -1,4 +1,9 @@
 import './values.scss';
+import {
+  HInput,
+  HInputEv,
+  HElem
+} from '../../plugins/range-slider-fox/glob-interface';
 
 interface OP {
   min?: number;
@@ -11,12 +16,12 @@ interface OP {
 
 class Values {
 
-  private elem: HTMLElement;
-  private min: HTMLInputElement;
-  private max: HTMLInputElement;
-  private from: HTMLInputElement;
-  private to: HTMLInputElement;
-  private step: HTMLInputElement;
+  private elem: HElem;
+  private min: HInput;
+  private max: HInput;
+  private from: HInput;
+  private to: HInput;
+  private step: HInput;
 
   private minD: number;
   private maxD: number;
@@ -26,7 +31,7 @@ class Values {
   private nameClass: string;
 
 
-  constructor(nameClass: string, elem: HTMLElement) {
+  constructor(nameClass: string, elem: HElem) {
     this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
@@ -71,14 +76,14 @@ class Values {
     mapInput.set('step', this.step.value);
 
     const data = (e: Event) => {
-      const elem = e.target as HTMLInputElement;
+      const elem: HInputEv = e.target;
       obj.update({
         [elem.name]: +mapInput.get(elem.name)
       });
     };
 
     const inputProcessing = (e: Event) => {
-      const elem = e.target as HTMLInputElement;
+      const elem: HInputEv = e.target;
       let val = elem.value.replace(/[^-.\d]/g, '');
 
       let regexp = /^-?\d*?[.]?\d*$/;
@@ -106,7 +111,7 @@ class Values {
         '__' +
         str +
         '-wrap input'
-      ) as HTMLInputElement;
+      );
     };
 
     this.min = getDom('min');

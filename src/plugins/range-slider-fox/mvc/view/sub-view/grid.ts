@@ -1,18 +1,19 @@
 
 import { Observer } from '../../../observer';
 import { Resize } from '../resize';
+import { HElem, HTElem, HPElem } from '../../../glob-interface';
 
 class Grid extends Observer {
 
-  private rsBottom: HTMLElement;
+  private rsBottom: HElem;
   private rsName: string;
   private elemGrid: HTMLElement;
   private indent: number;
   private masWH: number[] = [];
-  private oddElements: HTMLElement[][] = [[]];
-  private evenElements: HTMLElement[][] = [[]];
-  private lastElem: HTMLElement;
-  private previousElem: HTMLElement;
+  private oddElements: HElem[][] = [[]];
+  private evenElements: HElem[][] = [[]];
+  private lastElem: HElem;
+  private previousElem: HElem;
   private offOn: boolean;
   private vertical: boolean;
   private resizeF: boolean = false;
@@ -21,7 +22,7 @@ class Grid extends Observer {
   constructor(elem: HTMLElement | Element, rsName: string) {
     super();
     this.rsName = rsName;
-    this.rsBottom = (elem as HTMLElement);
+    this.rsBottom = elem;
     this.init();
   }
 
@@ -86,7 +87,7 @@ class Grid extends Observer {
 
   private setAction(elem: HTMLElement) {
     elem.addEventListener('click', (e: Event) => {
-      const mark = e.target as HTMLElement;
+      const mark: HTElem = e.target;
       const selector = 'js-' + this.rsName + '__grid-mark';
       if (this.searchStr(mark.className, selector)) {
         this.notifyOB({
@@ -123,10 +124,10 @@ class Grid extends Observer {
   }
 
 
-  private toggleElem(elem: HTMLElement, display: string, opacity: string) {
+  private toggleElem(elem: HElem, display: string, opacity: string) {
     const st = elem.style;
     st.visibility = display;
-    const wrapE = (elem.parentNode as HTMLElement);
+    const wrapE: HPElem = elem.parentNode;
     wrapE.style.opacity = opacity;
   }
 
@@ -151,14 +152,14 @@ class Grid extends Observer {
 
     const len = gridMarks.length;
     if (len > 1) {
-      this.lastElem = (gridMarks[len - 1] as HTMLElement);
+      this.lastElem = gridMarks[len - 1];
     }
 
 
     let k = 0;
     for (let item of gridMarks) {
-      const mark = (item as HTMLElement);
-      const pol = (gridPols[k++] as HTMLElement);
+      const mark: HElem = item;
+      const pol: HElem = gridPols[k++];
 
       const stMark = mark.style;
 
@@ -179,9 +180,9 @@ class Grid extends Observer {
     this.oddElements[0].shift();
     this.oddElements[0].pop();
 
-    let evenMas: HTMLElement[] = [];
+    let evenMas: HElem[] = [];
 
-    const breakIntoPieces = (mas: HTMLElement[]) => {
+    const breakIntoPieces = (mas: HElem[]) => {
       elemWH = 0;
       const newMas = mas.filter((elem, i) => {
         if (i % 2 == 0) { // every second element of the array

@@ -1,18 +1,17 @@
 import './code.scss';
-import { RangeSliderOptions } from
+import { RangeSliderOptions, HCElem, HElem } from
   '../../plugins/range-slider-fox/glob-interface';
 
 
 class CopyCode {
 
   private className: string;
-  private elem: HTMLElement;
+  private elem: HElem;
   private button: HTMLButtonElement;
   private ul: Element;
-  private items: HTMLElement[];
 
 
-  constructor(className: string, component: HTMLElement) {
+  constructor(className: string, component: HElem) {
     this.className = className;
     this.elem = component;
     this.init();
@@ -32,14 +31,17 @@ class CopyCode {
         valT = val[i];
       }
       const text = key[i] + ': ' + valT + ',';
-      let item: HTMLElement;
+
       if (!fl) {
-        item = this.createElem('li', [name + '__item']);
+        const item = this.createElem('li', [name + '__item']);
         this.ul.appendChild(item);
+        item.innerText = text;
       }
-      else
-        item = child[i] as HTMLElement;
-      item.innerText = text;
+      else {
+        const item: HCElem = child[i];
+        item.innerText = text;
+      }
+
     }
   }
 
@@ -62,7 +64,7 @@ class CopyCode {
     this.button.addEventListener('click', () => {
       let text = '$(\'.demo\').RangeSliderFox({\n';
       for (let item of child) {
-        const elem = item as HTMLElement;
+        const elem: HCElem = item;
         text += elem.innerText + '\n';
       }
       text += '});';

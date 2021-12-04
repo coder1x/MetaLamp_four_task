@@ -3,6 +3,10 @@ import { Select } from '../select/select';
 
 
 
+import { HInput, HInputEv, HElem } from
+  '../../plugins/range-slider-fox/glob-interface';
+
+
 interface OP {
   type?: string;
   disabled?: boolean;
@@ -12,16 +16,17 @@ interface OP {
 }
 
 
+
 class Different {
 
-  private elem: HTMLElement;
-  private type: HTMLInputElement;
-  private disabled: HTMLInputElement;
-  private orientation: HTMLInputElement;
-  private bar: HTMLInputElement;
+  private elem: HElem;
+  private type: HInput;
+  private disabled: HInput;
+  private orientation: HInput;
+  private bar: HInput;
   private select: Select;
   private reset: HTMLButtonElement;
-  private panel: HTMLElement;
+  private panel: HElem;
   private modify: string;
   private disabledD: boolean;
   private barD: boolean;
@@ -31,7 +36,7 @@ class Different {
   private nameClass: string;
 
 
-  constructor(nameClass: string, elem: HTMLElement, panel: HTMLElement) {
+  constructor(nameClass: string, elem: HElem, panel: HElem) {
     this.nameClass = nameClass;
     this.panel = panel;
     this.elem = elem;
@@ -90,28 +95,32 @@ class Different {
       });
     };
 
-    this.disabled.addEventListener('click', function () {
+    this.disabled.addEventListener('click', function (e: Event) {
+      const elem: HInputEv = e.target;
       obj.update({
-        disabled: this.checked
+        disabled: elem.checked
       });
     });
 
-    this.bar.addEventListener('click', function () {
+    this.bar.addEventListener('click', function (e: Event) {
+      const elem: HInputEv = e.target;
       obj.update({
-        bar: this.checked
+        bar: elem.checked
       });
     });
 
-    this.type.addEventListener('click', function () {
-      const val = this.checked ? 'double' : 'single';
+    this.type.addEventListener('click', function (e: Event) {
+      const elem: HInputEv = e.target;
+      const val = elem.checked ? 'double' : 'single';
       obj.update({
         type: val
       });
     });
 
-    this.orientation.addEventListener('click', function () {
-      const val = this.checked ? 'vertical' : 'horizontal';
-      this.checked ? objP.add(modify) : objP.remove(modify);
+    this.orientation.addEventListener('click', function (e: Event) {
+      const elem: HInputEv = e.target;
+      const val = elem.checked ? 'vertical' : 'horizontal';
+      elem.checked ? objP.add(modify) : objP.remove(modify);
 
       obj.update({
         orientation: val
@@ -128,7 +137,7 @@ class Different {
         '__' +
         str +
         '-wrap input'
-      ) as HTMLInputElement;
+      );
     };
 
     this.type = getDom('double');
@@ -136,9 +145,9 @@ class Different {
     this.bar = getDom('bar');
     this.orientation = getDom('vertical');
     this.reset =
-      this.elem.querySelector(this.nameClass + '__reset') as HTMLButtonElement;
+      this.elem.querySelector(this.nameClass + '__reset');
     const selectE = this.elem.querySelector('.select');
-    this.select = new Select('.select', selectE as HTMLElement);
+    this.select = new Select('.select', selectE);
   }
 
 }

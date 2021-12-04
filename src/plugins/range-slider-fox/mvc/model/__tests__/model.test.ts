@@ -149,23 +149,23 @@ describe('------- Test Model API -------', () => {
     let position = 533.7142944335938;
 
     const positionD = async (op: DP) => {
-      type obj = { from: number; to: number; };
       let data = await model.calcDotPosition({
         type: op.fl ? 'From' : 'To',
         wrapWH,
         position,
         clientXY: op.clientXY,
         shiftXY: op.shiftXY
-      }) as obj;
+      });
 
-      if (op.fl) {
-        expect(data.from).toBeCloseTo(op.val);
-        expect(data.to).toBeUndefined();
-      }
-      else {
-        expect(data.to).toBeCloseTo(op.val);
-        expect(data.from).toBeUndefined();
-      }
+      if (data)
+        if (op.fl) {
+          expect(data.from).toBeCloseTo(op.val);
+          expect(data.to).toBeUndefined();
+        }
+        else {
+          expect(data.to).toBeCloseTo(op.val);
+          expect(data.from).toBeUndefined();
+        }
     };
 
     model = await new Model({
@@ -178,7 +178,6 @@ describe('------- Test Model API -------', () => {
         await model.calcOnePercent();
         await model.calcPositionDotFrom();
         await model.calcPositionDotTo();
-        type obj = { from: number; to: number; };
 
         positionD({
           clientXY: 929.7144165039062,
@@ -200,10 +199,11 @@ describe('------- Test Model API -------', () => {
           position,
           clientXY: 1400,
           shiftXY: 3.580322265625
-        }) as obj;
-
-        expect(data.from).toBeCloseTo(500);
-        expect(data.to).toBeCloseTo(500);
+        });
+        if (data) {
+          expect(data.from).toBeCloseTo(500);
+          expect(data.to).toBeCloseTo(500);
+        }
 
         positionD({
           clientXY: 1500,
@@ -225,10 +225,12 @@ describe('------- Test Model API -------', () => {
           position,
           clientXY: 1200,
           shiftXY: 0.08056640625
-        }) as obj;
+        });
 
-        expect(data.from).toBeCloseTo(500);
-        expect(data.to).toBeCloseTo(500);
+        if (data) {
+          expect(data.from).toBeCloseTo(500);
+          expect(data.to).toBeCloseTo(500);
+        }
 
       },
     });

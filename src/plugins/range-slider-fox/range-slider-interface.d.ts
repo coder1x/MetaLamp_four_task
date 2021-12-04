@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: off */
+
 interface RangeSliderOptions {
   readonly type?: string;
   readonly orientation?: string;
@@ -27,16 +29,12 @@ interface RangeSliderOptions {
 }
 
 interface RangeSliderFoxFunction {
-  // eslint-disable-next-line no-unused-vars
   (options: RangeSliderOptions): JQuery;
 }
-
 
 interface RangeSliderFox extends
   RangeSliderFoxFunction { }
 
-
-// eslint-disable-next-line no-unused-vars
 interface JQuery {
   RangeSliderFox: RangeSliderFox;
 }

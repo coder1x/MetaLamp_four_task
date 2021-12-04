@@ -1,6 +1,4 @@
 
-
-
 interface UpdateTip {
   readonly fromXY?: number,
   readonly toXY?: number,
@@ -8,6 +6,8 @@ interface UpdateTip {
 }
 
 
+
+
 export {
-  UpdateTip
+  UpdateTip,
 };

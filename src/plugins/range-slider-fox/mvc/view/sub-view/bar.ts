@@ -1,8 +1,9 @@
 import { Observer } from '../../../observer';
 
+
 class Bar extends Observer {
 
-  private rsCenter: HTMLElement;
+  private rsCenter: Element;
   private rsName: string;
   private elemBar: HTMLElement;
   private bar: boolean;
@@ -12,7 +13,7 @@ class Bar extends Observer {
   constructor(elem: HTMLElement | Element, rsName: string) {
     super();
     this.rsName = rsName;
-    this.rsCenter = (elem as HTMLElement);
+    this.rsCenter = elem;
   }
 
 
@@ -28,13 +29,16 @@ class Bar extends Observer {
       let sizeW = '';
       let sizeH = '';
 
-      const toggleBar = (from: string, to: string) => {
-        const val = this.getProperty(elem, from as keyof CSSStyleDeclaration);
+      const toggleBar = (
+        from: keyof CSSStyleDeclaration,
+        to: keyof CSSStyleDeclaration
+      ) => {
+        const val = this.getProperty(elem, from);
         if (val == '') return false;
         sizeW = elem.width;
         sizeH = elem.height;
-        elem.removeProperty(from);
-        const key = to as keyof CSSStyleDeclaration;
+        elem.removeProperty(String(from));
+        const key = to;
         this.setProperty(elem, key, val);
         return true;
       };

@@ -1,5 +1,11 @@
 import './hints.scss';
 
+import {
+  HInputEv,
+  HInput,
+  HElem
+} from '../../plugins/range-slider-fox/glob-interface';
+
 interface OP {
   tipMinMax?: boolean;
   tipFromTo?: boolean;
@@ -8,18 +14,18 @@ interface OP {
 }
 
 class Hints {
-  private elem: HTMLElement;
-  private tipMinMax: HTMLInputElement;
-  private tipFromTo: HTMLInputElement;
-  private tipPrefix: HTMLInputElement;
-  private tipPostfix: HTMLInputElement;
+  private elem: HElem;
+  private tipMinMax: HInput;
+  private tipFromTo: HInput;
+  private tipPrefix: HInput;
+  private tipPostfix: HInput;
   private tipMinMaxD: boolean;
   private tipFromToD: boolean;
   private tipPrefixD: string;
   private tipPostfixD: string;
   private nameClass: string;
 
-  constructor(nameClass: string, elem: HTMLElement) {
+  constructor(nameClass: string, elem: HElem) {
     this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
@@ -48,7 +54,7 @@ class Hints {
 
   setAction(obj: any) {
     const data = (e: Event) => {
-      const elem = e.target as HTMLInputElement;
+      const elem: HInputEv = e.target;
       obj.update({
         [elem.name]: elem.value
       });
@@ -59,15 +65,17 @@ class Hints {
       item.addEventListener('change', data);
     }
 
-    this.tipMinMax.addEventListener('click', function () {
+    this.tipMinMax.addEventListener('click', function (e: Event) {
+      const elem: HInputEv = e.target;
       obj.update({
-        tipMinMax: this.checked
+        tipMinMax: elem.checked
       });
     });
 
-    this.tipFromTo.addEventListener('click', function () {
+    this.tipFromTo.addEventListener('click', function (e: Event) {
+      const elem: HInputEv = e.target;
       obj.update({
-        tipFromTo: this.checked
+        tipFromTo: elem.checked
       });
     });
   }
@@ -79,7 +87,7 @@ class Hints {
         '__' +
         str +
         '-wrap input'
-      ) as HTMLInputElement;
+      );
     };
 
     this.tipMinMax = getDom('minmax');

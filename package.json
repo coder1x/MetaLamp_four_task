@@ -22,6 +22,7 @@
     "@babel/preset-env": "^7.14.2",
     "@babel/preset-react": "^7.13.13",
     "@babel/preset-typescript": "^7.13.0",
+    "@types/jest": "^27.0.3",
     "@types/jquery": "^3.5.5",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",
@@ -64,6 +65,7 @@
     "style-loader": "^2.0.0",
     "terser-webpack-plugin": "^5.1.4",
     "thread-loader": "^3.0.4",
+    "ts-jest": "^27.0.7",
     "ts-loader": "^9.2.1",
     "webpack": "^5.37.0",
     "webpack-bundle-analyzer": "^4.4.1",
@@ -78,7 +80,6 @@
     "@babel/polyfill": "^7.12.1",
     "@types/css-font-loading-module": "0.0.6",
     "@types/expect-puppeteer": "^4.4.7",
-    "@types/jest": "^27.0.2",
     "@types/jest-environment-puppeteer": "^4.4.1",
     "@types/npm": "^2.0.32",
     "@types/puppeteer": "^5.4.4",
@@ -93,7 +94,6 @@
     "normalize.css": "^8.0.1",
     "pug-html-loader": "^1.1.5",
     "puppeteer": "^11.0.0",
-    "ts-jest": "^27.0.7",
     "ts-node": "^10.4.0",
     "typescript": "^4.2.4"
   }

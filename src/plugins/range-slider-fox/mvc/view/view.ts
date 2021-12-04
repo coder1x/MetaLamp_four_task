@@ -5,6 +5,9 @@ import { Hints } from './sub-view/hints';
 import { Bar } from './sub-view/bar';
 import { Grid } from './sub-view/grid';
 import { Observer, TOB } from '../../observer';
+import { HInput, HElem } from '../../glob-interface';
+
+
 
 class View extends Observer {
 
@@ -39,7 +42,9 @@ class View extends Observer {
     const typeElem = this.elem.constructor.name;
     let str = '';
     if (typeElem == 'HTMLInputElement') {
-      const input = this.elem as HTMLInputElement;
+
+      const input: HInput = this.elem;
+
       input.value = str;
       str += from;
       if (type == 'double') {
@@ -67,7 +72,7 @@ class View extends Observer {
   }
 
   disabledRangeSlider(flag: boolean) {
-    const elem = this.wrapSlider as HTMLElement;
+    const elem: HElem = this.wrapSlider;
     const st = elem.style;
     return flag ? st.opacity = '0.5' : st.opacity = '1';
   }

@@ -13,27 +13,27 @@ class TestOB extends Observer {
 describe('------- Observer - subscribe, unsubscribe, notify -------', () => {
 
   let ob: TestOB;
-  let сallback: Function;
-  let сallback2: Function;
+  let callback: Function;
+  let callback2: Function;
 
   beforeEach(() => {
     ob = new TestOB();
-    сallback = jest.fn();
-    сallback2 = jest.fn(x => x);
+    callback = jest.fn();
+    callback2 = jest.fn(x => x);
   });
 
   test('subscribeOB', () => {
-    expect(ob.subscribeOB(сallback)).toBe(1);
-    expect(ob.subscribeOB(сallback)).toBeFalsy();
-    expect(ob.subscribeOB(сallback2)).toBe(2);
+    expect(ob.subscribeOB(callback)).toBe(1);
+    expect(ob.subscribeOB(callback)).toBeFalsy();
+    expect(ob.subscribeOB(callback2)).toBe(2);
   });
 
   test('unsubscribeOB', () => {
-    ob.subscribeOB(сallback);
-    ob.subscribeOB(сallback2);
+    ob.subscribeOB(callback);
+    ob.subscribeOB(callback2);
 
-    expect(ob.unsubscribeOB(сallback)).toBe(1);
-    expect(ob.unsubscribeOB(сallback2)).toBe(0);
+    expect(ob.unsubscribeOB(callback)).toBe(1);
+    expect(ob.unsubscribeOB(callback2)).toBe(0);
   });
 
 

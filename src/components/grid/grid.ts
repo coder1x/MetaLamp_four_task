@@ -1,5 +1,11 @@
 import './grid.scss';
 
+import {
+  HInputEv,
+  HInput,
+  HElem
+} from '../../plugins/range-slider-fox/glob-interface';
+
 interface OP {
   grid?: boolean;
   gridSnap?: boolean;
@@ -11,12 +17,12 @@ interface OP {
 
 class Grid {
 
-  private elem: HTMLElement;
-  private grid: HTMLInputElement;
-  private snap: HTMLInputElement;
-  private interval: HTMLInputElement;
-  private step: HTMLInputElement;
-  private gridRound: HTMLInputElement;
+  private elem: HElem;
+  private grid: HInput;
+  private snap: HInput;
+  private interval: HInput;
+  private step: HInput;
+  private gridRound: HInput;
   private gridD: boolean;
   private gridSnapD: boolean;
   private gridNumD: number;
@@ -24,7 +30,7 @@ class Grid {
   private gridRoundD: number;
   private nameClass: string;
 
-  constructor(nameClass: string, elem: HTMLElement) {
+  constructor(nameClass: string, elem: HElem) {
     this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
@@ -86,7 +92,7 @@ class Grid {
     });
 
     const inputProcessing = (e: Event) => {
-      const elem = e.target as HTMLInputElement;
+      const elem: HInputEv = e.target;
       let val = elem.value.replace(/[^.\d]/g, '');
 
       let regexp = /^\d*?[.]?\d*$/;
@@ -105,14 +111,15 @@ class Grid {
       item.addEventListener('input', inputProcessing);
     }
 
-    this.grid.addEventListener('click', function () {
+    this.grid.addEventListener('click', function (e: Event) {
+      const elem: HInputEv = e.target;
       obj.update({
-        grid: this.checked
+        grid: elem.checked
       });
     });
 
     this.snap.addEventListener('click', (e: Event) => {
-      const elem = e.target as HTMLInputElement;
+      const elem: HInputEv = e.target;
       if (this.grid.checked) {
         obj.update({
           gridSnap: elem.checked
@@ -130,7 +137,7 @@ class Grid {
         '__' +
         str +
         '-wrap input'
-      ) as HTMLInputElement;
+      );
     };
 
     this.grid = getDom('grid');

@@ -5,6 +5,7 @@ import {
   mockKeyboardEvent
 } from '../../../../__tests__/jestUtils';
 
+
 describe('------- Test Handle API -------', () => {
 
   let rsName: string;
@@ -45,7 +46,10 @@ describe('------- Test Handle API -------', () => {
   test(' createDomBase ', async () => {
     let wrapH = handle.createDomBase('double');
     expect(wrapH).toBeDefined();
-    let child = (wrapH as HTMLElement).children;
+
+    let child: HTMLCollection;
+    if (typeof wrapH != 'boolean')
+      child = wrapH.children;
 
     searchStr(child[0].className, jsRsName + '__from');
     searchStr(child[1].className, jsRsName + '__to');
@@ -56,7 +60,9 @@ describe('------- Test Handle API -------', () => {
     handle = await new Handle(wrap, rsName);
     wrapH = await handle.createDomBase('single');
     expect(wrapH).toBeDefined();
-    child = (wrapH as HTMLElement).children;
+
+    if (typeof wrapH != 'boolean')
+      child = wrapH.children;
 
     searchStr(child[0].className, jsRsName + '__from');
     expect(child[1]).toBeUndefined();
@@ -67,8 +73,12 @@ describe('------- Test Handle API -------', () => {
 
   test(' setFrom & setTo ', async () => {
     const { from, to } = await createFromTo();
-    const leftF = (from as CSSStyleDeclaration).left;
-    const leftT = (to as CSSStyleDeclaration).left;
+    let leftF: string;
+    if (typeof from != 'boolean')
+      leftF = from.left;
+    let leftT: string;
+    if (typeof to != 'boolean')
+      leftT = to.left;
     expect(leftF).toBe('34%');
     expect(leftT).toBe('56%');
   });
@@ -105,10 +115,9 @@ describe('------- Test Handle API -------', () => {
         const eventDot = async (name: string, val1: number, val2: number) => {
           const dot =
             await wrapC.getElementsByClassName(jsRsName + '__' + name);
-          let elem = dot[0] as HTMLElement;
           const type = name == 'from' ? 'From' : 'To';
-          const funP = await mockPointerEvent(elem);
-          const funK = await mockKeyboardEvent(elem);
+          const funP = await mockPointerEvent(dot[0]);
+          const funK = await mockKeyboardEvent(dot[0]);
           await funP('pointerdown', val1, 0);
           await funP('pointermove', val2, 0);
           await funP('pointerup', 0, 0);

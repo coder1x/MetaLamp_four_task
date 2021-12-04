@@ -1,5 +1,6 @@
 import { Observer } from '../../../observer';
 
+
 interface MD {
   event: PointerEvent,
   type: string,
@@ -211,7 +212,7 @@ class Handle extends Observer {
 
 
   private getElem = (elem: Element, str: string) => {
-    return elem.getElementsByClassName(str)[0] as HTMLElement;
+    return elem.getElementsByClassName(str)[0];
   };
 
 

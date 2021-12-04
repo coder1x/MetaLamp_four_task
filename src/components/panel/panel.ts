@@ -1,6 +1,6 @@
 import './panel.scss';
 
-import { RangeSliderOptions } from
+import { RangeSliderOptions, HElem } from
   '../../plugins/range-slider-fox/glob-interface';
 
 import { Values } from '../values/values';
@@ -14,7 +14,7 @@ import { KeyboardControl } from '../keyboard-control/keyboard-control';
 
 class Panel {
 
-  private elem: HTMLElement;
+  private elem: HElem;
   private objValues: Values;
   private objInputData: InputData;
   private objGrid: Grid;
@@ -25,7 +25,7 @@ class Panel {
   private objKeyboardControl: KeyboardControl;
 
 
-  constructor(elem: HTMLElement, className: string) {
+  constructor(elem: HElem, className: string) {
     this.elem = elem;
     this.className = className;
     this.init();
@@ -79,7 +79,7 @@ class Panel {
   }
 
   private getDom(str: string) {
-    return this.elem.querySelector(str) as HTMLElement;
+    return this.elem.querySelector(str);
   }
 
   private setDataS(data: RangeSliderOptions) {
@@ -121,7 +121,7 @@ function renderPanel(className: string) {
   let components = document.querySelectorAll(className);
   let objMas: Panel[] = [];
   for (let elem of components) {
-    objMas.push(new Panel(elem as HTMLElement, className));
+    objMas.push(new Panel(elem, className));
   }
   return objMas;
 }
