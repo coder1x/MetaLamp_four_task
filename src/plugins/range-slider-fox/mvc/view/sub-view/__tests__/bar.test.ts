@@ -3,6 +3,7 @@ import { Controller, Model, View } from '../../../controller/controller';
 import { mockPointerEvent } from '../../../../__tests__/jestUtils';
 import { HElem } from '../../../../glob-interface';
 
+// диапазон между ползунками
 describe('------- Test Bar API -------', () => {
 
   let rsName: string;
@@ -25,18 +26,19 @@ describe('------- Test Bar API -------', () => {
     bar = new Bar(wrap, rsName);
   });
 
-  test(' setVisibleBar ', async () => {
+  // setVisibleBar
+  test(' Turn progress-bar visibility on / off ', async () => {
     expect(bar.setVisibleBar(true)).toBeTruthy();
     expect(bar.setVisibleBar(false)).toBeFalsy();
   });
 
-
-  test(' createDomBar ', async () => {
+  // createDomBar
+  test(' Create progress-bar DOM-element ', async () => {
     createBar();
   });
 
-
-  test(' setBar ', async () => {
+  // setBar
+  test(' Set progress-bar position and width ', async () => {
     await createBar();
     const sbF = await bar.setBar(12, 23);
     expect(sbF).toBeTruthy();
@@ -47,8 +49,8 @@ describe('------- Test Bar API -------', () => {
     expect(width).toBe('23%');
   });
 
-
-  test(' setOrientation ', async () => {
+  // setOrientation
+  test(' Set progress-bar orientation ', async () => {
     await createBar();
     const sbF = await bar.setBar(34, 10);
     expect(sbF).toBeTruthy();
@@ -61,7 +63,8 @@ describe('------- Test Bar API -------', () => {
     expect(height).toBe('10%');
   });
 
-  test(' setSizeWH ', async () => {
+  // setSizeWH 
+  test(' Set progress-bar size relating the orientation ', async () => {
     await createBar();
     bar.setSizeWH(25);
     const elem: HElem = await wrap.firstElementChild;
@@ -70,8 +73,8 @@ describe('------- Test Bar API -------', () => {
   });
 
 
-
-  test(' clickBar ', async () => {
+  // clickBar
+  test(' Check if click event on the progress-bar is triggered ', async () => {
 
     let wrapC: HTMLElement;
     let domC: HTMLInputElement;

@@ -45,19 +45,19 @@ describe('------- Test Grid API -------', () => {
     return len;
   };
 
-
-  test(' setOrientation ', async () => {
+  // setOrientation
+  test(' Change orientation ', async () => {
     expect(grid.setOrientation('vertical')).toBeTruthy();
     expect(grid.setOrientation('horizontal')).toBeFalsy();
   });
 
-
-  test(' getOrientation ', async () => {
+  // getOrientation 
+  test(' Get information about orientation change ', async () => {
     expect(grid.getOrientation()).toBeTruthy();
   });
 
-
-  test(' createMark ', async () => {
+  // createMark
+  test(' Create grid DOM-elements ', async () => {
     let model = await new Model({
       ...getConf(),
       onStart: () => {
@@ -68,8 +68,8 @@ describe('------- Test Grid API -------', () => {
 
   });
 
-
-  test(' createDomGrid ', async () => {
+  // createDomGrid
+  test(' Add grid to the plugin interface ', async () => {
     let model = await new Model({
       ...getConf(),
       onStart: async () => {
@@ -82,8 +82,8 @@ describe('------- Test Grid API -------', () => {
   });
 
 
-
-  test(' deleteGrid ', async () => {
+  // deleteGrid
+  test(' Delete grid ', async () => {
     let model = await new Model({
       ...getConf(),
       onStart: async () => {
@@ -99,8 +99,8 @@ describe('------- Test Grid API -------', () => {
     await model.onHandle();
   });
 
-
-  test(' ClickMark ', async () => {
+  // ClickMark
+  test(' Check if click event on the grid mark is triggered ', async () => {
 
     let wrapC: HTMLElement;
     let domC: HTMLInputElement;

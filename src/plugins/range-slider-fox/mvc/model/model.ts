@@ -43,10 +43,10 @@ class Model extends Observer {
   private startConfFl: boolean;
   private updateConfFl: boolean;
   onHandle: Function;
-  onChange: Function;
-  onUpdate: Function;
-  onStart: Function;
-  onReset: Function;
+  onChange: Function | boolean;
+  onUpdate: Function | boolean;
+  onStart: Function | boolean;
+  onReset: Function | boolean;
 
 
   constructor(options: RangeSliderOptions) {
@@ -111,7 +111,8 @@ class Model extends Observer {
       });
     }
 
-    if (this.startConfFl)
+
+    if (this.startConfFl && typeof this.onReset == 'function')
       this.onReset(this.defaultData);
 
   }
@@ -121,6 +122,7 @@ class Model extends Observer {
 
     this.updateConfFl = true;
 
+    await this.setCallbacks(options);
     await this.setRangeData(options);
     await this.setStep(options);
     await this.setDotData(options);
@@ -132,7 +134,8 @@ class Model extends Observer {
     await this.setHintsData(options);
     await this.setOrientationData(options);
 
-    if (this.startConfFl)
+
+    if (this.startConfFl && typeof this.onUpdate == 'function')
       this.onUpdate(this.getOptions());
     this.startConfFl = true;
     this.updateConfFl = false;
@@ -459,7 +462,8 @@ class Model extends Observer {
       to: this.to,
     });
 
-    this.onChange(this.getOptions());
+    if (typeof this.onChange == 'function')
+      this.onChange(this.getOptions());
     return { from: this.from, to: this.to };
   }
 
@@ -643,8 +647,8 @@ class Model extends Observer {
   private createProperties(options: RangeSliderOptions) {
 
     this.onHandle = async () => {
-      // eslint-disable-next-line no-unused-vars
-      const emptyFun = (data: RangeSliderOptions) => { };
+
+      const emptyFun = (data: RangeSliderOptions) => data;
 
       this.onChange = options.onChange ?? emptyFun;
       this.onUpdate = options.onUpdate ?? emptyFun;
@@ -659,7 +663,8 @@ class Model extends Observer {
         ...this.defaultData,
       });
 
-      await this.onStart(this.defaultData);
+      if (typeof this.onStart == 'function')
+        await this.onStart(this.defaultData);
     };
 
   }
@@ -885,7 +890,8 @@ class Model extends Observer {
     });
 
     if (this.startConfFl && !this.updateConfFl)
-      this.onChange(this.getOptions());
+      if (typeof this.onChange == 'function')
+        this.onChange(this.getOptions());
 
     return true;
   }
@@ -1014,6 +1020,39 @@ class Model extends Observer {
       key: 'ThemeData',
       theme: this.theme,
     });
+
+    return true;
+  }
+
+  private setCallbacks(options: RangeSliderOptions): boolean {
+    if (!this.propertiesValidation([
+      'onStart',
+      'onChange',
+      'onUpdate',
+      'onReset',
+    ], options)) return false;
+
+    const emptyFun = (data: RangeSliderOptions) => data;
+
+    const checkData = (fun: Function | boolean) => {
+      if (fun == false) {
+        console.log(fun);
+        return emptyFun;
+      }
+      else if (typeof fun == 'function')
+        return fun;
+    };
+
+    if (options.onChange != undefined)
+      this.onChange = checkData(options.onChange);
+    if (options.onUpdate != undefined) {
+      this.onUpdate = checkData(options.onUpdate);
+      console.log(this.onUpdate);
+    }
+    if (options.onStart != undefined)
+      this.onStart = checkData(options.onStart);
+    if (options.onReset != undefined)
+      this.onReset = checkData(options.onReset);
 
     return true;
   }

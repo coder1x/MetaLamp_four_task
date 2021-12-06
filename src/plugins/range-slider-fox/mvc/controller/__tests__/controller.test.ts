@@ -1,6 +1,7 @@
 import { RangeSliderOptions } from '../../../glob-interface';
 import { Controller, Model, View } from '../controller';
 
+// 
 describe('------- Test Controller API -------', () => {
 
   let wrapC: HTMLElement;
@@ -26,66 +27,100 @@ describe('------- Test Controller API -------', () => {
   });
 
 
-  test('onStart, onUpdate, update, onReset, reset ', () => {
+  // onStart, onUpdate, update, onReset, reset
+  test(' Check plugin events (onStart, onUpdate, onReset) ' +
+    'and API (update, reset)', () => {
 
-    const objС = new Controller(new Model({
-      onStart: (data: RangeSliderOptions) => {
+      const objС = new Controller(new Model({
+        onStart: (data: RangeSliderOptions) => {
 
-        expect(data).toStrictEqual(defaultData);
+          expect(data).toStrictEqual(defaultData);
 
-        const flU = objС.update({
-          type: 'double', orientation: 'vertical',
-          theme: 'fox', min: -120,
-          max: 800, to: 421.18,
-          from: 150.59, step: 4,
-          keyStepOne: 2, keyStepHold: 20,
-          bar: true, tipPrefix: 'rr',
-          tipPostfix: 'tt', tipMinMax: true,
-          tipFromTo: true, grid: true,
-          gridSnap: false,
-          gridNum: 34, gridStep: 0,
-          gridRound: 2, disabled: false,
+          const flU = objС.update({
+            type: 'double', orientation: 'vertical',
+            theme: 'fox', min: -120,
+            max: 800, to: 421.18,
+            from: 150.59, step: 4,
+            keyStepOne: 2, keyStepHold: 20,
+            bar: true, tipPrefix: 'rr',
+            tipPostfix: 'tt', tipMinMax: true,
+            tipFromTo: true, grid: true,
+            gridSnap: false,
+            gridNum: 34, gridStep: 0,
+            gridRound: 2, disabled: false,
+          });
+          expect(flU).toBeTruthy();
+        },
+        onUpdate: (data: RangeSliderOptions) => {
+
+          const gridPol = 'js-range-slider-fox__grid-pol';
+          const node = wrapC.getElementsByClassName(gridPol);
+
+          expect(node).toHaveLength(35);
+          expect(data.type).toBe('double');
+          expect(data.min).toBeCloseTo(-120);
+          expect(data.max).toBeCloseTo(800);
+          expect(data.from).toBeCloseTo(150.59);
+          expect(data.to).toBeCloseTo(421.18);
+          expect(data.orientation).toBe('vertical');
+          expect(data.step).toBeCloseTo(4);
+          expect(data.keyStepOne).toBeCloseTo(2);
+          expect(data.keyStepHold).toBeCloseTo(20);
+          expect(data.bar).toBeTruthy();
+          expect(data.tipPrefix).toBe('rr');
+          expect(data.tipPostfix).toBe('tt');
+          expect(data.tipMinMax).toBeTruthy();
+          expect(data.tipFromTo).toBeTruthy();
+          expect(data.grid).toBeTruthy();
+          expect(data.gridSnap).toBeFalsy();
+          expect(data.gridNum).toBeCloseTo(34);
+          expect(data.gridStep).toBeCloseTo(0);
+          expect(data.gridRound).toBeCloseTo(2);
+          expect(data.disabled).toBeFalsy();
+
+          const flR = objС.reset();
+          expect(flR).toBeTruthy();
+
+        },
+        onReset: (data: RangeSliderOptions) => {
+          expect(data).toStrictEqual(defaultData);
+        }
+      }), new View(domC));
+    });
+
+  //Проверка на отписку от события
+  test(' Check unsubscribtion from events  ', async () => {
+
+    let updateX = (data: RangeSliderOptions) => {
+      //  console.log(data);
+
+    };
+
+    let obj = await new Controller(new Model({
+      onStart: async () => {
+
+        await obj.update({
+          onUpdate: false,
         });
-        expect(flU).toBeTruthy();
+
+        obj.update({
+          max: 100,
+        });
       },
-      onUpdate: (data: RangeSliderOptions) => {
-
-        const gridPol = 'js-range-slider-fox__grid-pol';
-        const node = wrapC.getElementsByClassName(gridPol);
-
-        expect(node).toHaveLength(35);
-        expect(data.type).toBe('double');
-        expect(data.min).toBeCloseTo(-120);
-        expect(data.max).toBeCloseTo(800);
-        expect(data.from).toBeCloseTo(150.59);
-        expect(data.to).toBeCloseTo(421.18);
-        expect(data.orientation).toBe('vertical');
-        expect(data.step).toBeCloseTo(4);
-        expect(data.keyStepOne).toBeCloseTo(2);
-        expect(data.keyStepHold).toBeCloseTo(20);
-        expect(data.bar).toBeTruthy();
-        expect(data.tipPrefix).toBe('rr');
-        expect(data.tipPostfix).toBe('tt');
-        expect(data.tipMinMax).toBeTruthy();
-        expect(data.tipFromTo).toBeTruthy();
-        expect(data.grid).toBeTruthy();
-        expect(data.gridSnap).toBeFalsy();
-        expect(data.gridNum).toBeCloseTo(34);
-        expect(data.gridStep).toBeCloseTo(0);
-        expect(data.gridRound).toBeCloseTo(2);
-        expect(data.disabled).toBeFalsy();
-
-        const flR = objС.reset();
-        expect(flR).toBeTruthy();
-
-      },
-      onReset: (data: RangeSliderOptions) => {
-        expect(data).toStrictEqual(defaultData);
-      }
+      onUpdate: updateX,
     }), new View(domC));
+
+
+
+
+
+
+
   });
 
-  test(' Input data ', () => {
+
+  // Input data
+  test(' Check if data in Input element is changing ', () => {
     new Controller(new Model({
       onStart: () => {
         expect(domC.value).toBe('1');
@@ -94,7 +129,8 @@ describe('------- Test Controller API -------', () => {
   });
 
 
-  test(' Data-Attributes dynamically', () => {
+  // Data-Attributes dynamically
+  test(' Check if plugin responding on data-attributes changes ', () => {
     new Controller(new Model({
       onStart: (data: RangeSliderOptions) => {
         expect(data.from).toBe(1);
@@ -106,13 +142,15 @@ describe('------- Test Controller API -------', () => {
     }), new View(domC));
   });
 
-  test(' Data-Attributes static', async () => {
-    await domC.setAttribute('data-from', '5');
-    new Controller(new Model({
-      onUpdate: (data: RangeSliderOptions) => {
-        expect(data.from).toBe(5);
-      },
-    }), new View(domC));
-  });
+  // Data-Attributes static
+  test('Check if plugin is configured in ' +
+    'line with data-attributes on its start ', async () => {
+      await domC.setAttribute('data-from', '5');
+      new Controller(new Model({
+        onUpdate: (data: RangeSliderOptions) => {
+          expect(data.from).toBe(5);
+        },
+      }), new View(domC));
+    });
 
 });

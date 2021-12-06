@@ -24,7 +24,8 @@ describe('------- Test View API -------', () => {
     return regexp.test(text);
   }
 
-  test(' setValueInput ', () => {
+  // setValueInput
+  test(' Check Input DOM-element value changing ', () => {
     const model = new Model({
       min: 0,
       max: 100,
@@ -38,7 +39,8 @@ describe('------- Test View API -------', () => {
     expect(data).toBe(domV.value);
   });
 
-  test(' outDataAttr ', async () => {
+  // outDataAttr 
+  test(' Check if all necessary data-attributes are got ', async () => {
     await domV.setAttribute('data-from', '45');
     await domV.setAttribute('data-to', '86');
 
@@ -56,8 +58,8 @@ describe('------- Test View API -------', () => {
     new Controller(model, view);
   });
 
-
-  test(' disabledRangeSlider ', async () => {
+  // disabledRangeSlider
+  test(' Check interface changing on pluging disabling ', async () => {
     const model = await new Model({
       disabled: false,
       onStart: async () => {
@@ -74,8 +76,8 @@ describe('------- Test View API -------', () => {
     new Controller(model, view);
   });
 
-
-  test(' createDomBase ', async () => {
+  // createDomBase
+  test(' Create basic DOM-elements ', async () => {
     const model = await new Model({
       disabled: false,
       onStart: async () => {
@@ -101,8 +103,8 @@ describe('------- Test View API -------', () => {
   });
 
 
-
-  test(' setOrientation ', async () => {
+  // setOrientation
+  test(' Change plugin orientation - horizontal / vertical ', async () => {
     const model = await new Model({
       onStart: async () => {
         view.setOrientation('vertical');
@@ -114,8 +116,8 @@ describe('------- Test View API -------', () => {
     new Controller(model, view);
   });
 
-
-  test(' setActions ', async () => {
+  // setActions
+  test(' Check if click event on the grid range is triggered ', async () => {
 
     let wrapC: HTMLElement;
     let domC: HTMLInputElement;
@@ -150,8 +152,8 @@ describe('------- Test View API -------', () => {
 
   });
 
-
-  test(' setTheme ', async () => {
+  // setTheme
+  test(' Check interface theme changing ', async () => {
     const model = await new Model({
       onStart: async () => {
         view.setTheme('dark');

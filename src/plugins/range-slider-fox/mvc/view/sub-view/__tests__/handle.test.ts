@@ -42,8 +42,8 @@ describe('------- Test Handle API -------', () => {
     return { from, to };
   };
 
-
-  test(' createDomBase ', async () => {
+  // createDomBase
+  test(' Create basic DOM-elements ', async () => {
     let wrapH = handle.createDomBase('double');
     expect(wrapH).toBeDefined();
 
@@ -70,8 +70,8 @@ describe('------- Test Handle API -------', () => {
     expect(wrapH).toBeFalsy();
   });
 
-
-  test(' setFrom & setTo ', async () => {
+  // setFrom & setTo
+  test(' Check if dots got their positioning proprties ', async () => {
     const { from, to } = await createFromTo();
     let leftF: string;
     if (typeof from != 'boolean')
@@ -84,8 +84,8 @@ describe('------- Test Handle API -------', () => {
   });
 
 
-
-  test(' setOrientation ', async () => {
+  // setOrientation
+  test(' Check if orientation is changed ', async () => {
     await createFromTo();
     let fl = handle.setOrientation('vertical');
     expect(fl).toBeTruthy();
@@ -93,59 +93,61 @@ describe('------- Test Handle API -------', () => {
     expect(fl).toBeTruthy();
   });
 
+  // setActions
 
-  test(' setActions ', async () => {
+  test(' Check if an event of dots' +
+    ' movement along the track is triggered ', async () => {
 
-    let wrapC: HTMLElement;
-    let domC: HTMLInputElement;
-    wrapC = document.createElement('div');
-    domC = document.createElement('input');
-    wrapC.appendChild(domC);
+      let wrapC: HTMLElement;
+      let domC: HTMLInputElement;
+      wrapC = document.createElement('div');
+      domC = document.createElement('input');
+      wrapC.appendChild(domC);
 
-    await createFromTo();
-    handle.setOrientation('horizontal');
-    const fl = handle.setActions('double');
-    expect(fl).toBeTruthy();
+      await createFromTo();
+      handle.setOrientation('horizontal');
+      const fl = handle.setActions('double');
+      expect(fl).toBeTruthy();
 
-    const model = new Model({
-      type: 'double',
-      onStart: async () => {
-        const spy = await jest.spyOn(model, 'calcDotPosition');
+      const model = new Model({
+        type: 'double',
+        onStart: async () => {
+          const spy = await jest.spyOn(model, 'calcDotPosition');
 
-        const eventDot = async (name: string, val1: number, val2: number) => {
-          const dot =
-            await wrapC.getElementsByClassName(jsRsName + '__' + name);
-          const type = name == 'from' ? 'From' : 'To';
-          const funP = await mockPointerEvent(dot[0]);
-          const funK = await mockKeyboardEvent(dot[0]);
-          await funP('pointerdown', val1, 0);
-          await funP('pointermove', val2, 0);
-          await funP('pointerup', 0, 0);
-          await funK('ArrowRight');
-          await funK('ArrowLeft');
+          const eventDot = async (name: string, val1: number, val2: number) => {
+            const dot =
+              await wrapC.getElementsByClassName(jsRsName + '__' + name);
+            const type = name == 'from' ? 'From' : 'To';
+            const funP = await mockPointerEvent(dot[0]);
+            const funK = await mockKeyboardEvent(dot[0]);
+            await funP('pointerdown', val1, 0);
+            await funP('pointermove', val2, 0);
+            await funP('pointerup', 0, 0);
+            await funK('ArrowRight');
+            await funK('ArrowLeft');
 
-          expect(spy).toBeCalledWith(
-            {
-              "clientXY": val2,
-              "position": 0,
-              "shiftXY": val1,
-              "type": type,
-              "wrapWH": 0
-            }
-          );
-          expect(spy).toBeCalledTimes(1);
-          await spy.mockClear();
-        };
+            expect(spy).toBeCalledWith(
+              {
+                "clientXY": val2,
+                "position": 0,
+                "shiftXY": val1,
+                "type": type,
+                "wrapWH": 0
+              }
+            );
+            expect(spy).toBeCalledTimes(1);
+            await spy.mockClear();
+          };
 
-        await eventDot('from', 85, 82);
-        await eventDot('to', 87, 83);
-      }
+          await eventDot('from', 85, 82);
+          await eventDot('to', 87, 83);
+        }
+      });
+      const view = await new View(domC);
+      await new Controller(model, view);
+
+
     });
-    const view = await new View(domC);
-    await new Controller(model, view);
-
-
-  });
 
 
 

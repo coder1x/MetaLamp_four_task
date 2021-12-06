@@ -10,6 +10,7 @@ class TestOB extends Observer {
   }
 }
 
+
 describe('------- Observer - subscribe, unsubscribe, notify -------', () => {
 
   let ob: TestOB;
@@ -22,13 +23,15 @@ describe('------- Observer - subscribe, unsubscribe, notify -------', () => {
     callback2 = jest.fn(x => x);
   });
 
-  test('subscribeOB', () => {
+  // subscribeOB
+  test(' Subscribe a listener on events ', () => {
     expect(ob.subscribeOB(callback)).toBe(1);
     expect(ob.subscribeOB(callback)).toBeFalsy();
     expect(ob.subscribeOB(callback2)).toBe(2);
   });
 
-  test('unsubscribeOB', () => {
+  // unsubscribeOB
+  test(' Unsubscribe a listener from events ', () => {
     ob.subscribeOB(callback);
     ob.subscribeOB(callback2);
 
@@ -37,7 +40,8 @@ describe('------- Observer - subscribe, unsubscribe, notify -------', () => {
   });
 
 
-  test('notifyOB', () => {
+  // notifyOB
+  test(' Data distribution among the listeners ', () => {
 
     const fun1 = jest.fn((options: TOB) => { return options; });
     const fun2 = jest.fn((options: TOB) => { return options; });

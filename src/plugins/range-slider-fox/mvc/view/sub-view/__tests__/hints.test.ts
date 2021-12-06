@@ -33,21 +33,23 @@ describe('------- Test Hints API -------', () => {
     expect(dom.style.left).toBe(val);
   };
 
-  test(' setTipFlag ', async () => {
+  // setTipFlag
+  test(' Check toggles for hints are working ', async () => {
     const { tipFromTo, tipMinMax } = hints.setTipFlag(true, true);
     expect(tipFromTo).toBeTruthy();
     expect(tipMinMax).toBeTruthy();
   });
 
-  test(' setAdditionalText ', async () => {
+  // setAdditionalText
+  test(' Check postfix and prefix for hints are working ', async () => {
     const { tipPrefix, tipPostfix } =
       hints.setAdditionalText('%', '$');
     expect(tipPrefix).toBe('%');
     expect(tipPostfix).toBe('$');
   });
 
-
-  test(' createTipMinMax ', async () => {
+  // createTipMinMax
+  test(' Create Min and Max hints DOM-elements ', async () => {
     const fl = await hints.createTipMinMax();
     expect(fl).toBeTruthy();
     const tips = await wrap.children;
@@ -61,29 +63,32 @@ describe('------- Test Hints API -------', () => {
     expect(hints.createTipMinMax()).toBeFalsy();
   });
 
-  test(' createTipFrom ', async () => {
+  // createTipFrom
+  test(' Create From hint DOM-element ', async () => {
     const fl = await hints.createTipFrom();
     expect(fl).toBeTruthy();
     checkDom('from');
     expect(hints.createTipFrom()).toBeFalsy();
   });
 
-  test(' createTipTo ', async () => {
+  // createTipTo
+  test(' Create To hint DOM-element ', async () => {
     const fl = await hints.createTipTo();
     expect(fl).toBeTruthy();
     checkDom('to');
     expect(hints.createTipTo()).toBeFalsy();
   });
 
-  test(' createTipSingle ', async () => {
+  // createTipSingle
+  test(' Create Single hint DOM-element ', async () => {
     const fl = await hints.createTipSingle();
     expect(fl).toBeTruthy();
     checkDom('single');
     expect(hints.createTipSingle()).toBeFalsy();
   });
 
-
-  test(' deleteTipMinMax ', async () => {
+  //  deleteTipMinMax 
+  test(' Delete Min and Max hints DOM-elements ', async () => {
     let fl = await hints.createTipMinMax();
     expect(fl).toBeTruthy();
     fl = await hints.deleteTipMinMax();
@@ -92,7 +97,8 @@ describe('------- Test Hints API -------', () => {
     expect(hints.deleteTipMinMax()).toBeFalsy();
   });
 
-  test(' deleteTipFrom ', async () => {
+  // deleteTipFrom 
+  test(' Delete From hint DOM-element ', async () => {
     let fl = await hints.createTipFrom();
     expect(fl).toBeTruthy();
     fl = await hints.deleteTipFrom();
@@ -101,8 +107,8 @@ describe('------- Test Hints API -------', () => {
     expect(hints.deleteTipFrom()).toBeFalsy();
   });
 
-
-  test(' deleteTipTo ', async () => {
+  //  deleteTipTo 
+  test(' Delete To hint DOM-element ', async () => {
     let fl = await hints.createTipTo();
     expect(fl).toBeTruthy();
     fl = await hints.deleteTipTo();
@@ -111,8 +117,8 @@ describe('------- Test Hints API -------', () => {
     expect(hints.deleteTipTo()).toBeFalsy();
   });
 
-
-  test(' deleteTipSingle ', async () => {
+  //  deleteTipSingle 
+  test(' Delete Single hint DOM-element ', async () => {
     let fl = await hints.createTipSingle();
     expect(fl).toBeTruthy();
     fl = await hints.deleteTipSingle();
@@ -121,8 +127,8 @@ describe('------- Test Hints API -------', () => {
     expect(hints.deleteTipSingle()).toBeFalsy();
   });
 
-
-  test(' checkTipTo ', async () => {
+  //  checkTipTo 
+  test(' Check if both From and TO hints are displayed ', async () => {
     let fl = await hints.checkTipTo();
     expect(fl).toBeTruthy();
     await hints.setTipFlag(true, false);
@@ -132,30 +138,32 @@ describe('------- Test Hints API -------', () => {
     expect(hints.checkTipTo()).toBeTruthy();
   });
 
-
-  test(' setPositionFrom ', async () => {
+  //  setPositionFrom
+  test(' Set From hint position ', async () => {
     await hints.createTipFrom();
     let fl = await hints.setPositionFrom(34);
     expect(fl).toBeTruthy();
     checkStyle('34%');
   });
 
-  test(' setPositionTo ', async () => {
+  // setPositionTo
+  test(' Set To hint position ', async () => {
     await hints.createTipTo();
     let fl = await hints.setPositionTo(34);
     expect(fl).toBeTruthy();
     checkStyle('34%');
   });
 
-  test(' setPositionSingle ', async () => {
+  // setPositionSingle
+  test(' Set Single hint position ', async () => {
     await hints.createTipSingle();
     let fl = await hints.setPositionSingle(34);
     expect(fl).toBeTruthy();
     checkStyle('34%');
   });
 
-
-  test(' setOrientation ', async () => {
+  // setOrientation
+  test(' Set hints orientation ', async () => {
     let fl = await hints.createTipFrom();
     expect(fl).toBeTruthy();
     fl = await hints.createTipTo();

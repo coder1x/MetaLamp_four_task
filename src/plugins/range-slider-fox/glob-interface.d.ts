@@ -80,10 +80,10 @@ interface RangeSliderOptions {
   readonly gridStep?: number;
   readonly gridRound?: number;
   readonly disabled?: boolean;
-  readonly onStart?: Function;
-  readonly onChange?: Function;
-  readonly onUpdate?: Function;
-  readonly onReset?: Function;
+  readonly onStart?: Function | boolean;
+  readonly onChange?: Function | boolean;
+  readonly onUpdate?: Function | boolean;
+  readonly onReset?: Function | boolean;
 }
 
 
