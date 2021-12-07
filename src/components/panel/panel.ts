@@ -35,27 +35,58 @@ class Panel {
     const selector = this.className + '__slider-wrap';
     const elem = this.elem.querySelector(selector);
 
+    const onStart = (data: RangeSliderOptions) => {
+      this.setDataS(data);
+    };
+
+    const onChange = (data: RangeSliderOptions) => {
+      this.setDataC(data);
+    };
+
+    const onUpdate = (data: RangeSliderOptions) => {
+      this.setDataU(data);
+    };
+
+    const onReset = (data: RangeSliderOptions) => {
+      this.setDataR(data);
+    };
+
     const obj = $(elem.firstElementChild).RangeSliderFox({
       ...options
       ,
-      onStart: (data: RangeSliderOptions) => {
-        this.setDataS(data);
-      },
-      onChange: (data: RangeSliderOptions) => {
-        this.setDataC(data);
-      },
-      onUpdate: (data: RangeSliderOptions) => {
-        this.setDataU(data);
-      },
-      onReset: (data: RangeSliderOptions) => {
-        this.setDataR(data);
-      }
+      onStart,
+      onChange,
+      onUpdate,
+      onReset
     }).data('RangeSliderFox'); // will return an object for one item
 
 
     this.objValues.setAction(obj);
     this.objGrid.setAction(obj);
     this.objHints.setAction(obj);
+
+    let fl = false;
+    this.objDifferent.onUnsubscribtion = () => {
+      if (!fl) {
+        fl = true;
+        obj.update({
+          onStart: null,
+          onChange: null,
+          onUpdate: null,
+          onReset: null
+        });
+
+      } else {
+        fl = false;
+        obj.update({
+          onStart,
+          onChange,
+          onUpdate,
+          onReset
+        });
+      }
+    };
+
     this.objDifferent.setAction(obj);
     this.objKeyboardControl.setAction(obj);
   }

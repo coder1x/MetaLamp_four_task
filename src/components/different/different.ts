@@ -24,6 +24,7 @@ class Different {
   private disabled: HInput;
   private orientation: HInput;
   private bar: HInput;
+  private unsubscribtion: HInput;
   private select: Select;
   private reset: HTMLButtonElement;
   private panel: HElem;
@@ -34,6 +35,7 @@ class Different {
   private orientationD: string;
   private themeD: string;
   private nameClass: string;
+  onUnsubscribtion: Function;
 
 
   constructor(nameClass: string, elem: HElem, panel: HElem) {
@@ -109,6 +111,11 @@ class Different {
       });
     });
 
+    this.unsubscribtion.addEventListener('click', () => {
+      if (typeof this.onUnsubscribtion == 'function')
+        this.onUnsubscribtion();
+    });
+
     this.type.addEventListener('click', function (e: Event) {
       const elem: HInputEv = e.target;
       const val = elem.checked ? 'double' : 'single';
@@ -129,6 +136,7 @@ class Different {
   }
 
   private setDom() {
+
     this.modify = this.panel.className + '_vertical';
 
     const getDom = (str: string) => {
@@ -143,6 +151,7 @@ class Different {
     this.type = getDom('double');
     this.disabled = getDom('disabled');
     this.bar = getDom('bar');
+    this.unsubscribtion = getDom('unsubscribtion');
     this.orientation = getDom('vertical');
     this.reset =
       this.elem.querySelector(this.nameClass + '__reset');

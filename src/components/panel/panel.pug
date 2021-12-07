@@ -10,13 +10,13 @@ include ../keyboard-control/keyboard-control.pug
 
 mixin panel(options)
   -
-    const modif = options.modif ?? ''
+    const modify = options.modify ?? ''
     const addClass = options.class ?? ''
     const theme = options.theme ?? 'base'
     let classComp = 'panel'
     let className = classComp
-    if(modif){
-    className += ' '+classComp+'_'+modif}
+    if(modify){
+    className += ' '+classComp+'_'+modify}
     if(addClass){
     className += ' '+addClass}
   div(class=className)

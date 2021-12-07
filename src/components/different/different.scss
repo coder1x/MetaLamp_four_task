@@ -34,6 +34,12 @@ $color-button-active: #868686;
     grid-column-start: 1;
   }
 
+  &__unsubscribtion-wrap {
+    margin-top: 10px;
+    grid-row-start: 2;
+    grid-column-start: 2;
+  }
+
   &__select-wrap {
     margin-top: 10px;
     grid-row-start: 3;

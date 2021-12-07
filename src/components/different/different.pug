@@ -4,13 +4,13 @@ include ../select/select.pug
 mixin different(options)
   -
     let label = options.label ?? ''
-    let modif = options.modif ?? ''
+    let modify = options.modify ?? ''
     let addClass = options.class ?? ''
     let flLabel = options.flLabel ?? false
     let classComp = 'different'
     let className = classComp
-    if(modif){
-    className += ' '+classComp+'_'+modif}
+    if(modify){
+    className += ' '+classComp+'_'+modify}
     if(addClass){
     className += ' '+addClass}
   fieldset(class=className)
@@ -32,6 +32,10 @@ mixin different(options)
     div(class=classComp+'__bar-wrap')
       +toggle-buttons({
         header: 'bar',
+      })
+    div(class=classComp+'__unsubscribtion-wrap')
+      +toggle-buttons({
+        header: 'unsubscribtion',
       })
     -
       const masOptions = [

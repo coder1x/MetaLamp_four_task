@@ -135,7 +135,7 @@ describe('------- Test Model API -------', () => {
   });
 
   //  setWrapWH
-  test('Set wrapper width or height', async () => {
+  test(' Set wrapper width or height', async () => {
     const model = await new Model({});
     await model.onHandle();
     expect(model.setWrapWH(450)).toBeCloseTo(450);

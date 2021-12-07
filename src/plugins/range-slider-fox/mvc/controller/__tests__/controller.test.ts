@@ -88,33 +88,40 @@ describe('------- Test Controller API -------', () => {
       }), new View(domC));
     });
 
-  //Проверка на отписку от события
-  test(' Check unsubscribtion from events  ', async () => {
 
-    let updateX = (data: RangeSliderOptions) => {
-      //  console.log(data);
+  test(' Check unsubscribtion from events  ', () => {
 
-    };
+    let obj: Controller;
+    let updateX2 = jest.fn((data: RangeSliderOptions) => {
+      expect(data.max).toBe(150);
 
-    let obj = await new Controller(new Model({
-      onStart: async () => {
+      obj.update({
+        onUpdate: null,
+      });
 
-        await obj.update({
-          onUpdate: false,
-        });
+      obj.update({
+        max: 50,
+      });
+    });
 
+    let updateX = jest.fn((data: RangeSliderOptions) => {
+      expect(data.max).toBe(100);
+
+      obj.update({
+        max: 150,
+        onUpdate: updateX2,
+      });
+    });
+
+    obj = new Controller(new Model({
+      onStart: () => {
         obj.update({
           max: 100,
         });
+
       },
       onUpdate: updateX,
     }), new View(domC));
-
-
-
-
-
-
 
   });
 
@@ -143,7 +150,7 @@ describe('------- Test Controller API -------', () => {
   });
 
   // Data-Attributes static
-  test('Check if plugin is configured in ' +
+  test(' Check if plugin is configured in ' +
     'line with data-attributes on its start ', async () => {
       await domC.setAttribute('data-from', '5');
       new Controller(new Model({

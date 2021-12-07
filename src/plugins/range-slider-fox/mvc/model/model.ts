@@ -43,10 +43,10 @@ class Model extends Observer {
   private startConfFl: boolean;
   private updateConfFl: boolean;
   onHandle: Function;
-  onChange: Function | boolean;
-  onUpdate: Function | boolean;
-  onStart: Function | boolean;
-  onReset: Function | boolean;
+  onChange: Function;
+  onUpdate: Function;
+  onStart: Function;
+  onReset: Function;
 
 
   constructor(options: RangeSliderOptions) {
@@ -685,7 +685,7 @@ class Model extends Observer {
     let flag = false;
     for (let item of properties) {
       const dataT = obj[item] ?? null;
-      if (dataT != null) {
+      if (dataT !== null) {
         flag = true;
         break;
       }
@@ -1025,34 +1025,47 @@ class Model extends Observer {
   }
 
   private setCallbacks(options: RangeSliderOptions): boolean {
-    if (!this.propertiesValidation([
+    const keyC = Object.keys(options);
+    const checkKey = [
       'onStart',
       'onChange',
       'onUpdate',
       'onReset',
-    ], options)) return false;
+    ];
+    let fl = false;
+    for (let item of checkKey) {
+      if (keyC.lastIndexOf(item) != -1) {
+        fl = true;
+        break;
+      }
+    }
+    if (!fl) return false;
 
     const emptyFun = (data: RangeSliderOptions) => data;
 
-    const checkData = (fun: Function | boolean) => {
-      if (fun == false) {
-        console.log(fun);
+    const checkData = (fun: Function) => {
+      if (fun === null) {
         return emptyFun;
       }
       else if (typeof fun == 'function')
         return fun;
     };
 
-    if (options.onChange != undefined)
-      this.onChange = checkData(options.onChange);
-    if (options.onUpdate != undefined) {
-      this.onUpdate = checkData(options.onUpdate);
-      console.log(this.onUpdate);
-    }
-    if (options.onStart != undefined)
-      this.onStart = checkData(options.onStart);
-    if (options.onReset != undefined)
-      this.onReset = checkData(options.onReset);
+    if (options.onChange !== this.onChange)
+      if (options.onChange !== undefined)
+        this.onChange = checkData(options.onChange);
+
+    if (options.onUpdate !== this.onUpdate)
+      if (options.onUpdate !== undefined)
+        this.onUpdate = checkData(options.onUpdate);
+
+    if (options.onStart !== this.onStart)
+      if (options.onStart !== undefined)
+        this.onStart = checkData(options.onStart);
+
+    if (options.onReset !== this.onReset)
+      if (options.onReset !== undefined)
+        this.onReset = checkData(options.onReset);
 
     return true;
   }
