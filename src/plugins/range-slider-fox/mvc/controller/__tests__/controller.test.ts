@@ -160,4 +160,19 @@ describe('------- Test Controller API -------', () => {
       }), new View(domC));
     });
 
+
+  test(' destroy ', async () => {
+
+    const objX = new Controller(new Model({
+      onUpdate: () => {
+        console.log('onUpdate');
+
+      }
+    }), new View(domC));
+
+
+    objX.destroy();
+  });
+
+
 });

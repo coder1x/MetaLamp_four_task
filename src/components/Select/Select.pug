@@ -5,12 +5,12 @@ mixin select(options)
     let flLabel = options.flLabel ?? false
     let masOptions = options.masOptions ?? []
     let name = options.name ?? ''
-    let modif = options.modif ?? ''
+    let modify = options.modify ?? ''
     let addClass = options.class ?? ''
     let classComp = 'select'
     let className = classComp
-    if(modif){
-    className += ' '+classComp+'_'+modif}
+    if(modify){
+    className += ' '+classComp+'_'+modify}
     if(addClass){
     className += ' '+addClass}
   div(class=className)

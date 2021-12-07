@@ -21,7 +21,7 @@ class Controller {
   }
 
 
-  reset = async () => {
+  async reset() {
     if (this.lock) return false;
     this.resetFL = await true;
     await this.model.reset();
@@ -29,14 +29,23 @@ class Controller {
     return true;
   }
 
-
-  update = (options: RangeSliderOptions) => {
+  update(options: RangeSliderOptions) {
     const lock = options.disabled !== false;
     const orientation = typeof options.orientation !== 'string';
     if (lock && orientation)
       if (this.lock) return false;
     this.model.update(options);
     return true;
+  }
+
+  destroy() {
+    const elem = this.view.elem;
+    if (elem.constructor.name != 'HTMLInputElement') return false;
+
+    $.data(elem, 'RangeSliderFox', null);
+
+    this.view.destroy();
+
   }
 
 

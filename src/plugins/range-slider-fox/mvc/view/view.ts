@@ -38,6 +38,13 @@ class View extends Observer {
     this.init();
   }
 
+
+  destroy() {
+
+    this.wrapSlider.remove();
+
+  }
+
   setValueInput(from: number, to: number, type: string) {
     const typeElem = this.elem.constructor.name;
     let str = '';

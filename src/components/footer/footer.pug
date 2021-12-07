@@ -1,11 +1,11 @@
 mixin footer(options)
   -
-    let modif = options.modif ?? []
+    let modify = options.modify ?? []
     let addClass = options.class ?? ''
     let classComp = 'footer'
     let className = classComp
-    if(modif){
-      for(let item of modif)
+    if(modify){
+      for(let item of modify)
     className += ' '+classComp+'_'+item
     }
     if(addClass){
