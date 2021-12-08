@@ -65,26 +65,29 @@ class Panel {
     this.objGrid.setAction(obj);
     this.objHints.setAction(obj);
 
-    let fl = false;
+    //let fl = false;
     this.objDifferent.onUnsubscribtion = () => {
-      if (!fl) {
-        fl = true;
-        obj.update({
-          onStart: null,
-          onChange: null,
-          onUpdate: null,
-          onReset: null
-        });
 
-      } else {
-        fl = false;
-        obj.update({
-          onStart,
-          onChange,
-          onUpdate,
-          onReset
-        });
-      }
+      obj.destroy();
+
+      // if (!fl) {
+      //   fl = true;
+      //   obj.update({
+      //     onStart: null,
+      //     onChange: null,
+      //     onUpdate: null,
+      //     onReset: null
+      //   });
+
+      // } else {
+      //   fl = false;
+      //   obj.update({
+      //     onStart,
+      //     onChange,
+      //     onUpdate,
+      //     onReset
+      //   });
+      // }
     };
 
     this.objDifferent.setAction(obj);

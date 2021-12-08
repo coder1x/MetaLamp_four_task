@@ -7,6 +7,10 @@ describe('------- Range Slider Fox - JQuery Objects -------', () => {
   let wrap: HTMLElement;
   let dom: HTMLInputElement;
 
+  function delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   beforeEach(() => {
     wrap = document.createElement('div');
     dom = document.createElement('input');
@@ -31,13 +35,27 @@ describe('------- Range Slider Fox - JQuery Objects -------', () => {
   // initialization
   test(' Initialize plugin on a DOM-element ' +
     'and check the obtained object ', () => {
-      const wrapC = document.createElement('div');
-      const domC = document.createElement('input');
-      wrapC.appendChild(domC);
 
-      const obj = $(domC).RangeSliderFox({}).data('RangeSliderFox');
+      const obj = $(dom).RangeSliderFox({}).data('RangeSliderFox');
       expect(obj).toBeDefined();
     });
+
+
+
+  test(' destroy - plugin removal ', async () => {
+
+    const obj = $(dom).RangeSliderFox({}).data('RangeSliderFox');
+    expect(obj).toBeDefined();
+
+    let rs = $.data(dom, 'RangeSliderFox');
+    expect(rs).toBeDefined();
+    obj.destroy();
+    await delay(100);
+
+    rs = $.data(dom, 'RangeSliderFox');
+    expect(rs).toBeNull();
+
+  });
 
 });
 

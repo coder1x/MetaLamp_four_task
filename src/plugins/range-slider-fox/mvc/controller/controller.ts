@@ -3,7 +3,6 @@ import { View } from '../view/view';
 import { RangeSliderOptions } from '../../glob-interface';
 import { TOB } from '../../observer';
 
-
 class Controller {
 
   private startFL = false;
@@ -39,13 +38,11 @@ class Controller {
   }
 
   destroy() {
+    this.lock = true;
     const elem = this.view.elem;
     if (elem.constructor.name != 'HTMLInputElement') return false;
-
     $.data(elem, 'RangeSliderFox', null);
-
     this.view.destroy();
-
   }
 
 

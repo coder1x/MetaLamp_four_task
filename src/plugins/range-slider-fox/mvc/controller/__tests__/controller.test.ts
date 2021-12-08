@@ -1,7 +1,10 @@
 import { RangeSliderOptions } from '../../../glob-interface';
 import { Controller, Model, View } from '../controller';
 
-// 
+function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 describe('------- Test Controller API -------', () => {
 
   let wrapC: HTMLElement;
@@ -89,7 +92,7 @@ describe('------- Test Controller API -------', () => {
     });
 
 
-  test(' Check unsubscribtion from events  ', () => {
+  test(' Check unsubscribtion from events  ', async () => {
 
     let obj: Controller;
     let updateX2 = jest.fn((data: RangeSliderOptions) => {
@@ -122,6 +125,11 @@ describe('------- Test Controller API -------', () => {
       },
       onUpdate: updateX,
     }), new View(domC));
+
+
+    await delay(100);
+    expect(updateX.mock.calls).toHaveLength(1);
+    expect(updateX2.mock.calls).toHaveLength(1);
 
   });
 
@@ -161,17 +169,34 @@ describe('------- Test Controller API -------', () => {
     });
 
 
-  test(' destroy ', async () => {
 
-    const objX = new Controller(new Model({
-      onUpdate: () => {
-        console.log('onUpdate');
+  test(' destroy - plugin removal ', async () => {
 
-      }
+    let objX: Controller;
+    const fun = jest.fn(() => {
+    });
+
+    objX = await new Controller(new Model({
+      onUpdate: fun,
     }), new View(domC));
 
+    await objX.update({
+      from: 4
+    });
 
-    objX.destroy();
+    await delay(100);
+
+    await objX.destroy();
+
+    await delay(100);
+    await objX.update({
+      from: 8
+    });
+
+    await delay(100);
+    expect(fun.mock.calls).toHaveLength(1);
+    expect(domC.value).toBe(' ');
+
   });
 
 

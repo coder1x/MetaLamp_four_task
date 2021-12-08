@@ -68,11 +68,11 @@ class Select {
   }
 
   private getElem(param: optE) {
-    let elem: HTMLElement[] | Element;
+    let elem: Element[] | Element;
     let dom = param.dom ?? this.elem;
     let name = this.className + param.str;
     if (param.fl) {
-      elem = [...dom.querySelectorAll<HTMLElement>(name)];
+      elem = [...dom.querySelectorAll(name)];
     }
     else {
       elem = dom.querySelector(name);
@@ -82,8 +82,6 @@ class Select {
 
 
   private setDomElem() {
-
-
 
     const butElem = this.getElem({
       str: '__displayed'
@@ -104,10 +102,8 @@ class Select {
       fl: true
     });
 
-
     if (Array.isArray(itemsElem))
       this.items = itemsElem;
-
 
     const optionsElem = this.getElem({
       str: '__options',
@@ -115,7 +111,6 @@ class Select {
 
     if (!Array.isArray(optionsElem))
       this.options = optionsElem;
-
 
     const displayedWrapElem = this.getElem({
       str: '__displayed-wrap'
@@ -197,21 +192,20 @@ class Select {
     const setValue = (e: MouseEvent | KeyboardEvent) => {
 
       let flag = false;
-      let mousE: MouseEvent;
-      let keyE: KeyboardEvent;
+      let mousE: string;
+      let keyE: string;
 
       if (e instanceof MouseEvent) {
-        mousE = e;
+        mousE = e.type;
       }
-
       if (e instanceof KeyboardEvent) {
-        keyE = e;
+        keyE = e.key;
       }
 
-      if (keyE.key == 'Enter' || keyE.key == ' ') {
+      if (keyE == 'Enter' || keyE == ' ') {
         e.preventDefault();
         flag = true;
-      } else if (mousE.type == 'click')
+      } else if (mousE == 'click')
         flag = true;
 
       if (flag) {

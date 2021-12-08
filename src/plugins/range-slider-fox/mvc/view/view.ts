@@ -40,9 +40,14 @@ class View extends Observer {
 
 
   destroy() {
-
-    this.wrapSlider.remove();
-
+    const typeElem = this.elem.constructor.name;
+    if (typeElem == 'HTMLInputElement') {
+      const input: HInput = this.elem;
+      input.value = ' ';
+    }
+    const elem = this.wrapSlider.querySelector('.js-' + this.rsName);
+    if (elem)
+      elem.remove();
   }
 
   setValueInput(from: number, to: number, type: string) {
