@@ -240,7 +240,6 @@ describe('------- Test Model API -------', () => {
       });
       await model.onHandle();
 
-
       model = await new Model({
         type: 'double',
         orientation: 'vertical',
@@ -248,6 +247,7 @@ describe('------- Test Model API -------', () => {
         max: 800,
         to: 500,
         from: 80,
+        step: 5,
         onStart: async () => {
           await model.calcOnePercent();
           await model.calcPositionDotFrom();
@@ -272,6 +272,32 @@ describe('------- Test Model API -------', () => {
       });
       await model.onHandle();
 
+      model = await new Model({
+        type: 'double',
+        orientation: 'vertical',
+        min: -120,
+        max: 800,
+        to: 500,
+        from: 80,
+        grid: true,
+        gridSnap: true,
+        gridNum: 40,
+        onStart: async () => {
+          await model.calcOnePercent();
+          await model.calcPositionDotFrom();
+          await model.calcPositionDotTo();
+          wrapWH = 522;
+          position = 721.1786041259766;
+
+          positionD({
+            clientXY: 369.00006103515625,
+            shiftXY: -2.5625,
+            val: 496,
+            fl: false
+          });
+        }
+      });
+      await model.onHandle();
 
       model = await new Model({
         type: 'single',
@@ -296,8 +322,6 @@ describe('------- Test Model API -------', () => {
         }
       });
       await model.onHandle();
-
-
 
     });
 
@@ -434,6 +458,23 @@ describe('------- Test Model API -------', () => {
       }
     });
     await model.onHandle();
+
+    model = await new Model({
+      type: 'single',
+      min: -120,
+      max: 800,
+      to: 600,
+      from: 100,
+      onStart: async () => {
+        await model.setWrapWH(1120);
+        await model.calcOnePercent();
+        await model.calcPositionDotFrom();
+        const obj = { barX: 0, widthBar: 23.91304347826087 };
+        expect(model.calcPositionBar()).toEqual(obj);
+      }
+    });
+    await model.onHandle();
+
   });
 
   // clickLine
@@ -483,6 +524,27 @@ describe('------- Test Model API -------', () => {
     });
     await model.onHandle();
 
+    model = await new Model({
+      type: 'double',
+      min: -120,
+      max: 500,
+      from: 200,
+      to: 300,
+
+      onStart: async () => {
+        await model.setWrapWH(600);
+        await model.calcOnePercent();
+        await model.calcPositionDotFrom();
+        await model.calcPositionDotTo();
+
+        const to = model.clickLine(601).to;
+        expect(to).toBeCloseTo(501);
+        const from = model.clickLine(-1).from;
+        expect(from).toBeCloseTo(-121);
+      }
+    });
+    await model.onHandle();
+
   });
 
   // clickBar
@@ -495,22 +557,52 @@ describe('------- Test Model API -------', () => {
         max: 800,
         to: 600,
         from: 100,
-
         onStart: async () => {
           await model.setWrapWH(1120);
           await model.calcOnePercent();
           await model.calcPositionDotFrom();
           await model.calcPositionDotTo();
-
           let obj = { from: 344, to: 600 };
           expect(model.clickBar(297)).toEqual(obj);
-
           obj = { from: 344, to: 582 };
           expect(model.clickBar(290)).toEqual(obj);
-
         }
       });
       await model.onHandle();
+
+      model = await new Model({
+        orientation: 'vertical',
+        type: 'single',
+        min: -120,
+        max: 800,
+        to: 600,
+        from: 100,
+        onStart: async () => {
+          await model.setWrapWH(1120);
+          await model.calcOnePercent();
+          await model.calcPositionDotFrom();
+          let obj = { from: 92, to: 100 };
+          expect(model.clickBar(10)).toEqual(obj);
+        }
+      });
+      await model.onHandle();
+
+      model = await new Model({
+        type: 'single',
+        min: -120,
+        max: 800,
+        to: 600,
+        from: 100,
+        onStart: async () => {
+          await model.setWrapWH(1120);
+          await model.calcOnePercent();
+          await model.calcPositionDotFrom();
+          let obj = { from: -79, to: 100 };
+          expect(model.clickBar(50)).toEqual(obj);
+        }
+      });
+      await model.onHandle();
+
     });
 
   // clickMark
