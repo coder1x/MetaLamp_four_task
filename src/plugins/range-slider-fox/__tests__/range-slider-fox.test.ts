@@ -38,6 +38,9 @@ describe('------- Range Slider Fox - JQuery Objects -------', () => {
 
       const obj = $(dom).RangeSliderFox({}).data('RangeSliderFox');
       expect(obj).toBeDefined();
+
+      const obj2 = $(dom).RangeSliderFox({}).data('RangeSliderFox');
+      expect(obj2).toEqual(obj);
     });
 
 

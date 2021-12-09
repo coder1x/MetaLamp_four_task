@@ -161,58 +161,62 @@ class View extends Observer {
 
   //--------------------------------- handle
   createDotElem(type: string) {
-    this.handle.createDomBase(type);
+    return this.handle.createDomBase(type);
   }
 
   setDotFrom(fromP: number) {
-    this.handle.setFrom(fromP);
+    return this.handle.setFrom(fromP);
   }
 
   setDotTo(toP: number) {
-    this.handle.setTo(toP);
+    return this.handle.setTo(toP);
   }
 
   setDotActions(type: string) {
-    this.handle.setActions(type);
+    return this.handle.setActions(type);
   }
 
   //--------------------------------- hints
 
   setHintsData(options: TOB) {
+    const masFL: boolean[] = [];
     this.hints.setAdditionalText(options.tipPrefix, options.tipPostfix);
     this.hints.setTipFlag(options.tipFromTo, options.tipMinMax);
     if (options.tipMinMax) {
-      this.hints.createTipMinMax();
+      masFL.push(this.hints.createTipMinMax());
       this.hints.setValTipMinMax(options.min, options.max);
     }
     else {
-      this.hints.deleteTipMinMax();
+      masFL.push(this.hints.deleteTipMinMax());
     }
 
     if (options.tipFromTo) {
-      this.hints.createTipFrom();
+      masFL.push(this.hints.createTipFrom());
       if (options.type == 'double') {
-        this.hints.createTipTo();
-        this.hints.createTipSingle();
+        masFL.push(this.hints.createTipTo());
+        masFL.push(this.hints.createTipSingle());
       }
     } else {
-      this.hints.deleteTipFrom();
+      masFL.push(this.hints.deleteTipFrom());
       if (options.type == 'double') {
-        this.hints.deleteTipTo();
-        this.hints.deleteTipSingle();
+        masFL.push(this.hints.deleteTipTo());
+        masFL.push(this.hints.deleteTipSingle());
       }
     }
+    return masFL;
   }
 
   toggleTipTo(to: number) {
+    let fl = false;
     if (!this.hints.checkTipTo()) {
-      this.hints.createTipTo();
-      this.hints.setValTipTo(to);
+      fl = this.hints.createTipTo();
+      fl = Boolean(this.hints.setValTipTo(to));
     }
+    return fl;
   }
 
   updateTipMinMax(min: number, max: number) {
-    this.hints.setValTipMinMax(min, max);
+    return this.hints.setValTipMinMax(min, max);
   }
 
   getWidthTip(startFL: boolean, resetFL: boolean) {
@@ -222,61 +226,67 @@ class View extends Observer {
   }
 
   deleteTipTo() {
-    this.hints.deleteTipTo();
+    return this.hints.deleteTipTo();
   }
 
   checkVisibleTip() {
-    this.hints.checkVisibleTip();
+    return this.hints.checkVisibleTip();
   }
 
 
   updateTipValue(from: number, to: number, type: string) {
-    this.hints.setValTipFrom(from);
+    const masFL: boolean[] = [];
+    masFL.push(Boolean(this.hints.setValTipFrom(from)));
     if (type == 'double') {
-      this.hints.setValTipTo(to);
-      this.hints.setValTipSingle();
+      masFL.push(Boolean(this.hints.setValTipTo(to)));
+      masFL.push(Boolean(this.hints.setValTipSingle()));
     }
+    return masFL;
   }
 
   updateTipPosition(op: UpdateTip) {
-    this.hints.setPositionFrom(op.fromXY);
+    const masFL: boolean[] = [];
+    masFL.push(Boolean(this.hints.setPositionFrom(op.fromXY)));
     if (op.toXY && op.singleXY) {
-      this.hints.setPositionTo(op.toXY);
-      this.hints.setPositionSingle(op.singleXY);
+      masFL.push(Boolean(this.hints.setPositionTo(op.toXY)));
+      masFL.push(Boolean(this.hints.setPositionSingle(op.singleXY)));
     }
+    return masFL;
   }
 
 
   //--------------------------------- bar
 
   setVisibleBar(bar: boolean) {
-    this.bar.setVisibleBar(bar);
-    this.bar.createDomBar();
+    const masFL: boolean[] = [];
+    masFL.push(this.bar.setVisibleBar(bar));
+    masFL.push(this.bar.createDomBar());
     const size = this.vertical ?
       this.rsLine.offsetWidth : this.rsLine.offsetHeight;
-    this.bar.setSizeWH(size);
+    masFL.push(this.bar.setSizeWH(size));
+    return masFL;
   }
 
   setBar(barX: number, widthBar: number) {
-    this.bar.setBar(barX, widthBar);
+    return this.bar.setBar(barX, widthBar);
   }
 
 
   //--------------------------------- Grid
 
   deleteGrid() {
-    this.grid.deleteGrid();
+    return this.grid.deleteGrid();
   }
 
   createDomGrid() {
-    this.grid.createDomGrid();
+    return this.grid.createDomGrid();
   }
 
   createMark(valMark: {
     val: number,
     position: number,
   }[]) {
-    this.grid.createMark(valMark);
+    return this.grid.createMark(valMark);
   }
 
 

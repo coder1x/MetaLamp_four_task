@@ -173,6 +173,119 @@ describe('------- Test View API -------', () => {
 
 
 
+  test(' handle - interface  ', async () => {
+    const model = await new Model({
+      onStart: async () => {
+
+        const elem = view.createDotElem('double');
+        expect(elem.constructor.name).toBe('HTMLDivElement');
+
+        const from = view.setDotFrom(15);
+        expect(typeof from).toBe('object');
+
+        const to = view.setDotTo(20);
+        expect(typeof to).toBe('object');
+
+        const fl = view.setDotActions('double');
+        expect(fl).toBeTruthy();
+      }
+    });
+
+    new Controller(model, view);
+  });
+
+
+  test(' hints - interface  ', async () => {
+    const model = await new Model({
+      onStart: async () => {
+
+        let masFL = view.setHintsData({
+          tipPrefix: '',
+          tipPostfix: '',
+          tipFromTo: false,
+          tipMinMax: false,
+          min: 0,
+          max: 100,
+          type: 'single',
+        });
+
+        expect(masFL.indexOf(false)).toBe(-1);
+
+        let fl = view.toggleTipTo(20);
+        expect(fl).toBeFalsy();
+
+        const objMinMax = view.updateTipMinMax(10, 50);
+        expect(objMinMax).toEqual({ tipMin: false, tipMax: false });
+
+        const size = view.getWidthTip(true, false);
+        expect(size).toEqual({ fromWH: 0, toWH: 0, singleWH: 0 });
+        expect(view.deleteTipTo()).toBeFalsy();
+        expect(view.checkVisibleTip()).toBeFalsy();
+
+        masFL = view.updateTipValue(10, 30, 'double');
+        expect(masFL).not.toContain(true);
+
+        masFL = view.updateTipPosition({
+          fromXY: 1,
+          toXY: 1,
+          singleXY: 1,
+        });
+        expect(masFL).not.toContain(true);
+
+      }
+    });
+
+    new Controller(model, view);
+  });
+
+
+  test(' Bar - interface  ', async () => {
+    const model = await new Model({
+      onStart: async () => {
+        let masFL = view.setVisibleBar(true);
+        expect(masFL).not.toContain(false);
+
+        const fl = view.setBar(25, 100);
+        expect(fl).toBeTruthy();
+      }
+    });
+
+    new Controller(model, view);
+  });
+
+
+  test(' Grid - interface  ', async () => {
+    const model = await new Model({
+      onStart: async () => {
+        let elem = view.createDomGrid();
+        expect(elem.constructor.name).toBe('HTMLDivElement');
+        elem = view.createMark([
+          {
+            val: 1,
+            position: 1,
+          },
+          {
+            val: 1,
+            position: 1,
+          },
+          {
+            val: 1,
+            position: 1,
+          },
+          {
+            val: 1,
+            position: 1,
+          },
+        ]);
+
+        expect(elem.constructor.name).toBe('HTMLDivElement');
+        expect(view.deleteGrid()).toBeFalsy();
+      }
+    });
+
+    new Controller(model, view);
+  });
+
 
 });
 

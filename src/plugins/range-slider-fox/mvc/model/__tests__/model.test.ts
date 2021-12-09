@@ -622,9 +622,34 @@ describe('------- Test Model API -------', () => {
 
           obj = { from: 150, to: 700 };
           expect(model.clickMark(700)).toEqual(obj);
+
+          obj = { from: 10, to: 700 };
+          expect(model.clickMark(10)).toEqual(obj);
         }
       });
       await model.onHandle();
+
+
+      model = await new Model({
+        type: 'single',
+        min: -120,
+        max: 800,
+        to: 600,
+        from: 100,
+
+        onStart: async () => {
+          let obj = { from: 150, to: 100 };
+          expect(model.clickMark(150)).toEqual(obj);
+
+          obj = { from: 700, to: 100 };
+          expect(model.clickMark(700)).toEqual(obj);
+
+          obj = { from: 10, to: 100 };
+          expect(model.clickMark(10)).toEqual(obj);
+        }
+      });
+      await model.onHandle();
+
     });
 
   //  calcSnap & snapDot
@@ -690,7 +715,46 @@ describe('------- Test Model API -------', () => {
         }
       });
       await model.onHandle();
+
+
+      model = await new Model({
+        type: 'double',
+        min: -120,
+        max: 800,
+        to: 600,
+        from: 100,
+        grid: true,
+        gridSnap: true,
+        gridNum: 40,
+        keyStepOne: 0,
+        keyStepHold: 0,
+        onStart: async () => {
+
+          let mas: number[] = [];
+
+          for (let item of model.createMark()) {
+            mas.push(item.val);
+          }
+          mas.shift();
+          mas.pop();
+
+          let obj = { from: 110, to: 593 };
+          expect(model.calcSnap(mas)).toEqual(obj);
+          expect(model.snapDot()).toEqual(obj);
+
+          obj = { from: 133, to: 593 };
+          expect(model.calcKeyDown(false, '+', 'from')).toEqual(obj);
+          obj = { from: 110, to: 593 };
+          expect(model.calcKeyDown(false, '-', 'from')).toEqual(obj);
+          obj = { from: 110, to: 616 };
+          expect(model.calcKeyDown(false, '+', 'to')).toEqual(obj);
+        }
+      });
+      await model.onHandle();
+
+
     });
+
 
 });
 
