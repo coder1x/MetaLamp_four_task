@@ -19,8 +19,8 @@ mixin panel(options)
     className += ' '+classComp+'_'+modify}
     if(addClass){
     className += ' '+addClass}
-  div(class=className)
-    div(class=classComp+'__slider-wrap')
+  div(class=className + ' js-'+classComp)
+    div(class=classComp+'__slider-wrap'+' js-'+classComp+'__slider-wrap')
       input(class='rslider__'+theme+' visually-hidden' 
       type='text' 
       name='DATA' 

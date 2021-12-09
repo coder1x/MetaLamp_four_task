@@ -137,7 +137,7 @@ class Different {
 
   private setDom() {
 
-    this.modify = this.panel.className + '_vertical';
+    this.modify = this.panel.classList[0] + '_vertical';
 
     const getDom = (str: string) => {
       return this.elem.querySelector(

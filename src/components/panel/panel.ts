@@ -65,29 +65,26 @@ class Panel {
     this.objGrid.setAction(obj);
     this.objHints.setAction(obj);
 
-    //let fl = false;
+    let fl = false;
     this.objDifferent.onUnsubscribtion = () => {
+      if (!fl) {
+        fl = true;
+        obj.update({
+          onStart: null,
+          onChange: null,
+          onUpdate: null,
+          onReset: null
+        });
 
-      obj.destroy();
-
-      // if (!fl) {
-      //   fl = true;
-      //   obj.update({
-      //     onStart: null,
-      //     onChange: null,
-      //     onUpdate: null,
-      //     onReset: null
-      //   });
-
-      // } else {
-      //   fl = false;
-      //   obj.update({
-      //     onStart,
-      //     onChange,
-      //     onUpdate,
-      //     onReset
-      //   });
-      // }
+      } else {
+        fl = false;
+        obj.update({
+          onStart,
+          onChange,
+          onUpdate,
+          onReset
+        });
+      }
     };
 
     this.objDifferent.setAction(obj);
@@ -100,8 +97,8 @@ class Panel {
     this.objGrid = new Grid('.grid', this.getDom('.grid'));
     this.objHints = new Hints('.hints', this.getDom('.hints'));
     this.objDifferent = new Different(
-      '.different',
-      this.getDom('.different'),
+      '.js-different',
+      this.getDom('.js-different'),
       this.elem);
     this.objCopyCode = new CopyCode('.code', this.getDom('.code'));
 
@@ -161,7 +158,7 @@ function renderPanel(className: string) {
 
 
 
-const objPanel = renderPanel('.panel');
+const objPanel = renderPanel('.js-panel');
 
 
 objPanel[0].createRangeSlider({

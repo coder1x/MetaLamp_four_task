@@ -13,27 +13,27 @@ mixin different(options)
     className += ' '+classComp+'_'+modify}
     if(addClass){
     className += ' '+addClass}
-  fieldset(class=className)
+  fieldset(class=className + ' js-'+classComp)
     - if(!flLabel){
     legend(class=classComp+'__label')= label
     -}
-    div(class=classComp+'__double-wrap')
+    div(class=classComp+'__double-wrap' + ' js-'+classComp+'__double-wrap')
       +toggle-buttons({
         header: 'double',
       })
-    div(class=classComp+'__disabled-wrap')
+    div(class=classComp+'__disabled-wrap' + ' js-'+classComp+'__disabled-wrap')
       +toggle-buttons({
         header: 'disabled',
       })
-    div(class=classComp+'__vertical-wrap')
+    div(class=classComp+'__vertical-wrap' + ' js-'+classComp+'__vertical-wrap')
       +toggle-buttons({
         header: 'vertical',
       })
-    div(class=classComp+'__bar-wrap')
+    div(class=classComp+'__bar-wrap' + ' js-'+classComp+'__bar-wrap')
       +toggle-buttons({
         header: 'bar',
       })
-    div(class=classComp+'__unsubscribtion-wrap')
+    div(class=classComp+'__unsubscribtion-wrap' + ' js-'+classComp+'__unsubscribtion-wrap')
       +toggle-buttons({
         header: 'unsubscribtion',
       })
@@ -63,6 +63,6 @@ mixin different(options)
         masOptions: masOptions,
       })
     div(class=classComp+'__reset-wrap')
-      button(class=classComp+'__reset') Reset
+      button(class=classComp+'__reset' + ' js-'+classComp+'__reset') Reset
     div(class=classComp+'__apply-wrap')
       button(class=classComp+'__apply') Apply 
