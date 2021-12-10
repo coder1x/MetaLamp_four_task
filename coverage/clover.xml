@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1639054938631" clover="3.2.0">
-  <project timestamp="1639054938631" name="All files">
+<coverage generated="1639132937380" clover="3.2.0">
+  <project timestamp="1639132937380" name="All files">
     <metrics statements="1654" coveredstatements="1527" conditionals="887" coveredconditionals="706" methods="233" coveredmethods="229" elements="2774" coveredelements="2462" complexity="0" loc="1654" ncloc="1654" packages="5" files="10" classes="10"/>
     <package name="range-slider-fox">
       <metrics statements="21" coveredstatements="21" conditionals="4" coveredconditionals="4" methods="6" coveredmethods="6"/>

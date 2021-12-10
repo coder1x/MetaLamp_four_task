@@ -4,7 +4,5 @@ const key = process.env.NODE_ENV;
 module.exports = {
   isDev: key === 'development',
   isProd: !this.isDev,
-  isMulti: key === 'multisite',
+  isMulti: key === 'abspath',
 };
-
-// && key !== 'multisite'

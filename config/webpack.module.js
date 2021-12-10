@@ -32,8 +32,9 @@ module.exports = {
         test: /\.(ttf|woff|woff2|eot)$/,
         loader: 'file-loader',
         options: {
-          outputPath: `${PATHS.assets}fonts\\`,
-          publicPath: DP.isMulti ? '../fonts/' : '/assets/fonts/',
+          outputPath: PATHS.assets + 'fonts\\',
+          publicPath: DP.isMulti ?
+            PATHS.public + '/assets/fonts/' : '/assets/fonts/',
         },
       },
 
@@ -52,8 +53,9 @@ module.exports = {
         test: /\.(png|jpg|svg|gif|webp|avif)$/,
         loader: 'file-loader',
         options: {
-          outputPath: `${PATHS.assets}images/`,
-          publicPath: DP.isMulti ? 'assets/images/' : '/assets/images/',
+          outputPath: PATHS.assets + 'images/',
+          publicPath: DP.isMulti ?
+            PATHS.public + '/assets/images/' : '/assets/images/',
         },
       },
 

@@ -1,9 +1,8 @@
-// eslint-disable-next-line no-unused-vars
+//eslint-disable-next-line no-unused-vars
 import $ from 'jquery';
 import 'focus-visible/dist/focus-visible.min.js';
 
 import '@styles/styles';
-import '@plugins/java-import';
 
 function requireAll(requireContext: any) {
   return requireContext.keys().map(requireContext);
