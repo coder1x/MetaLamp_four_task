@@ -13,31 +13,31 @@ mixin grid(options)
     className += ' '+classComp+'_'+modify}
     if(addClass){
     className += ' '+addClass}
-  fieldset(class=className)
+  fieldset(class=className+' js-'+classComp)
     - if(!flLabel){
     legend(class=classComp+'__label')= label
     -}
-    div(class=classComp+'__grid-wrap')
+    div(class=classComp+'__grid-wrap'+' js-'+classComp+'__grid-wrap')
       +toggle-buttons({
         header: 'Grid',
       })
-    div(class=classComp+'__snap-wrap')
+    div(class=classComp+'__snap-wrap'+' js-'+classComp+'__snap-wrap')
       +toggle-buttons({
         header: 'Snap',
       })
-    div(class=classComp+'__interval-wrap')
+    div(class=classComp+'__interval-wrap'+' js-'+classComp+'__interval-wrap')
       +text-field({
         label: 'Interval',
         type: 'text',
         name: 'gridNum'
       })
-    div(class=classComp+'__step-wrap')
+    div(class=classComp+'__step-wrap'+' js-'+classComp+'__step-wrap')
       +text-field({
         label: 'Step',
         type: 'text',
         name: 'gridStep'
       })
-    div(class=classComp+'__round-wrap')
+    div(class=classComp+'__round-wrap'+' js-'+classComp+'__round-wrap')
       +text-field({
         label: 'round up to',
         type: 'text',

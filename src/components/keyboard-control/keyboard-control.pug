@@ -12,17 +12,17 @@ mixin keyboard-control(options)
     className += ' '+classComp+'_'+modify}
     if(addClass){
     className += ' '+addClass}
-  fieldset(class=className)
+  fieldset(class=className+' js-'+classComp)
     - if(!flLabel){
     legend(class=classComp+'__label')= label
     -}
-    div(class=classComp+'__one-wrap')
+    div(class=classComp+'__one-wrap'+' js-'+classComp+'__one-wrap')
       +text-field({
         label: 'key Step One',
         type: 'text',
         name: 'keyStepOne'
       })
-    div(class=classComp+'__hold-wrap')
+    div(class=classComp+'__hold-wrap'+' js-'+classComp+'__hold-wrap')
       +text-field({
         label: 'key Step Hold',
         type: 'text',

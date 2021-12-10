@@ -155,8 +155,8 @@ class Different {
     this.orientation = getDom('vertical');
     this.reset =
       this.elem.querySelector(this.nameClass + '__reset');
-    const selectE = this.elem.querySelector('.select');
-    this.select = new Select('.select', selectE);
+    const selectE = this.elem.querySelector('.js-select');
+    this.select = new Select('.js-select', selectE);
   }
 
 }

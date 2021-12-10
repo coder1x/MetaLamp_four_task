@@ -24,7 +24,7 @@ class InputData {
     );
 
     this.value = this.elem.querySelector(
-      '.input-data input'
+      '.js-input-data input'
     );
 
     if (this.input) {

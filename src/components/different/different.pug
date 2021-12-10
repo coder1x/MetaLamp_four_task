@@ -57,7 +57,7 @@ mixin different(options)
           text:'Classic',
         },
       ];
-    div(class=classComp+'__select-wrap')
+    div(class=classComp+'__select-wrap' + ' js-'+classComp+'__select-wrap')
       +select({
         label: 'Skin',
         masOptions: masOptions,

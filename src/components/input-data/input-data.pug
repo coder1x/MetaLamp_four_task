@@ -12,7 +12,7 @@ mixin input-data(options)
     className += ' '+classComp+'_'+modify}
     if(addClass){
     className += ' '+addClass}
-  fieldset(class=className)
+  fieldset(class=className+' js-'+classComp)
     - if(!flLabel){
     legend(class=classComp+'__label')= label
     -}

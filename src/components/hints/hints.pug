@@ -13,25 +13,25 @@ mixin hints(options)
     className += ' '+classComp+'_'+modify}
     if(addClass){
     className += ' '+addClass}
-  fieldset(class=className)
+  fieldset(class=className+' js-'+classComp)
     - if(!flLabel){
     legend(class=classComp+'__label')= label
     -}
-    div(class=classComp+'__minmax-wrap')
+    div(class=classComp+'__minmax-wrap'+' js-'+classComp+'__minmax-wrap')
       +toggle-buttons({
         header: 'min - max',
       })
-    div(class=classComp+'__fromto-wrap')
+    div(class=classComp+'__fromto-wrap'+' js-'+classComp+'__fromto-wrap')
       +toggle-buttons({
         header: 'from - to',
       })
-    div(class=classComp+'__prefix-wrap')
+    div(class=classComp+'__prefix-wrap'+' js-'+classComp+'__prefix-wrap')
       +text-field({
         label: 'Prefix',
         type: 'text',
         name: 'tipPrefix'
       })
-    div(class=classComp+'__postfix-wrap')
+    div(class=classComp+'__postfix-wrap'+' js-'+classComp+'__postfix-wrap')
       +text-field({
         label: 'Postfix',
         type: 'text',

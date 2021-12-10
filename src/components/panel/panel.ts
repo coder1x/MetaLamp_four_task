@@ -91,20 +91,21 @@ class Panel {
     this.objKeyboardControl.setAction(obj);
   }
 
+
   private init() {
-    this.objValues = new Values('.values', this.getDom('.values'));
+    this.objValues = new Values('.js-values', this.getDom('.js-values'));
     this.objInputData = new InputData(this.className, this.elem);
-    this.objGrid = new Grid('.grid', this.getDom('.grid'));
-    this.objHints = new Hints('.hints', this.getDom('.hints'));
+    this.objGrid = new Grid('.js-grid', this.getDom('.js-grid'));
+    this.objHints = new Hints('.js-hints', this.getDom('.js-hints'));
     this.objDifferent = new Different(
       '.js-different',
       this.getDom('.js-different'),
       this.elem);
-    this.objCopyCode = new CopyCode('.code', this.getDom('.code'));
+    this.objCopyCode = new CopyCode('.js-code', this.getDom('.js-code'));
 
     this.objKeyboardControl = new KeyboardControl(
-      '.keyboard-control',
-      this.getDom('.keyboard-control')
+      '.js-keyboard-control',
+      this.getDom('.js-keyboard-control')
     );
   }
 

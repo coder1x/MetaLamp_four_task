@@ -13,12 +13,12 @@ mixin code(options)
     className += ' '+classComp+'_'+modify}
     if(addClass){
     className += ' '+addClass}
-  fieldset(class=className)
+  fieldset(class=className +' js-'+classComp)
     - if(!flLabel){
     legend(class=classComp+'__label')= label
     -}
     div(class=classComp+'__config')
       p(class=classComp+'__lang-js')=codeTop
-      ul(class=classComp+'__options')
+      ul(class=classComp+'__options'+' js-'+classComp+'__options')
       p(class=classComp+'__lang-js')=codeBottom
-    button(class=classComp+'__copy') Copy code
+    button(class=classComp+'__copy' + ' js-'+classComp+'__copy') Copy code

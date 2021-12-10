@@ -155,7 +155,7 @@ class Select {
   }
 
   private getModify() {
-    const selector = this.className + '_visible';
+    const selector = this.className.replace('js-', '') + '_visible';
     return selector.replace(/^\./, '');
   }
 

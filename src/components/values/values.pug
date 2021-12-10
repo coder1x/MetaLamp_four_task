@@ -12,35 +12,35 @@ mixin values(options)
     className += ' '+classComp+'_'+modify}
     if(addClass){
     className += ' '+addClass}
-  fieldset(class=className)
+  fieldset(class=className+' js-'+classComp)
     - if(!flLabel){
     legend(class=classComp+'__label')= label
     -}
-    div(class=classComp+'__min-wrap')
+    div(class=classComp+'__min-wrap'+' js-'+classComp+'__min-wrap')
       +text-field({
         label: 'Min',
         type: 'text',
         name: 'min'
       })
-    div(class=classComp+'__max-wrap')
+    div(class=classComp+'__max-wrap'+' js-'+classComp+'__max-wrap')
       +text-field({
         label: 'Max',
         type: 'text',
         name: 'max'
       })
-    div(class=classComp+'__from-wrap')
+    div(class=classComp+'__from-wrap'+' js-'+classComp+'__from-wrap')
       +text-field({
         label: 'From',
         type: 'text',
         name: 'from'
       })
-    div(class=classComp+'__to-wrap')
+    div(class=classComp+'__to-wrap'+' js-'+classComp+'__to-wrap')
       +text-field({
         label: 'To',
         type: 'text',
         name: 'to'
       })
-    div(class=classComp+'__step-wrap')
+    div(class=classComp+'__step-wrap'+' js-'+classComp+'__step-wrap')
       +text-field({
         label: 'step',
         type: 'text',
