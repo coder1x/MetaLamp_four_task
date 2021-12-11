@@ -5,4 +5,5 @@ module.exports = {
   isDev: key === 'development',
   isProd: !this.isDev,
   isMulti: key === 'abspath',
+  isPlugin: key === 'plugin',
 };

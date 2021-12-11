@@ -1,8 +1,4 @@
 
-
-
-//--------------------------------------------------------------------------
-
 const PATHS = require('./paths');
 const FL = require('./filename');
 const DP = require('./isDev');
@@ -10,12 +6,35 @@ const OPT = require('./optimization');
 
 const { merge } = require('webpack-merge');
 const devServ = require('./webpack.devServer.js');
+let confE = null;
 
+let pluginM = ['@plugins/java-import.ts'];
+let demoM = [];
+
+if (DP.isProd) {
+  demoM.push('./index.ts');
+} else {
+  demoM.push('webpack/hot/dev-server');
+  demoM.push('./index.ts');
+}
+
+if (DP.isPlugin) {
+  confE = {
+    plugin: pluginM
+  };
+} else {
+  confE = {
+    plugin: pluginM,
+    demo: demoM,
+  };
+}
 
 let pubPath;
 if (DP.isAbsPath) pubPath = `${PATHS.public}`;
 
 module.exports = merge(devServ, {
+
+
 
   // target: DP.isDev ? 'web' : 'browserslist',
   target: 'web',
@@ -23,19 +42,11 @@ module.exports = merge(devServ, {
   devtool: DP.isDev ? false : false,
 
 
-  entry: {
-    plugin: [
-      '@plugins/java-import.ts'
-    ],
-    demo: [
-      "webpack/hot/dev-server",
-      './index.ts', // входной файл (их может быть несколько)
-    ],
-  },
+  entry: confE,
 
 
   context: PATHS.src, // корень исходников
-  mode: 'development',   // собираем проект в режиме разработки
+  mode: DP.isDev ? 'development' : 'production',   // собираем проект в режиме разработки
   output: {
     filename: FL.filename('js'),
     path: PATHS.dist, // каталог в который будет выгружаться сборка.

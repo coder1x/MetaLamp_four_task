@@ -20,7 +20,7 @@ module.exports = {
     if (DP.isMulti)
       dir = dir.replace(/^\\/, '');
 
-    if (DP.isDev) {
+    if (DP.isDev || DP.isPlugin) {
       return `${dir}[name].${ext}`;
     }
     else {
