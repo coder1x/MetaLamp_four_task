@@ -12,9 +12,7 @@ const FL = require('./filename');
 const PATHS = require('./paths');
 const PAGES_DIR = `${PATHS.src}\\pages\\`; // каталог где располагаються PUG  файлы
 
-
 const pages = [];
-
 fs.readdirSync(PAGES_DIR).forEach((file) => {
   pages.push(file.split('/', 2));
 });

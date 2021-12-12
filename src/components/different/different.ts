@@ -83,6 +83,7 @@ class Different {
   }
 
 
+  // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   setAction(obj: any) {
     const modify = this.modify;
     const objP = this.panel.classList;

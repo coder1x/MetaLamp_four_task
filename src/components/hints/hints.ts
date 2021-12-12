@@ -52,6 +52,7 @@ class Hints {
     }
   }
 
+  // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   setAction(obj: any) {
     const data = (e: Event) => {
       const elem: HInputEv = e.target;

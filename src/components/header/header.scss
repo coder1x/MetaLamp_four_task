@@ -1,7 +1,8 @@
 @import "@styles/glob.scss";
 
-$font: Arial, sans-serif;
 $color-background: rgb(25, 25, 25);
+$font: "Montserrat", Helvetica, Arial, sans-serif;
+$color-focus: rgb(167, 167, 167);
 
 .header {
   width: 100%;
@@ -30,6 +31,21 @@ $color-background: rgb(25, 25, 25);
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+  }
+
+  &__download {
+    color: #555;
+    font-size: 24px;
+  }
+
+  &__download:hover,
+  &__download:focus {
+    color: rgb(107, 107, 107);
+  }
+
+  &__download:focus {
+    outline: 2px solid $color-focus;
+    outline-offset: 4px;
   }
 }
 

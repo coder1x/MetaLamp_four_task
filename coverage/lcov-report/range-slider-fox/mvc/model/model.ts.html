@@ -1285,7 +1285,11 @@
 <a name='L1220'></a><a href='#L1220'>1220</a>
 <a name='L1221'></a><a href='#L1221'>1221</a>
 <a name='L1222'></a><a href='#L1222'>1222</a>
-<a name='L1223'></a><a href='#L1223'>1223</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1223'></a><a href='#L1223'>1223</a>
+<a name='L1224'></a><a href='#L1224'>1224</a>
+<a name='L1225'></a><a href='#L1225'>1225</a>
+<a name='L1226'></a><a href='#L1226'>1226</a>
+<a name='L1227'></a><a href='#L1227'>1227</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
@@ -1365,6 +1369,8 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">42x</span>
 <span class="cline-any cline-yes">42x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1890,6 +1896,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">910x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">910x</span>
 <span class="cline-any cline-yes">910x</span>
 <span class="cline-any cline-yes">910x</span>
@@ -2595,6 +2603,8 @@ class Model extends Observer {
 &nbsp;
     let opKey = Object.keys(op);
     for (let key of opKey) {
+      // использую type assertions так как не нашёл возможности передавать нужный тип
+      // не могу отказаться от данной конструкции кода так как это сильно уменьшает копипаст
       const val = this.getProperty(op, key as keyof RangeSliderOptions);
       this.setProperty(this, key as keyof Model, val as this[keyof Model]);
     }
@@ -3116,9 +3126,9 @@ class Model extends Observer {
   }
 &nbsp;
   private trimFraction(num: number) {
-    const integer = Math.trunc(n<span class="branch-1 cbranch-no" title="branch not covered" >um);</span>
+    const integer = Math.trunc(num);
     const str = String(num).replace(integer + '.', '');
-    const len = str.length;
+    const len = str.length;<span class="branch-1 cbranch-no" title="branch not covered" ></span>
     return len;
   }
 &nbsp;
@@ -3126,32 +3136,32 @@ class Model extends Observer {
 &nbsp;
     this.startConfFl = false;
     this.updateConfFl = false;
-<span class="missing-if-branch" title="if path not taken" >I</span>
-    return O<span class="cstat-no" title="statement not covered" >bject.assign({</span>
-      type: 'single',   // type - single or double dot
-      or<span class="missing-if-branch" title="if path not taken" >I</span>ientation: 'horizontal',  // slider orientation
-      theme:<span class="cstat-no" title="statement not covered" > 'base',    //</span> slider theme
+&nbsp;
+    return Object.assign({
+      ty<span class="missing-if-branch" title="if path not taken" >I</span>pe: 'single',   // type - single or double dot
+      orient<span class="cstat-no" title="statement not covered" >ation: 'horizo</span>ntal',  // slider orientation
+      theme: 'base',    // slider theme
       mi<span class="missing-if-branch" title="if path not taken" >I</span>n: 0,           // minimal value on the scale
       max: 1<span class="cstat-no" title="statement not covered" >0,          //</span> maximal value on the scale
       fr<span class="missing-if-branch" title="if path not taken" >I</span>om: 1,          // first dot position
-      to: 2,            /<span class="cstat-no" title="statement not covered" >/ se</span>cond dot position
-      step: <span class="cstat-no" title="statement not covered" >0,         </span>  // step of the dot mooving
-      keySte<span class="cstat-no" title="statement not covered" >pOne: 0,    </span>// step of the dot mooving on keyboard key single pressing
-      keyStepHold: 0,   // step of the dot mooving on keyboard key holding
-      bar: false,       // show or hide a bar
+      to: 2,<span class="cstat-no" title="statement not covered" >            //</span> second dot position
+      st<span class="missing-if-branch" title="if path not taken" >I</span>ep: 0,           // step of the dot mooving
+      keyStepOne: 0,    /<span class="cstat-no" title="statement not covered" >/ st</span>ep of the dot mooving on keyboard key single pressing
+      keySte<span class="cstat-no" title="statement not covered" >pHold: 0,  </span> // step of the dot mooving on keyboard key holding
+      bar: f<span class="cstat-no" title="statement not covered" >alse,       </span>// show or hide a bar
       tipPrefix: '',    // prefix for hints (15 characters maximum)
       tipPostfix: '',   // postfix for hints (15 characters maximum)
       tipMinMax: true,  // hints are on
       tipFromTo: true,  // hints are off
       grid: false,      // scale is off
-      gridSn<span class="missing-if-branch" title="if path not taken" >I</span>ap: false,  // dot can't stop between scale marks
-      gridNum: 0<span class="cstat-no" title="statement not covered" >,       // amount of i</span>ntervals the scale is split into
+      gridSnap: false,  // dot can't stop between scale marks
+      gridNum: 0,       // amount of intervals the scale is split into
       gridSt<span class="missing-if-branch" title="if path not taken" >I</span>ep: 0,      // amount of steps in the interval
-      gridRound:<span class="cstat-no" title="statement not covered" > 0,     // fractiona</span>l rounding 
+      gridRound:<span class="cstat-no" title="statement not covered" > 0,     // fractional </span>rounding 
       disabl<span class="missing-if-branch" title="if path not taken" >I</span>ed: false,  // slider enabled or disabled
     }, options);<span class="cstat-no" title="statement not covered" ></span>
-  }
-&nbsp;
+  }<span class="missing-if-branch" title="if path not taken" >I</span>
+<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
   private createProperties(options: RangeSliderOptions) {
 &nbsp;
@@ -3164,9 +3174,9 @@ class Model extends Observer {
       this.onStart = options.onStart ?? emptyFun;
       this.onReset = options.onReset ?? emptyFun;
 &nbsp;
-      aw<span class="cstat-no" title="statement not covered" >ait this.updat</span>e(options);
+      await this.update(options);
 &nbsp;
-      this.defaultData = await this.getOptions();
+      th<span class="cstat-no" title="statement not covered" >is.defaultData</span> = await this.getOptions();
       await this.notifyOB({
         key: 'Start',
         ...this.defaultData,
@@ -3177,21 +3187,21 @@ class Model extends Observer {
     };
 &nbsp;
   }
+&nbsp;
+&nbsp;
+  privat<span class="missing-if-branch" title="if path not taken" >I</span>e getProperty&lt;T, K extends keyof T&gt;(obj: T, key: K) {
+    return o<span class="cstat-no" title="statement not covered" >bj[key];</span>
+  }
 <span class="missing-if-branch" title="if path not taken" >I</span>
 <span class="cstat-no" title="statement not covered" ></span>
-  private getProperty&lt;T, K extends keyof T&gt;(obj: T, key: K) {
-    retu<span class="missing-if-branch" title="if path not taken" >I</span>rn obj[key];
+  private setProperty&lt;T, K extends keyof T&gt;(obj: T, key: K, value: T[K]) {
+    obj[<span class="missing-if-branch" title="if path not taken" >I</span>key] = value;
   }<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
 <span class="missing-if-branch" title="if path not taken" >I</span>
-  private se<span class="cstat-no" title="statement not covered" >tProperty&lt;T, K ex</span>tends keyof T&gt;(obj: T, key: K, value: T[K]) {
-    obj[key] = value;
-  }<span class="missing-if-branch" title="if path not taken" >I</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="missing-if-branch" title="if path not taken" >I</span>
-  private proper<span class="cstat-no" title="statement not covered" >tiesValida</span>tion(
-    properties: Array&lt;keyof typeof obj&gt;, obj: RangeSliderOptions) {
-    let flag = false;
+  private proper<span class="cstat-no" title="statement not covered" >tiesValidation(</span>
+    properti<span class="missing-if-branch" title="if path not taken" >I</span>es: Array&lt;keyof typeof obj&gt;, obj: RangeSliderOptions) {
+    let flag = f<span class="cstat-no" title="statement not covered" >alse;</span>
     for (let item of properties) {
       const dataT = obj[item] ?? null;
       if (dataT !== null) {
@@ -3211,6 +3221,8 @@ class Model extends Observer {
 &nbsp;
   private checkValue(data: PROP, str: string) {
     const _this = this;
+    // использую type assertions так как не нашёл возможности передавать нужный тип
+    // не могу отказаться от данной конструкции кода так как это сильно уменьшает копипаст
     const key = str as keyof typeof _this;
     cons<span class="missing-if-branch" title="if path not taken" >I</span>t val = this[key];
     const va<span class="cstat-no" title="statement not covered" >lF = (val ?? n</span>ull) != null ? true : false;
@@ -3736,7 +3748,7 @@ export { Model };</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Dec 10 2021 13:42:17 GMT+0300 (Москва, стандартное время)
+                at Sun Dec 12 2021 14:25:48 GMT+0300 (Москва, стандартное время)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

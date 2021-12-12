@@ -86,6 +86,8 @@ class Model extends Observer {
 
     let opKey = Object.keys(op);
     for (let key of opKey) {
+      // использую type assertions так как не нашёл возможности передавать нужный тип
+      // не могу отказаться от данной конструкции кода так как это сильно уменьшает копипаст
       const val = this.getProperty(op, key as keyof RangeSliderOptions);
       this.setProperty(this, key as keyof Model, val as this[keyof Model]);
     }
@@ -702,6 +704,8 @@ class Model extends Observer {
 
   private checkValue(data: PROP, str: string) {
     const _this = this;
+    // использую type assertions так как не нашёл возможности передавать нужный тип
+    // не могу отказаться от данной конструкции кода так как это сильно уменьшает копипаст
     const key = str as keyof typeof _this;
     const val = this[key];
     const valF = (val ?? null) != null ? true : false;

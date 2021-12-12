@@ -30,7 +30,7 @@ if (DP.isPlugin) {
 }
 
 let pubPath;
-if (DP.isAbsPath) pubPath = `${PATHS.public}`;
+if (DP.isAbsPath) pubPath = PATHS.public;
 
 module.exports = merge(devServ, {
 
@@ -41,9 +41,7 @@ module.exports = merge(devServ, {
   //devtool: DP.isDev ? 'eval-cheap-module-source-map' : 'source-map', //  (карта для браузеров) 
   devtool: DP.isDev ? false : false,
 
-
   entry: confE,
-
 
   context: PATHS.src, // корень исходников
   mode: DP.isDev ? 'development' : 'production',   // собираем проект в режиме разработки

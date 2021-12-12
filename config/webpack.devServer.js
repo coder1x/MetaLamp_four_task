@@ -1,8 +1,5 @@
 
-
 const PATHS = require('./paths');
-
-// .replace(/\/\//g, "/")
 
 module.exports = {
   devServer: { // локальный сервер который будет запущен на http://localhost:8080/

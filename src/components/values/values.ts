@@ -66,7 +66,7 @@ class Values {
     }
   }
 
-
+  // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   setAction(obj: any) {
     let mapInput = new Map();
     mapInput.set('min', this.min.value);
