@@ -60,19 +60,6 @@ class Bar extends Observer {
     return false;
   }
 
-
-  private setActions() {
-    this.elemBar.addEventListener('click', (event: MouseEvent) => {
-      const dotXY = this.vertical ? event.offsetY : event.offsetX;
-
-      this.notifyOB({
-        key: 'ClickBar',
-        clientXY: dotXY,
-      });
-    });
-  }
-
-
   createDomBar() {
     if (!this.bar && this.elemBar) {
       this.elemBar.remove();
@@ -114,6 +101,18 @@ class Bar extends Observer {
       st.width = widthBar + '%';
     }
     return true;
+  }
+
+
+  private setActions() {
+    this.elemBar.addEventListener('click', (event: MouseEvent) => {
+      const dotXY = this.vertical ? event.offsetY : event.offsetX;
+
+      this.notifyOB({
+        key: 'ClickBar',
+        clientXY: dotXY,
+      });
+    });
   }
 
 

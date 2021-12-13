@@ -240,9 +240,9 @@ class Handle extends Observer {
   private keyDown = (e: KeyboardEvent, directions: mapKey, dot: string) => {
     const fl = (e.key == 'ArrowRight' || e.key == 'ArrowLeft');
     if (this.vertical && fl || !this.vertical && !fl)
-      return {};
+      return false;
 
-    if (!directions.get(e.key)) return {};
+    if (!directions.get(e.key)) return false;
     e.preventDefault();
     const repeat = e.repeat;
     const sign = directions.get(e.key);
@@ -254,6 +254,7 @@ class Handle extends Observer {
         keySign: sign,
         dot: dot,
       });
+    return true;
   };
 
 
