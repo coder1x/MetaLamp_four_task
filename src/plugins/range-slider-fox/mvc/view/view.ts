@@ -39,15 +39,20 @@ class View extends Observer {
   }
 
 
-  destroy() {
-    const typeElem = this.elem.constructor.name;
+  async destroy() {
+    const typeElem = await this.elem.constructor.name;
     if (typeElem == 'HTMLInputElement') {
       const input: HInput = this.elem;
       input.value = ' ';
     }
-    const elem = this.wrapSlider.querySelector('.js-' + this.rsName);
+    const elem = await this.wrapSlider.querySelector('.js-' + this.rsName);
     if (elem)
-      elem.remove();
+      await elem.remove();
+
+    this.handle = null;
+    this.hints = null;
+    this.bar = null;
+    this.grid = null;
   }
 
   setValueInput(from: number, to: number, type: string) {

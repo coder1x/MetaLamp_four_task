@@ -257,9 +257,9 @@ describe('------- Test View API -------', () => {
   test(' Grid - interface  ', async () => {
     const model = await new Model({
       onStart: async () => {
-        let elem = view.createDomGrid();
+        let elem = await view.createDomGrid();
         expect(elem.constructor.name).toBe('HTMLDivElement');
-        elem = view.createMark([
+        elem = await view.createMark([
           {
             val: 1,
             position: 1,
@@ -279,7 +279,8 @@ describe('------- Test View API -------', () => {
         ]);
 
         expect(elem.constructor.name).toBe('HTMLDivElement');
-        expect(view.deleteGrid()).toBeFalsy();
+        const fl = await view.deleteGrid();
+        expect(fl).toBeTruthy();
       }
     });
 

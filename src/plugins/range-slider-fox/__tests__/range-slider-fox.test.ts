@@ -47,15 +47,16 @@ describe('------- Range Slider Fox - JQuery Objects -------', () => {
 
   test(' destroy - plugin removal ', async () => {
 
-    const obj = $(dom).RangeSliderFox({}).data('RangeSliderFox');
+    const obj = await $(dom).RangeSliderFox({}).data('RangeSliderFox');
     expect(obj).toBeDefined();
 
-    let rs = $.data(dom, 'RangeSliderFox');
+    let rs = await $.data(dom, 'RangeSliderFox');
     expect(rs).toBeDefined();
-    obj.destroy();
-    await delay(100);
 
-    rs = $.data(dom, 'RangeSliderFox');
+    await delay(100);
+    await obj.destroy();
+    await delay(100);
+    rs = await $.data(dom, 'RangeSliderFox');
     expect(rs).toBeNull();
 
   });

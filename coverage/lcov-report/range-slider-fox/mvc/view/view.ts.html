@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.06% </span>
+                <span class="strong">96.15% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>171/178</span>
+                <span class='fraction'>175/182</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.03% </span>
+                <span class="strong">79.31% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>47/58</span>
+                <span class='fraction'>46/58</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.06% </span>
+                <span class="strong">96.15% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>171/178</span>
+                <span class='fraction'>175/182</span>
             </div>
         
             
@@ -481,7 +481,12 @@
 <a name='L416'></a><a href='#L416'>416</a>
 <a name='L417'></a><a href='#L417'>417</a>
 <a name='L418'></a><a href='#L418'>418</a>
-<a name='L419'></a><a href='#L419'>419</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L419'></a><a href='#L419'>419</a>
+<a name='L420'></a><a href='#L420'>420</a>
+<a name='L421'></a><a href='#L421'>421</a>
+<a name='L422'></a><a href='#L422'>422</a>
+<a name='L423'></a><a href='#L423'>423</a>
+<a name='L424'></a><a href='#L424'>424</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
@@ -521,7 +526,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">35x</span>
@@ -899,6 +908,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
 import { UpdateTip } from './view.d';
 import { Handle } from './sub-view/handle';
@@ -940,21 +950,26 @@ class View extends Observer {
   }
 &nbsp;
 &nbsp;
-  destroy() {
-    const typeElem = this.elem.constructor.name;
+  async destroy() {
+    const typeElem = await this.elem.constructor.name;
     if (typeElem == 'HTMLInputElement') {
       const input: HInput = this.elem;
       input.value = ' ';
     }
-    const elem = this.wrapSlider.querySelector('.js-' + this.rsName);
+    const elem = await this.wrapSlider.querySelector('.js-' + this.rsName);
     if (elem)
-      elem.remove();
+      await elem.remove();
+&nbsp;
+    this.handle = null;
+    this.hints = null;
+    this.bar = null;
+    this.grid = null;
   }
 &nbsp;
   setValueInput(from: number, to: number, type: string) {
-    const typeElem = this.elem.constructor.name;
-    let str =<span class="missing-if-branch" title="else path not taken" >E</span> '';
-    if (type<span class="cstat-no" title="statement not covered" >Elem == 'HTMLI</span>nputElement') {
+    const typ<span class="missing-if-branch" title="else path not taken" >E</span>eElem = this.elem.constructor.name;
+    let str <span class="cstat-no" title="statement not covered" >= '';</span>
+    if (typeElem == 'HTMLInputElement') {
 &nbsp;
       const input: HInput = this.elem;
 &nbsp;
@@ -1017,8 +1032,8 @@ class View extends Observer {
     'js-' + this.rsName + '__bottom']);
     this.rsLine = createElem('span', [this.rsName + '__line',
     'js-' + this.rsName + '__line']);
-&nbsp;
-    this.rsCenter.appendChild(this.rsLine)<span class="branch-0 cbranch-no" title="branch not covered" >;</span>
+<span class="branch-0 cbranch-no" title="branch not covered" ></span>
+    this.rsCenter.appendChild(this.rsLine);
     this.rangeSlider.appendChild(this.rsTop);
     this.rangeSlider.appendChild(this.rsCenter);
     this.rangeSlider.appendChild(this.rsBottom);
@@ -1062,10 +1077,10 @@ class View extends Observer {
 &nbsp;
   //--------------------------------- handle
   createDotElem(type: string) {
-    return this.handle.createDomBase(type);
-  }<span class="missing-if-branch" title="if path not taken" >I</span>
+    return t<span class="missing-if-branch" title="if path not taken" >I</span>his.handle.createDomBase(type);
+  }<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" ></span>
-  setDotFrom(fro<span class="cstat-no" title="statement not covered" >mP: number) {</span>
+  setDotFrom(fromP: number) {
     return this.handle.setFrom(fromP);
   }
 &nbsp;
@@ -1163,12 +1178,12 @@ class View extends Observer {
     masFL.push(this.bar.setVisibleBar(bar));
     masFL.push(this.bar.createDomBar());
     const size = this.vertical ?
-      this.rsLine.offsetWidth : this.rsLine.offsetHeight;
-    masFL.push(this.bar.setSizeWH(s<span class="cstat-no" title="statement not covered" >ize));</span>
-    return masFL<span class="cstat-no" title="statement not covered" >;</span>
-  }<span class="cstat-no" title="statement not covered" ></span>
-&nbsp;
-  setBar(barX: n<span class="cstat-no" title="statement not covered" >umber, widthBar: nu</span>mber) {
+      this.rsLine.offsetWidth : thi<span class="cstat-no" title="statement not covered" >s.rsLine.offsetHe</span>ight;
+    masFL.push(t<span class="cstat-no" title="statement not covered" >his.bar.setSizeWH(size));</span>
+    return masFL;<span class="cstat-no" title="statement not covered" ></span>
+  }
+<span class="cstat-no" title="statement not covered" ></span>
+  setBar(barX: number, widthBar: number) {
     return this.bar.setBar(barX, widthBar);
   }
 &nbsp;
@@ -1324,7 +1339,7 @@ export { View };</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Dec 12 2021 14:25:48 GMT+0300 (Москва, стандартное время)
+                at Tue Dec 14 2021 19:15:57 GMT+0300 (Москва, стандартное время)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

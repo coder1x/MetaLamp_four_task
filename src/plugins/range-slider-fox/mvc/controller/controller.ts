@@ -37,12 +37,14 @@ class Controller {
     return true;
   }
 
-  destroy() {
+  async destroy() {
     this.lock = true;
-    const elem = this.view.elem;
+    const elem = await this.view.elem;
     if (elem.constructor.name != 'HTMLInputElement') return false;
-    $.data(elem, 'RangeSliderFox', null);
-    this.view.destroy();
+    await $.data(elem, 'RangeSliderFox', null);
+    await this.view.destroy();
+    this.view = null;
+    this.model = null;
   }
 
 
