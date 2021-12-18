@@ -99,7 +99,7 @@ class Handle extends Observer {
 
 
   setFrom(fromP: number) {
-    if (this.elemTo) {
+    if (this.elemFrom) {
       const val = fromP + '%';
       const from = this.elemFrom.style;
       this.vertical ? from.bottom = val : from.left = val;

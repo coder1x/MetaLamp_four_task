@@ -39,12 +39,14 @@ class Controller {
 
   async destroy() {
     this.lock = true;
+    if (!this.view) return false;
     const elem = await this.view.elem;
     if (elem.constructor.name != 'HTMLInputElement') return false;
     await $.data(elem, 'RangeSliderFox', null);
     await this.view.destroy();
     this.view = null;
     this.model = null;
+    return true;
   }
 
 

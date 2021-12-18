@@ -83,7 +83,6 @@ describe('------- Test Controller API -------', () => {
 
           const flR = objС.reset();
           expect(flR).toBeTruthy();
-
         },
         onReset: (data: RangeSliderOptions) => {
           expect(data).toStrictEqual(defaultData);
@@ -157,6 +156,7 @@ describe('------- Test Controller API -------', () => {
     }), new View(domC));
   });
 
+
   // Data-Attributes static
   test(' Check if plugin is configured in ' +
     'line with data-attributes on its start ', async () => {
@@ -183,9 +183,7 @@ describe('------- Test Controller API -------', () => {
     await objX.update({
       from: 4
     });
-
     await delay(100);
-
     await objX.destroy();
 
     await delay(100);
@@ -196,7 +194,6 @@ describe('------- Test Controller API -------', () => {
     await delay(100);
     expect(fun.mock.calls).toHaveLength(1);
     expect(domC.value).toBe(' ');
-
   });
 
 

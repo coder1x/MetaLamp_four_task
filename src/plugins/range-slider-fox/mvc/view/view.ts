@@ -6,7 +6,7 @@ import { Bar } from './sub-view/bar';
 import { Grid } from './sub-view/grid';
 import { Observer, TOB } from '../../observer';
 import { HInput, HElem } from '../../glob-interface';
-
+import { RangeSliderOptions } from '../../glob-interface';
 
 
 class View extends Observer {
@@ -306,15 +306,18 @@ class View extends Observer {
       ['from', 'from'],
       ['to', 'to'],
       ['step', 'step'],
-      ['key_step_one', 'keyStepOne'],
-      ['key_step_hold', 'keyStepHold'],
+      ['key-step-one', 'keyStepOne'],
+      ['key-step-hold', 'keyStepHold'],
       ['bar', 'bar'],
       ['grid', 'grid'],
-      ['grid_snap', 'gridSnap'],
-      ['grid_num', 'gridNum'],
-      ['grid_step', 'gridStep'],
-      ['grid_round', 'gridRound'],
-      ['tip_min_max', 'tipMinMax'],
+      ['grid-snap', 'gridSnap'],
+      ['grid-num', 'gridNum'],
+      ['grid-step', 'gridStep'],
+      ['grid-round', 'gridRound'],
+      ['tip-min-max', 'tipMinMax'],
+      ['tip-from-to', 'tipFromTo'],
+      ['tip-prefix', 'tipPrefix'],
+      ['tip-postfix', 'tipPostfix'],
     ]);
 
     const mapOptions = new Map();
@@ -352,23 +355,37 @@ class View extends Observer {
 
     this.objData = Object.fromEntries(mapOptions);
     let observer = new MutationObserver(mut => {
-      const attr = mut[0].attributeName;
-      const opt = attr.replace('data-', '');
-      const data = getDataAttr(opt);
 
-      if (data) {
-        const key = String(data[0]);
-        const val = data[1];
+      let obj: RangeSliderOptions = {};
+      for (let item of mut) {
+        const attr = item.attributeName;
+        const opt = attr.replace('data-', '');
+        const data = getDataAttr(opt);
+
+        if (data) {
+          const key = String(data[0]);
+          const val = data[1];
+          this.setProperty(obj, key as keyof RangeSliderOptions, val);
+        }
+      }
+
+      if (obj) {
         this.notifyOB({
           key: 'DataAttributes',
-          [key]: val,
+          ...obj,
         });
       }
     });
 
+
+
     observer.observe(this.elem, {
       attributeFilter: masDataAttr,
     });
+  }
+
+  private setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
+    obj[key] = value;
   }
 
   private init() {
