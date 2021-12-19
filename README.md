@@ -113,6 +113,7 @@ $('.rslider__fox').RangeSliderFox({
 ```javascript
 const obj = $(dom).RangeSliderFox({}).data('RangeSliderFox');
 
+// This piece of code will change range values and set the dot on position 350.
 obj.update({
 min:0,
 max:600,
@@ -120,7 +121,6 @@ from:350
 })
 
 // unsubscribe from events
-
 obj.update({
   onStart:null,
   onChange:null,
@@ -128,7 +128,6 @@ obj.update({
   onReset:null
 })
 
-// This piece of code will change range values and set the dot on position 350.
 
 obj.reset()
 
@@ -152,9 +151,9 @@ obj.destroy()
 | max | data-max | 10 (-n, n.n..) | number | Maximal value of the range |
 | to | data-to | 2 (-n, n.n..) | number | Second dot position |
 | from | data-from | 1 (-n, n.n..) | number | First dot position |
-| step | data-step | 0 (max-mun) | number | Step of the dot mooving |
-| keyStepOne | data-key-step-one | 0 (max-mun) | number | Step of the dot mooving on keyboard key single pressing |
-| keyStepHold | data-key-step-hold | 0 (max-mun) | number | Step of the dot mooving on keyboard key holding |
+| step | data-step | 0 (n, n.n.. <= max-min) | number | Step of the dot mooving |
+| keyStepOne | data-key-step-one | 0 (max-min) | number | Step of the dot mooving on keyboard key single pressing |
+| keyStepHold | data-key-step-hold | 0 (max-min) | number | Step of the dot mooving on keyboard key holding |
 | bar | data-bar | false | boolean | Progrees-bar view (shown or hidden) |
 | tipPrefix | data-tip-prefix | '' (char…) | string | Prefix for hints (15 characters maximum) |
 | tipPostfix | data-tip-postfix | '' (char…) | string | Postfix for hints (15 characters maximum) |
@@ -170,6 +169,14 @@ obj.destroy()
 | onChange | - | null | Function | Call a callback function after each user’s interaction with the slider and pass an object of current configuration data as an argument |
 | onUpdate | - | null | Function | Call a callback function after “update”  method calling and pass an object of current configuration data as an argument |
 | onReset | - | null | Function | Call a callback function after “reset”  method calling and pass an object of current configuration data as an argument |
+
+## details
+
+* only one of values gridNum or gridStep can be set for scale. If both of them are set, gridStep will be ignored
+
+* gridSnap is ignored if one of parameters step, keyStepOne, keyStepHold is set
+
+* step is ignored while keyboard controlling if one of parameters keyStepOne, keyStepHold is set
 
 
 ## Setup and Scripts ( build the project, start, testing, production)

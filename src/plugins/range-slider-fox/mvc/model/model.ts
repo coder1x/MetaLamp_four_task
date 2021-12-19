@@ -87,7 +87,7 @@ class Model extends Observer {
     let opKey = Object.keys(op);
     for (let key of opKey) {
       // использую type assertions так как не нашёл возможности передавать нужный тип
-      // не могу отказаться от данной конструкции кода так как это сильно уменьшает копипаст
+      // не могу отказаться от данной конструкции кода, так как это сильно уменьшает копипаст
       const val = this.getProperty(op, key as keyof RangeSliderOptions);
       this.setProperty(this, key as keyof Model, val as this[keyof Model]);
     }
@@ -260,14 +260,14 @@ class Model extends Observer {
 
     const len = this.trimFraction(this.step);
     let mas: number[] = [];
-    let kol = this.fixedNum((this.min + this.step), len);
+    let kol = +(this.min + this.step).toFixed(len);
     mas.push(this.min);
     for (let i = this.min; i <= this.max;) {
-      i = this.fixedNum((i += this.step), len);
+      i = +(i += this.step).toFixed(len);
       if (kol == i && i < this.max) {
         mas.push(kol);
-        kol = this.fixedNum((kol += this.step), len);
-      }
+        kol = +(kol += this.step).toFixed(len);
+      } else break;
     }
     mas.push(this.max);
 
@@ -539,10 +539,10 @@ class Model extends Observer {
 
         if (dotF) {
           const num = !signF ? from - step : from + step;
-          from = this.fixedNum(num, len);
+          from = +num.toFixed(len);
         } else {
           const num = !signF ? to - step : to + step;
-          to = this.fixedNum(num, len);
+          to = +num.toFixed(len);
         }
         if (this.type == 'double') {
           if (from > to && dotF) from = to;
@@ -556,7 +556,7 @@ class Model extends Observer {
         }
         if (!this.keyStepHold && this.keyStepOne) {
           const len = this.trimFraction(this.keyStepOne);
-          this.keyStepHold = this.fixedNum(this.keyStepOne, len);
+          this.keyStepHold = +this.keyStepOne.toFixed(len);
         }
         repeat ? value(this.keyStepHold) : value(this.keyStepOne);
       } else if (this.step) {
@@ -595,18 +595,6 @@ class Model extends Observer {
     return +(this.min + (this.toP * this.valP)).toFixed(0);
   }
 
-  private fixedNum(num: number, len: number) {
-    let temp = '';
-    let fl = false;
-    let k = 0;
-    for (let item of String(num)) {
-      if (item == '.') fl = true;
-      temp += item;
-      if (fl) ++k;
-      if (k == len + 1) break;
-    }
-    return parseFloat(temp);
-  }
 
   private trimFraction(num: number) {
     const integer = Math.trunc(num);
@@ -703,7 +691,7 @@ class Model extends Observer {
   private checkValue(data: PROP, str: string) {
     const _this = this;
     // использую type assertions так как не нашёл возможности передавать нужный тип
-    // не могу отказаться от данной конструкции кода так как это сильно уменьшает копипаст
+    // не могу отказаться от данной конструкции кода, так как это сильно уменьшает копипаст
     const key = str as keyof typeof _this;
     const val = this[key];
     const valF = (val ?? null) != null ? true : false;

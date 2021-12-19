@@ -365,6 +365,8 @@ class View extends Observer {
         if (data) {
           const key = String(data[0]);
           const val = data[1];
+          // использую type assertions так как не нашёл возможности передавать нужный тип
+          // не могу отказаться от данной конструкции кода, так как это сильно уменьшает копипаст
           this.setProperty(obj, key as keyof RangeSliderOptions, val);
         }
       }
