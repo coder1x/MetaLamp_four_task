@@ -73,6 +73,38 @@ $('.rslider__fox').RangeSliderFox({
     grid: true,
     gridSnap: false,
     gridNum: 40,
+    onStart: (data) => {
+      console.log(data.type);
+      console.log(data.orientation); 
+      console.log(data.theme);
+      console.log(data.min);
+      console.log(data.max);
+      console.log(data.from);
+      console.log(data.to);
+      console.log(data.step);
+      console.log(data.keyStepOne);
+      console.log(data.keyStepHold);
+      console.log(data.bar);
+      console.log(data.tipPrefix);
+      console.log(data.tipPostfix);
+      console.log(data.tipMinMax);
+      console.log(data.tipFromTo);
+      console.log(data.grid);
+      console.log(data.gridSnap);
+      console.log(data.gridNum);
+      console.log(data.gridStep);
+      console.log(data.gridRound);
+      console.log(data.disabled);
+    },
+    onChange:(data) => {
+      console.log(data);
+    },
+    onUpdate:(data) => {
+      console.log(data);
+    },
+    onReset:(data) => {
+      console.log(data);
+    }
 })
 ``` 
 
@@ -85,6 +117,15 @@ obj.update({
 min:0,
 max:600,
 from:350
+})
+
+// unsubscribe from events
+
+obj.update({
+  onStart:null,
+  onChange:null,
+  onUpdate:null,
+  onReset:null
 })
 
 // This piece of code will change range values and set the dot on position 350.
@@ -111,9 +152,9 @@ obj.destroy()
 | max | data-max | 10 (-n, n.n..) | number | Maximal value of the range |
 | to | data-to | 2 (-n, n.n..) | number | Second dot position |
 | from | data-from | 1 (-n, n.n..) | number | First dot position |
-| step | data-step | 0 (0-max) | number | Step of the dot mooving |
-| keyStepOne | data-key-step-one | 0(0-max) | number | Step of the dot mooving on keyboard key single pressing |
-| keyStepHold | data-key-step-hold | 0(0-max) | number | Step of the dot mooving on keyboard key holding |
+| step | data-step | 0 (max-mun) | number | Step of the dot mooving |
+| keyStepOne | data-key-step-one | 0 (max-mun) | number | Step of the dot mooving on keyboard key single pressing |
+| keyStepHold | data-key-step-hold | 0 (max-mun) | number | Step of the dot mooving on keyboard key holding |
 | bar | data-bar | false | boolean | Progrees-bar view (shown or hidden) |
 | tipPrefix | data-tip-prefix | '' (char…) | string | Prefix for hints (15 characters maximum) |
 | tipPostfix | data-tip-postfix | '' (char…) | string | Postfix for hints (15 characters maximum) |
@@ -125,13 +166,15 @@ obj.destroy()
 | gridStep | data-grid-step | 0 (n, n.n..) | number | Amount of steps in the interval |
 | gridRound | data-grid-round | 0 (n) | number | Fractional rounding |
 | disabled | data-disabled | false | boolean | Slider enabled or disabled |
-| onStart | - | (data) => data | Function | Call a callback function after the first start of the plugin and pass an object of current configuration data as an argument |
-| onChange | - | (data) => data | Function | Call a callback function after each user’s interaction with the slider and pass an object of current configuration data as an argument |
-| onUpdate | - | (data) => data | Function | Call a callback function after “update”  method calling and pass an object of current configuration data as an argument |
-| onReset | - | (data) => data | Function | Call a callback function after “reset”  method calling and pass an object of current configuration data as an argument |
+| onStart | - | null | Function | Call a callback function after the first start of the plugin and pass an object of current configuration data as an argument |
+| onChange | - | null | Function | Call a callback function after each user’s interaction with the slider and pass an object of current configuration data as an argument |
+| onUpdate | - | null | Function | Call a callback function after “update”  method calling and pass an object of current configuration data as an argument |
+| onReset | - | null | Function | Call a callback function after “reset”  method calling and pass an object of current configuration data as an argument |
 
 
 ## Setup and Scripts ( build the project, start, testing, production)
+
+* Node version v14.18.1
 
 * Install dependencies:
   ```

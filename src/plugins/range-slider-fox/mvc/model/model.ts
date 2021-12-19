@@ -650,12 +650,10 @@ class Model extends Observer {
 
     this.onHandle = async () => {
 
-      const emptyFun = (data: RangeSliderOptions) => data;
-
-      this.onChange = options.onChange ?? emptyFun;
-      this.onUpdate = options.onUpdate ?? emptyFun;
-      this.onStart = options.onStart ?? emptyFun;
-      this.onReset = options.onReset ?? emptyFun;
+      this.onChange = options.onChange ?? null;
+      this.onUpdate = options.onUpdate ?? null;
+      this.onStart = options.onStart ?? null;
+      this.onReset = options.onReset ?? null;
 
       await this.update(options);
 
@@ -798,15 +796,16 @@ class Model extends Observer {
     if (keyStepHold == null)
       keyStepHold = 0;
 
-    const validMaxMin = (val: number) => {
-      if (val > this.max) return this.max;
-      if (val < 0) return 0;
-      return val;
+    const validVal = (val: number) => {
+      if (val <= this.getRange())
+        return val;
+      else
+        return this.getRange();
     };
 
-    this.step = validMaxMin(+step);
-    this.keyStepOne = validMaxMin(+keyStepOne);
-    this.keyStepHold = validMaxMin(+keyStepHold);
+    this.step = validVal(+step);
+    this.keyStepOne = validVal(+keyStepOne);
+    this.keyStepHold = validVal(+keyStepHold);
 
     this.notifyOB({
       key: 'Step',
@@ -936,7 +935,7 @@ class Model extends Observer {
     let grid: boolean = options.grid;
     let gridNum: number = options.gridNum;
     let gridStep: number = options.gridStep;
-    let gridRound: number = options.gridRound;
+    let gridRound: number = Math.trunc(options.gridRound);
 
     grid = Boolean(this.checkValue(grid, 'grid') ?? false);
     this.grid = Boolean(grid);
@@ -1045,11 +1044,9 @@ class Model extends Observer {
     }
     if (!fl) return false;
 
-    const emptyFun = (data: RangeSliderOptions) => data;
-
     const checkData = (fun: Function) => {
       if (fun === null) {
-        return emptyFun;
+        return null;
       }
       else if (typeof fun == 'function')
         return fun;
