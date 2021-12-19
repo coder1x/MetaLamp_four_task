@@ -1,0 +1,31 @@
+
+mixin select(options)
+  -
+    let label = options.label ?? ''
+    let flLabel = options.flLabel ?? false
+    let masOptions = options.masOptions ?? []
+    let name = options.name ?? ''
+    let modify = options.modify ?? ''
+    let addClass = options.class ?? ''
+    let classComp = 'select'
+    let className = classComp
+    if(modify){
+    className += ' '+classComp+'_'+modify}
+    if(addClass){
+    className += ' '+addClass}
+  div(class=className + ' js-'+classComp)
+    - if(!flLabel){
+    p(class=classComp+'__label-text')= label
+    -}
+    div(class=classComp+'__displayed-wrap' + ' js-'+classComp+'__displayed-wrap')
+      button(class=classComp+'__displayed' + ' js-'+classComp+'__displayed')
+      img(class=classComp+'__tip'+ ' js-'+classComp+'__tip' src=require('@com/select/img/tip.svg').default alt='угалок')
+    ul(class=classComp+'__options' + ' js-'+classComp+'__options')
+      -for(let item of masOptions){
+        - let selector=classComp+'__item' + ' js-'+classComp+'__item';
+        -if(item.selected){
+        -selector += ' '+item.selected;
+        -}
+        li(class=selector tabindex='0' data-val=item.value)=item.text
+      -}
+    input(class=classComp+'__input'+ ' js-'+classComp+'__input' value='' tabindex='-2' name=name)
