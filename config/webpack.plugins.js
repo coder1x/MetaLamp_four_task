@@ -21,7 +21,6 @@ fs.readdirSync(PAGES_DIR).forEach((file) => {
 const description = 'Узнайте, как использовать Range Slider Fox' +
   ' на нескольких практических демонстрациях';
 const keywords = 'range slider, diapason, interval, price range, price slider';
-const title = 'Range Slider Fox';
 
 
 let pluginsM = [];
@@ -45,7 +44,6 @@ if (!DP.isPlugin)
           return {};
         }
       },
-      title: title,
       filename: `${fileName}.html`,
       template: `./pages/${fileName}/${fileName}.pug`,
       alwaysWriteToDisk: true,
@@ -54,7 +52,7 @@ if (!DP.isPlugin)
       meta: {
         'Content-Type': {
           'http-equiv': 'Content-Type',
-          'content': 'text/html; charset=utf-8'
+          'content': 'text/html'
         },
         'viewport': {
           'name': 'viewport',
