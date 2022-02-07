@@ -1,6 +1,6 @@
-import { HElem } from '../glob-interface';
 
-function mockPointerEvent(element: HElem) {
+
+function mockPointerEvent(element: Element) {
   return function (eventType: string, clientX: number, clientY: number) {
     const conf = { bubbles: true, clientX, clientY, };
     const pointerEvent = new MouseEvent(eventType, conf);
@@ -11,7 +11,7 @@ function mockPointerEvent(element: HElem) {
 }
 
 
-function mockKeyboardEvent(element: HElem) {
+function mockKeyboardEvent(element: Element) {
   return function (code: string, eventType = 'keydown', repeat = false) {
     const conf = { code, repeat, bubbles: true, };
     const keyboardEvent = new KeyboardEvent(eventType, conf);

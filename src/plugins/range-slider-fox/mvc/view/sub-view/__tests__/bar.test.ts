@@ -1,7 +1,7 @@
 import { Bar } from '../bar';
 import { Controller, Model, View } from '../../../controller/controller';
 import { mockPointerEvent } from '../../../../__tests__/jestUtils';
-import { HElem } from '../../../../glob-interface';
+
 
 // диапазон между ползунками
 describe('------- Test Bar API -------', () => {
@@ -42,9 +42,14 @@ describe('------- Test Bar API -------', () => {
     await createBar();
     const sbF = await bar.setBar(12, 23);
     expect(sbF).toBeTruthy();
-    const elem: HElem = await wrap.firstElementChild;
-    const left = elem.style.left;
-    const width = elem.style.width;
+    const elem = await wrap.firstElementChild;
+
+    let left: string;
+    let width: string;
+    if (elem instanceof HTMLElement) {
+      left = elem.style.left;
+      width = elem.style.width;
+    }
     expect(left).toBe('12%');
     expect(width).toBe('23%');
   });
@@ -56,9 +61,15 @@ describe('------- Test Bar API -------', () => {
     expect(sbF).toBeTruthy();
     const orF = await bar.setOrientation('vertical');
     expect(orF).toBeTruthy();
-    const elem: HElem = await wrap.firstElementChild;
-    const bottom = elem.style.bottom;
-    const height = elem.style.height;
+    const elem = await wrap.firstElementChild;
+
+    let bottom: string;
+    let height: string;
+
+    if (elem instanceof HTMLElement) {
+      bottom = elem.style.bottom;
+      height = elem.style.height;
+    }
     expect(bottom).toBe('34%');
     expect(height).toBe('10%');
   });
@@ -67,8 +78,10 @@ describe('------- Test Bar API -------', () => {
   test(' Set progress-bar size relating the orientation ', async () => {
     await createBar();
     bar.setSizeWH(25);
-    const elem: HElem = await wrap.firstElementChild;
-    const height = elem.style.height;
+    const elem = await wrap.firstElementChild;
+    let height: string;
+    if (elem instanceof HTMLElement)
+      height = elem.style.height;
     expect(height).toBe('25px');
   });
 

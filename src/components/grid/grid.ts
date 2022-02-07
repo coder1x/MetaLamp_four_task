@@ -1,10 +1,5 @@
 import './grid.scss';
 
-import {
-  HInputEv,
-  HInput,
-  HElem
-} from '../../components/interface/glob-interface';
 
 interface OP {
   grid?: boolean;
@@ -17,12 +12,12 @@ interface OP {
 
 class Grid {
 
-  private elem: HElem;
-  private grid: HInput;
-  private snap: HInput;
-  private interval: HInput;
-  private step: HInput;
-  private gridRound: HInput;
+  private elem: Element;
+  private grid: HTMLInputElement;
+  private snap: HTMLInputElement;
+  private interval: HTMLInputElement;
+  private step: HTMLInputElement;
+  private gridRound: HTMLInputElement;
   private gridD: boolean;
   private gridSnapD: boolean;
   private gridNumD: number;
@@ -30,7 +25,7 @@ class Grid {
   private gridRoundD: number;
   private nameClass: string;
 
-  constructor(nameClass: string, elem: HElem) {
+  constructor(nameClass: string, elem: Element) {
     this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
@@ -93,17 +88,18 @@ class Grid {
     });
 
     const inputProcessing = (e: Event) => {
-      const elem: HInputEv = e.target;
-      let val = elem.value.replace(/[^.\d]/g, '');
+      const elem = e.target;
+      if (elem instanceof HTMLInputElement) {
+        let val = elem.value.replace(/[^.\d]/g, '');
+        let regexp = /^\d*?[.]?\d*$/;
+        const valid = regexp.test(val);
 
-      let regexp = /^\d*?[.]?\d*$/;
-      const valid = regexp.test(val);
-
-      if (valid) {
-        mapInput.set(elem.name, val);
-        elem.value = val;
-      } else {
-        elem.value = mapInput.get(elem.name);
+        if (valid) {
+          mapInput.set(elem.name, val);
+          elem.value = val;
+        } else {
+          elem.value = mapInput.get(elem.name);
+        }
       }
     };
 
@@ -113,26 +109,28 @@ class Grid {
     }
 
     this.grid.addEventListener('click', function (e: Event) {
-      const elem: HInputEv = e.target;
-      obj.update({
-        grid: elem.checked
-      });
+      const elem = e.target;
+      if (elem instanceof HTMLInputElement)
+        obj.update({
+          grid: elem.checked
+        });
     });
 
     this.snap.addEventListener('click', (e: Event) => {
-      const elem: HInputEv = e.target;
-      if (this.grid.checked) {
-        obj.update({
-          gridSnap: elem.checked
-        });
-      } else {
-        e.preventDefault();
-      }
+      const elem = e.target;
+      if (elem instanceof HTMLInputElement)
+        if (this.grid.checked) {
+          obj.update({
+            gridSnap: elem.checked
+          });
+        } else {
+          e.preventDefault();
+        }
     });
   }
 
   private setDom() {
-    const getDom = (str: string) => {
+    const getDom = (str: string): HTMLInputElement => {
       return this.elem.querySelector(
         this.nameClass +
         '__' +
@@ -147,8 +145,6 @@ class Grid {
     this.step = getDom('step');
     this.gridRound = getDom('round');
   }
-
-
 }
 
 

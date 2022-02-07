@@ -1,10 +1,5 @@
 import './hints.scss';
 
-import {
-  HInputEv,
-  HInput,
-  HElem
-} from '../../components/interface/glob-interface';
 
 interface OP {
   tipMinMax?: boolean;
@@ -14,18 +9,18 @@ interface OP {
 }
 
 class Hints {
-  private elem: HElem;
-  private tipMinMax: HInput;
-  private tipFromTo: HInput;
-  private tipPrefix: HInput;
-  private tipPostfix: HInput;
+  private elem: Element;
+  private tipMinMax: HTMLInputElement;
+  private tipFromTo: HTMLInputElement;
+  private tipPrefix: HTMLInputElement;
+  private tipPostfix: HTMLInputElement;
   private tipMinMaxD: boolean;
   private tipFromToD: boolean;
   private tipPrefixD: string;
   private tipPostfixD: string;
   private nameClass: string;
 
-  constructor(nameClass: string, elem: HElem) {
+  constructor(nameClass: string, elem: Element) {
     this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
@@ -55,10 +50,11 @@ class Hints {
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   setAction(obj: any) {
     const data = (e: Event) => {
-      const elem: HInputEv = e.target;
-      obj.update({
-        [elem.name]: elem.value
-      });
+      const elem = e.target;
+      if (elem instanceof HTMLInputElement)
+        obj.update({
+          [elem.name]: elem.value
+        });
     };
 
     const masE = [this.tipPrefix, this.tipPostfix];
@@ -67,22 +63,24 @@ class Hints {
     }
 
     this.tipMinMax.addEventListener('click', function (e: Event) {
-      const elem: HInputEv = e.target;
-      obj.update({
-        tipMinMax: elem.checked
-      });
+      const elem = e.target;
+      if (elem instanceof HTMLInputElement)
+        obj.update({
+          tipMinMax: elem.checked
+        });
     });
 
     this.tipFromTo.addEventListener('click', function (e: Event) {
-      const elem: HInputEv = e.target;
-      obj.update({
-        tipFromTo: elem.checked
-      });
+      const elem = e.target;
+      if (elem instanceof HTMLInputElement)
+        obj.update({
+          tipFromTo: elem.checked
+        });
     });
   }
 
   private setDom() {
-    const getDom = (str: string) => {
+    const getDom = (str: string): HTMLInputElement => {
       return this.elem.querySelector(
         this.nameClass +
         '__' +

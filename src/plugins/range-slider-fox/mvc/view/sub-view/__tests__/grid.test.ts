@@ -1,7 +1,7 @@
 import { Grid } from '../grid';
 import { Controller, Model, View } from '../../../controller/controller';
 import { mockPointerEvent } from '../../../../__tests__/jestUtils';
-import { HElem } from '../../../../glob-interface';
+
 
 describe('------- Test Grid API -------', () => {
 
@@ -121,12 +121,13 @@ describe('------- Test Grid API -------', () => {
 
         const dot =
           await wrapC.getElementsByClassName(jsRsName + '__grid-mark');
-        let elem: HElem = dot[0];
+        let elem = dot[0];
         const funP = await mockPointerEvent(elem);
         await funP('click', 0, 0);
 
         expect(spy).toBeCalledTimes(1);
-        expect(spy).toBeCalledWith(+(elem.innerText));
+        if (elem instanceof HTMLElement)
+          expect(spy).toBeCalledWith(+(elem.innerText));
         await spy.mockClear();
       },
     });

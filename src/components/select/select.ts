@@ -1,33 +1,22 @@
 import './select.scss';
-import {
-  HElem,
-  HInput,
-  HTElem
-} from '../../components/interface/glob-interface';
-
-interface optE {
-  str: string,
-  fl?: boolean,
-  dom?: Element
-}
 
 
 class Select {
 
   private className: string;
-  private elem: HElem;
-  private button: HElem;
-  private input: HInput;
-  private items: HElem[];
-  private displayedWrap: HElem;
-  private options: HElem;
+  private elem: Element;
+  private button: HTMLButtonElement;
+  private input: HTMLInputElement;
+  private items: Element[];
+  private displayedWrap: HTMLElement;
+  private options: HTMLElement;
   onChange: Function;
   onUpdate: Function;
   private updateFlag = false;
   private startFlag = true;
 
 
-  constructor(className: string, elem: HElem) {
+  constructor(className: string, elem: Element) {
     this.className = className;
     this.elem = elem;
     this.init();
@@ -45,7 +34,8 @@ class Select {
       const data = item.getAttribute('data-val');
       if (data == val) {
         flag = true;
-        this.setValSelect(item);
+        if (item instanceof HTMLElement)
+          this.setValSelect(item);
         break;
       }
     }
@@ -67,62 +57,43 @@ class Select {
     this.startFlag = false;
   }
 
-  private getElem(param: optE) {
-    let elem: Element[] | Element;
-    let dom = param.dom ?? this.elem;
-    let name = this.className + param.str;
-    if (param.fl) {
-      elem = [...dom.querySelectorAll(name)];
-    }
-    else {
-      elem = dom.querySelector(name);
-    }
-    return elem;
+
+
+  private getElement(str: string, domBase?: Element): Function {
+    const dom = domBase ?? this.elem;
+    const selector = this.className + str;
+    const elem: Element = dom.querySelector(selector);
+    if (elem instanceof HTMLElement)
+      return function (): HTMLElement { return elem; };
+    if (elem instanceof HTMLButtonElement)
+      return function (): HTMLButtonElement { return elem; };
+    if (elem instanceof HTMLInputElement)
+      return function (): HTMLInputElement { return elem; };
+    if (elem instanceof Element)
+      return function (): Element { return elem; };
+    return () => { return elem; };
+  }
+
+  private getElements(str: string, domBase?: Element): Element[] {
+    const dom = domBase ?? this.elem;
+    const selector = this.className + str;
+    const doms = [...dom.querySelectorAll(selector)];
+    return doms;
   }
 
 
   private setDomElem() {
 
-    const butElem = this.getElem({
-      str: '__displayed'
-    });
-
-    if (!Array.isArray(butElem))
-      this.button = butElem;
-
-    const inputElem = this.getElem({
-      str: '__input'
-    });
-
-    if (!Array.isArray(inputElem))
-      this.input = inputElem;
-
-    const itemsElem = this.getElem({
-      str: '__item',
-      fl: true
-    });
-
-    if (Array.isArray(itemsElem))
-      this.items = itemsElem;
-
-    const optionsElem = this.getElem({
-      str: '__options',
-    });
-
-    if (!Array.isArray(optionsElem))
-      this.options = optionsElem;
-
-    const displayedWrapElem = this.getElem({
-      str: '__displayed-wrap'
-    });
-
-    if (!Array.isArray(displayedWrapElem))
-      this.displayedWrap = displayedWrapElem;
+    this.button = this.getElement('__displayed')();
+    this.input = this.getElement('__input')();
+    this.items = this.getElements('__item');
+    this.options = this.getElement('__options')();
+    this.displayedWrap = this.getElement('__displayed-wrap')();
 
     this.setDisplayed();
   }
 
-  private setValSelect(elem: HElem | HTElem) {
+  private setValSelect(elem: HTMLElement) {
     const text = elem.innerText;
     this.button.innerText = text;
     const val = elem.getAttribute('data-val');
@@ -135,14 +106,15 @@ class Select {
   private setDisplayed() {
     for (let item of this.items) {
       if (item.classList.contains('js-selected')) {
-        this.setValSelect(item);
+        if (item instanceof HTMLElement)
+          this.setValSelect(item);
         item.classList.remove('js-selected');
         break;
       }
     }
   }
 
-  private getVisible(elem: HElem) {
+  private getVisible(elem: HTMLElement) {
     let display = window.getComputedStyle(elem, null)
       .getPropertyValue('display');
     return display === 'none' ? false : true;
@@ -209,22 +181,27 @@ class Select {
         flag = true;
 
       if (flag) {
-        const target: HTElem = e.target;
-        this.setValSelect(target);
+        const target = e.target;
+        if (target instanceof HTMLElement)
+          this.setValSelect(target);
         this.toggle(true);
       }
     };
 
 
     for (let item of this.items) {
-      item.addEventListener('click', setValue);
-      item.addEventListener('keydown', setValue);
+      if (item instanceof HTMLElement) {
+        item.addEventListener('click', setValue);
+        item.addEventListener('keydown', setValue);
+      }
     }
 
 
     document.addEventListener('click', (e: MouseEvent) => {
-      const target: HTElem = e.target;
-      const domEl = target.closest('.' + this.getModify()) ?? false;
+      const target = e.target;
+      let domEl: false | Element;
+      if (target instanceof Element)
+        domEl = target.closest('.' + this.getModify()) ?? false;
       if (!domEl) {
         this.toggle(true);
       }
@@ -232,14 +209,15 @@ class Select {
 
 
     document.addEventListener('focusin', (e: FocusEvent) => {
-      const target: HTElem = e.target;
-      const linkEl = target.closest(
-        this.className + '__options'
-      ) ?? false;
-      const ulEl = target.closest('.' + this.getModify()) ?? false;
-      if (!linkEl && !ulEl) { this.toggle(true); }
+      const target = e.target;
+      if (target instanceof Element) {
+        const linkEl = target.closest(
+          this.className + '__options'
+        ) ?? false;
+        const ulEl = target.closest('.' + this.getModify()) ?? false;
+        if (!linkEl && !ulEl) { this.toggle(true); }
+      }
     });
-
   }
 
 }

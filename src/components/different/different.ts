@@ -3,10 +3,6 @@ import { Select } from '../select/select';
 
 
 
-import { HInput, HInputEv, HElem } from
-  '../../components/interface/glob-interface';
-
-
 interface OP {
   type?: string;
   disabled?: boolean;
@@ -19,15 +15,15 @@ interface OP {
 
 class Different {
 
-  private elem: HElem;
-  private type: HInput;
-  private disabled: HInput;
-  private orientation: HInput;
-  private bar: HInput;
-  private unsubscribtion: HInput;
+  private elem: Element;
+  private type: HTMLInputElement;
+  private disabled: HTMLInputElement;
+  private orientation: HTMLInputElement;
+  private bar: HTMLInputElement;
+  private unsubscribtion: HTMLInputElement;
   private select: Select;
   private reset: HTMLButtonElement;
-  private panel: HElem;
+  private panel: Element;
   private modify: string;
   private disabledD: boolean;
   private barD: boolean;
@@ -38,7 +34,7 @@ class Different {
   onUnsubscribtion: Function;
 
 
-  constructor(nameClass: string, elem: HElem, panel: HElem) {
+  constructor(nameClass: string, elem: Element, panel: Element) {
     this.nameClass = nameClass;
     this.panel = panel;
     this.elem = elem;
@@ -99,17 +95,19 @@ class Different {
     };
 
     this.disabled.addEventListener('click', function (e: Event) {
-      const elem: HInputEv = e.target;
-      obj.update({
-        disabled: elem.checked
-      });
+      const elem = e.target;
+      if (elem instanceof HTMLInputElement)
+        obj.update({
+          disabled: elem.checked
+        });
     });
 
     this.bar.addEventListener('click', function (e: Event) {
-      const elem: HInputEv = e.target;
-      obj.update({
-        bar: elem.checked
-      });
+      const elem = e.target;
+      if (elem instanceof HTMLInputElement)
+        obj.update({
+          bar: elem.checked
+        });
     });
 
     this.unsubscribtion.addEventListener('click', () => {
@@ -118,17 +116,22 @@ class Different {
     });
 
     this.type.addEventListener('click', function (e: Event) {
-      const elem: HInputEv = e.target;
-      const val = elem.checked ? 'double' : 'single';
+      const elem = e.target;
+      let val: string;
+      if (elem instanceof HTMLInputElement)
+        val = elem.checked ? 'double' : 'single';
       obj.update({
         type: val
       });
     });
 
     this.orientation.addEventListener('click', function (e: Event) {
-      const elem: HInputEv = e.target;
-      const val = elem.checked ? 'vertical' : 'horizontal';
-      elem.checked ? objP.add(modify) : objP.remove(modify);
+      const elem = e.target;
+      let val: string;
+      if (elem instanceof HTMLInputElement) {
+        val = elem.checked ? 'vertical' : 'horizontal';
+        elem.checked ? objP.add(modify) : objP.remove(modify);
+      }
 
       obj.update({
         orientation: val
@@ -140,7 +143,7 @@ class Different {
 
     this.modify = this.panel.classList[0] + '_vertical';
 
-    const getDom = (str: string) => {
+    const getDom = (str: string): HTMLInputElement => {
       return this.elem.querySelector(
         this.nameClass +
         '__' +

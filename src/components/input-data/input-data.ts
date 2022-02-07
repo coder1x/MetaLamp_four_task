@@ -1,18 +1,15 @@
 import './input-data.scss';
-import {
-  HInput,
-  HElem
-} from '../../components/interface/glob-interface';
+
 
 
 class InputData {
 
-  private value: HInput;
-  private input: HInput;
+  private value: HTMLInputElement;
+  private input: HTMLInputElement;
   private className: string;
-  private elem: HElem;
+  private elem: Element;
 
-  constructor(className: string, elem: HElem) {
+  constructor(className: string, elem: Element) {
     this.className = className;
     this.elem = elem;
     this.setDom();

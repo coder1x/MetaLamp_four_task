@@ -1,6 +1,5 @@
 import { Controller, Model, View } from '../../controller/controller';
 import { mockPointerEvent } from '../../../__tests__/jestUtils';
-import { HCElem } from '../../../glob-interface';
 
 describe('------- Test View API -------', () => {
 
@@ -83,12 +82,15 @@ describe('------- Test View API -------', () => {
       onStart: async () => {
         let nodes = view.createDomBase().childNodes;
         let name: string[] = [];
-        let line: HCElem;
+        let line: Element;
         for (let item of nodes) {
-          const elem: HCElem = item;
+          let elem: HTMLElement;
+          if (item instanceof HTMLElement)
+            elem = item;
           const nC = elem.className;
-          if (searchStr(nC, jsRsName + '__center'))
+          if (searchStr(nC, jsRsName + '__center')) {
             line = elem.children[0];
+          }
           name.push(nC);
         }
 

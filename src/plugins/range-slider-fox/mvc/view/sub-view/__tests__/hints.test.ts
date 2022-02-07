@@ -1,5 +1,4 @@
 import { Hints } from '../../sub-view/hints';
-import { HCElem } from '../../../../glob-interface';
 
 describe('------- Test Hints API -------', () => {
 
@@ -23,14 +22,17 @@ describe('------- Test Hints API -------', () => {
   }
 
   const checkDom = async (name: string) => {
-    const dom: HCElem = await wrap.firstChild;
-    const fl = searchStr(dom.className, jsRsName + '__tip-' + name);
+    const dom = await wrap.firstChild;
+    let fl: boolean;
+    if (dom instanceof HTMLElement)
+      fl = searchStr(dom.className, jsRsName + '__tip-' + name);
     expect(fl).toBeTruthy();
   };
 
   const checkStyle = async (val: string) => {
-    const dom: HCElem = await wrap.firstChild;
-    expect(dom.style.left).toBe(val);
+    const dom = await wrap.firstChild;
+    if (dom instanceof HTMLElement)
+      expect(dom.style.left).toBe(val);
   };
 
   // setTipFlag
@@ -178,12 +180,15 @@ describe('------- Test Hints API -------', () => {
     fl = await hints.setOrientation('vertical');
     expect(fl).toBeTruthy();
 
-    const from: HCElem = await wrap.children[0];
-    expect(from.style.bottom).toBe('20%');
-    const to: HCElem = await wrap.children[1];
-    expect(to.style.bottom).toBe('34%');
-    const single: HCElem = await wrap.children[2];
-    expect(single.style.bottom).toBe('27%');
+    const from = await wrap.children[0];
+    if (from instanceof HTMLElement)
+      expect(from.style.bottom).toBe('20%');
+    const to = await wrap.children[1];
+    if (to instanceof HTMLElement)
+      expect(to.style.bottom).toBe('34%');
+    const single = await wrap.children[2];
+    if (single instanceof HTMLElement)
+      expect(single.style.bottom).toBe('27%');
   });
 
 

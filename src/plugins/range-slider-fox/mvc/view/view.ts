@@ -5,7 +5,6 @@ import { Hints } from './sub-view/hints';
 import { Bar } from './sub-view/bar';
 import { Grid } from './sub-view/grid';
 import { Observer, TOB } from '../../observer';
-import { HInput, HElem } from '../../glob-interface';
 import { RangeSliderOptions } from '../../glob-interface';
 
 
@@ -42,8 +41,9 @@ class View extends Observer {
   async destroy() {
     const typeElem = await this.elem.constructor.name;
     if (typeElem == 'HTMLInputElement') {
-      const input: HInput = this.elem;
-      input.value = ' ';
+      const input = this.elem;
+      if (input instanceof HTMLInputElement)
+        input.value = ' ';
     }
     const elem = await this.wrapSlider.querySelector('.js-' + this.rsName);
     if (elem)
@@ -59,15 +59,15 @@ class View extends Observer {
     const typeElem = this.elem.constructor.name;
     let str = '';
     if (typeElem == 'HTMLInputElement') {
-
-      const input: HInput = this.elem;
-
-      input.value = str;
-      str += from;
-      if (type == 'double') {
-        str += ',' + to;
+      const input = this.elem;
+      if (input instanceof HTMLInputElement) {
+        input.value = str;
+        str += from;
+        if (type == 'double') {
+          str += ',' + to;
+        }
+        input.value = str;
       }
-      input.value = str;
     }
     else {
       return false;
@@ -89,8 +89,10 @@ class View extends Observer {
   }
 
   disabledRangeSlider(flag: boolean) {
-    const elem: HElem = this.wrapSlider;
-    const st = elem.style;
+    const elem = this.wrapSlider;
+    let st: CSSStyleDeclaration;
+    if (elem instanceof HTMLElement)
+      st = elem.style;
     return flag ? st.opacity = '0.5' : st.opacity = '1';
   }
 

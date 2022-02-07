@@ -925,6 +925,9 @@ class Model extends Observer {
     let gridStep: number = options.gridStep;
     let gridRound: number = Math.trunc(options.gridRound);
 
+    if (Number.isNaN(gridRound)) gridRound = null;
+
+
     grid = Boolean(this.checkValue(grid, 'grid') ?? false);
     this.grid = Boolean(grid);
 

@@ -1,9 +1,5 @@
 import './keyboard-control.scss';
-import {
-  HInput,
-  HInputEv,
-  HElem
-} from '../../components/interface/glob-interface';
+
 
 interface OP {
   keyStepOne?: number;
@@ -13,15 +9,15 @@ interface OP {
 
 class KeyboardControl {
 
-  private elem: HElem;
-  private keyStepOne: HInput;
-  private keyStepHold: HInput;
+  private elem: Element;
+  private keyStepOne: HTMLInputElement;
+  private keyStepHold: HTMLInputElement;
   private keyStepOneD: number;
   private keyStepHoldD: number;
   private nameClass: string;
 
 
-  constructor(nameClass: string, elem: HElem) {
+  constructor(nameClass: string, elem: Element) {
     this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
@@ -49,23 +45,26 @@ class KeyboardControl {
     mapInput.set('keyStepHold', this.keyStepHold.value);
 
     const data = (e: Event) => {
-      const elem: HInputEv = e.target;
-      obj.update({
-        [elem.name]: +mapInput.get(elem.name)
-      });
+      const elem = e.target;
+      if (elem instanceof HTMLInputElement)
+        obj.update({
+          [elem.name]: +mapInput.get(elem.name)
+        });
     };
 
     const inputProcessing = (e: Event) => {
-      const elem: HInputEv = e.target;
-      let val = elem.value.replace(/[^-.\d]/g, '');
-      let regexp = /^-?\d*?[.]?\d*$/;
-      const valid = regexp.test(val);
+      const elem = e.target;
+      if (elem instanceof HTMLInputElement) {
+        let val = elem.value.replace(/[^-.\d]/g, '');
+        let regexp = /^-?\d*?[.]?\d*$/;
+        const valid = regexp.test(val);
 
-      if (valid) {
-        mapInput.set(elem.name, val);
-        elem.value = val;
-      } else {
-        elem.value = mapInput.get(elem.name);
+        if (valid) {
+          mapInput.set(elem.name, val);
+          elem.value = val;
+        } else {
+          elem.value = mapInput.get(elem.name);
+        }
       }
     };
 
@@ -78,7 +77,7 @@ class KeyboardControl {
   }
 
   private setDom() {
-    const getDom = (str: string) => {
+    const getDom = (str: string): HTMLInputElement => {
       return this.elem.querySelector(
         this.nameClass +
         '__' +

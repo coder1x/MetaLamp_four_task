@@ -1,5 +1,5 @@
 import './panel.scss';
-import { RangeSliderOptions, HElem } from
+import { RangeSliderOptions } from
   '../../components/interface/glob-interface';
 
 import { Values } from '../values/values';
@@ -13,7 +13,7 @@ import { KeyboardControl } from '../keyboard-control/keyboard-control';
 
 class Panel {
 
-  private elem: HElem;
+  private elem: Element;
   private objValues: Values;
   private objInputData: InputData;
   private objGrid: Grid;
@@ -24,7 +24,7 @@ class Panel {
   private objKeyboardControl: KeyboardControl;
 
 
-  constructor(elem: HElem, className: string) {
+  constructor(elem: Element, className: string) {
     this.elem = elem;
     this.className = className;
     this.init();
