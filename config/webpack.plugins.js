@@ -10,18 +10,17 @@ const FoxUrlConvertor = require('fox-url-convertor');
 const DP = require('./isDev');
 const FL = require('./filename');
 const PATHS = require('./paths');
-const PAGES_DIR = `${PATHS.src}\\pages\\`; // каталог где располагаються PUG  файлы
+const path = require('path');
+const PAGES_DIR = path.join(PATHS.src, '/pages/'); // каталог где располагаються PUG  файлы
 
 const pages = [];
 fs.readdirSync(PAGES_DIR).forEach((file) => {
   pages.push(file.split('/', 2));
 });
 
-
 const description = 'Узнайте, как использовать Range Slider Fox' +
   ' на нескольких практических демонстрациях';
 const keywords = 'range slider, diapason, interval, price range, price slider';
-
 
 let pluginsM = [];
 
@@ -123,7 +122,7 @@ if (!DP.isPlugin)
 
 pluginsM.push(
   new FoxFavicon({
-    src: `${PATHS.src}${PATHS.assets}images/icon/favicon.png`,
+    src: path.join(PATHS.src, PATHS.assets, 'images/icon/favicon.png'),
     path: 'assets/favicons/',
     //pathManifest: '/assets/favicons/',
     //'https://plugins.su/

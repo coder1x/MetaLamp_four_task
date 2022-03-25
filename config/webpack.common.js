@@ -1,9 +1,8 @@
-
 const PATHS = require('./paths');
 const FL = require('./filename');
 const DP = require('./isDev');
 const OPT = require('./optimization');
-
+const path = require('path');
 const { merge } = require('webpack-merge');
 const devServ = require('./webpack.devServer.js');
 let confE = null;
@@ -34,12 +33,10 @@ if (DP.isAbsPath) pubPath = PATHS.public;
 
 module.exports = merge(devServ, {
 
-
-
   // target: DP.isDev ? 'web' : 'browserslist',
   target: 'web',
   //devtool: DP.isDev ? 'eval-cheap-module-source-map' : 'source-map', //  (карта для браузеров) 
-  devtool: DP.isDev ? false : false,
+  devtool: false,
 
   entry: confE,
 
@@ -51,21 +48,19 @@ module.exports = merge(devServ, {
     publicPath: pubPath,
   },
 
-
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.css', '.scss'],  // когда мы прописываем тут расширения то при импуте в index.js их можно не прописывать 
     alias: {
-      '@plugins': `${PATHS.src}\\plugins`,
-      '@styles': `${PATHS.src}${PATHS.assets}styles`,
-      '@typescript': `${PATHS.src}${PATHS.assets}ts`,
-      '@img': `${PATHS.src}${PATHS.assets}images`,
-      '@pag': `${PATHS.src}\\pages`,
-      '@com': `${PATHS.src}\\components`,
+      '@plugins': path.join(PATHS.src, 'plugins'),
+      '@styles': path.join(PATHS.src, PATHS.assets, 'styles'),
+      '@typescript': path.join(PATHS.src, PATHS.assets, 'ts'),
+      '@img': path.join(PATHS.src, 'images'),
+      '@pag': path.join(PATHS.src, 'pages'),
+      '@com': path.join(PATHS.src, 'components'),
       '@': PATHS.src,
       comp: PATHS.components,
     }
   },
-
 
   optimization: OPT.optimization(), // минификация и оптимизация файлов на выходе  (если это Продакшен)
 
