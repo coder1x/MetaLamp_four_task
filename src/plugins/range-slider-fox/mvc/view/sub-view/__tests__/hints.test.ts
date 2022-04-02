@@ -8,10 +8,10 @@ describe('------- Test Hints API -------', () => {
 
   beforeEach(() => {
     rsName = 'range-slider-fox';
-    jsRsName = 'js-' + rsName;
+    jsRsName = `js-${rsName}`;
     wrap = document.createElement('div');
-    wrap.classList.add(rsName + '__top');
-    wrap.classList.add(jsRsName + '__top');
+    wrap.classList.add(`${rsName}__top`);
+    wrap.classList.add(`${jsRsName}__top`);
     hints = new Hints(wrap, rsName);
   });
 
@@ -21,17 +21,14 @@ describe('------- Test Hints API -------', () => {
   }
 
   const checkDom = async (name: string) => {
-    const dom = await wrap.firstChild;
-    let fl: boolean;
-    if (dom instanceof HTMLElement)
-      fl = searchStr(dom.className, jsRsName + '__tip-' + name);
+    const dom = await wrap.firstChild as HTMLElement;
+    const fl = searchStr(dom.className, `${jsRsName}__tip-${name}`);
     expect(fl).toBeTruthy();
   };
 
   const checkStyle = async (val: string) => {
-    const dom = await wrap.firstChild;
-    if (dom instanceof HTMLElement)
-      expect(dom.style.left).toBe(val);
+    const dom = await wrap.firstChild as HTMLElement;
+    expect(dom.style.left).toBe(val);
   };
 
   // setTipFlag
@@ -43,8 +40,7 @@ describe('------- Test Hints API -------', () => {
 
   // setAdditionalText
   test(' Check postfix and prefix for hints are working ', async () => {
-    const { tipPrefix, tipPostfix } =
-      hints.setAdditionalText('%', '$');
+    const { tipPrefix, tipPostfix } = hints.setAdditionalText('%', '$');
     expect(tipPrefix).toBe('%');
     expect(tipPostfix).toBe('$');
   });
@@ -55,11 +51,9 @@ describe('------- Test Hints API -------', () => {
     expect(fl).toBeTruthy();
     const tips = await wrap.children;
 
-    let classNameF = searchStr(tips[0].className,
-      jsRsName + '__tip-min');
+    let classNameF = searchStr(tips[0].className, `${jsRsName}__tip-min`);
     expect(classNameF).toBeTruthy();
-    classNameF = searchStr(tips[1].className,
-      jsRsName + '__tip-max');
+    classNameF = searchStr(tips[1].className, `${jsRsName}__tip-max`);
     expect(classNameF).toBeTruthy();
     expect(hints.createTipMinMax()).toBeFalsy();
   });
@@ -179,14 +173,13 @@ describe('------- Test Hints API -------', () => {
     fl = await hints.setOrientation('vertical');
     expect(fl).toBeTruthy();
 
-    const from = await wrap.children[0];
-    if (from instanceof HTMLElement)
-      expect(from.style.bottom).toBe('20%');
-    const to = await wrap.children[1];
-    if (to instanceof HTMLElement)
-      expect(to.style.bottom).toBe('34%');
-    const single = await wrap.children[2];
-    if (single instanceof HTMLElement)
-      expect(single.style.bottom).toBe('27%');
+    const from = await wrap.children[0] as HTMLElement;
+    expect(from.style.bottom).toBe('20%');
+
+    const to = await wrap.children[1] as HTMLElement;
+    expect(to.style.bottom).toBe('34%');
+
+    const single = await wrap.children[2] as HTMLElement;
+    expect(single.style.bottom).toBe('27%');
   });
 });

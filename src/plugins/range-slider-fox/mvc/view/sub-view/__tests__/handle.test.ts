@@ -13,10 +13,10 @@ describe('------- Test Handle API -------', () => {
 
   beforeEach(async () => {
     rsName = 'range-slider-fox';
-    jsRsName = 'js-' + rsName;
+    jsRsName = `js-${rsName}`;
     wrap = document.createElement('div');
-    wrap.classList.add(rsName + '__center');
-    wrap.classList.add(jsRsName + '__center');
+    wrap.classList.add(`${rsName}__center`);
+    wrap.classList.add(`${jsRsName}__center`);
     handle = await new Handle(wrap, rsName);
   });
 
@@ -48,8 +48,8 @@ describe('------- Test Handle API -------', () => {
     if (typeof wrapH != 'boolean')
       child = wrapH.children;
 
-    searchStr(child[0].className, jsRsName + '__from');
-    searchStr(child[1].className, jsRsName + '__to');
+    searchStr(child[0].className, `${jsRsName}__from`);
+    searchStr(child[1].className, `${jsRsName}__to`);
 
     wrapH = await handle.createDomBase('double');
     expect(wrapH).toBeFalsy();
@@ -61,7 +61,7 @@ describe('------- Test Handle API -------', () => {
     if (typeof wrapH != 'boolean')
       child = wrapH.children;
 
-    searchStr(child[0].className, jsRsName + '__from');
+    searchStr(child[0].className, `${jsRsName}__from`);
     expect(child[1]).toBeUndefined();
     wrapH = handle.createDomBase('single');
     expect(wrapH).toBeFalsy();

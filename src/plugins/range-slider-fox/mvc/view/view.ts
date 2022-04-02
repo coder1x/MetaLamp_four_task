@@ -36,11 +36,10 @@ class View extends Observer {
   async destroy() {
     const typeElem = await this.elem.constructor.name;
     if (typeElem == 'HTMLInputElement') {
-      const input = this.elem;
-      if (input instanceof HTMLInputElement)
-        input.value = ' ';
+      const input = this.elem as HTMLInputElement;
+      input.value = ' ';
     }
-    const elem = await this.wrapSlider.querySelector('.js-' + this.rsName);
+    const elem = await this.wrapSlider.querySelector(`.js-${this.rsName}`);
     if (elem)
       await elem.remove();
 
@@ -54,15 +53,14 @@ class View extends Observer {
     const typeElem = this.elem.constructor.name;
     let str = '';
     if (typeElem == 'HTMLInputElement') {
-      const input = this.elem;
-      if (input instanceof HTMLInputElement) {
-        input.value = str;
-        str += from;
-        if (type == 'double') {
-          str += ',' + to;
-        }
-        input.value = str;
+      const input = this.elem as HTMLInputElement;
+
+      input.value = str;
+      str += from;
+      if (type == 'double') {
+        str += `,${to}`;
       }
+      input.value = str;
     }
     else {
       return false;
@@ -84,10 +82,8 @@ class View extends Observer {
   }
 
   disabledRangeSlider(flag: boolean) {
-    const elem = this.wrapSlider;
-    let st: CSSStyleDeclaration;
-    if (elem instanceof HTMLElement)
-      st = elem.style;
+    const elem = this.wrapSlider as HTMLElement;
+    const st = elem.style as CSSStyleDeclaration;
     return flag ? st.opacity = '0.5' : st.opacity = '1';
   }
 
@@ -107,15 +103,23 @@ class View extends Observer {
       return elem;
     };
 
-    this.rangeSlider = createElem('div', [this.rsName, 'js-' + this.rsName]);
-    this.rsTop = createElem('div', [this.rsName + '__top',
-    'js-' + this.rsName + '__top']);
-    this.rsCenter = createElem('div', [this.rsName + '__center',
-    'js-' + this.rsName + '__center']);
-    this.rsBottom = createElem('div', [this.rsName + '__bottom',
-    'js-' + this.rsName + '__bottom']);
-    this.rsLine = createElem('span', [this.rsName + '__line',
-    'js-' + this.rsName + '__line']);
+    this.rangeSlider = createElem('div', [this.rsName, `js-${this.rsName}`]);
+    this.rsTop = createElem('div', [
+      `${this.rsName}__top`,
+      `js-${this.rsName}__top`
+    ]);
+    this.rsCenter = createElem('div', [
+      `${this.rsName}__center`,
+      `js-${this.rsName}__center`
+    ]);
+    this.rsBottom = createElem('div', [
+      `${this.rsName}__bottom`,
+      `js-${this.rsName}__bottom`
+    ]);
+    this.rsLine = createElem('span', [
+      `${this.rsName}__line`,
+      `js-${this.rsName}__line`
+    ]);
 
     this.rsCenter.appendChild(this.rsLine);
     this.rangeSlider.appendChild(this.rsTop);
@@ -126,7 +130,7 @@ class View extends Observer {
   }
 
   async setOrientation(str: string) {
-    const modify = this.rsName + '_vertical';
+    const modify = `${this.rsName}_vertical`;
     const objP = this.rangeSlider.classList;
     this.vertical = str == 'vertical' ? true : false;
     this.vertical ? objP.add(modify) : objP.remove(modify);
@@ -151,7 +155,7 @@ class View extends Observer {
   setTheme(theme: string) {
     if (this.prevTheme)
       this.rangeSlider.classList.remove(this.prevTheme);
-    const classN = 'rs-' + theme;
+    const classN = `rs-${theme}`;
     this.rangeSlider.classList.add(classN);
     this.prevTheme = classN;
   }
@@ -311,7 +315,7 @@ class View extends Observer {
     const mapOptions = new Map();
 
     const getDataAttr = (item: string) => {
-      const attr = 'data-' + item;
+      const attr = `data-${item}`;
       if (this.elem.hasAttribute(attr)) {
         const val = this.elem.getAttribute(attr);
         const key = options.get(item);
@@ -338,7 +342,7 @@ class View extends Observer {
         const val = data[1];
         mapOptions.set(key, val);
       }
-      masDataAttr.push('data-' + item);
+      masDataAttr.push(`data-${item}`);
     }
 
     this.objData = Object.fromEntries(mapOptions);

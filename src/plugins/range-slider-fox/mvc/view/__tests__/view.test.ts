@@ -10,7 +10,7 @@ describe('------- Test View API -------', () => {
 
   beforeEach(() => {
     rsName = 'range-slider-fox';
-    jsRsName = 'js-' + rsName;
+    jsRsName = `js-${rsName}`;
     wrap = document.createElement('div');
     domV = document.createElement('input');
     wrap.appendChild(domV);
@@ -86,16 +86,16 @@ describe('------- Test View API -------', () => {
           if (item instanceof HTMLElement)
             elem = item;
           const nC = elem.className;
-          if (searchStr(nC, jsRsName + '__center')) {
+          if (searchStr(nC, `${jsRsName}__center`)) {
             line = elem.children[0];
           }
           name.push(nC);
         }
 
-        expect(searchStr(name[0], jsRsName + '__top')).toBeTruthy();
-        expect(searchStr(name[1], jsRsName + '__center')).toBeTruthy();
-        expect(searchStr(name[2], jsRsName + '__bottom')).toBeTruthy();
-        expect(searchStr(line.className, jsRsName + '__line')).toBeTruthy();
+        expect(searchStr(name[0], `${jsRsName}__top`)).toBeTruthy();
+        expect(searchStr(name[1], `${jsRsName}__center`)).toBeTruthy();
+        expect(searchStr(name[2], `${jsRsName}__bottom`)).toBeTruthy();
+        expect(searchStr(line.className, `${jsRsName}__line`)).toBeTruthy();
       }
     });
     new Controller(model, view);
@@ -106,7 +106,7 @@ describe('------- Test View API -------', () => {
     const model = await new Model({
       onStart: async () => {
         view.setOrientation('vertical');
-        const elem = wrap.getElementsByClassName(rsName + '_vertical');
+        const elem = wrap.getElementsByClassName(`${rsName}_vertical`);
         expect(elem[0]).toBeDefined();
       }
     });
@@ -115,10 +115,8 @@ describe('------- Test View API -------', () => {
 
   // setActions
   test(' Check if click event on the grid range is triggered ', async () => {
-    let wrapC: HTMLElement;
-    let domC: HTMLInputElement;
-    wrapC = document.createElement('div');
-    domC = document.createElement('input');
+    const wrapC: HTMLElement = document.createElement('div');
+    const domC: HTMLInputElement = document.createElement('input');
     wrapC.appendChild(domC);
 
     let obj: Controller;
@@ -136,7 +134,7 @@ describe('------- Test View API -------', () => {
       onUpdate: async () => {
         const spy = await jest.spyOn(model, 'clickLine');
         const dot =
-          await wrapC.getElementsByClassName(jsRsName + '__line');
+          await wrapC.getElementsByClassName(`${jsRsName}__line`);
         const funP = await mockPointerEvent(dot[0]);
         await funP('click', 34, 45);
         expect(spy).toBeCalledTimes(1);

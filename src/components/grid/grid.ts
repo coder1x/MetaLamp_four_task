@@ -83,18 +83,17 @@ class Grid {
     });
 
     const inputProcessing = (e: Event) => {
-      const elem = e.target;
-      if (elem instanceof HTMLInputElement) {
-        const val = elem.value.replace(/[^.\d]/g, '');
-        const regexp = /^\d*?[.]?\d*$/;
-        const valid = regexp.test(val);
+      const elem = e.target as HTMLInputElement;
 
-        if (valid) {
-          mapInput.set(elem.name, val);
-          elem.value = val;
-        } else {
-          elem.value = mapInput.get(elem.name);
-        }
+      const val = elem.value.replace(/[^.\d]/g, '');
+      const regexp = /^\d*?[.]?\d*$/;
+      const valid = regexp.test(val);
+
+      if (valid) {
+        mapInput.set(elem.name, val);
+        elem.value = val;
+      } else {
+        elem.value = mapInput.get(elem.name);
       }
     };
 
@@ -103,35 +102,30 @@ class Grid {
       item.addEventListener('input', inputProcessing);
     }
 
-    this.grid.addEventListener('click', function (e: Event) {
-      const elem = e.target;
-      if (elem instanceof HTMLInputElement)
-        obj.update({
-          grid: elem.checked
-        });
+    this.grid.addEventListener('click', function (event: Event) {
+      const elem = event.target as HTMLInputElement;
+
+      obj.update({
+        grid: elem.checked
+      });
     });
 
-    this.snap.addEventListener('click', (e: Event) => {
-      const elem = e.target;
-      if (elem instanceof HTMLInputElement)
-        if (this.grid.checked) {
-          obj.update({
-            gridSnap: elem.checked
-          });
-        } else {
-          e.preventDefault();
-        }
+    this.snap.addEventListener('click', (event: Event) => {
+      const elem = event.target as HTMLInputElement;
+
+      if (this.grid.checked) {
+        obj.update({
+          gridSnap: elem.checked
+        });
+      } else {
+        event.preventDefault();
+      }
     });
   }
 
   private setDom() {
     const getDom = (str: string): HTMLInputElement => {
-      return this.elem.querySelector(
-        this.nameClass +
-        '__' +
-        str +
-        '-wrap input'
-      );
+      return this.elem.querySelector(`${this.nameClass}__${str}-wrap input`);
     };
 
     this.grid = getDom('grid');

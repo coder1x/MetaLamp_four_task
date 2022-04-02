@@ -342,7 +342,6 @@ class Controller {
     if (key != 'CreateGrid') return false;
 
     this.view.createMark(options.valMark);
-
     return true;
   };
 

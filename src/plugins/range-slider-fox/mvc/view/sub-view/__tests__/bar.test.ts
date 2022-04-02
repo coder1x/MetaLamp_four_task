@@ -17,10 +17,10 @@ describe('------- Test Bar API -------', () => {
 
   beforeEach(() => {
     rsName = 'range-slider-fox';
-    jsRsName = 'js-' + rsName;
+    jsRsName = `js-${rsName}`;
     wrap = document.createElement('div');
-    wrap.classList.add(rsName + '__center');
-    wrap.classList.add(jsRsName + '__center');
+    wrap.classList.add(`${rsName}__center`);
+    wrap.classList.add(`${jsRsName}__center`);
     bar = new Bar(wrap, rsName);
   });
 
@@ -40,14 +40,11 @@ describe('------- Test Bar API -------', () => {
     await createBar();
     const sbF = await bar.setBar(12, 23);
     expect(sbF).toBeTruthy();
-    const elem = await wrap.firstElementChild;
+    const elem = await wrap.firstElementChild as HTMLElement;
 
-    let left: string;
-    let width: string;
-    if (elem instanceof HTMLElement) {
-      left = elem.style.left;
-      width = elem.style.width;
-    }
+    const left = elem.style.left;
+    const width = elem.style.width;
+
     expect(left).toBe('12%');
     expect(width).toBe('23%');
   });
@@ -59,15 +56,11 @@ describe('------- Test Bar API -------', () => {
     expect(sbF).toBeTruthy();
     const orF = await bar.setOrientation('vertical');
     expect(orF).toBeTruthy();
-    const elem = await wrap.firstElementChild;
+    const elem = await wrap.firstElementChild as HTMLElement;
 
-    let bottom: string;
-    let height: string;
+    const bottom = elem.style.bottom;
+    const height = elem.style.height;
 
-    if (elem instanceof HTMLElement) {
-      bottom = elem.style.bottom;
-      height = elem.style.height;
-    }
     expect(bottom).toBe('34%');
     expect(height).toBe('10%');
   });
@@ -76,21 +69,16 @@ describe('------- Test Bar API -------', () => {
   test(' Set progress-bar size relating the orientation ', async () => {
     await createBar();
     bar.setSizeWH(25);
-    const elem = await wrap.firstElementChild;
-    let height: string;
-    if (elem instanceof HTMLElement)
-      height = elem.style.height;
+    const elem = await wrap.firstElementChild as HTMLElement;
+    const height = elem.style.height;
     expect(height).toBe('25px');
   });
 
   // clickBar
   test(' Check if click event on the progress-bar is triggered ', async () => {
-    let wrapC: HTMLElement;
-    let domC: HTMLInputElement;
-    wrapC = document.createElement('div');
-    domC = document.createElement('input');
+    const wrapC = document.createElement('div');
+    const domC = document.createElement('input');
     wrapC.appendChild(domC);
-
     let obj: Controller;
 
     const model = new Model({
@@ -106,7 +94,7 @@ describe('------- Test Bar API -------', () => {
       onUpdate: async () => {
         const spy = await jest.spyOn(model, 'clickBar');
         const dot =
-          await wrapC.getElementsByClassName(jsRsName + '__bar');
+          await wrapC.getElementsByClassName(`${jsRsName}__bar`);
         const funP = await mockPointerEvent(dot[0]);
         await funP('click', 34, 45);
         expect(spy).toBeCalledTimes(1);

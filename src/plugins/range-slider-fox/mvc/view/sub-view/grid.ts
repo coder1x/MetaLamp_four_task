@@ -40,14 +40,14 @@ class Grid extends Observer {
   }[]) => {
     for (let item of valMark) {
       const { val, position } = item;
-      const polName = this.rsName + '__grid-pol';
-      const gridPol = this.createElem('div', [polName, 'js-' + polName]);
+      const polName = `${this.rsName}__grid-pol`;
+      const gridPol = this.createElem('div', [polName, `js-${polName}`]);
       const markName = this.rsName + '__grid-mark';
-      const gridMark = this.createElem('span', [markName, 'js-' + markName]);
+      const gridMark = this.createElem('span', [markName, `js-${markName}`]);
       gridMark.innerText = String(val);
       gridPol.appendChild(gridMark);
       const st = gridPol.style;
-      const pos = position + '%';
+      const pos = `${position}%`;
       this.vertical ? st.bottom = pos : st.left = pos;
       this.elemGrid.appendChild(gridPol);
     }
@@ -80,15 +80,13 @@ class Grid extends Observer {
 
   private setAction(elem: HTMLElement) {
     elem.addEventListener('click', (e: Event) => {
-      const mark = e.target;
-      if (mark instanceof HTMLElement) {
-        const selector = 'js-' + this.rsName + '__grid-mark';
-        if (this.searchStr(mark.className, selector)) {
-          this.notifyOB({
-            key: 'ClickMark',
-            valueG: Number(mark.innerText)
-          });
-        }
+      const mark = e.target as HTMLElement;
+      const selector = `js-${this.rsName}__grid-mark`;
+      if (this.searchStr(mark.className, selector)) {
+        this.notifyOB({
+          key: 'ClickMark',
+          valueG: Number(mark.innerText)
+        });
       }
     });
   }
@@ -104,8 +102,8 @@ class Grid extends Observer {
   private init() {
     this.offOn = false;
     this.indent = 4; //indent in pixels between values on the scale
-    const gridName = this.rsName + '__grid';
-    this.elemGrid = this.createElem('div', [gridName, 'js-' + gridName]);
+    const gridName = `${this.rsName}__grid`;
+    this.elemGrid = this.createElem('div', [gridName, `js-${gridName}`]);
 
     const observer = new MutationObserver(() => {
       this.shapingMark();
@@ -119,9 +117,8 @@ class Grid extends Observer {
   private toggleElem(elem: HTMLElement, display: string, opacity: string) {
     const st = elem.style;
     st.visibility = display;
-    const wrapE = elem.parentNode;
-    if (wrapE instanceof HTMLElement)
-      wrapE.style.opacity = opacity;
+    const wrapE = elem.parentNode as HTMLElement;
+    wrapE.style.opacity = opacity;
   }
 
   private shapingMark() {
@@ -135,11 +132,11 @@ class Grid extends Observer {
     this.previousElem = null;
 
     const gridMarks = this.elemGrid.getElementsByClassName(
-      'js-' + this.rsName + '__grid-mark'
+      `js-${this.rsName}__grid-mark`
     );
 
     const gridPols = this.elemGrid.getElementsByClassName(
-      'js-' + this.rsName + '__grid-pol'
+      `js-${this.rsName}__grid-pol`
     );
 
     const len = gridMarks.length;
@@ -163,12 +160,12 @@ class Grid extends Observer {
       const stMark = mark.style;
 
       if (this.vertical) {
-        stMark.top = '-' + mark.offsetHeight / 2 + 'px';
-        stMark.left = pol.offsetWidth + 2 + 'px';
+        stMark.top = `-${mark.offsetHeight / 2}px`;
+        stMark.left = `${pol.offsetWidth + 2}px`;
         elemWH += mark.offsetHeight + this.indent;
       } else {
-        stMark.left = '-' + mark.offsetWidth / 2 + 'px';
-        stMark.top = pol.offsetHeight + 2 + 'px';
+        stMark.left = `-${mark.offsetWidth / 2}px`;
+        stMark.top = `${pol.offsetHeight + 2}px`;
         elemWH += mark.offsetWidth + this.indent;
       }
 

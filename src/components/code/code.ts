@@ -24,14 +24,14 @@ class CopyCode {
 
     for (let i = 0; i < key.length; ++i) {
       let valT: string;
-      if (typeof val[i] == 'string') { valT = '\'' + val[i] + '\''; }
+      if (typeof val[i] == 'string') { valT = `'${val[i]}'`; }
       else {
         valT = val[i];
       }
-      const text = key[i] + ': ' + valT + ',';
+      const text = `${key[i]}: ${valT},`;
 
       if (!fl) {
-        const item = this.createElem('li', [name + '__item']);
+        const item = this.createElem('li', [`${name}__item`]);
         this.ul.appendChild(item);
         item.innerText = text;
       }
@@ -40,13 +40,12 @@ class CopyCode {
         if (item instanceof HTMLElement)
           item.innerText = text;
       }
-
     }
   }
 
   private init() {
-    this.ul = this.elem.querySelector(this.className + '__options');
-    this.button = this.elem.querySelector(this.className + '__copy');
+    this.ul = this.elem.querySelector(`${this.className}__options`);
+    this.button = this.elem.querySelector(`${this.className}__copy`);
     this.setActions();
   }
 
@@ -63,9 +62,8 @@ class CopyCode {
     this.button.addEventListener('click', () => {
       let text = '$(\'.demo\').RangeSliderFox({\n';
       for (let item of child) {
-        const elem = item;
-        if (elem instanceof HTMLElement)
-          text += elem.innerText + '\n';
+        const elem = item as HTMLElement;
+        text += `${elem.innerText}\n`;
       }
       text += '});';
       navigator.clipboard.writeText(text)

@@ -28,7 +28,7 @@ class Panel {
   }
 
   createRangeSlider(options: RangeSliderOptions) {
-    const selector = this.className + '__slider-wrap';
+    const selector = `${this.className}__slider-wrap`;
     const elem = this.elem.querySelector(selector);
 
     const onStart = (data: RangeSliderOptions) => {

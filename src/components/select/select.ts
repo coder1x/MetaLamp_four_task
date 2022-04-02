@@ -117,7 +117,7 @@ class Select {
   }
 
   private getModify() {
-    const selector = this.className.replace('js-', '') + '_visible';
+    const selector = `${this.className.replace('js-', '')}_visible`;
     return selector.replace(/^\./, '');
   }
 
@@ -132,44 +132,42 @@ class Select {
       this.toggle();
     });
 
-    const keydown = (e: KeyboardEvent) => {
-      if (e.key == 'Escape') {
-        e.preventDefault();
+    const keydown = (event: KeyboardEvent) => {
+      if (event.key == 'Escape') {
+        event.preventDefault();
         this.toggle(true);
       }
     };
 
     this.button.addEventListener('keydown', keydown);
     this.options.addEventListener('keydown', keydown);
-
-    this.button.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key == 'Enter' || e.key == ' ') {
-        e.preventDefault();
+    this.button.addEventListener('keydown', (event: KeyboardEvent) => {
+      if (event.key == 'Enter' || event.key == ' ') {
+        event.preventDefault();
         this.toggle();
       }
     });
 
-    const setValue = (e: MouseEvent | KeyboardEvent) => {
-
+    const setValue = (event: MouseEvent | KeyboardEvent) => {
       let flag = false;
       let mousE: string;
       let keyE: string;
 
-      if (e instanceof MouseEvent) {
-        mousE = e.type;
+      if (event instanceof MouseEvent) {
+        mousE = event.type;
       }
-      if (e instanceof KeyboardEvent) {
-        keyE = e.key;
+      if (event instanceof KeyboardEvent) {
+        keyE = event.key;
       }
 
       if (keyE == 'Enter' || keyE == ' ') {
-        e.preventDefault();
+        event.preventDefault();
         flag = true;
       } else if (mousE == 'click')
         flag = true;
 
       if (flag) {
-        const target = e.target;
+        const target = event.target;
         if (target instanceof HTMLElement)
           this.setValSelect(target);
         this.toggle(true);
@@ -183,23 +181,21 @@ class Select {
       }
     }
 
-    document.addEventListener('click', (e: MouseEvent) => {
-      const target = e.target;
+    document.addEventListener('click', (event: MouseEvent) => {
+      const target = event.target;
       let domEl: false | Element;
       if (target instanceof Element)
-        domEl = target.closest('.' + this.getModify()) ?? false;
+        domEl = target.closest(`.${this.getModify()}`) ?? false;
       if (!domEl) {
         this.toggle(true);
       }
     });
 
-    document.addEventListener('focusin', (e: FocusEvent) => {
-      const target = e.target;
+    document.addEventListener('focusin', (event: FocusEvent) => {
+      const target = event.target;
       if (target instanceof Element) {
-        const linkEl = target.closest(
-          this.className + '__options'
-        ) ?? false;
-        const ulEl = target.closest('.' + this.getModify()) ?? false;
+        const linkEl = target.closest(`${this.className}__options`) ?? false;
+        const ulEl = target.closest(`.${this.getModify()}`) ?? false;
         if (!linkEl && !ulEl) { this.toggle(true); }
       }
     });

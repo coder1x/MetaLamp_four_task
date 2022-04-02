@@ -87,19 +87,17 @@ class Different {
     };
 
     this.disabled.addEventListener('click', function (e: Event) {
-      const elem = e.target;
-      if (elem instanceof HTMLInputElement)
-        obj.update({
-          disabled: elem.checked
-        });
+      const elem = e.target as HTMLInputElement;
+      obj.update({
+        disabled: elem.checked
+      });
     });
 
     this.bar.addEventListener('click', function (e: Event) {
-      const elem = e.target;
-      if (elem instanceof HTMLInputElement)
-        obj.update({
-          bar: elem.checked
-        });
+      const elem = e.target as HTMLInputElement;
+      obj.update({
+        bar: elem.checked
+      });
     });
 
     this.unsubscribtion.addEventListener('click', () => {
@@ -108,22 +106,17 @@ class Different {
     });
 
     this.type.addEventListener('click', function (e: Event) {
-      const elem = e.target;
-      let val: string;
-      if (elem instanceof HTMLInputElement)
-        val = elem.checked ? 'double' : 'single';
+      const elem = e.target as HTMLInputElement;
+      const val = elem.checked ? 'double' : 'single';
       obj.update({
         type: val
       });
     });
 
     this.orientation.addEventListener('click', function (e: Event) {
-      const elem = e.target;
-      let val: string;
-      if (elem instanceof HTMLInputElement) {
-        val = elem.checked ? 'vertical' : 'horizontal';
-        elem.checked ? objP.add(modify) : objP.remove(modify);
-      }
+      const elem = e.target as HTMLInputElement;
+      const val = elem.checked ? 'vertical' : 'horizontal';
+      elem.checked ? objP.add(modify) : objP.remove(modify);
 
       obj.update({
         orientation: val
@@ -135,12 +128,7 @@ class Different {
     this.modify = this.panel.classList[0] + '_vertical';
 
     const getDom = (str: string): HTMLInputElement => {
-      return this.elem.querySelector(
-        this.nameClass +
-        '__' +
-        str +
-        '-wrap input'
-      );
+      return this.elem.querySelector(`${this.nameClass}__${str}-wrap input`);
     };
 
     this.type = getDom('double');

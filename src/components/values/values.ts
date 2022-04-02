@@ -74,20 +74,17 @@ class Values {
         });
     };
 
-    const inputProcessing = (e: Event) => {
-      const elem = e.target;
-      if (elem instanceof HTMLInputElement) {
-        const val = elem.value.replace(/[^-.\d]/g, '');
+    const inputProcessing = (event: Event) => {
+      const elem = event.target as HTMLInputElement;
+      const val = elem.value.replace(/[^-.\d]/g, '');
+      const regexp = /^-?\d*?[.]?\d*$/;
+      const valid = regexp.test(val);
 
-        const regexp = /^-?\d*?[.]?\d*$/;
-        const valid = regexp.test(val);
-
-        if (valid) {
-          mapInput.set(elem.name, val);
-          elem.value = val;
-        } else {
-          elem.value = mapInput.get(elem.name);
-        }
+      if (valid) {
+        mapInput.set(elem.name, val);
+        elem.value = val;
+      } else {
+        elem.value = mapInput.get(elem.name);
       }
     };
 

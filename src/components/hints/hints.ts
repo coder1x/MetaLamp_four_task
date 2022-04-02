@@ -48,12 +48,12 @@ class Hints {
 
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   setAction(obj: any) {
-    const data = (e: Event) => {
-      const elem = e.target;
-      if (elem instanceof HTMLInputElement)
-        obj.update({
-          [elem.name]: elem.value
-        });
+    const data = (event: Event) => {
+      const elem = event.target as HTMLInputElement;
+
+      obj.update({
+        [elem.name]: elem.value
+      });
     };
 
     const masE = [this.tipPrefix, this.tipPostfix];
@@ -61,31 +61,26 @@ class Hints {
       item.addEventListener('change', data);
     }
 
-    this.tipMinMax.addEventListener('click', function (e: Event) {
-      const elem = e.target;
-      if (elem instanceof HTMLInputElement)
-        obj.update({
-          tipMinMax: elem.checked
-        });
+    this.tipMinMax.addEventListener('click', function (event: Event) {
+      const elem = event.target as HTMLInputElement;
+
+      obj.update({
+        tipMinMax: elem.checked
+      });
     });
 
-    this.tipFromTo.addEventListener('click', function (e: Event) {
-      const elem = e.target;
-      if (elem instanceof HTMLInputElement)
-        obj.update({
-          tipFromTo: elem.checked
-        });
+    this.tipFromTo.addEventListener('click', function (event: Event) {
+      const elem = event.target as HTMLInputElement;
+
+      obj.update({
+        tipFromTo: elem.checked
+      });
     });
   }
 
   private setDom() {
     const getDom = (str: string): HTMLInputElement => {
-      return this.elem.querySelector(
-        this.nameClass +
-        '__' +
-        str +
-        '-wrap input'
-      );
+      return this.elem.querySelector(`${this.nameClass}__${str}-wrap input`);
     };
 
     this.tipMinMax = getDom('minmax');

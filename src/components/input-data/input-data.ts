@@ -14,7 +14,7 @@ class InputData {
 
   private setDom() {
     this.input = this.elem.querySelector(
-      this.className + '__slider-wrap input'
+      `${this.className}__slider-wrap input`
     );
 
     this.value = this.elem.querySelector(
@@ -23,11 +23,11 @@ class InputData {
 
     if (this.input) {
       const _this = this;
-      Object.defineProperty(this.input, "value", {
+      Object.defineProperty(this.input, 'value', {
         set: function (text) {
           if (!text) return;
           _this.value.value = text;
-          this.setAttribute("value", text);
+          this.setAttribute('value', text);
         }
       });
     } else {

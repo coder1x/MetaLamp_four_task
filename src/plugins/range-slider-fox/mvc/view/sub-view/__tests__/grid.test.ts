@@ -10,10 +10,10 @@ describe('------- Test Grid API -------', () => {
 
   beforeEach(async () => {
     rsName = 'range-slider-fox';
-    jsRsName = 'js-' + rsName;
+    jsRsName = `js-${rsName}`;
     wrap = document.createElement('div');
-    wrap.classList.add(rsName + '__bottom');
-    wrap.classList.add(jsRsName + '__bottom');
+    wrap.classList.add(`${rsName}__bottom`);
+    wrap.classList.add(`${jsRsName}__bottom`);
     grid = await new Grid(wrap, rsName);
   });
 
@@ -96,13 +96,9 @@ describe('------- Test Grid API -------', () => {
 
   // ClickMark
   test(' Check if click event on the grid mark is triggered ', async () => {
-
-    let wrapC: HTMLElement;
-    let domC: HTMLInputElement;
-    wrapC = document.createElement('div');
-    domC = document.createElement('input');
+    const wrapC = document.createElement('div');
+    const domC = document.createElement('input');
     wrapC.appendChild(domC);
-
     let obj: Controller;
 
     const model = new Model({
@@ -115,7 +111,7 @@ describe('------- Test Grid API -------', () => {
         const spy = await jest.spyOn(model, 'clickMark');
 
         const dot =
-          await wrapC.getElementsByClassName(jsRsName + '__grid-mark');
+          await wrapC.getElementsByClassName(`${jsRsName}__grid-mark`);
         const elem = dot[0];
         const funP = await mockPointerEvent(elem);
         await funP('click', 0, 0);

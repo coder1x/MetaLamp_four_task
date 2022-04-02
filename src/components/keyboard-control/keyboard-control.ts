@@ -39,28 +39,27 @@ class KeyboardControl {
     mapInput.set('keyStepOne', this.keyStepOne.value);
     mapInput.set('keyStepHold', this.keyStepHold.value);
 
-    const data = (e: Event) => {
-      const elem = e.target;
-      if (elem instanceof HTMLInputElement)
-        obj.update({
-          [elem.name]: +mapInput.get(elem.name)
-        });
+    const data = (event: Event) => {
+      const elem = event.target as HTMLInputElement;
+
+      obj.update({
+        [elem.name]: +mapInput.get(elem.name)
+      });
     };
 
-    const inputProcessing = (e: Event) => {
-      const elem = e.target;
-      if (elem instanceof HTMLInputElement) {
-        const val = elem.value.replace(/[^-.\d]/g, '');
-        const regexp = /^-?\d*?[.]?\d*$/;
-        const valid = regexp.test(val);
+    const inputProcessing = (event: Event) => {
+      const elem = event.target as HTMLInputElement;
+      const val = elem.value.replace(/[^-.\d]/g, '');
+      const regexp = /^-?\d*?[.]?\d*$/;
+      const valid = regexp.test(val);
 
-        if (valid) {
-          mapInput.set(elem.name, val);
-          elem.value = val;
-        } else {
-          elem.value = mapInput.get(elem.name);
-        }
+      if (valid) {
+        mapInput.set(elem.name, val);
+        elem.value = val;
+      } else {
+        elem.value = mapInput.get(elem.name);
       }
+
     };
 
     const masE = [this.keyStepOne, this.keyStepHold];
@@ -73,12 +72,7 @@ class KeyboardControl {
 
   private setDom() {
     const getDom = (str: string): HTMLInputElement => {
-      return this.elem.querySelector(
-        this.nameClass +
-        '__' +
-        str +
-        '-wrap input'
-      );
+      return this.elem.querySelector(`${this.nameClass}__${str}-wrap input`);
     };
 
     this.keyStepOne = getDom('one');

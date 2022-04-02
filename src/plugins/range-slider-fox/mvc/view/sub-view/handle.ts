@@ -39,23 +39,23 @@ class Handle extends Observer {
       return elem;
     };
 
-    const fromClassName = this.rsName + '__from';
-    const toClassName = this.rsName + '__to';
+    const fromClassName = `${this.rsName}__from`;
+    const toClassName = `${this.rsName}__to`;
 
-    const fromE = this.getElem(this.wrapElem, 'js-' + fromClassName);
-    const toE = this.getElem(this.wrapElem, 'js-' + toClassName);
+    const fromE = this.getElem(this.wrapElem, `js-${fromClassName}`);
+    const toE = this.getElem(this.wrapElem, `js-${toClassName}`);
 
     // don't create the element if it is already exist
     if (!fromE) {
       this.elemFrom = createElem('span', [fromClassName,
-        'js-' + fromClassName]);
+        `js-${fromClassName}`]);
       this.wrapElem.appendChild(this.elemFrom);
     }
 
     if (double) {
       // don't create the element if it is already exist
       if (!toE) {
-        this.elemTo = createElem('span', [toClassName, 'js-' + toClassName]);
+        this.elemTo = createElem('span', [toClassName, `js-${toClassName}`]);
         this.wrapElem.appendChild(this.elemTo);
       }
     } else {
@@ -95,7 +95,7 @@ class Handle extends Observer {
 
   setFrom(fromP: number) {
     if (this.elemFrom) {
-      const val = fromP + '%';
+      const val = `${fromP}%`;
       const from = this.elemFrom.style;
       this.vertical ? from.bottom = val : from.left = val;
       return from;
@@ -105,7 +105,7 @@ class Handle extends Observer {
 
   setTo(toP: number) {
     if (this.elemTo) {
-      const val = toP + '%';
+      const val = `${toP}%`;
       const to = this.elemTo.style;
       this.vertical ? to.bottom = val : to.left = val;
       return to;
@@ -227,15 +227,15 @@ class Handle extends Observer {
     });
   };
 
-  private keyDown = (e: KeyboardEvent, directions: mapKey, dot: string) => {
-    const fl = (e.key == 'ArrowRight' || e.key == 'ArrowLeft');
+  private keyDown = (event: KeyboardEvent, directions: mapKey, dot: string) => {
+    const fl = (event.key == 'ArrowRight' || event.key == 'ArrowLeft');
     if (this.vertical && fl || !this.vertical && !fl)
       return false;
 
-    if (!directions.get(e.key)) return false;
-    e.preventDefault();
-    const repeat = e.repeat;
-    const sign = directions.get(e.key);
+    if (!directions.get(event.key)) return false;
+    event.preventDefault();
+    const repeat = event.repeat;
+    const sign = directions.get(event.key);
 
     if (sign)
       this.notifyOB({

@@ -56,10 +56,10 @@ class Hints {
   //----------------------- create elements
   createTipMinMax() {
     if (this.tipMin && this.tipMax) return false;
-    const minName = this.rsName + '__tip-min';
-    this.tipMin = this.createElem('div', [minName, 'js-' + minName]);
-    const maxName = this.rsName + '__tip-max';
-    this.tipMax = this.createElem('div', [maxName, 'js-' + maxName]);
+    const minName = `${this.rsName}__tip-min`;
+    this.tipMin = this.createElem('div', [minName, `js-${minName}`]);
+    const maxName = `${this.rsName}__tip-max`;
+    this.tipMax = this.createElem('div', [maxName, `js-${maxName}`]);
     this.rsTop.appendChild(this.tipMin);
     this.rsTop.appendChild(this.tipMax);
     return true;
@@ -67,24 +67,24 @@ class Hints {
 
   createTipFrom() {
     if (this.tipFrom) return false;
-    const fromName = this.rsName + '__tip-from';
-    this.tipFrom = this.createElem('div', [fromName, 'js-' + fromName]);
+    const fromName = `${this.rsName}__tip-from`;
+    this.tipFrom = this.createElem('div', [fromName, `js-${fromName}`]);
     this.rsTop.appendChild(this.tipFrom);
     return true;
   }
 
   createTipTo() {
     if (this.tipTo) return false;
-    const toName = this.rsName + '__tip-to';
-    this.tipTo = this.createElem('div', [toName, 'js-' + toName]);
+    const toName = `${this.rsName}__tip-to`;
+    this.tipTo = this.createElem('div', [toName, `js-${toName}`]);
     this.rsTop.appendChild(this.tipTo);
     return true;
   }
 
   createTipSingle() {
     if (this.tipSingle) return false;
-    const singleName = this.rsName + '__tip-single';
-    this.tipSingle = this.createElem('div', [singleName, 'js-' + singleName]);
+    const singleName = `${this.rsName}__tip-single`;
+    this.tipSingle = this.createElem('div', [singleName, `js-${singleName}`]);
     this.tipSingle.style.visibility = 'hidden';
     this.rsTop.appendChild(this.tipSingle);
     return true;
@@ -242,10 +242,10 @@ class Hints {
 
   private setStylePosition(coordXY: number, st: CSSStyleDeclaration) {
     if (this.vertical) {
-      st.bottom = coordXY + '%';
+      st.bottom = `${coordXY}%`;
       st.removeProperty('left');
     } else {
-      st.left = coordXY + '%';
+      st.left = `${coordXY}%`;
       st.removeProperty('bottom');
     }
   }
@@ -261,9 +261,9 @@ class Hints {
   private getPrefix(val: number | string) {
     let text = String(val);
     if (this.tipPostfix)
-      text = this.tipPostfix + ' ' + text;
+      text = `${this.tipPostfix} ${text}`;
     if (this.tipPrefix)
-      text += ' ' + this.tipPrefix;
+      text += ` ${this.tipPrefix}`;
     return text;
   }
 

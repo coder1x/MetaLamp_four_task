@@ -64,8 +64,8 @@ class Bar extends Observer {
     if (this.bar && this.elemBar) return false;
     if (!this.bar && !this.elemBar) return false;
 
-    const barName = this.rsName + '__bar';
-    this.elemBar = this.createElem('span', [barName, 'js-' + barName]);
+    const barName = `${this.rsName}__bar`;
+    this.elemBar = this.createElem('span', [barName, `js-${barName}`]);
     this.rsCenter.appendChild(this.elemBar);
 
     this.setActions();
@@ -75,7 +75,7 @@ class Bar extends Observer {
   setSizeWH(size: number) {
     if (!this.elemBar) return false;
 
-    const sizePX = size + 'px';
+    const sizePX = `${size}px`;
     const st = this.elemBar.style;
     this.vertical ? st.width = sizePX : st.height = sizePX;
     return true;
@@ -87,11 +87,11 @@ class Bar extends Observer {
     const st = this.elemBar.style;
 
     if (this.vertical) {
-      st.bottom = barX + '%';
-      st.height = widthBar + '%';
+      st.bottom = `${barX}%`;
+      st.height = `${widthBar}%`;
     } else {
-      st.left = barX + '%';
-      st.width = widthBar + '%';
+      st.left = `${barX}%`;
+      st.width = `${widthBar}%`;
     }
     return true;
   }
