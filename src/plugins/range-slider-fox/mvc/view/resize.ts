@@ -1,6 +1,4 @@
-
 class Resize {
-
   wrapper: HTMLElement;
   sleep: number;
   onChange: Function;
@@ -13,7 +11,6 @@ class Resize {
     this.onChange = onChange ?? emptyFun;
     this.resize();
   }
-
 
   private resize() {
     let rTime: Date;
@@ -46,7 +43,7 @@ class Resize {
 
   private throttle(type: string, name: string, obj = window) {
     let running = false;
-    let func = function () {
+    const func = function () {
       if (running) { return false; }
       running = true;
       requestAnimationFrame(function () {
@@ -56,8 +53,6 @@ class Resize {
     };
     obj.addEventListener(type, func);
   }
-
 }
-
 
 export { Resize };

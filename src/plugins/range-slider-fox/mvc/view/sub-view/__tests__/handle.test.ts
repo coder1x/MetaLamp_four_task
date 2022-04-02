@@ -5,14 +5,11 @@ import {
   mockKeyboardEvent
 } from '../../../../__tests__/jestUtils';
 
-
 describe('------- Test Handle API -------', () => {
-
   let rsName: string;
   let wrap: HTMLElement;
   let handle: Handle;
   let jsRsName: string;
-
 
   beforeEach(async () => {
     rsName = 'range-slider-fox';
@@ -83,7 +80,6 @@ describe('------- Test Handle API -------', () => {
     expect(leftT).toBe('56%');
   });
 
-
   // setOrientation
   test(' Check if orientation is changed ', async () => {
     await createFromTo();
@@ -94,10 +90,8 @@ describe('------- Test Handle API -------', () => {
   });
 
   // setActions
-
   test(' Check if an event of dots' +
     ' movement along the track is triggered ', async () => {
-
       let wrapC: HTMLElement;
       let domC: HTMLInputElement;
       wrapC = document.createElement('div');
@@ -145,10 +139,5 @@ describe('------- Test Handle API -------', () => {
       });
       const view = await new View(domC);
       await new Controller(model, view);
-
-
     });
-
-
-
 });

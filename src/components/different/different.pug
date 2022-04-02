@@ -3,40 +3,48 @@ include ../select/select.pug
 
 mixin different(options)
   -
-    let label = options.label ?? ''
-    let modify = options.modify ?? ''
-    let addClass = options.class ?? ''
-    let flLabel = options.flLabel ?? false
-    let classComp = 'different'
+    const label = options.label ?? ''
+    const modify = options.modify ?? ''
+    const addClass = options.class ?? ''
+    const flLabel = options.flLabel ?? false
+    const classComp = 'different'
     let className = classComp
+    
     if(modify){
-    className += ' '+classComp+'_'+modify}
+    className += ` ${classComp}_${modify}`}
     if(addClass){
-    className += ' '+addClass}
-  fieldset(class=className + ' js-'+classComp)
+    className += ` ${addClass}`}
+
+  fieldset(class=`${className} js-${classComp}`)
     - if(!flLabel){
-    legend(class=classComp+'__label')= label
+    legend(class=`${classComp}__label`)= label
     -}
-    div(class=classComp+'__double-wrap' + ' js-'+classComp+'__double-wrap')
+
+    div(class=`${classComp}__double-wrap js-${classComp}__double-wrap`)
       +toggle-buttons({
         header: 'double',
       })
-    div(class=classComp+'__disabled-wrap' + ' js-'+classComp+'__disabled-wrap')
+
+    div(class=`${classComp}__disabled-wrap js-${classComp}__disabled-wrap`)
       +toggle-buttons({
         header: 'disabled',
       })
-    div(class=classComp+'__vertical-wrap' + ' js-'+classComp+'__vertical-wrap')
+
+    div(class=`${classComp}__vertical-wrap js-${classComp}__vertical-wrap`)
       +toggle-buttons({
         header: 'vertical',
       })
-    div(class=classComp+'__bar-wrap' + ' js-'+classComp+'__bar-wrap')
+
+    div(class=`${classComp}__bar-wrap js-${classComp}__bar-wrap`)
       +toggle-buttons({
         header: 'bar',
       })
-    div(class=classComp+'__unsubscribtion-wrap' + ' js-'+classComp+'__unsubscribtion-wrap')
+
+    div(class=`${classComp}__unsubscribtion-wrap js-${classComp}__unsubscribtion-wrap`)
       +toggle-buttons({
         header: 'unsubscribtion',
       })
+
     -
       const masOptions = [
         {
@@ -57,12 +65,14 @@ mixin different(options)
           text:'Classic',
         },
       ];
-    div(class=classComp+'__select-wrap' + ' js-'+classComp+'__select-wrap')
+    div(class=`${classComp}__select-wrap js-${classComp}__select-wrap`)
       +select({
         label: 'Skin',
         masOptions: masOptions,
       })
-    div(class=classComp+'__reset-wrap')
-      button(class=classComp+'__reset' + ' js-'+classComp+'__reset') Reset
-    div(class=classComp+'__apply-wrap')
-      button(class=classComp+'__apply') Apply 
+
+    div(class=`${classComp}__reset-wrap`)
+      button(class=`${classComp}__reset js-${classComp}__reset`) Reset
+      
+    div(class=`${classComp}__apply-wrap`)
+      button(class=`${classComp}__apply`) Apply

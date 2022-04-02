@@ -1,5 +1,3 @@
-
-
 function mockPointerEvent(element: Element) {
   return function (eventType: string, clientX: number, clientY: number) {
     const conf = { bubbles: true, clientX, clientY, };
@@ -9,7 +7,6 @@ function mockPointerEvent(element: Element) {
     element.dispatchEvent(pointerEvent);
   };
 }
-
 
 function mockKeyboardEvent(element: Element) {
   return function (code: string, eventType = 'keydown', repeat = false) {

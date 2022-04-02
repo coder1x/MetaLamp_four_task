@@ -1,22 +1,25 @@
 mixin toggle-buttons(options)
   -
-    let header = options.header ?? ''
-    let label = options.label ?? ''
-    let modify = options.modify ?? ''
-    let addClass = options.class ?? ''
-    let flLabel = options.flLabel ?? false
-    let classComp = 'toggle-buttons'
+    const header = options.header ?? ''
+    const label = options.label ?? ''
+    const modify = options.modify ?? ''
+    const addClass = options.class ?? ''
+    const flLabel = options.flLabel ?? false
+    const classComp = 'toggle-buttons'
     let className = classComp
+    
     if(modify){
-    className += ' '+classComp+'_'+modify}
+    className += ` ${classComp}_${modify}`}
     if(addClass){
-    className += ' '+addClass}
+    className += ` ${addClass}`}
+
   div(class=className)
     - if(!flLabel){
-    p(class=classComp+'__header')= header
+    p(class=`${classComp}__header`)= header
     -}
-    div(class=classComp+'__tog')
-      label(class=classComp+'__label')= label
-        input(class=classComp+'__input' type='checkbox' name='toggle')
-        span(class=classComp+'__bef')
+    
+    div(class=`${classComp}__tog`)
+      label(class=`${classComp}__label`)= label
+        input(class=`${classComp}__input` type='checkbox' name='toggle')
+        span(class=`${classComp}__bef`)
 

@@ -2,7 +2,6 @@ import { Controller, Model, View } from '../../controller/controller';
 import { mockPointerEvent } from '../../../__tests__/jestUtils';
 
 describe('------- Test View API -------', () => {
-
   let wrap: HTMLElement;
   let domV: HTMLInputElement;
   let view: View;
@@ -49,7 +48,7 @@ describe('------- Test View API -------', () => {
       from: 30,
       to: 70,
       onStart: async () => {
-        let obj = { from: 45, to: 86 };
+        const obj = { from: 45, to: 86 };
         expect(view.outDataAttr()).toEqual(obj);
       },
     });
@@ -71,7 +70,6 @@ describe('------- Test View API -------', () => {
         expect(+op).toBeCloseTo(num);
       }
     });
-
     new Controller(model, view);
   });
 
@@ -80,8 +78,8 @@ describe('------- Test View API -------', () => {
     const model = await new Model({
       disabled: false,
       onStart: async () => {
-        let nodes = view.createDomBase().childNodes;
-        let name: string[] = [];
+        const nodes = view.createDomBase().childNodes;
+        const name: string[] = [];
         let line: Element;
         for (let item of nodes) {
           let elem: HTMLElement;
@@ -100,10 +98,8 @@ describe('------- Test View API -------', () => {
         expect(searchStr(line.className, jsRsName + '__line')).toBeTruthy();
       }
     });
-
     new Controller(model, view);
   });
-
 
   // setOrientation
   test(' Change plugin orientation - horizontal / vertical ', async () => {
@@ -114,13 +110,11 @@ describe('------- Test View API -------', () => {
         expect(elem[0]).toBeDefined();
       }
     });
-
     new Controller(model, view);
   });
 
   // setActions
   test(' Check if click event on the grid range is triggered ', async () => {
-
     let wrapC: HTMLElement;
     let domC: HTMLInputElement;
     wrapC = document.createElement('div');
@@ -151,7 +145,6 @@ describe('------- Test View API -------', () => {
     });
     const view = await new View(domC);
     obj = await new Controller(model, view);
-
   });
 
   // setTheme
@@ -168,12 +161,8 @@ describe('------- Test View API -------', () => {
         expect(elem[0]).toBeDefined();
       }
     });
-
     new Controller(model, view);
   });
-
-
-
 
   test(' handle - interface  ', async () => {
     const model = await new Model({
@@ -192,10 +181,8 @@ describe('------- Test View API -------', () => {
         expect(fl).toBeTruthy();
       }
     });
-
     new Controller(model, view);
   });
-
 
   test(' hints - interface  ', async () => {
     const model = await new Model({
@@ -212,9 +199,7 @@ describe('------- Test View API -------', () => {
         });
 
         expect(masFL.indexOf(false)).toBe(-1);
-
-        let fl = view.toggleTipTo(20);
-        expect(fl).toBeFalsy();
+        expect(view.toggleTipTo(20)).toBeFalsy();
 
         const objMinMax = view.updateTipMinMax(10, 50);
         expect(objMinMax).toEqual({ tipMin: false, tipMax: false });
@@ -233,28 +218,23 @@ describe('------- Test View API -------', () => {
           singleXY: 1,
         });
         expect(masFL).not.toContain(true);
-
       }
     });
-
     new Controller(model, view);
   });
-
 
   test(' Bar - interface  ', async () => {
     const model = await new Model({
       onStart: async () => {
-        let masFL = view.setVisibleBar(true);
+        const masFL = view.setVisibleBar(true);
         expect(masFL).not.toContain(false);
 
         const fl = view.setBar(25, 100);
         expect(fl).toBeTruthy();
       }
     });
-
     new Controller(model, view);
   });
-
 
   test(' Grid - interface  ', async () => {
     const model = await new Model({
@@ -285,10 +265,6 @@ describe('------- Test View API -------', () => {
         expect(fl).toBeTruthy();
       }
     });
-
     new Controller(model, view);
   });
-
-
 });
-

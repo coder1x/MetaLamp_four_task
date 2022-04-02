@@ -1,4 +1,3 @@
-
 interface CalcDotPositionOpt {
   readonly type: string,
   readonly wrapWH: number,
@@ -7,14 +6,13 @@ interface CalcDotPositionOpt {
   readonly shiftXY: number
 }
 
-interface TP {
+interface PositionData {
   readonly fl: boolean,
   readonly clientXY: number,
   readonly shiftXY: number,
   readonly position: number,
 }
 
-type PROP = number | string | boolean | undefined | null;
+type Prop = number | string | boolean | undefined | null;
 
-
-export { CalcDotPositionOpt, PROP, TP };
+export { CalcDotPositionOpt, Prop, PositionData };

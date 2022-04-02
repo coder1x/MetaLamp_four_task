@@ -1,7 +1,6 @@
 import { Observer } from '../../../observer';
 
-
-interface MD {
+interface Pointer {
   event: PointerEvent,
   type: string,
   shiftXY: number,
@@ -10,7 +9,6 @@ interface MD {
 type mapKey = Map<string, string>;
 
 class Handle extends Observer {
-
   private elemFrom: HTMLElement;
   private elemTo: HTMLElement;
   private rsName: string;
@@ -26,7 +24,6 @@ class Handle extends Observer {
     this.eventFromF = false;
     this.eventToF = false;
   }
-
 
   createDomBase(type: string) {
     const double = type == 'double' ? true : false;
@@ -71,7 +68,6 @@ class Handle extends Observer {
     return this.wrapElem;
   }
 
-
   setOrientation(str: string) {
     this.vertical = str == 'vertical' ? true : false;
 
@@ -97,7 +93,6 @@ class Handle extends Observer {
       return convertStyle(this.elemTo.style);
   }
 
-
   setFrom(fromP: number) {
     if (this.elemFrom) {
       const val = fromP + '%';
@@ -108,7 +103,6 @@ class Handle extends Observer {
     return false;
   }
 
-
   setTo(toP: number) {
     if (this.elemTo) {
       const val = toP + '%';
@@ -118,7 +112,6 @@ class Handle extends Observer {
     }
     return false;
   }
-
 
   setActions(type: string) {
     const eventFromTo = this.eventFromF && this.eventToF;
@@ -210,20 +203,17 @@ class Handle extends Observer {
     return true;
   }
 
-
   private getElem = (elem: Element, str: string) => {
     return elem.getElementsByClassName(str)[0];
   };
 
-
-  private moveDot = (options: MD) => {
-
+  private moveDot = (options: Pointer) => {
     const { event, type, shiftXY } = options;
     const rect = this.wrapElem.getBoundingClientRect();
     const wrap = this.wrapElem;
     const fl = this.vertical;
 
-    let wrapWH = fl ? wrap.offsetHeight : wrap.offsetWidth;
+    const wrapWH = fl ? wrap.offsetHeight : wrap.offsetWidth;
     const position = fl ? rect.bottom : rect.left;
     const clientXY = fl ? event.clientY : event.clientX;
 
@@ -257,7 +247,6 @@ class Handle extends Observer {
     return true;
   };
 
-
   private mouseDown = (event: PointerEvent, elem: HTMLElement) => {
     event.preventDefault();
     let shiftXY = 0;
@@ -270,8 +259,6 @@ class Handle extends Observer {
     elem.setPointerCapture(event.pointerId);
     return shiftXY;
   };
-
 }
-
 
 export { Handle };

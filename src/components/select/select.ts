@@ -1,8 +1,6 @@
 import './select.scss';
 
-
 class Select {
-
   private className: string;
   private elem: Element;
   private button: HTMLButtonElement;
@@ -15,13 +13,11 @@ class Select {
   private updateFlag = false;
   private startFlag = true;
 
-
   constructor(className: string, elem: Element) {
     this.className = className;
     this.elem = elem;
     this.init();
   }
-
 
   getData() {
     return this.input.value;
@@ -46,7 +42,6 @@ class Select {
     }
   }
 
-
   private init() {
     const emptyFun = (val: string) => { return val; };
     this.onChange = emptyFun;
@@ -56,8 +51,6 @@ class Select {
     this.setActions();
     this.startFlag = false;
   }
-
-
 
   private getElement(str: string, domBase?: Element): Function {
     const dom = domBase ?? this.elem;
@@ -81,15 +74,12 @@ class Select {
     return doms;
   }
 
-
   private setDomElem() {
-
     this.button = this.getElement('__displayed')();
     this.input = this.getElement('__input')();
     this.items = this.getElements('__item');
     this.options = this.getElement('__options')();
     this.displayedWrap = this.getElement('__displayed-wrap')();
-
     this.setDisplayed();
   }
 
@@ -115,14 +105,14 @@ class Select {
   }
 
   private getVisible(elem: HTMLElement) {
-    let display = window.getComputedStyle(elem, null)
+    const display = window.getComputedStyle(elem, null)
       .getPropertyValue('display');
     return display === 'none' ? false : true;
   }
 
   private toggle(flag = false) {
     const UlVisible: boolean = this.getVisible(this.options);
-    let flagVis = !UlVisible && !flag;
+    const flagVis = !UlVisible && !flag;
     this.toggleModify(this.elem, flagVis);
   }
 
@@ -147,7 +137,6 @@ class Select {
         e.preventDefault();
         this.toggle(true);
       }
-
     };
 
     this.button.addEventListener('keydown', keydown);
@@ -159,7 +148,6 @@ class Select {
         this.toggle();
       }
     });
-
 
     const setValue = (e: MouseEvent | KeyboardEvent) => {
 
@@ -188,14 +176,12 @@ class Select {
       }
     };
 
-
     for (let item of this.items) {
       if (item instanceof HTMLElement) {
         item.addEventListener('click', setValue);
         item.addEventListener('keydown', setValue);
       }
     }
-
 
     document.addEventListener('click', (e: MouseEvent) => {
       const target = e.target;
@@ -206,7 +192,6 @@ class Select {
         this.toggle(true);
       }
     });
-
 
     document.addEventListener('focusin', (e: FocusEvent) => {
       const target = e.target;
@@ -219,9 +204,6 @@ class Select {
       }
     });
   }
-
 }
-
-
 
 export { Select };

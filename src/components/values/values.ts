@@ -1,6 +1,6 @@
 import './values.scss';
 
-interface OP {
+interface Options {
   min?: number;
   max?: number;
   from?: number;
@@ -8,16 +8,13 @@ interface OP {
   step?: number;
 }
 
-
 class Values {
-
   private elem: Element;
   private min: HTMLInputElement;
   private max: HTMLInputElement;
   private from: HTMLInputElement;
   private to: HTMLInputElement;
   private step: HTMLInputElement;
-
   private minD: number;
   private maxD: number;
   private fromD: number;
@@ -25,14 +22,13 @@ class Values {
   private stepD: number;
   private nameClass: string;
 
-
   constructor(nameClass: string, elem: Element) {
     this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
   }
 
-  setData(options: OP) {
+  setData(options: Options) {
     const { min, max, from, to, step } = options;
 
     if (this.minD != min) {
@@ -63,7 +59,7 @@ class Values {
 
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   setAction(obj: any) {
-    let mapInput = new Map();
+    const mapInput = new Map();
     mapInput.set('min', this.min.value);
     mapInput.set('max', this.max.value);
     mapInput.set('from', this.from.value);
@@ -81,9 +77,9 @@ class Values {
     const inputProcessing = (e: Event) => {
       const elem = e.target;
       if (elem instanceof HTMLInputElement) {
-        let val = elem.value.replace(/[^-.\d]/g, '');
+        const val = elem.value.replace(/[^-.\d]/g, '');
 
-        let regexp = /^-?\d*?[.]?\d*$/;
+        const regexp = /^-?\d*?[.]?\d*$/;
         const valid = regexp.test(val);
 
         if (valid) {
@@ -118,11 +114,6 @@ class Values {
     this.to = getDom('to');
     this.step = getDom('step');
   }
-
 }
-
-
-
-
 
 export { Values };

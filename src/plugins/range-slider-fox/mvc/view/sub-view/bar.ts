@@ -1,14 +1,11 @@
 import { Observer } from '../../../observer';
 
-
 class Bar extends Observer {
-
   private rsCenter: Element;
   private rsName: string;
   private elemBar: HTMLElement;
   private bar: boolean;
   private vertical: boolean;
-
 
   constructor(elem: HTMLElement | Element, rsName: string) {
     super();
@@ -16,11 +13,9 @@ class Bar extends Observer {
     this.rsCenter = elem;
   }
 
-
   setVisibleBar(bar: boolean) {
     return this.bar = bar;
   }
-
 
   setOrientation(str: string) {
     this.vertical = str == 'vertical' ? true : false;
@@ -77,7 +72,6 @@ class Bar extends Observer {
     return true;
   }
 
-
   setSizeWH(size: number) {
     if (!this.elemBar) return false;
 
@@ -86,7 +80,6 @@ class Bar extends Observer {
     this.vertical ? st.width = sizePX : st.height = sizePX;
     return true;
   }
-
 
   setBar(barX: number, widthBar: number) {
     if (!this.elemBar) return false;
@@ -103,7 +96,6 @@ class Bar extends Observer {
     return true;
   }
 
-
   private setActions() {
     this.elemBar.addEventListener('click', (event: MouseEvent) => {
       const dotXY = this.vertical ? event.offsetY : event.offsetX;
@@ -115,16 +107,13 @@ class Bar extends Observer {
     });
   }
 
-
   private getProperty<T, K extends keyof T>(obj: T, key: K) {
     return obj[key];
   }
 
-
   private setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
     obj[key] = value;
   }
-
 
   private createElem(teg: string, className: string[]) {
     const elem = document.createElement(teg);
@@ -133,7 +122,6 @@ class Bar extends Observer {
     }
     return elem;
   }
-
 }
 
 export { Bar };

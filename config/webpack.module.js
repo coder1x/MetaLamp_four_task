@@ -7,7 +7,7 @@ const path = require('path');
 module.exports = {
 
   module: {
-    rules: [  // описание правил как вебПаку работать с тем или иным расширением файлов.
+    rules: [
       {
         test: /\.css$/,
         use: CL.cssLoaders(),
@@ -17,16 +17,16 @@ module.exports = {
         test: /\.pug$/,
         loader: 'pug-loader',
         options: {
-          pretty: DP.isDev  // минифицировать или нет в зависемости от типа зборки. 
+          pretty: DP.isDev
         }
       },
 
-      { // работа с препроцессором SCSS
+      {
         test: /\.s[ac]ss$/,
-        use: CL.cssLoaders('sass-loader') // преобразовать scss в css
+        use: CL.cssLoaders('sass-loader')
       },
 
-      { // работа с файлами шрифтов
+      {
         test: /\.(ttf|woff|woff2|eot)$/,
         loader: 'file-loader',
         options: {
@@ -35,18 +35,18 @@ module.exports = {
         },
       },
 
-      { // работа с js файлами
+      {
         test: /\.(js)$/,
-        exclude: /node_modules/,  // игнорируем эту папку. что бы не обрабатывать файлы от туда. 
+        exclude: /node_modules/,
         use: JL.jsLoaders('js')
       },
-      { // работа с ts файлами
+      {
         test: /\.(ts|tsx)$/,
-        exclude: /node_modules/,  // игнорируем эту папку. что бы не обрабатывать файлы от туда. 
+        exclude: /node_modules/,
         use: JL.jsLoaders(),
       },
 
-      { // работа с графическими файлами
+      {
         test: /\.(png|jpg|svg|gif|webp|avif)$/,
         loader: 'file-loader',
         options: {
@@ -55,16 +55,14 @@ module.exports = {
         },
       },
 
-      { // работа с xml структурой
+      {
         test: /\.xml$/,
         use: ['xml-loader']
       },
-      { // работа с выгрузкой базы данных
+      {
         test: /\.csv$/,
         use: ['csv-loader']
       },
-
     ],
   },
-
 };

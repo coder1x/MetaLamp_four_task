@@ -2,9 +2,7 @@ import { Grid } from '../grid';
 import { Controller, Model, View } from '../../../controller/controller';
 import { mockPointerEvent } from '../../../../__tests__/jestUtils';
 
-
 describe('------- Test Grid API -------', () => {
-
   let rsName: string;
   let wrap: HTMLElement;
   let grid: Grid;
@@ -38,7 +36,6 @@ describe('------- Test Grid API -------', () => {
     return len;
   };
 
-
   const getLenDom = () => {
     const rsBottom = grid.createDomGrid();
     const len = rsBottom.firstChild.childNodes.length;
@@ -58,19 +55,18 @@ describe('------- Test Grid API -------', () => {
 
   // createMark
   test(' Create grid DOM-elements ', async () => {
-    let model = await new Model({
+    const model = await new Model({
       ...getConf(),
       onStart: () => {
         getLenMark(model);
       }
     });
     await model.onHandle();
-
   });
 
   // createDomGrid
   test(' Add grid to the plugin interface ', async () => {
-    let model = await new Model({
+    const model = await new Model({
       ...getConf(),
       onStart: async () => {
         const len = await getLenMark(model);
@@ -81,10 +77,9 @@ describe('------- Test Grid API -------', () => {
     await model.onHandle();
   });
 
-
   // deleteGrid
   test(' Delete grid ', async () => {
-    let model = await new Model({
+    const model = await new Model({
       ...getConf(),
       onStart: async () => {
         const len = await getLenMark(model);
@@ -121,7 +116,7 @@ describe('------- Test Grid API -------', () => {
 
         const dot =
           await wrapC.getElementsByClassName(jsRsName + '__grid-mark');
-        let elem = dot[0];
+        const elem = dot[0];
         const funP = await mockPointerEvent(elem);
         await funP('click', 0, 0);
 
@@ -133,9 +128,5 @@ describe('------- Test Grid API -------', () => {
     });
     const view = await new View(domC);
     obj = await new Controller(model, view);
-
   });
-
-
-
 });

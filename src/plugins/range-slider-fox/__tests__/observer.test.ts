@@ -1,18 +1,16 @@
-import { Observer, TOB } from '../observer';
+import { Observer, ObserverOptions } from '../observer';
 
 class TestOB extends Observer {
   constructor() {
     super();
   }
 
-  notifyTest(options: TOB) {
+  notifyTest(options: ObserverOptions) {
     this.notifyOB(options);
   }
 }
 
-
 describe('------- Observer - subscribe, unsubscribe, notify -------', () => {
-
   let ob: TestOB;
   let callback: Function;
   let callback2: Function;
@@ -39,12 +37,10 @@ describe('------- Observer - subscribe, unsubscribe, notify -------', () => {
     expect(ob.unsubscribeOB(callback2)).toBe(0);
   });
 
-
   // notifyOB
   test(' Data distribution among the listeners ', () => {
-
-    const fun1 = jest.fn((options: TOB) => { return options; });
-    const fun2 = jest.fn((options: TOB) => { return options; });
+    const fun1 = jest.fn((options: ObserverOptions) => { return options; });
+    const fun2 = jest.fn((options: ObserverOptions) => { return options; });
 
     ob.subscribeOB(fun1);
     ob.subscribeOB(fun2);
@@ -62,6 +58,4 @@ describe('------- Observer - subscribe, unsubscribe, notify -------', () => {
     expect(fun1.mock.calls[0][0]).toStrictEqual(data);
     expect(fun2.mock.calls[0][0]).toStrictEqual(data);
   });
-
-
 });

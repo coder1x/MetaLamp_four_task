@@ -1,22 +1,24 @@
 extends ../layout/layout.pug
 include ../../components/panel/panel.pug
 
-
 block title 
   title Range Slider Fox
 block content
   main.demo-slider
     h1.demo-slider__header Range Slider Fox
+
     section.slider
         .slider__panel-wrap 
           +panel({
             theme:'fox'
           })
+
     section.slider
         .slider__panel-wrap 
           +panel({
             theme:'dark'
           })
+          
     section.slider
         .slider__panel-wrap 
           +panel({

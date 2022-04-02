@@ -1,6 +1,6 @@
 import { Model } from '../model';
 
-interface DP {
+interface PositionData {
   clientXY: number,
   shiftXY: number,
   val: number,
@@ -8,7 +8,6 @@ interface DP {
 }
 
 describe('------- Test Model API -------', () => {
-
   const defaultData = {
     type: 'single', orientation: 'horizontal',
     theme: 'base', min: 0,
@@ -33,7 +32,6 @@ describe('------- Test Model API -------', () => {
 
     model.onHandle();
   });
-
 
   // reset
   test(' Check API reset ', () => {
@@ -77,7 +75,6 @@ describe('------- Test Model API -------', () => {
     model.onHandle();
   });
 
-
   // calcOnePercent
   test(' Check what one percent of a range is equal to ', () => {
     const max = [1200, 134.67, 800];
@@ -100,7 +97,6 @@ describe('------- Test Model API -------', () => {
 
   //  calcPositionDot: From & To ( in percents )
   test(' Calculate From & To position ( in percents ) ', async () => {
-
     let model: Model;
 
     const position = async (from: number, to: number) => {
@@ -143,7 +139,6 @@ describe('------- Test Model API -------', () => {
     expect(model.setWrapWH(0)).toBeCloseTo(319);
   });
 
-
   //  calcDotPosition 
   test(' Check dots mooving along ' +
     'the grid and interaction with each other ', async () => {
@@ -152,7 +147,7 @@ describe('------- Test Model API -------', () => {
       let wrapWH = 1120;
       let position = 533.7142944335938;
 
-      const positionD = async (op: DP) => {
+      const positionD = async (op: PositionData) => {
         let data = await model.calcDotPosition({
           type: op.fl ? 'From' : 'To',
           wrapWH,
@@ -325,10 +320,8 @@ describe('------- Test Model API -------', () => {
 
     });
 
-
   // calcStep
   test(' Calculate step relating the range ', async () => {
-
     let mas = await [0, 2, 4, 6, 8, 10];
 
     let model = await new Model({
@@ -357,14 +350,11 @@ describe('------- Test Model API -------', () => {
       }
     });
     await model.onHandle();
-
   });
-
 
   //calcPositionTip: From, To, Single
   test(' Calculate hints position relating dots ', async () => {
-
-    let model = await new Model({
+    const model = await new Model({
       type: 'double',
       min: -120,
       max: 800,
@@ -393,7 +383,6 @@ describe('------- Test Model API -------', () => {
   //  createMark
   test(' Calculate numeral grid' +
     ' relating range and interval or step ', async () => {
-
       let model = await new Model({
         min: 10,
         max: 800,
@@ -436,12 +425,10 @@ describe('------- Test Model API -------', () => {
         }
       });
       await model.onHandle();
-
     });
 
   // calcPositionBar
   test(' Calculate progress-bar position between dots', async () => {
-
     let model = await new Model({
       type: 'double',
       min: -120,
@@ -474,12 +461,10 @@ describe('------- Test Model API -------', () => {
       }
     });
     await model.onHandle();
-
   });
 
   // clickLine
   test(' Check calculation of a click on a grid ', async () => {
-
     let model = await new Model({
       type: 'double',
       min: -120,
@@ -518,7 +503,6 @@ describe('------- Test Model API -------', () => {
         await model.calcOnePercent();
         await model.calcPositionDotFrom();
 
-
         expect(model.clickLine(300).from).toBeCloseTo(554);
       }
     });
@@ -544,13 +528,11 @@ describe('------- Test Model API -------', () => {
       }
     });
     await model.onHandle();
-
   });
 
   // clickBar
   test(' Check calculation of a click' +
     ' on a progress-bar between dots ', async () => {
-
       let model = await new Model({
         type: 'double',
         min: -120,
@@ -581,7 +563,7 @@ describe('------- Test Model API -------', () => {
           await model.setWrapWH(1120);
           await model.calcOnePercent();
           await model.calcPositionDotFrom();
-          let obj = { from: 92, to: 100 };
+          const obj = { from: 92, to: 100 };
           expect(model.clickBar(10)).toEqual(obj);
         }
       });
@@ -597,7 +579,7 @@ describe('------- Test Model API -------', () => {
           await model.setWrapWH(1120);
           await model.calcOnePercent();
           await model.calcPositionDotFrom();
-          let obj = { from: -79, to: 100 };
+          const obj = { from: -79, to: 100 };
           expect(model.clickBar(50)).toEqual(obj);
         }
       });
@@ -608,7 +590,6 @@ describe('------- Test Model API -------', () => {
   // clickMark
   test(' Check dots values changes ' +
     'on clicking on the grid element ', async () => {
-
       let model = await new Model({
         type: 'double',
         min: -120,
@@ -629,7 +610,6 @@ describe('------- Test Model API -------', () => {
       });
       await model.onHandle();
 
-
       model = await new Model({
         type: 'single',
         min: -120,
@@ -649,13 +629,11 @@ describe('------- Test Model API -------', () => {
         }
       });
       await model.onHandle();
-
     });
 
   //  calcSnap & snapDot
   test(' Calculate dots positions relating ' +
     'grid mark and further moovement along the grid ', async () => {
-
       let model = await new Model({
         type: 'double',
         min: -120,
@@ -686,7 +664,6 @@ describe('------- Test Model API -------', () => {
   // calcKeyDown
   test(' Calculate dots movement when' +
     ' controlling from keyboard ', async () => {
-
       let model = await new Model({
         type: 'double',
         min: -120,
@@ -715,7 +692,6 @@ describe('------- Test Model API -------', () => {
         }
       });
       await model.onHandle();
-
 
       model = await new Model({
         type: 'double',
@@ -752,11 +728,5 @@ describe('------- Test Model API -------', () => {
       });
       await model.onHandle();
 
-
     });
-
-
 });
-
-
-

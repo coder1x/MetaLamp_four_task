@@ -6,53 +6,46 @@ include ../different/different.pug
 include ../code/code.pug
 include ../keyboard-control/keyboard-control.pug
 
-
-
 mixin panel(options)
   -
     const modify = options.modify ?? ''
     const addClass = options.class ?? ''
     const theme = options.theme ?? 'base'
-    let classComp = 'panel'
+    const classComp = 'panel'
     let className = classComp
+    
     if(modify){
-    className += ' '+classComp+'_'+modify}
+    className += ` ${classComp}_${modify}`}
     if(addClass){
-    className += ' '+addClass}
-  div(class=className + ' js-'+classComp)
-    div(class=classComp+'__slider-wrap'+' js-'+classComp+'__slider-wrap')
-      input(class='rslider__'+theme+' visually-hidden' 
+    className += ` ${addClass}`}
+
+  div(class=`${className} js-${classComp}`)
+    div(class=`${classComp}__slider-wrap js-${classComp}__slider-wrap`)
+      input(class=`rslider__${theme} visually-hidden` 
       type='text' 
       name='DATA' 
       value='' 
       tabindex='-2' 
       readonly=''
       )
-    div(class=classComp+'__values-wrap') 
-      +values({
-        label: 'Values',
-      })
-    div(class=classComp+'__input-data-wrap') 
-      +input-data({
-        label: 'Input data',
-      })
-    div(class=classComp+'__keyboard-control-wrap') 
-      +keyboard-control({
-        label: 'keyboard control',
-      })
-    div(class=classComp+'__grid-wrap') 
-      +grid({
-        label: 'Grid',
-      })
-    div(class=classComp+'__different-wrap') 
-      +different({
-        label: 'Different',
-      })
-    div(class=classComp+'__hints-wrap')
-      +hints({
-        label: 'Hints',
-      })
-    div(class=classComp+'__code-wrap')
-      +code({
-        label: 'Config code',
-      })
+
+    div(class=`${classComp}__values-wrap`)
+      +values({label: 'Values',})
+
+    div(class=`${classComp}__input-data-wrap`)
+      +input-data({label: 'Input data',})
+
+    div(class=`${classComp}__keyboard-control-wrap`)
+      +keyboard-control({label: 'keyboard control',})
+
+    div(class=`${classComp}__grid-wrap`)
+      +grid({label: 'Grid',})
+
+    div(class=`${classComp}__different-wrap`)
+      +different({label: 'Different',})
+
+    div(class=`${classComp}__hints-wrap`)
+      +hints({label: 'Hints',})
+      
+    div(class=`${classComp}__code-wrap`)
+      +code({label: 'Config code',})

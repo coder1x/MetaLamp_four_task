@@ -1,6 +1,5 @@
-
 const DP = require('./isDev');
-// работа с js файлами 
+
 module.exports = {
   jsLoaders: (ext = 'ts') => {
     let loaders = null;
@@ -22,10 +21,9 @@ module.exports = {
     }
 
     if (DP.isDev) {
-      loaders.push('eslint-loader'); // позволяет проводить анализ качества вашего кода, написанного на любом выбранном стандарте JavaScript
+      loaders.push('eslint-loader');
     }
 
     return loaders;
   }
-
 };

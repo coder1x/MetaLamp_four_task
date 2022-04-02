@@ -1,5 +1,5 @@
 /* --------- Библиотеки, миксины, нормолайзы --------- */
-import './fonts.scss';
+// import './fonts.scss';
 import 'normalize.css';
 
 

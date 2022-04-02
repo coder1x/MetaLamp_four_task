@@ -1,6 +1,6 @@
 @import "@styles/glob.scss";
 
-$font: "Montserrat", Helvetica, Arial, sans-serif;
+$font: Helvetica, Arial, sans-serif;
 $color-focus: $Dark-Shade-100;
 $color-border-show: $Dark-Shade-50;
 $color-border: rgba(31, 32, 65, 0.5);
@@ -99,7 +99,6 @@ $background-color-item: rgb(244, 249, 255);
     overflow: hidden;
   }
 
-  // ---------------------------- modif
   &_visible &__options {
     display: block;
   }

@@ -1,14 +1,11 @@
 import './keyboard-control.scss';
 
-
-interface OP {
+interface Options {
   keyStepOne?: number;
   keyStepHold?: number;
 }
 
-
 class KeyboardControl {
-
   private elem: Element;
   private keyStepOne: HTMLInputElement;
   private keyStepHold: HTMLInputElement;
@@ -16,14 +13,13 @@ class KeyboardControl {
   private keyStepHoldD: number;
   private nameClass: string;
 
-
   constructor(nameClass: string, elem: Element) {
     this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
   }
 
-  setData(options: OP) {
+  setData(options: Options) {
     const { keyStepOne, keyStepHold } = options;
 
     if (this.keyStepOneD != keyStepOne) {
@@ -39,8 +35,7 @@ class KeyboardControl {
 
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   setAction(obj: any) {
-
-    let mapInput = new Map();
+    const mapInput = new Map();
     mapInput.set('keyStepOne', this.keyStepOne.value);
     mapInput.set('keyStepHold', this.keyStepHold.value);
 
@@ -55,8 +50,8 @@ class KeyboardControl {
     const inputProcessing = (e: Event) => {
       const elem = e.target;
       if (elem instanceof HTMLInputElement) {
-        let val = elem.value.replace(/[^-.\d]/g, '');
-        let regexp = /^-?\d*?[.]?\d*$/;
+        const val = elem.value.replace(/[^-.\d]/g, '');
+        const regexp = /^-?\d*?[.]?\d*$/;
         const valid = regexp.test(val);
 
         if (valid) {
@@ -89,10 +84,6 @@ class KeyboardControl {
     this.keyStepOne = getDom('one');
     this.keyStepHold = getDom('hold');
   }
-
 }
-
-
-
 
 export { KeyboardControl };

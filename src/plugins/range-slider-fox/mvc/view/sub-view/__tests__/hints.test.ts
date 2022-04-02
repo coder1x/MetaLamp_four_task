@@ -1,7 +1,6 @@
 import { Hints } from '../../sub-view/hints';
 
 describe('------- Test Hints API -------', () => {
-
   let rsName: string;
   let wrap: HTMLElement;
   let hints: Hints;
@@ -143,7 +142,7 @@ describe('------- Test Hints API -------', () => {
   //  setPositionFrom
   test(' Set From hint position ', async () => {
     await hints.createTipFrom();
-    let fl = await hints.setPositionFrom(34);
+    const fl = await hints.setPositionFrom(34);
     expect(fl).toBeTruthy();
     checkStyle('34%');
   });
@@ -151,7 +150,7 @@ describe('------- Test Hints API -------', () => {
   // setPositionTo
   test(' Set To hint position ', async () => {
     await hints.createTipTo();
-    let fl = await hints.setPositionTo(34);
+    const fl = await hints.setPositionTo(34);
     expect(fl).toBeTruthy();
     checkStyle('34%');
   });
@@ -159,7 +158,7 @@ describe('------- Test Hints API -------', () => {
   // setPositionSingle
   test(' Set Single hint position ', async () => {
     await hints.createTipSingle();
-    let fl = await hints.setPositionSingle(34);
+    const fl = await hints.setPositionSingle(34);
     expect(fl).toBeTruthy();
     checkStyle('34%');
   });
@@ -190,8 +189,4 @@ describe('------- Test Hints API -------', () => {
     if (single instanceof HTMLElement)
       expect(single.style.bottom).toBe('27%');
   });
-
-
-
-
 });

@@ -2,45 +2,52 @@ include ../text-field/text-field.pug
 
 mixin values(options)
   -
-    let label = options.label ?? ''
-    let modify = options.modify ?? ''
-    let addClass = options.class ?? ''
-    let flLabel = options.flLabel ?? false
-    let classComp = 'values'
+    const label = options.label ?? ''
+    const modify = options.modify ?? ''
+    const addClass = options.class ?? ''
+    const flLabel = options.flLabel ?? false
+    const classComp = 'values'
     let className = classComp
+    
     if(modify){
-    className += ' '+classComp+'_'+modify}
+    className += ` ${classComp}_${modify}`}
     if(addClass){
-    className += ' '+addClass}
-  fieldset(class=className+' js-'+classComp)
+    className += ` ${addClass}`}
+    
+  fieldset(class=`${className} js-${classComp}`)
     - if(!flLabel){
-    legend(class=classComp+'__label')= label
+    legend(class=`${classComp}__label`)= label
     -}
-    div(class=classComp+'__min-wrap'+' js-'+classComp+'__min-wrap')
+
+    div(class=`${classComp}__min-wrap js-${classComp}__min-wrap`)
       +text-field({
         label: 'Min',
         type: 'text',
         name: 'min'
       })
-    div(class=classComp+'__max-wrap'+' js-'+classComp+'__max-wrap')
+
+    div(class=`${classComp}__max-wrap js-${classComp}__max-wrap`)
       +text-field({
         label: 'Max',
         type: 'text',
         name: 'max'
       })
-    div(class=classComp+'__from-wrap'+' js-'+classComp+'__from-wrap')
+
+    div(class=`${classComp}__from-wrap js-${classComp}__from-wrap`)
       +text-field({
         label: 'From',
         type: 'text',
         name: 'from'
       })
-    div(class=classComp+'__to-wrap'+' js-'+classComp+'__to-wrap')
+
+    div(class=`${classComp}__to-wrap js-${classComp}__to-wrap`)
       +text-field({
         label: 'To',
         type: 'text',
         name: 'to'
       })
-    div(class=classComp+'__step-wrap'+' js-'+classComp+'__step-wrap')
+
+    div(class=`${classComp}__step-wrap js-${classComp}__step-wrap`)
       +text-field({
         label: 'step',
         type: 'text',

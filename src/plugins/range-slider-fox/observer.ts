@@ -24,13 +24,11 @@ interface insideOptions extends RangeSliderOptions {
   readonly dot?: string,
 }
 
-
-interface TOB extends insideOptions {
+interface ObserverOptions extends insideOptions {
   key?: string,
 }
 
 abstract class Observer {
-
   private observers: Function[] = [];
 
   subscribeOB(observer: Function) {
@@ -46,14 +44,14 @@ abstract class Observer {
     return this.observers.length;
   }
 
-  protected notifyOB(options: TOB) {
+  protected notifyOB(options: ObserverOptions) {
     for (let item of this.observers) {
       item(options);
     }
   }
 }
 
-export { Observer, TOB };
+export { Observer, ObserverOptions };
 
 
 

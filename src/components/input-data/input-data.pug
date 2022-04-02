@@ -2,21 +2,24 @@ include ../text-field/text-field.pug
 
 mixin input-data(options)
   -
-    let label = options.label ?? ''
-    let modify = options.modify ?? ''
-    let addClass = options.class ?? ''
-    let flLabel = options.flLabel ?? false
-    let classComp = 'input-data'
+    const label = options.label ?? ''
+    const modify = options.modify ?? ''
+    const addClass = options.class ?? ''
+    const flLabel = options.flLabel ?? false
+    const classComp = 'input-data'
     let className = classComp
+    
     if(modify){
-    className += ' '+classComp+'_'+modify}
+    className += ` ${classComp}_${modify}`}
     if(addClass){
-    className += ' '+addClass}
-  fieldset(class=className+' js-'+classComp)
+    className += ` ${addClass}`}
+
+  fieldset(class=`${className} js-${classComp}`)
     - if(!flLabel){
-    legend(class=classComp+'__label')= label
+    legend(class=`${classComp}__label`)= label
     -}
-    div(class=classComp+'__value-wrap')
+    
+    div(class=`${classComp}__value-wrap`)
       +text-field({
         label: 'value',
         type: 'text',

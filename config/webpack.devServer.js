@@ -8,9 +8,6 @@ module.exports = {
     port: 8080,
     historyApiFallback: true,
     open: true,
-    //hot: true, // включает горячую замену модуля без обнавления страницы. 
-    //watchContentBase: true,
   },
-
 };
 

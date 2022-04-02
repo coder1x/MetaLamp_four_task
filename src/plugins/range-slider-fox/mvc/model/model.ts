@@ -1,9 +1,8 @@
 import { RangeSliderOptions } from '../../glob-interface';
-import { CalcDotPositionOpt, PROP, TP } from './model.d';
+import { CalcDotPositionOpt, Prop, PositionData } from './model.d';
 import { Observer } from '../../observer';
 
 class Model extends Observer {
-
   // --- data config
   private type: string;
   private orientation: string;
@@ -48,7 +47,6 @@ class Model extends Observer {
   onStart: Function;
   onReset: Function;
 
-
   constructor(options: RangeSliderOptions) {
     super();
     this.createProperties(this.defaultConfig(options));
@@ -80,11 +78,9 @@ class Model extends Observer {
     };
   }
 
-
   reset() {
     const op = this.defaultData;
-
-    let opKey = Object.keys(op);
+    const opKey = Object.keys(op);
     for (let key of opKey) {
       // использую type assertions так как не нашёл возможности передавать нужный тип
       // не могу отказаться от данной конструкции кода, так как это сильно уменьшает копипаст
@@ -113,15 +109,11 @@ class Model extends Observer {
       });
     }
 
-
     if (this.startConfFl && typeof this.onReset == 'function')
       this.onReset(this.defaultData);
-
   }
 
-
   async update(options: RangeSliderOptions) {
-
     this.updateConfFl = true;
 
     await this.setCallbacks(options);
@@ -136,13 +128,11 @@ class Model extends Observer {
     await this.setHintsData(options);
     await this.setOrientationData(options);
 
-
     if (this.startConfFl && typeof this.onUpdate == 'function')
       this.onUpdate(this.getOptions());
     this.startConfFl = true;
     this.updateConfFl = false;
   }
-
 
   calcOnePercent() {
     return this.valP = this.getRange() / 100;
@@ -156,18 +146,15 @@ class Model extends Observer {
     return this.fromP;
   }
 
-
   calcPositionDotTo() {
     this.toP = (this.to - this.min) / this.valP;      // right dot position (in %)
     this.limitTo = this.toP;
     return this.toP;
   }
 
-
   setWrapWH(val: number) {
     return this.wrapWH = val ? val : 319;
   }
-
 
   calcDotPosition(options: CalcDotPositionOpt) {
     let fromFl = false;
@@ -254,12 +241,11 @@ class Model extends Observer {
     return { from: from, to: to };
   }
 
-
   calcStep() {
     if (!this.step) return false;
 
     const len = this.trimFraction(this.step);
-    let mas: number[] = [];
+    const mas: number[] = [];
     let kol = +(this.min + this.step).toFixed(len);
     mas.push(this.min);
     for (let i = this.min; i <= this.max;) {
@@ -274,18 +260,15 @@ class Model extends Observer {
     return this.stepNum = mas;
   }
 
-
   calcPositionTipFrom = (tipFrom: number) => {
     const tipFromP = this.calcWidthP(tipFrom - 4);
     return this.fromP - tipFromP;
   }
 
-
   calcPositionTipTo = (tipTo: number) => {
     const tipToP = this.calcWidthP(tipTo - 4);
     return this.toP - tipToP;
   }
-
 
   calcPositionTipSingle = (singleWH: number) => {
     const line = (this.toP - this.fromP) / 2;
@@ -294,10 +277,9 @@ class Model extends Observer {
     return centerFromTo - tipSingleP;
   }
 
-
   createMark() {
     const range = this.getRange();
-    let masMark: {
+    const masMark: {
       val: number,
       position: number,
     }[] = [];
@@ -345,14 +327,12 @@ class Model extends Observer {
     return { barX, widthBar };
   }
 
-
   clickBar = (pointXY: number) => {
-
     const vertical = this.orientation == 'vertical';
     const oneP = this.wrapWH / 100; // one percent of the entire scale
 
     const verticalC = (valP: number) => {
-      let remainderP = 100 - valP;
+      const remainderP = 100 - valP;
       pointXY = remainderP * oneP + pointXY;
       return this.clickLine(pointXY);
     };
@@ -369,7 +349,6 @@ class Model extends Observer {
         return this.clickLine(this.fromP * oneP + pointXY);
     }
   }
-
 
   clickMark = (value: number) => {
     let from = this.from;
@@ -395,7 +374,6 @@ class Model extends Observer {
     });
     return { from: from, to: to };
   }
-
 
   //---------------------------------- Line
   clickLine = (pointXY: number) => {
@@ -476,7 +454,6 @@ class Model extends Observer {
 
     return this.snapDot();
   }
-
 
   calcKeyDown(repeat: boolean, sign: string, dot: string) {
     let from = this.from;
@@ -574,7 +551,6 @@ class Model extends Observer {
     return { from: from, to: to };
   }
 
-
   private getValStep(val: number, step: number, mas: number[]) {
     for (let i = 0; i < mas.length; i++) {
       const item = mas[i];
@@ -595,7 +571,6 @@ class Model extends Observer {
     return +(this.min + (this.toP * this.valP)).toFixed(0);
   }
 
-
   private trimFraction(num: number) {
     const integer = Math.trunc(num);
     const str = String(num).replace(integer + '.', '');
@@ -604,7 +579,6 @@ class Model extends Observer {
   }
 
   private defaultConfig(options: RangeSliderOptions) {
-
     this.startConfFl = false;
     this.updateConfFl = false;
 
@@ -633,9 +607,7 @@ class Model extends Observer {
     }, options);
   }
 
-
   private createProperties(options: RangeSliderOptions) {
-
     this.onHandle = async () => {
 
       this.onChange = options.onChange ?? null;
@@ -657,16 +629,13 @@ class Model extends Observer {
 
   }
 
-
   private getProperty<T, K extends keyof T>(obj: T, key: K) {
     return obj[key];
   }
 
-
   private setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
     obj[key] = value;
   }
-
 
   private propertiesValidation(
     properties: Array<keyof typeof obj>, obj: RangeSliderOptions) {
@@ -682,13 +651,11 @@ class Model extends Observer {
     return true;
   }
 
-
-  private isEmpty(data: PROP) {
+  private isEmpty(data: Prop) {
     return (data ?? null) != null ? true : false;
   }
 
-
-  private checkValue(data: PROP, str: string) {
+  private checkValue(data: Prop, str: string) {
     const _this = this;
     // использую type assertions так как не нашёл возможности передавать нужный тип
     // не могу отказаться от данной конструкции кода, так как это сильно уменьшает копипаст
@@ -701,7 +668,6 @@ class Model extends Observer {
     }
     return data;
   }
-
 
   private setRangeData(options: RangeSliderOptions): boolean {
     if (!this.propertiesValidation(['min', 'max'], options)) return false;
@@ -758,7 +724,6 @@ class Model extends Observer {
     return false;
   }
 
-
   private setStep(options: RangeSliderOptions): boolean {
     if (!this.propertiesValidation(
       [
@@ -804,7 +769,6 @@ class Model extends Observer {
 
     return false;
   }
-
 
   private setDotData(options: RangeSliderOptions): boolean {
     if (!this.propertiesValidation(
@@ -887,9 +851,7 @@ class Model extends Observer {
     return true;
   }
 
-
   private setGridSnapData(options: RangeSliderOptions): boolean {
-
     if (!this.propertiesValidation(['gridSnap'], options)) {
       if (this.gridSnap == undefined)
         this.gridSnap = false;
@@ -908,9 +870,7 @@ class Model extends Observer {
     return true;
   }
 
-
   private setGridData(options: RangeSliderOptions): boolean {
-
     if (!this.propertiesValidation(
       [
         'grid',
@@ -926,7 +886,6 @@ class Model extends Observer {
     let gridRound: number = Math.trunc(options.gridRound);
 
     if (Number.isNaN(gridRound)) gridRound = null;
-
 
     grid = Boolean(this.checkValue(grid, 'grid') ?? false);
     this.grid = Boolean(grid);
@@ -979,7 +938,6 @@ class Model extends Observer {
     return true;
   }
 
-
   private setOrientationData(options: RangeSliderOptions): boolean {
     if (!this.propertiesValidation(['orientation'], options)) return false;
 
@@ -997,7 +955,6 @@ class Model extends Observer {
     return true;
   }
 
-
   private setThemeData(options: RangeSliderOptions): boolean {
     if (!this.propertiesValidation(['theme'], options)) return false;
 
@@ -1014,7 +971,6 @@ class Model extends Observer {
       key: 'ThemeData',
       theme: this.theme,
     });
-
     return true;
   }
 
@@ -1061,7 +1017,6 @@ class Model extends Observer {
 
     return true;
   }
-
 
   private setHintsData(options: RangeSliderOptions): boolean {
     if (!this.propertiesValidation(
@@ -1118,10 +1073,8 @@ class Model extends Observer {
       to: this.to,
       type: this.type,
     });
-
     return true;
   }
-
 
   private setDisabledData(options: RangeSliderOptions): boolean {
     if (!this.propertiesValidation(['disabled'], options)) {
@@ -1140,7 +1093,6 @@ class Model extends Observer {
     return true;
   }
 
-
   private setBarData(options: RangeSliderOptions): boolean {
     if (!this.propertiesValidation(['bar'], options)) {
       if (this.bar == undefined)
@@ -1154,17 +1106,14 @@ class Model extends Observer {
       key: 'BarData',
       bar: this.bar,
     });
-
     return true;
   }
-
 
   private getRange() {
     return this.max - this.min;
   }
 
-
-  private convertToPercent(options: TP) {
+  private convertToPercent(options: PositionData) {
     const { fl, clientXY, shiftXY, position, } = options;
     const vertical = this.orientation == 'vertical';
     const dotXY = clientXY - shiftXY;
@@ -1175,7 +1124,7 @@ class Model extends Observer {
     } else {
       num = dotXY - position;
     }
-    let percent = num * 100 / this.wrapWH;
+    const percent = num * 100 / this.wrapWH;
 
     if (fl) {
       this.limitFrom = percent;
@@ -1186,11 +1135,9 @@ class Model extends Observer {
     return percent;
   }
 
-
   private calcWidthP(width: number) {
     return (width * 100 / this.wrapWH) / 2;
   }
-
 
   private calcGridNumStep() {
     let interval = 0;
@@ -1203,13 +1150,8 @@ class Model extends Observer {
       interval = this.gridNum;
       step = (this.max - this.min) / interval;    // define step
     }
-
     return { interval, step };
   }
-
-
 }
-
-
 
 export { Model };

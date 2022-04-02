@@ -1,14 +1,16 @@
 mixin footer(options)
   -
-    let modify = options.modify ?? []
-    let addClass = options.class ?? ''
-    let classComp = 'footer'
+    const modify = options.modify ?? []
+    const addClass = options.class ?? ''
+    const classComp = 'footer'
     let className = classComp
+    
     if(modify){
       for(let item of modify)
-    className += ' '+classComp+'_'+item
+    className += ` ${classComp}_${item}`
     }
     if(addClass){
-    className += ' '+addClass}
+    className += ` ${addClass}`}
+    
   footer(class=className role='contentinfo')
     p Клюшин А. © 2021

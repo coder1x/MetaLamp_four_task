@@ -1,10 +1,9 @@
 import { Model } from '../model/model';
 import { View } from '../view/view';
 import { RangeSliderOptions } from '../../glob-interface';
-import { TOB } from '../../observer';
+import { ObserverOptions } from '../../observer';
 
 class Controller {
-
   private startFL = false;
   private resetFL = false;
   private lock = false;
@@ -12,13 +11,11 @@ class Controller {
   private model: Model;
   private view: View;
 
-
   constructor(model: Model, view: View) {
     this.model = model;
     this.view = view;
     this.init();
   }
-
 
   async reset() {
     if (this.lock) return false;
@@ -49,16 +46,13 @@ class Controller {
     return true;
   }
 
-
   private async init() {
     await this.createListeners();
     await this.view.onHandle();
     await this.model.onHandle();
   }
 
-
   private createListeners() {
-
     const subscribe = (talking: Model | View, items: Function[]) => {
       for (let item of items) {
         talking.subscribeOB(item);
@@ -95,8 +89,7 @@ class Controller {
     subscribe(this.view, SView);
   }
 
-
-  private handleStart = async (options: TOB) => {
+  private handleStart = async (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'Start') return false;
 
@@ -106,8 +99,7 @@ class Controller {
     return true;
   };
 
-
-  private handleDataAttributes = (options: TOB) => {
+  private handleDataAttributes = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'DataAttributes') return false;
 
@@ -121,8 +113,7 @@ class Controller {
     return true;
   };
 
-
-  private handleRangeData = (options: TOB) => {
+  private handleRangeData = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'RangeData') return false;
 
@@ -143,8 +134,7 @@ class Controller {
     return true;
   };
 
-
-  private handleStep = (options: TOB) => {
+  private handleStep = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'Step') return false;
 
@@ -152,8 +142,7 @@ class Controller {
     return true;
   };
 
-
-  private handleDotKeyDown = (options: TOB) => {
+  private handleDotKeyDown = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'DotKeyDown') return false;
     if (this.lock) return false;
@@ -162,8 +151,7 @@ class Controller {
     return true;
   };
 
-
-  private handleDotData = (options: TOB) => {
+  private handleDotData = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'DotData') return false;
     const type = options.type;
@@ -188,7 +176,6 @@ class Controller {
       this.updateHints(options.type, options.from, options.to);
     }
 
-
     // ----------  Bar
     if (lockFl) {
       const position = this.model.calcPositionBar();
@@ -200,8 +187,7 @@ class Controller {
     return true;
   };
 
-
-  private handleDotMove = (options: TOB) => {
+  private handleDotMove = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'DotMove') return false;
     if (this.lock) return false;
@@ -216,8 +202,7 @@ class Controller {
     return true;
   };
 
-
-  private handleGridSnapData = (options: TOB) => {
+  private handleGridSnapData = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'GridSnapData') return false;
 
@@ -225,7 +210,7 @@ class Controller {
     return true;
   };
 
-  private handleGridData = (options: TOB) => {
+  private handleGridData = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'GridData') return false;
 
@@ -241,8 +226,7 @@ class Controller {
     return true;
   };
 
-
-  private handleOrientationData = async (options: TOB) => {
+  private handleOrientationData = async (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'OrientationData') return false;
 
@@ -260,8 +244,7 @@ class Controller {
     return true;
   };
 
-
-  private handleThemeData = (options: TOB) => {
+  private handleThemeData = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'ThemeData') return false;
 
@@ -269,8 +252,7 @@ class Controller {
     return true;
   };
 
-
-  private handleHintsData = (options: TOB) => {
+  private handleHintsData = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'HintsData') return false;
 
@@ -285,9 +267,7 @@ class Controller {
     return true;
   };
 
-
   private async updateHints(type: string, from: number, to: number) {
-
     await this.view.updateTipValue(from, to, type);
     const objTip = await this.view.getWidthTip(this.startFL, this.resetFL);
 
@@ -310,11 +290,9 @@ class Controller {
 
     }
     await this.view.checkVisibleTip();
-
   }
 
-
-  private handleDisabledData = (options: TOB) => {
+  private handleDisabledData = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'DisabledData') return false;
 
@@ -323,8 +301,7 @@ class Controller {
     return true;
   };
 
-
-  private handleClickLine = (options: TOB) => {
+  private handleClickLine = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'ClickLine') return false;
     if (this.lock) return false;
@@ -333,8 +310,7 @@ class Controller {
     return true;
   };
 
-
-  private handleSizeWrap = (options: TOB) => {
+  private handleSizeWrap = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'SizeWrap' || !this.startFL) return false;
 
@@ -342,8 +318,7 @@ class Controller {
     return true;
   };
 
-
-  private handleBarData = (options: TOB) => {
+  private handleBarData = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'BarData') return false;
 
@@ -353,8 +328,7 @@ class Controller {
     return true;
   };
 
-
-  private handleClickBar = (options: TOB) => {
+  private handleClickBar = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'ClickBar') return false;
 
@@ -363,8 +337,7 @@ class Controller {
     return true;
   };
 
-
-  private handleCreateGrid = (options: TOB) => {
+  private handleCreateGrid = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'CreateGrid') return false;
 
@@ -373,8 +346,7 @@ class Controller {
     return true;
   };
 
-
-  private handleClickMark = (options: TOB) => {
+  private handleClickMark = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'ClickMark') return false;
     if (this.lock) return false;
@@ -383,16 +355,13 @@ class Controller {
     return true;
   };
 
-
-  private handleSnapNum = (options: TOB) => {
+  private handleSnapNum = (options: ObserverOptions) => {
     const key = options.key;
     if (key != 'SnapNum') return false;
 
     this.model.calcSnap(options.snapNum);
     return true;
   };
-
-
 }
 
 export { Controller, Model, View };

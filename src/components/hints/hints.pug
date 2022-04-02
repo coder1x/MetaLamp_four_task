@@ -3,35 +3,41 @@ include ../text-field/text-field.pug
 
 mixin hints(options)
   -
-    let label = options.label ?? ''
-    let modify = options.modify ?? ''
-    let addClass = options.class ?? ''
-    let flLabel = options.flLabel ?? false
-    let classComp = 'hints'
+    const label = options.label ?? ''
+    const modify = options.modify ?? ''
+    const addClass = options.class ?? ''
+    const flLabel = options.flLabel ?? false
+    const classComp = 'hints'
     let className = classComp
+    
     if(modify){
-    className += ' '+classComp+'_'+modify}
+    className += ` ${classComp}_${modify}`}
     if(addClass){
-    className += ' '+addClass}
-  fieldset(class=className+' js-'+classComp)
+    className += ` ${addClass}`}
+
+  fieldset(class=`${className} js-${classComp}`)
     - if(!flLabel){
-    legend(class=classComp+'__label')= label
+    legend(class=`${classComp}__label`)= label
     -}
-    div(class=classComp+'__minmax-wrap'+' js-'+classComp+'__minmax-wrap')
+
+    div(class=`${classComp}__minmax-wrap js-${classComp}__minmax-wrap`)
       +toggle-buttons({
         header: 'min - max',
       })
-    div(class=classComp+'__fromto-wrap'+' js-'+classComp+'__fromto-wrap')
+
+    div(class=`${classComp}__fromto-wrap js-${classComp}__fromto-wrap`)
       +toggle-buttons({
         header: 'from - to',
       })
-    div(class=classComp+'__prefix-wrap'+' js-'+classComp+'__prefix-wrap')
+
+    div(class=`${classComp}__prefix-wrap js-${classComp}__prefix-wrap`)
       +text-field({
         label: 'Prefix',
         type: 'text',
         name: 'tipPrefix'
       })
-    div(class=classComp+'__postfix-wrap'+' js-'+classComp+'__postfix-wrap')
+      
+    div(class=`${classComp}__postfix-wrap js-${classComp}__postfix-wrap`)
       +text-field({
         label: 'Postfix',
         type: 'text',

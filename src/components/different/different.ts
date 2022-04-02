@@ -1,9 +1,7 @@
 import './different.scss';
 import { Select } from '../select/select';
 
-
-
-interface OP {
+interface Options {
   type?: string;
   disabled?: boolean;
   bar?: boolean;
@@ -11,10 +9,7 @@ interface OP {
   theme?: string;
 }
 
-
-
 class Different {
-
   private elem: Element;
   private type: HTMLInputElement;
   private disabled: HTMLInputElement;
@@ -33,7 +28,6 @@ class Different {
   private nameClass: string;
   onUnsubscribtion: Function;
 
-
   constructor(nameClass: string, elem: Element, panel: Element) {
     this.nameClass = nameClass;
     this.panel = panel;
@@ -41,8 +35,7 @@ class Different {
     this.setDom();
   }
 
-
-  setData(options: OP) {
+  setData(options: Options) {
     const { disabled, bar, type, orientation, theme } = options;
 
     if (this.disabledD != disabled) {
@@ -77,7 +70,6 @@ class Different {
       this.themeD = theme;
     }
   }
-
 
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   setAction(obj: any) {
@@ -140,7 +132,6 @@ class Different {
   }
 
   private setDom() {
-
     this.modify = this.panel.classList[0] + '_vertical';
 
     const getDom = (str: string): HTMLInputElement => {
@@ -162,9 +153,6 @@ class Different {
     const selectE = this.elem.querySelector('.js-select');
     this.select = new Select('.js-select', selectE);
   }
-
 }
-
-
 
 export { Different };

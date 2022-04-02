@@ -2,14 +2,12 @@ import './code.scss';
 import { RangeSliderOptions } from
   '../../components/interface/glob-interface';
 
-
 class CopyCode {
 
   private className: string;
   private elem: Element;
   private button: HTMLButtonElement;
   private ul: Element;
-
 
   constructor(className: string, component: Element) {
     this.className = className;
@@ -78,10 +76,6 @@ class CopyCode {
         });
     });
   }
-
 }
-
-
-
 
 export { CopyCode };

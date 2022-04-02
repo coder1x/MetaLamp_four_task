@@ -1,26 +1,22 @@
-const TerserPlugin = require("terser-webpack-plugin"); // минимизация js 
-
+const TerserPlugin = require("terser-webpack-plugin");
 const DP = require('./isDev');
-// в зависемости от сборки выбераем оптимизацию на выходе
 
 module.exports = {
   optimization: () => {
-    const config = {  // позволяет лишний код который используеться в нескольких js файлах вынести в один отдельный файл тем самым минимизируя основные.
+    const config = {
       runtimeChunk: DP.isPlugin ? undefined : 'single',
-      splitChunks: {  // создаються файлы vendors
-        chunks: 'all' // создаёт отдельные вендор файлы в которые кидает весь лишний код, при этом наш бандел файл перестаёт весить полтора мегобайта :). 
+      splitChunks: {
+        chunks: 'all'
       }
     };
 
-    if (DP.isProd) {  // минимизируем код если собираем в продакшен
+    if (DP.isProd) {
       config.minimizer = [
         new TerserPlugin({
           parallel: true,
         }),
       ];
     }
-
     return config;
   }
-
 };

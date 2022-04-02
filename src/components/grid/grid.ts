@@ -1,7 +1,6 @@
 import './grid.scss';
 
-
-interface OP {
+interface Options {
   grid?: boolean;
   gridSnap?: boolean;
   gridNum?: number;
@@ -9,9 +8,7 @@ interface OP {
   gridRound?: number;
 }
 
-
 class Grid {
-
   private elem: Element;
   private grid: HTMLInputElement;
   private snap: HTMLInputElement;
@@ -31,8 +28,7 @@ class Grid {
     this.setDom();
   }
 
-
-  setData(options: OP) {
+  setData(options: Options) {
     const { grid, gridSnap, gridNum, gridStep, gridRound } = options;
 
     if (this.gridD != grid) {
@@ -59,11 +55,10 @@ class Grid {
 
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   setAction(obj: any) {
-    let mapInput = new Map();
+    const mapInput = new Map();
     mapInput.set('gridNum', this.interval.value);
     mapInput.set('gridStep', this.step.value);
     mapInput.set('gridRound', this.gridRound.value);
-
 
     this.gridRound.addEventListener('change', () => {
       obj.update({
@@ -90,8 +85,8 @@ class Grid {
     const inputProcessing = (e: Event) => {
       const elem = e.target;
       if (elem instanceof HTMLInputElement) {
-        let val = elem.value.replace(/[^.\d]/g, '');
-        let regexp = /^\d*?[.]?\d*$/;
+        const val = elem.value.replace(/[^.\d]/g, '');
+        const regexp = /^\d*?[.]?\d*$/;
         const valid = regexp.test(val);
 
         if (valid) {
@@ -146,7 +141,5 @@ class Grid {
     this.gridRound = getDom('round');
   }
 }
-
-
 
 export { Grid };

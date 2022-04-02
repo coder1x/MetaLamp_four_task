@@ -1,22 +1,24 @@
 mixin text-field(options)
   -
-    let label = options.label ?? ''
-    let placeholder = options.placeholder ?? ''
-    let typeField = options.type ?? ''
-    let name = options.name ?? ''
-    let modify = options.modify ?? ''
-    let addClass = options.class ?? ''
-    let flLabel = options.flLabel ?? false
-    let classComp = 'text-field'
+    const label = options.label ?? ''
+    const placeholder = options.placeholder ?? ''
+    const typeField = options.type ?? ''
+    const name = options.name ?? ''
+    const modify = options.modify ?? ''
+    const addClass = options.class ?? ''
+    const flLabel = options.flLabel ?? false
+    const classComp = 'text-field'
     let className = classComp
+    
     if(modify){
-    className += ' '+classComp+'_'+modify}
+    className += ` ${classComp}_${modify}`}
     if(addClass){
-    className += ' '+addClass}
+    className += ` ${addClass}`}
+    
   div(class=className)
-    label(class=classComp+'__label')
+    label(class=`${classComp}__label`)
       - if(!flLabel){
-      p(class=classComp+'__label-text')= label
+      p(class=`${classComp}__label-text`)= label
       -}
-      input(class=classComp+'__input' type=typeField placeholder=placeholder value='' name=name)
+      input(class=`${classComp}__input` type=typeField placeholder=placeholder value='' name=name)
       

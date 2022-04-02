@@ -1,10 +1,7 @@
-
 import { Observer } from '../../../observer';
 import { Resize } from '../resize';
 
-
 class Grid extends Observer {
-
   private rsBottom: HTMLElement;
   private rsName: string;
   private elemGrid: HTMLElement;
@@ -18,7 +15,6 @@ class Grid extends Observer {
   private vertical: boolean;
   private resizeF: boolean = false;
 
-
   constructor(elem: HTMLElement | Element, rsName: string) {
     super();
     this.rsName = rsName;
@@ -27,7 +23,6 @@ class Grid extends Observer {
       this.rsBottom = elem;
     this.init();
   }
-
 
   setOrientation(str: string) {
     return this.vertical = str == 'vertical' ? true : false;
@@ -38,7 +33,6 @@ class Grid extends Observer {
     const height = this.rsBottom.offsetHeight;
     return width > height ? false : true;
   }
-
 
   createMark = (valMark: {
     val: number,
@@ -60,14 +54,12 @@ class Grid extends Observer {
     return this.elemGrid;
   }
 
-
   createDomGrid() {
     this.rsBottom.appendChild(this.elemGrid);
     this.offOn = true;
     this.setAction(this.elemGrid);
     return this.rsBottom;
   }
-
 
   deleteGrid() {
     const items = this.elemGrid.children;
@@ -80,7 +72,6 @@ class Grid extends Observer {
     }
     return false;
   }
-
 
   private searchStr(text: string, str: string) {
     const regexp = new RegExp(str, 'g');
@@ -102,7 +93,6 @@ class Grid extends Observer {
     });
   }
 
-
   private createElem(teg: string, className: string[]) {
     const elem = document.createElement(teg);
     for (let item of className) {
@@ -110,7 +100,6 @@ class Grid extends Observer {
     }
     return elem;
   }
-
 
   private init() {
     this.offOn = false;
@@ -127,7 +116,6 @@ class Grid extends Observer {
     });
   }
 
-
   private toggleElem(elem: HTMLElement, display: string, opacity: string) {
     const st = elem.style;
     st.visibility = display;
@@ -135,7 +123,6 @@ class Grid extends Observer {
     if (wrapE instanceof HTMLElement)
       wrapE.style.opacity = opacity;
   }
-
 
   private shapingMark() {
     this.masWH = [];
@@ -159,7 +146,6 @@ class Grid extends Observer {
     if (len > 1) {
       this.lastElem = gridMarks[len - 1];
     }
-
 
     let k = 0;
     for (let item of gridMarks) {
@@ -232,9 +218,7 @@ class Grid extends Observer {
       }
       );
     }
-
   }
-
 
   // hide or show values on the scale
   private visibleMark() {
@@ -257,7 +241,7 @@ class Grid extends Observer {
         }
     }
 
-    let snapNum: number[] = [];
+    const snapNum: number[] = [];
 
     this.oddElements[i].map((elem) => { // show the necessary elements only
       this.toggleElem(elem, 'visible', '1');
@@ -269,7 +253,6 @@ class Grid extends Observer {
 
     this.visibleLastElem(snapNum);
   }
-
 
   private visibleLastElem(snapNum: number[]) {
     if (!this.lastElem || !this.previousElem) return false;
@@ -300,9 +283,6 @@ class Grid extends Observer {
     });
     return true;
   }
-
 }
-
-
 
 export { Grid };

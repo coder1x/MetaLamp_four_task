@@ -1,9 +1,6 @@
 import './input-data.scss';
 
-
-
 class InputData {
-
   private value: HTMLInputElement;
   private input: HTMLInputElement;
   private className: string;
@@ -38,6 +35,5 @@ class InputData {
     }
   }
 }
-
 
 export { InputData };

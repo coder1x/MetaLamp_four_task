@@ -6,7 +6,6 @@ function delay(ms: number) {
 }
 
 describe('------- Test Controller API -------', () => {
-
   let wrapC: HTMLElement;
   let domC: HTMLInputElement;
   const defaultData = {
@@ -29,11 +28,9 @@ describe('------- Test Controller API -------', () => {
     wrapC.appendChild(domC);
   });
 
-
   // onStart, onUpdate, update, onReset, reset
   test(' Check plugin events (onStart, onUpdate, onReset) ' +
     'and API (update, reset)', () => {
-
       const objС = new Controller(new Model({
         onStart: (data: RangeSliderOptions) => {
 
@@ -90,11 +87,9 @@ describe('------- Test Controller API -------', () => {
       }), new View(domC));
     });
 
-
   test(' Check unsubscribtion from events  ', async () => {
-
     let obj: Controller;
-    let updateX2 = jest.fn((data: RangeSliderOptions) => {
+    const updateX2 = jest.fn((data: RangeSliderOptions) => {
       expect(data.max).toBe(150);
 
       obj.update({
@@ -125,13 +120,11 @@ describe('------- Test Controller API -------', () => {
       onUpdate: updateX,
     }), new View(domC));
 
-
     await delay(100);
     expect(updateX.mock.calls).toHaveLength(1);
     expect(updateX2.mock.calls).toHaveLength(1);
 
   });
-
 
   // Input data
   test(' Check if data in Input element is changing ', () => {
@@ -141,7 +134,6 @@ describe('------- Test Controller API -------', () => {
       },
     }), new View(domC));
   });
-
 
   // Data-Attributes dynamically
   test(' Check if plugin responding on data-attributes changes ', () => {
@@ -156,7 +148,6 @@ describe('------- Test Controller API -------', () => {
     }), new View(domC));
   });
 
-
   // Data-Attributes static
   test(' Check if plugin is configured in ' +
     'line with data-attributes on its start ', async () => {
@@ -168,10 +159,7 @@ describe('------- Test Controller API -------', () => {
       }), new View(domC));
     });
 
-
-
   test(' destroy - plugin removal ', async () => {
-
     let objX: Controller;
     const fun = jest.fn(() => {
     });
@@ -195,6 +183,4 @@ describe('------- Test Controller API -------', () => {
     expect(fun.mock.calls).toHaveLength(1);
     expect(domC.value).toBe(' ');
   });
-
-
 });

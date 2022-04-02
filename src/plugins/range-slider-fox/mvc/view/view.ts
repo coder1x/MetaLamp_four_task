@@ -1,15 +1,12 @@
-
 import { UpdateTip } from './view.d';
 import { Handle } from './sub-view/handle';
 import { Hints } from './sub-view/hints';
 import { Bar } from './sub-view/bar';
 import { Grid } from './sub-view/grid';
-import { Observer, TOB } from '../../observer';
+import { Observer, ObserverOptions } from '../../observer';
 import { RangeSliderOptions } from '../../glob-interface';
 
-
 class View extends Observer {
-
   private rsName: string;
   private wrapSlider: Element;
   private rangeSlider: Element;
@@ -23,10 +20,9 @@ class View extends Observer {
   private hints: Hints;
   private bar: Bar;
   private grid: Grid;
-  private objData: TOB;
+  private objData: ObserverOptions;
   onHandle: Function;
   elem: Element;
-
 
   constructor(elem: Element) {
     super();
@@ -36,7 +32,6 @@ class View extends Observer {
 
     this.init();
   }
-
 
   async destroy() {
     const typeElem = await this.elem.constructor.name;
@@ -96,7 +91,6 @@ class View extends Observer {
     return flag ? st.opacity = '0.5' : st.opacity = '1';
   }
 
-
   getWrapWH() {
     const size = (this.vertical ?
       this.rsCenter.offsetHeight :
@@ -105,7 +99,6 @@ class View extends Observer {
   }
 
   createDomBase() {
-
     const createElem = (teg: string, className: string[]) => {
       const elem = document.createElement(teg);
       for (let item of className) {
@@ -132,9 +125,7 @@ class View extends Observer {
     return this.wrapSlider.appendChild(this.rangeSlider);
   }
 
-
   async setOrientation(str: string) {
-
     const modify = this.rsName + '_vertical';
     const objP = this.rangeSlider.classList;
     this.vertical = str == 'vertical' ? true : false;
@@ -156,7 +147,6 @@ class View extends Observer {
       });
     });
   }
-
 
   setTheme(theme: string) {
     if (this.prevTheme)
@@ -185,7 +175,7 @@ class View extends Observer {
 
   //--------------------------------- hints
 
-  setHintsData(options: TOB) {
+  setHintsData(options: ObserverOptions) {
     const masFL: boolean[] = [];
     this.hints.setAdditionalText(options.tipPrefix, options.tipPostfix);
     this.hints.setTipFlag(options.tipFromTo, options.tipMinMax);
@@ -240,7 +230,6 @@ class View extends Observer {
     return this.hints.checkVisibleTip();
   }
 
-
   updateTipValue(from: number, to: number, type: string) {
     const masFL: boolean[] = [];
     masFL.push(Boolean(this.hints.setValTipFrom(from)));
@@ -261,7 +250,6 @@ class View extends Observer {
     return masFL;
   }
 
-
   //--------------------------------- bar
 
   setVisibleBar(bar: boolean) {
@@ -277,7 +265,6 @@ class View extends Observer {
   setBar(barX: number, widthBar: number) {
     return this.bar.setBar(barX, widthBar);
   }
-
 
   //--------------------------------- Grid
 
@@ -295,7 +282,6 @@ class View extends Observer {
   }[]) {
     return this.grid.createMark(valMark);
   }
-
 
   private attributesChange() {
     const options = new Map([
@@ -343,7 +329,7 @@ class View extends Observer {
       }
     };
 
-    let masDataAttr = [];
+    const masDataAttr = [];
 
     for (let item of options.keys()) {
       const data = getDataAttr(item);
@@ -356,9 +342,9 @@ class View extends Observer {
     }
 
     this.objData = Object.fromEntries(mapOptions);
-    let observer = new MutationObserver(mut => {
+    const observer = new MutationObserver(mut => {
 
-      let obj: RangeSliderOptions = {};
+      const obj: RangeSliderOptions = {};
       for (let item of mut) {
         const attr = item.attributeName;
         const opt = attr.replace('data-', '');
@@ -380,8 +366,6 @@ class View extends Observer {
         });
       }
     });
-
-
 
     observer.observe(this.elem, {
       attributeFilter: masDataAttr,
@@ -407,19 +391,16 @@ class View extends Observer {
     };
   }
 
-
   private createListeners() {
     this.handle.subscribeOB(this.handleForwarding);
     this.bar.subscribeOB(this.handleForwarding);
     this.grid.subscribeOB(this.handleForwarding);
   }
 
-
-  private handleForwarding = (options: TOB) => {
+  private handleForwarding = (options: ObserverOptions) => {
     this.notifyOB({ ...options });
     return true;
   };
-
 
   private sizeWrap() {
 
@@ -435,11 +416,6 @@ class View extends Observer {
       wrapWH: wrapWH,
     });
   }
-
-
-
 }
-
-
 
 export { View };

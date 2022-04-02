@@ -58,7 +58,7 @@ $font-size: 16;
 //-------------------------------
 
 @mixin media-breakpoint-up($width) {
-  @media (min-width: $width + 1) {
+  @media (min-width: ($width + 1)) {
     @content;
   }
 }
@@ -70,7 +70,7 @@ $font-size: 16;
 }
 
 @mixin media-breakpoint-between($min-width, $max-width) {
-  @media (min-width: $min-width + 1) and (max-width: $max-width) {
+  @media (min-width: ($min-width + 1)) and (max-width: $max-width) {
     @content;
   }
 }

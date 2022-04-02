@@ -1,27 +1,27 @@
 {
-  "compilerOptions": { // Настраивает параметры компиляции. Параметры называются также, как и в командной строке.
-    "target": "es5", // Тип кода создаваемого итогового файла.
-    "lib": [ // Набор библиотечных файлов полифилов, которые будут включены в итоговый выходной файл.
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
       "dom",
       "es6",
       "dom.iterable",
       "esnext"
     ],
-    "sourceMap": false, // Создавать ли соответствующие source map файлы ".map"?
-    "allowJs": false, // Разрешать компилировать файлы с JavaScript-кодом?
-    "skipLibCheck": true, // Не проверять типы, заданные во всех файлах описания типов (*.d.ts)?
-    "esModuleInterop": false, // Создать хелперы __importStar и __importDefault для обеспечения совместимости с экосистемой Babel и включить allowSyntheticDefaultImports для совместимости с системой типов.
-    "allowSyntheticDefaultImports": true, // Разрешить импортировать модули не имеющие внутри себя "import default"?
-    "strict": true, // Включить ли все строгие проверки типов сразу: noImplicitAny, noImplicitThis, alwaysStrict, strictNullChecks, strictFunctionTypes, strictPropertyInitialization?
-    "forceConsistentCasingInFileNames": true, // Запретить несогласованные ссылки на один и тот же файл?
-    "noFallthroughCasesInSwitch": true, // Сообщить об ошибке в случае обнаружения проваливания в конструкции switch-case?
-    "module": "esnext", // Определяет тип импорта кода в итоговом файле, прописанном в "outFile". Необходимо задавать при использовании опции "outFile".
-    "moduleResolution": "node", // Определить способ поиска модулей в папках: как в Node.js или классический, как в TypeScript 1.5 и ниже. 
+    "sourceMap": false,
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "strictNullChecks": false,
-    "isolatedModules": false, // Обрабатывать каждый файл, как отдельный изолированный модуль.
-    "downlevelIteration": true, // Обеспечьте полную поддержку итераций для for - in, ..., деструктуризации при настройке на ES5 или ES3?
-    "noEmit": false, // Не создавать итоговый файл если есть проблемы в коде.
-    "noImplicitAny": true // запретить неявные any
+    "isolatedModules": false,
+    "downlevelIteration": true,
+    "noEmit": false,
+    "noImplicitAny": true
   }
 }

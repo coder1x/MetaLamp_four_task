@@ -1,6 +1,4 @@
-
-
-interface CH {
+interface CheckTip {
   tipMaxXY: number,
   visibilityTipSingle: boolean,
   visibilityTipMax: boolean,
@@ -9,9 +7,7 @@ interface CH {
   tipMinXRight: number,
 }
 
-
 class Hints {
-
   private rsTop: Element;
   private rsName: string;
   private tipFrom: HTMLElement;
@@ -30,7 +26,6 @@ class Hints {
     this.rsTop = elem;
   }
 
-
   setTipFlag(tipFromTo: boolean, tipMinMax: boolean) {
     this.tipFromTo = tipFromTo;
     this.tipMinMax = tipMinMax;
@@ -42,7 +37,6 @@ class Hints {
     this.tipPostfix = tipPostfix;
     return { tipPrefix, tipPostfix };
   }
-
 
   setOrientation(str: string) {
     this.vertical = str == 'vertical' ? true : false;
@@ -127,7 +121,6 @@ class Hints {
     return true;
   }
 
-
   checkTipTo() {
     return this.tipTo || !this.tipFromTo ? true : false;
   }
@@ -165,7 +158,6 @@ class Hints {
     return true;
   }
 
-
   setPositionTo(coordXY: number) {
     if (!this.tipTo) return false;
     const st = this.tipTo.style;
@@ -173,14 +165,12 @@ class Hints {
     return true;
   }
 
-
   setPositionSingle(coordXY: number) {
     if (!this.tipSingle) return false;
     const st = this.tipSingle.style;
     this.setStylePosition(coordXY, st);
     return true;
   }
-
 
   getWidthTip() {
     let fromWH = 0;
@@ -195,14 +185,13 @@ class Hints {
     return { fromWH, toWH, singleWH, };
   }
 
-
   checkVisibleTip() {
     if (!this.tipMinMax && !this.tipFromTo) return false;
 
     //------------------------------------------- get data
-    let { tipFromXY, tipFromWH } = this.getBoundingDot(this.tipFrom);
-    let { tipToXY, tipToWH } = this.getBoundingDot(this.tipTo);
-    let { tipMinXY, tipMinWH, tipMaxXY } = this.getBoundingMinMax();
+    const { tipFromXY, tipFromWH } = this.getBoundingDot(this.tipFrom);
+    const { tipToXY, tipToWH } = this.getBoundingDot(this.tipTo);
+    const { tipMinXY, tipMinWH, tipMaxXY } = this.getBoundingMinMax();
     //-------------------------------------------
 
     let visibilityTipSingle = false;
@@ -241,7 +230,6 @@ class Hints {
       tipMinYTop,
       tipMinXRight,
     });
-
     return true;
   }
 
@@ -270,7 +258,6 @@ class Hints {
     return elem;
   }
 
-
   private getPrefix(val: number | string) {
     let text = String(val);
     if (this.tipPostfix)
@@ -279,7 +266,6 @@ class Hints {
       text += ' ' + this.tipPrefix;
     return text;
   }
-
 
   private convertStyle = (elem: CSSStyleDeclaration) => {
     let val = '';
@@ -297,11 +283,9 @@ class Hints {
     return true;
   };
 
-
   private getSizeElem(elem: HTMLElement) {
     return this.vertical ? elem.offsetHeight : elem.offsetWidth;
   }
-
 
   private getBoundingDot(elem: HTMLElement) {
     let tipDotXY = 0;
@@ -324,7 +308,6 @@ class Hints {
     };
   }
 
-
   private getBoundingMinMax() {
     let tipMinXY = 0;
     let tipMinWH = 0;
@@ -342,7 +325,6 @@ class Hints {
     }
     return { tipMinXY, tipMinWH, tipMaxXY };
   }
-
 
   private getBoundingSingle() {
     let tipSingleXY = 0;
@@ -363,8 +345,7 @@ class Hints {
     return { tipSingleXY, tipSingleB };
   }
 
-
-  private toggleDisplay(op: CH) {
+  private toggleDisplay(options: CheckTip) {
     let {
       tipMaxXY,
       visibilityTipSingle,
@@ -372,7 +353,7 @@ class Hints {
       visibilityTipMin,
       tipMinYTop,
       tipMinXRight,
-    } = op;
+    } = options;
 
     const display = (elem: HTMLElement, fl: boolean) => {
       if (elem)
@@ -387,7 +368,7 @@ class Hints {
         display(this.tipSingle, visibilityTipSingle);
 
         if (visibilityTipSingle) {
-          let { tipSingleXY, tipSingleB } = this.getBoundingSingle();
+          const { tipSingleXY, tipSingleB } = this.getBoundingSingle();
           if (this.vertical) {
             if (tipMaxXY >= tipSingleB)
               visibilityTipMax = true;
@@ -411,8 +392,6 @@ class Hints {
       display(this.tipMin, visibilityTipMin);
     }
   }
-
 }
-
 
 export { Hints };

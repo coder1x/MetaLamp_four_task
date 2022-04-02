@@ -10,9 +10,7 @@ import { Different } from '../different/different';
 import { CopyCode } from '../code/code';
 import { KeyboardControl } from '../keyboard-control/keyboard-control';
 
-
 class Panel {
-
   private elem: Element;
   private objValues: Values;
   private objInputData: InputData;
@@ -23,13 +21,11 @@ class Panel {
   private className: string;
   private objKeyboardControl: KeyboardControl;
 
-
   constructor(elem: Element, className: string) {
     this.elem = elem;
     this.className = className;
     this.init();
   }
-
 
   createRangeSlider(options: RangeSliderOptions) {
     const selector = this.className + '__slider-wrap';
@@ -60,7 +56,6 @@ class Panel {
       onReset
     }).data('RangeSliderFox'); // will return an object for one item
 
-
     this.objValues.setAction(obj);
     this.objGrid.setAction(obj);
     this.objHints.setAction(obj);
@@ -90,7 +85,6 @@ class Panel {
     this.objDifferent.setAction(obj);
     this.objKeyboardControl.setAction(obj);
   }
-
 
   private init() {
     this.objValues = new Values('.js-values', this.getDom('.js-values'));
@@ -147,20 +141,16 @@ class Panel {
   }
 }
 
-
 function renderPanel(className: string) {
-  let components = document.querySelectorAll(className);
-  let objMas: Panel[] = [];
+  const components = document.querySelectorAll(className);
+  const objMas: Panel[] = [];
   for (let elem of components) {
     objMas.push(new Panel(elem, className));
   }
   return objMas;
 }
 
-
-
 const objPanel = renderPanel('.js-panel');
-
 
 objPanel[0].createRangeSlider({
   type: 'double',
@@ -173,7 +163,6 @@ objPanel[0].createRangeSlider({
   grid: true,
   gridNum: 40,
 });
-
 
 objPanel[1].createRangeSlider({
   type: 'double',
@@ -188,7 +177,6 @@ objPanel[1].createRangeSlider({
   gridStep: 33,
 });
 
-
 objPanel[2].createRangeSlider({
   type: 'double',
   min: -120,
@@ -199,6 +187,3 @@ objPanel[2].createRangeSlider({
   bar: true,
   gridStep: 30,
 });
-
-
-

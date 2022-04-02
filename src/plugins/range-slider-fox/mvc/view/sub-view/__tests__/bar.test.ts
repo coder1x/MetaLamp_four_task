@@ -2,10 +2,8 @@ import { Bar } from '../bar';
 import { Controller, Model, View } from '../../../controller/controller';
 import { mockPointerEvent } from '../../../../__tests__/jestUtils';
 
-
 // диапазон между ползунками
 describe('------- Test Bar API -------', () => {
-
   let rsName: string;
   let wrap: HTMLElement;
   let bar: Bar;
@@ -85,10 +83,8 @@ describe('------- Test Bar API -------', () => {
     expect(height).toBe('25px');
   });
 
-
   // clickBar
   test(' Check if click event on the progress-bar is triggered ', async () => {
-
     let wrapC: HTMLElement;
     let domC: HTMLInputElement;
     wrapC = document.createElement('div');
@@ -119,8 +115,5 @@ describe('------- Test Bar API -------', () => {
     });
     const view = await new View(domC);
     obj = await new Controller(model, view);
-
   });
-
-
 });

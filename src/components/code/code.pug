@@ -1,24 +1,26 @@
 
 mixin code(options)
   -
-    let label = options.label ?? ''
-    let modify = options.modify ?? ''
-    let addClass = options.class ?? ''
-    let flLabel = options.flLabel ?? false
-    let classComp = 'code'
+    const label = options.label ?? ''
+    const modify = options.modify ?? ''
+    const addClass = options.class ?? ''
+    const flLabel = options.flLabel ?? false
+    const classComp = 'code'
     let className = classComp
-    let codeTop = '$(\'.demo\').RangeSliderFox({';
-    let codeBottom = '})';
+    const codeTop = '$(\'.demo\').RangeSliderFox({';
+    const codeBottom = '})';
     if(modify){
-    className += ' '+classComp+'_'+modify}
+    className += ` ${classComp}_${modify}`}
     if(addClass){
-    className += ' '+addClass}
-  fieldset(class=className +' js-'+classComp)
+    className += ` ${addClass}`}
+
+  fieldset(class=`${className} js-${classComp}`)
     - if(!flLabel){
-    legend(class=classComp+'__label')= label
+    legend(class=`${classComp}__label`)= label
     -}
-    div(class=classComp+'__config')
-      p(class=classComp+'__lang-js')=codeTop
-      ul(class=classComp+'__options'+' js-'+classComp+'__options')
-      p(class=classComp+'__lang-js')=codeBottom
-    button(class=classComp+'__copy' + ' js-'+classComp+'__copy') Copy code
+    
+    div(class=`${classComp}__config`)
+      p(class=`${classComp}__lang-js`)=codeTop
+      ul(class=`${classComp}__options js-${classComp}__options`)
+      p(class=`${classComp}__lang-js`)=codeBottom
+    button(class=`${classComp}__copy js-${classComp}__copy`) Copy code

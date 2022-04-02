@@ -1,7 +1,6 @@
 import { Resize } from '../resize';
 
-
-interface OP {
+interface Options {
   width: number,
   height: number,
   padding?: number,
@@ -9,11 +8,9 @@ interface OP {
   y?: number,
 }
 
-
 describe('------- Test Resize API -------', () => {
-
   function mockElementDimensions(element: HTMLElement) {
-    return (options: OP): HTMLElement => {
+    return (options: Options): HTMLElement => {
       const {
         width,
         height,
@@ -62,7 +59,7 @@ describe('------- Test Resize API -------', () => {
     'resizing after the defined timeout ', async () => {
 
       let change = false;
-      let wrap = await document.createElement('div');
+      const wrap = await document.createElement('div');
       await mockElementDimensions(wrap)({
         width: 300,
         height: 100,
@@ -75,7 +72,7 @@ describe('------- Test Resize API -------', () => {
         change = true;
       });
 
-      let wrap2 = await document.createElement('div');
+      const wrap2 = await document.createElement('div');
       await mockElementDimensions(wrap2)({
         width: 250,
         height: 100,
@@ -89,6 +86,4 @@ describe('------- Test Resize API -------', () => {
       expect(change).toBeTruthy();
       expect(setTimeout).toHaveBeenCalledTimes(1);
     });
-
-
 });

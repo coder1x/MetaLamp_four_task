@@ -1,9 +1,7 @@
 import { _$ as $ } from '../range-slider-fox';
 
-
 // Добавление JQuery плагина - Range Slider Fox
 describe('------- Range Slider Fox - JQuery Objects -------', () => {
-
   let wrap: HTMLElement;
   let dom: HTMLInputElement;
 
@@ -31,11 +29,9 @@ describe('------- Range Slider Fox - JQuery Objects -------', () => {
     expect(propertyFL).toBeTruthy();
   });
 
-
   // initialization
   test(' Initialize plugin on a DOM-element ' +
     'and check the obtained object ', () => {
-
       const obj = $(dom).RangeSliderFox({}).data('RangeSliderFox');
       expect(obj).toBeDefined();
 
@@ -43,10 +39,7 @@ describe('------- Range Slider Fox - JQuery Objects -------', () => {
       expect(obj2).toEqual(obj);
     });
 
-
-
   test(' destroy - plugin removal ', async () => {
-
     const obj = await $(dom).RangeSliderFox({}).data('RangeSliderFox');
     expect(obj).toBeDefined();
 
@@ -60,7 +53,6 @@ describe('------- Range Slider Fox - JQuery Objects -------', () => {
     expect(rs).toBeNull();
 
   });
-
 });
 
 

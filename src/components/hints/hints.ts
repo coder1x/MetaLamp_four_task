@@ -1,7 +1,6 @@
 import './hints.scss';
 
-
-interface OP {
+interface Options {
   tipMinMax?: boolean;
   tipFromTo?: boolean;
   tipPrefix?: string;
@@ -26,7 +25,7 @@ class Hints {
     this.setDom();
   }
 
-  setData(options: OP) {
+  setData(options: Options) {
     const { tipMinMax, tipFromTo, tipPrefix, tipPostfix } = options;
 
     if (this.tipMinMaxD != tipMinMax) {
@@ -94,9 +93,6 @@ class Hints {
     this.tipPrefix = getDom('prefix');
     this.tipPostfix = getDom('postfix');
   }
-
 }
-
-
 
 export { Hints };

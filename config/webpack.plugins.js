@@ -1,7 +1,7 @@
-const HTMLWebpackPlugin = require('html-webpack-plugin'); // упрощает создаение HTML файлов, добавления хеша в имена файлов
-const { CleanWebpackPlugin } = require('clean-webpack-plugin'); // удаляет все ненужные файлы при перестройке проекта
+const HTMLWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // Он создает файл CSS для каждого файла JS, который содержит CSS
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const fs = require('fs');
 
 const FoxFavicon = require('fox-favicon');
@@ -11,7 +11,7 @@ const DP = require('./isDev');
 const FL = require('./filename');
 const PATHS = require('./paths');
 const path = require('path');
-const PAGES_DIR = path.join(PATHS.src, '/pages/'); // каталог где располагаються PUG  файлы
+const PAGES_DIR = path.join(PATHS.src, '/pages/');
 
 const pages = [];
 fs.readdirSync(PAGES_DIR).forEach((file) => {
@@ -25,7 +25,7 @@ const keywords = 'range slider, diapason, interval, price range, price slider';
 let pluginsM = [];
 
 pluginsM.push(
-  new CleanWebpackPlugin(),   // очищаем от лишних файлов в папке дист
+  new CleanWebpackPlugin(),
 );
 
 if (!DP.isPlugin)
@@ -180,7 +180,7 @@ pluginsM.push(
 
 if (!DP.isPlugin)
   pluginsM.push(
-    new webpack.ProvidePlugin({  // подключаем jquery плагином, самый нормальный способ ..
+    new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
       'window.jQuery': 'jquery'

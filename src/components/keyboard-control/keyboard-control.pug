@@ -2,27 +2,31 @@ include ../text-field/text-field.pug
 
 mixin keyboard-control(options)
   -
-    let label = options.label ?? ''
-    let modify = options.modify ?? ''
-    let addClass = options.class ?? ''
-    let flLabel = options.flLabel ?? false
-    let classComp = 'keyboard-control'
+    const label = options.label ?? ''
+    const modify = options.modify ?? ''
+    const addClass = options.class ?? ''
+    const flLabel = options.flLabel ?? false
+    const classComp = 'keyboard-control'
     let className = classComp
+    
     if(modify){
-    className += ' '+classComp+'_'+modify}
+    className += ` ${classComp}_${modify}`}
     if(addClass){
-    className += ' '+addClass}
-  fieldset(class=className+' js-'+classComp)
+    className += ` ${addClass}`}
+
+  fieldset(class=`${className} js-${classComp}`)
     - if(!flLabel){
-    legend(class=classComp+'__label')= label
+    legend(class=`${classComp}__label`)= label
     -}
-    div(class=classComp+'__one-wrap'+' js-'+classComp+'__one-wrap')
+
+    div(class=`${classComp}__one-wrap js-${classComp}__one-wrap`)
       +text-field({
         label: 'key Step One',
         type: 'text',
         name: 'keyStepOne'
       })
-    div(class=classComp+'__hold-wrap'+' js-'+classComp+'__hold-wrap')
+      
+    div(class=`${classComp}__hold-wrap js-${classComp}__hold-wrap`)
       +text-field({
         label: 'key Step Hold',
         type: 'text',
