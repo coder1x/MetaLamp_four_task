@@ -1,8 +1,8 @@
+const path = require('path');
 const DP = require('./isDev');
 const CL = require('./cssLoaders');
 const JL = require('./jsLoaders');
 const PATHS = require('./paths');
-const path = require('path');
 
 module.exports = {
 
@@ -17,13 +17,13 @@ module.exports = {
         test: /\.pug$/,
         loader: 'pug-loader',
         options: {
-          pretty: DP.isDev
-        }
+          pretty: DP.isDev,
+        },
       },
 
       {
         test: /\.s[ac]ss$/,
-        use: CL.cssLoaders('sass-loader')
+        use: CL.cssLoaders('sass-loader'),
       },
 
       {
@@ -38,7 +38,7 @@ module.exports = {
       {
         test: /\.(js)$/,
         exclude: /node_modules/,
-        use: JL.jsLoaders('js')
+        use: JL.jsLoaders('js'),
       },
       {
         test: /\.(ts|tsx)$/,
@@ -57,11 +57,11 @@ module.exports = {
 
       {
         test: /\.xml$/,
-        use: ['xml-loader']
+        use: ['xml-loader'],
       },
       {
         test: /\.csv$/,
-        use: ['csv-loader']
+        use: ['csv-loader'],
       },
     ],
   },

@@ -10,16 +10,27 @@ interface Options {
 
 class Grid {
   private elem: Element;
+
   private grid: HTMLInputElement;
+
   private snap: HTMLInputElement;
+
   private interval: HTMLInputElement;
+
   private step: HTMLInputElement;
+
   private gridRound: HTMLInputElement;
+
   private gridD: boolean;
+
   private gridSnapD: boolean;
+
   private gridNumD: number;
+
   private gridStepD: number;
+
   private gridRoundD: number;
+
   private nameClass: string;
 
   constructor(nameClass: string, elem: Element) {
@@ -29,25 +40,27 @@ class Grid {
   }
 
   setData(options: Options) {
-    const { grid, gridSnap, gridNum, gridStep, gridRound } = options;
+    const {
+      grid, gridSnap, gridNum, gridStep, gridRound,
+    } = options;
 
-    if (this.gridD != grid) {
+    if (this.gridD !== grid) {
       this.grid.checked = grid;
       this.gridD = grid;
     }
-    if (this.gridSnapD != gridSnap) {
+    if (this.gridSnapD !== gridSnap) {
       this.snap.checked = gridSnap;
       this.gridSnapD = gridSnap;
     }
-    if (this.gridNumD != gridNum) {
+    if (this.gridNumD !== gridNum) {
       this.interval.value = String(gridNum);
       this.gridNumD = gridNum;
     }
-    if (this.gridStepD != gridStep) {
+    if (this.gridStepD !== gridStep) {
       this.step.value = String(gridStep);
       this.gridStepD = gridStep;
     }
-    if (this.gridRoundD != gridRound) {
+    if (this.gridRoundD !== gridRound) {
       this.gridRound.value = String(gridRound);
       this.gridRoundD = gridRound;
     }
@@ -76,7 +89,7 @@ class Grid {
 
     this.interval.addEventListener('change', () => {
       obj.update({
-        gridNum: + this.interval.value,
+        gridNum: +this.interval.value,
         gridStep: 0,
       });
       this.step.value = '0';
@@ -98,15 +111,16 @@ class Grid {
     };
 
     const masE = [this.interval, this.step, this.gridRound];
-    for (let item of masE) {
-      item.addEventListener('input', inputProcessing);
-    }
 
-    this.grid.addEventListener('click', function (event: Event) {
+    masE.forEach((item) => {
+      item.addEventListener('input', inputProcessing);
+    });
+
+    this.grid.addEventListener('click', (event: Event) => {
       const elem = event.target as HTMLInputElement;
 
       obj.update({
-        grid: elem.checked
+        grid: elem.checked,
       });
     });
 
@@ -115,7 +129,7 @@ class Grid {
 
       if (this.grid.checked) {
         obj.update({
-          gridSnap: elem.checked
+          gridSnap: elem.checked,
         });
       } else {
         event.preventDefault();
@@ -124,9 +138,9 @@ class Grid {
   }
 
   private setDom() {
-    const getDom = (str: string): HTMLInputElement => {
-      return this.elem.querySelector(`${this.nameClass}__${str}-wrap input`);
-    };
+    const getDom = (str: string): HTMLInputElement => this.elem.querySelector(
+      `${this.nameClass}__${str}-wrap input`,
+    );
 
     this.grid = getDom('grid');
     this.snap = getDom('snap');
@@ -136,4 +150,4 @@ class Grid {
   }
 }
 
-export { Grid };
+export default Grid;

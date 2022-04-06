@@ -1,50 +1,88 @@
-import { RangeSliderOptions } from '../../glob-interface';
+import RangeSliderOptions from '../../glob-interface';
 import { CalcDotPositionOpt, Prop, PositionData } from './model.d';
 import { Observer } from '../../observer';
 
 class Model extends Observer {
   // --- data config
   private type: string;
+
   private orientation: string;
+
   private theme: string;
+
   private min: number;
+
   private max: number;
+
   private from: number;
+
   private to: number;
+
   private step: number;
+
   private keyStepOne: number;
+
   private keyStepHold: number;
+
   private bar: boolean;
+
   private tipPrefix: string;
+
   private tipPostfix: string;
+
   private tipMinMax: boolean;
+
   private tipFromTo: boolean;
+
   private gridSnap: boolean;
+
   private gridNum: number;
+
   private gridStep: number;
+
   private gridRound: number;
+
   private grid: boolean;
+
   private disabled: boolean;
+
   private defaultData: RangeSliderOptions;
 
-  // --- internal data. 
+  // --- internal data.
   private valP: number;
+
   private fromP: number;
+
   private toP: number;
+
   private limitFrom: number;
+
   private limitTo: number;
+
   private wrapWH: number;
+
   private snapNum: number[] = [];
+
   private stepNum: number[] = [];
+
   private stepGrid: number;
+
   private MAX_VAL = 999999999999999;
+
   private MIN_VAL = -999999999999999;
+
   private startConfFl: boolean;
+
   private updateConfFl: boolean;
+
   onHandle: Function;
+
   onChange: Function;
+
   onUpdate: Function;
+
   onStart: Function;
+
   onReset: Function;
 
   constructor(options: RangeSliderOptions) {
@@ -81,12 +119,13 @@ class Model extends Observer {
   reset() {
     const op = this.defaultData;
     const opKey = Object.keys(op);
-    for (let key of opKey) {
+
+    opKey.forEach((key) => {
       // использую type assertions так как не нашёл возможности передавать нужный тип
       // не могу отказаться от данной конструкции кода, так как это сильно уменьшает копипаст
-      const val = this.getProperty(op, key as keyof RangeSliderOptions);
-      this.setProperty(this, key as keyof Model, val as this[keyof Model]);
-    }
+      const val = Model.getProperty(op, key as keyof RangeSliderOptions);
+      Model.setProperty(this, key as keyof Model, val as this[keyof Model]);
+    });
 
     const keysMap = [
       'RangeData',
@@ -99,18 +138,19 @@ class Model extends Observer {
       'DisabledData',
       'BarData',
       'OrientationData',
-      'Start'
+      'Start',
     ];
 
-    for (let key of keysMap) {
+    keysMap.forEach((key) => {
       this.notifyOB({
-        key: key,
+        key,
         ...op,
       });
-    }
+    });
 
-    if (this.startConfFl && typeof this.onReset == 'function')
+    if (this.startConfFl && typeof this.onReset === 'function') {
       this.onReset(this.defaultData);
+    }
   }
 
   async update(options: RangeSliderOptions) {
@@ -128,38 +168,41 @@ class Model extends Observer {
     await this.setHintsData(options);
     await this.setOrientationData(options);
 
-    if (this.startConfFl && typeof this.onUpdate == 'function')
+    if (this.startConfFl && typeof this.onUpdate === 'function') {
       this.onUpdate(this.getOptions());
+    }
     this.startConfFl = true;
     this.updateConfFl = false;
   }
 
   calcOnePercent() {
-    return this.valP = this.getRange() / 100;
+    this.valP = this.getRange() / 100;
+    return this.valP;
   }
 
-  //---------------------------------- Handle
+  // ---------------------------------- Handle
 
   calcPositionDotFrom() {
-    this.fromP = (this.from - this.min) / this.valP;  //left dot position (in %)
+    this.fromP = (this.from - this.min) / this.valP; // left dot position (in %)
     this.limitFrom = this.fromP;
     return this.fromP;
   }
 
   calcPositionDotTo() {
-    this.toP = (this.to - this.min) / this.valP;      // right dot position (in %)
+    this.toP = (this.to - this.min) / this.valP; // right dot position (in %)
     this.limitTo = this.toP;
     return this.toP;
   }
 
   setWrapWH(val: number) {
-    return this.wrapWH = val ? val : 319;
+    this.wrapWH = val || 319;
+    return this.wrapWH;
   }
 
   calcDotPosition(options: CalcDotPositionOpt) {
     let fromFl = false;
     let toFl = false;
-    const typeFrom = options.type == 'From';
+    const typeFrom = options.type === 'From';
 
     this.setWrapWH(options.wrapWH);
 
@@ -175,28 +218,23 @@ class Model extends Observer {
     if (percent < 0) percent = 0;
     if (percent > 100) percent = 100;
 
-    const typeF = this.type == 'single';
+    const typeF = this.type === 'single';
 
-    if (typeF) {  // if single dot 
+    if (typeF) { // if single dot
       this.fromP = percent;
       fromFl = true;
-    } else if (limitDot) {  //if double dot and FROM is less than TO
+    } else if (limitDot) { // if double dot and FROM is less than TO
       // depending on which dot is mooving
       if (typeFrom) {
         this.fromP = percent;
         fromFl = true;
-      }
-      else {
+      } else {
         this.toP = percent;
         toFl = true;
       }
-    }
-    else { // if FROM is greater than TO
+    } else { // if FROM is greater than TO
       // take value of another dot (which the mooving dot is approaching closely)
-      if (typeFrom)
-        this.fromP = this.toP;
-      else
-        this.toP = this.fromP;
+      if (typeFrom) { this.fromP = this.toP; } else { this.toP = this.fromP; }
 
       fromFl = true;
       toFl = true;
@@ -214,10 +252,12 @@ class Model extends Observer {
     }
 
     if (this.gridSnap && !this.step) {
-      if (fromFl)
-        from = this.getValStep(from, this.stepGrid, this.snapNum);
-      if (!typeF && toFl)
-        to = this.getValStep(to, this.stepGrid, this.snapNum);
+      if (fromFl) {
+        from = Model.getValStep(from, this.stepGrid, this.snapNum);
+      }
+      if (!typeF && toFl) {
+        to = Model.getValStep(to, this.stepGrid, this.snapNum);
+      }
     }
 
     let signF = '';
@@ -225,39 +265,39 @@ class Model extends Observer {
     if (this.to < to && toFl) signF = 'right';
     if (this.from > from && fromFl) signF = 'left';
     if (this.to > to && toFl) signF = 'left';
-    if (signF == '') return false;
+    if (signF === '') return false;
 
     if (this.step) {
-      if (fromFl)
-        from = this.getValStep(from, this.step, this.stepNum);
-      if (!typeF && toFl)
-        to = this.getValStep(to, this.step, this.stepNum);
+      if (fromFl) { from = Model.getValStep(from, this.step, this.stepNum); }
+      if (!typeF && toFl) {
+        to = Model.getValStep(to, this.step, this.stepNum);
+      }
     }
 
     this.setDotData({
-      from: from,
-      to: to,
+      from,
+      to,
     });
-    return { from: from, to: to };
+    return { from, to };
   }
 
   calcStep() {
     if (!this.step) return false;
 
-    const len = this.trimFraction(this.step);
+    const len = Model.trimFraction(this.step);
     const mas: number[] = [];
     let kol = +(this.min + this.step).toFixed(len);
     mas.push(this.min);
     for (let i = this.min; i <= this.max;) {
       i = +(i += this.step).toFixed(len);
-      if (kol == i && i < this.max) {
+      if (kol === i && i < this.max) {
         mas.push(kol);
         kol = +(kol += this.step).toFixed(len);
       } else break;
     }
     mas.push(this.max);
-
-    return this.stepNum = mas;
+    this.stepNum = mas;
+    return this.stepNum;
   }
 
   calcPositionTipFrom = (tipFrom: number) => {
@@ -285,7 +325,7 @@ class Model extends Observer {
     }[] = [];
 
     const calcPositionGrid = (value: number, step: number) => {
-      value = value + step;
+      value += step;
       const position = ((value - this.min) * 100) / range;
       return { value, position };
     };
@@ -300,7 +340,7 @@ class Model extends Observer {
     let obj = calcPositionGrid(this.min, step);
     notify(obj.value, obj.position);
 
-    for (let i = 1; i < interval - 1; i++) {
+    for (let i = 1; i < interval - 1; i += 1) {
       obj = calcPositionGrid(obj.value, step);
       notify(obj.value, obj.position);
     }
@@ -314,11 +354,11 @@ class Model extends Observer {
     return masMark;
   }
 
-  //---------------------------------- Bar
+  // ---------------------------------- Bar
   calcPositionBar() {
     let barX = 0;
     let widthBar = 0;
-    if (this.type == 'double') {
+    if (this.type === 'double') {
       barX = this.fromP;
       widthBar = this.toP - this.fromP;
     } else {
@@ -328,7 +368,7 @@ class Model extends Observer {
   }
 
   clickBar = (pointXY: number) => {
-    const vertical = this.orientation == 'vertical';
+    const vertical = this.orientation === 'vertical';
     const oneP = this.wrapWH / 100; // one percent of the entire scale
 
     const verticalC = (valP: number) => {
@@ -337,49 +377,48 @@ class Model extends Observer {
       return this.clickLine(pointXY);
     };
 
-    if (this.type == 'single') {
-      if (vertical)
-        return verticalC(this.fromP);
-      else
-        return this.clickLine(pointXY);
-    } else {
-      if (vertical)
-        return verticalC(this.toP);
-      else
-        return this.clickLine(this.fromP * oneP + pointXY);
+    if (this.type === 'single') {
+      if (vertical) return verticalC(this.fromP);
+      return this.clickLine(pointXY);
     }
+    if (vertical) return verticalC(this.toP);
+    return this.clickLine(this.fromP * oneP + pointXY);
   }
 
   clickMark = (value: number) => {
-    let from = this.from;
-    let to = this.to;
+    let { from } = this;
+    let { to } = this;
 
-    if (this.type == 'single') {
+    if (this.type === 'single') {
       from = value;
-    }
-    else if (value > to) {       // if the value is greater than TO
-      to = value;                // set on this dot
-    } else if (value > from) {   // if the value is greater than FROM
-      const To = to - value;     // extract Val from TO
+    } else if (value > to) { // if the value is greater than TO
+      to = value; // set on this dot
+    } else if (value > from) { // if the value is greater than FROM
+      const To = to - value; // extract Val from TO
       const From = value - from; // extract FROM from VAL
-      From > To ? to = value : from = value; // that dot is closer which value is smaller
-    } else {                              // if VAL is smaller than FROM, then move FROM
+
+      if (From > To) {
+        to = value;
+      } else {
+        from = value;
+      }
+    } else { // if VAL is smaller than FROM, then move FROM
       from = value;
     }
 
     this.setDotData({
       type: this.type,
-      from: from,
-      to: to,
+      from,
+      to,
     });
-    return { from: from, to: to };
+    return { from, to };
   }
 
-  //---------------------------------- Line
+  // ---------------------------------- Line
   clickLine = (pointXY: number) => {
-    const vertical = this.orientation == 'vertical';
-    let from = this.from;
-    let to = this.to;
+    const vertical = this.orientation === 'vertical';
+    let { from } = this;
+    let { to } = this;
     let fromFl = false;
     let toFl = false;
 
@@ -392,19 +431,28 @@ class Model extends Observer {
       pointP = pointXY / oneP; // total percentage in the clicked area
     }
 
-    if (this.type == 'single') {
+    if (this.type === 'single') {
       this.fromP = pointP;
       fromFl = true;
-    }
-    else if (pointP > this.toP) {       // if the value is greater than TO
-      this.toP = pointP;                // set on this dot
+    } else if (pointP > this.toP) { // if the value is greater than TO
+      this.toP = pointP; // set on this dot
       toFl = true;
-    } else if (pointP > this.fromP) {   // if TO is smaller then FROM is greater
-      const To = this.toP - pointP;     // extract VAL from TO
-      const From = pointP - this.fromP; //extract FROM from VAL
-      From > To ? this.toP = pointP : this.fromP = pointP; //that dot is closer which value is smaller
-      From > To ? toFl = true : fromFl = true;
-    } else {                              //  if VAL is smaller than FROM, then move FROM
+    } else if (pointP > this.fromP) { // if TO is smaller then FROM is greater
+      const To = this.toP - pointP; // extract VAL from TO
+      const From = pointP - this.fromP; // extract FROM from VAL
+
+      if (From > To) { // that dot is closer which value is smaller
+        this.toP = pointP;
+      } else {
+        this.fromP = pointP;
+      }
+
+      if (From > To) {
+        toFl = true;
+      } else {
+        fromFl = true;
+      }
+    } else { //  if VAL is smaller than FROM, then move FROM
       this.fromP = pointP;
       fromFl = true;
     }
@@ -419,20 +467,20 @@ class Model extends Observer {
 
     this.setDotData({
       type: this.type,
-      from: from,
-      to: to,
+      from,
+      to,
     });
 
-    return { from: from, to: to };
+    return { from, to };
   }
 
   snapDot() {
     if (!this.gridSnap) return false;
 
-    this.from = this.getValStep(this.from, this.stepGrid, this.snapNum);
+    this.from = Model.getValStep(this.from, this.stepGrid, this.snapNum);
 
-    if (this.type == 'double') {
-      this.to = this.getValStep(this.to, this.stepGrid, this.snapNum);
+    if (this.type === 'double') {
+      this.to = Model.getValStep(this.to, this.stepGrid, this.snapNum);
     }
 
     this.notifyOB({
@@ -442,8 +490,9 @@ class Model extends Observer {
       to: this.to,
     });
 
-    if (typeof this.onChange == 'function')
+    if (typeof this.onChange === 'function') {
       this.onChange(this.getOptions());
+    }
     return { from: this.from, to: this.to };
   }
 
@@ -456,34 +505,38 @@ class Model extends Observer {
   }
 
   calcKeyDown(repeat: boolean, sign: string, dot: string) {
-    let from = this.from;
-    let to = this.to;
-    const signF = sign == '+';
-    const dotF = dot == 'from';
-    const typeF = this.type == 'double';
+    let { from } = this;
+    let { to } = this;
+    const signF = sign === '+';
+    const dotF = dot === 'from';
+    const typeF = this.type === 'double';
     const keyF = !this.keyStepOne && !this.keyStepHold;
 
     if (this.gridSnap && !this.step && keyF) {
-
       const prev = this.snapNum[this.snapNum.length - 2];
 
       const value = (i: number) => {
         const val = this.snapNum[!signF ? i - 2 : i];
-        dotF ? from = val : to = val;
+
+        if (dotF) {
+          from = val;
+        } else {
+          to = val;
+        }
       };
 
       const moveFrom = (item: number, i: number) => {
         if (from < item && dotF) {
-          if (from == to && signF && typeF) return false;
+          if (from === to && signF && typeF) return false;
           value(i);
           return false;
         }
-        else if (from == this.min) {
+        if (from === this.min) {
           if (signF) {
-            from = this.snapNum[1];
+            [, from] = this.snapNum;
             return false;
           }
-        } else if (from == this.max) {
+        } else if (from === this.max) {
           if (!signF) {
             from = prev;
             return false;
@@ -496,7 +549,7 @@ class Model extends Observer {
         if (to < item && !dotF) {
           value(i);
           return false;
-        } else if (to == this.max) {
+        } if (to === this.max) {
           if (!signF) {
             to = prev;
             return false;
@@ -505,14 +558,14 @@ class Model extends Observer {
         return true;
       };
 
-      for (let i = 0; i < this.snapNum.length; i++) {
+      for (let i = 0; i < this.snapNum.length; i += 1) {
         const item = this.snapNum[i];
         if (!moveFrom(item, i)) break;
         if (!moveTo(item, i)) break;
       }
     } else {
       const value = (step: number) => {
-        const len = this.trimFraction(step);
+        const len = Model.trimFraction(step);
 
         if (dotF) {
           const num = !signF ? from - step : from + step;
@@ -521,7 +574,7 @@ class Model extends Observer {
           const num = !signF ? to - step : to + step;
           to = +num.toFixed(len);
         }
-        if (this.type == 'double') {
+        if (this.type === 'double') {
           if (from > to && dotF) from = to;
           if (from > to && !dotF) to = from;
         }
@@ -532,10 +585,15 @@ class Model extends Observer {
           this.keyStepOne = 1;
         }
         if (!this.keyStepHold && this.keyStepOne) {
-          const len = this.trimFraction(this.keyStepOne);
+          const len = Model.trimFraction(this.keyStepOne);
           this.keyStepHold = +this.keyStepOne.toFixed(len);
         }
-        repeat ? value(this.keyStepHold) : value(this.keyStepOne);
+
+        if (repeat) {
+          value(this.keyStepHold);
+        } else {
+          value(this.keyStepOne);
+        }
       } else if (this.step) {
         value(this.step);
       } else {
@@ -544,20 +602,20 @@ class Model extends Observer {
     }
 
     this.setDotData({
-      from: from,
-      to: to,
+      from,
+      to,
     });
 
-    return { from: from, to: to };
+    return { from, to };
   }
 
-  private getValStep(val: number, step: number, mas: number[]) {
-    for (let i = 0; i < mas.length; i++) {
+  private static getValStep(val: number, step: number, mas: number[]) {
+    for (let i = 0; i < mas.length; i += 1) {
       const item = mas[i];
       if (val < item) {
         const ost = step - (item - val);
-        return ost < step / 2 ?
-          mas[i ? i - 1 : i] : item;
+        return ost < step / 2
+          ? mas[i ? i - 1 : i] : item;
       }
     }
     return val;
@@ -571,9 +629,9 @@ class Model extends Observer {
     return +(this.min + (this.toP * this.valP)).toFixed(0);
   }
 
-  private trimFraction(num: number) {
+  private static trimFraction(num: number) {
     const integer = Math.trunc(num);
-    const str = String(num).replace(integer + '.', '');
+    const str = String(num).replace(`${integer}.`, '');
     const len = str.length;
     return len;
   }
@@ -582,34 +640,34 @@ class Model extends Observer {
     this.startConfFl = false;
     this.updateConfFl = false;
 
-    return Object.assign({
-      type: 'single',   // type - single or double dot
-      orientation: 'horizontal',  // slider orientation
-      theme: 'base',    // slider theme
-      min: 0,           // minimal value on the scale
-      max: 10,          // maximal value on the scale
-      from: 1,          // first dot position
-      to: 2,            // second dot position
-      step: 0,           // step of the dot mooving
-      keyStepOne: 0,    // step of the dot mooving on keyboard key single pressing
-      keyStepHold: 0,   // step of the dot mooving on keyboard key holding
-      bar: false,       // show or hide a bar
-      tipPrefix: '',    // prefix for hints (15 characters maximum)
-      tipPostfix: '',   // postfix for hints (15 characters maximum)
-      tipMinMax: true,  // hints are on
-      tipFromTo: true,  // hints are off
-      grid: false,      // scale is off
-      gridSnap: false,  // dot can't stop between scale marks
-      gridNum: 0,       // amount of intervals the scale is split into
-      gridStep: 0,      // amount of steps in the interval
-      gridRound: 0,     // fractional rounding 
-      disabled: false,  // slider enabled or disabled
-    }, options);
+    return {
+      type: 'single', // type - single or double dot
+      orientation: 'horizontal', // slider orientation
+      theme: 'base', // slider theme
+      min: 0, // minimal value on the scale
+      max: 10, // maximal value on the scale
+      from: 1, // first dot position
+      to: 2, // second dot position
+      step: 0, // step of the dot mooving
+      keyStepOne: 0, // step of the dot mooving on keyboard key single pressing
+      keyStepHold: 0, // step of the dot mooving on keyboard key holding
+      bar: false, // show or hide a bar
+      tipPrefix: '', // prefix for hints (15 characters maximum)
+      tipPostfix: '', // postfix for hints (15 characters maximum)
+      tipMinMax: true, // hints are on
+      tipFromTo: true, // hints are off
+      grid: false, // scale is off
+      gridSnap: false, // dot can't stop between scale marks
+      gridNum: 0, // amount of intervals the scale is split into
+      gridStep: 0, // amount of steps in the interval
+      gridRound: 0, // fractional rounding
+      disabled: false, // slider enabled or disabled
+      ...options,
+    };
   }
 
   private createProperties(options: RangeSliderOptions) {
     this.onHandle = async () => {
-
       this.onChange = options.onChange ?? null;
       this.onUpdate = options.onUpdate ?? null;
       this.onStart = options.onStart ?? null;
@@ -623,25 +681,31 @@ class Model extends Observer {
         ...this.defaultData,
       });
 
-      if (typeof this.onStart == 'function')
+      if (typeof this.onStart === 'function') {
         await this.onStart(this.defaultData);
+      }
     };
-
   }
 
-  private getProperty<T, K extends keyof T>(obj: T, key: K) {
+  private static getProperty<T, K extends keyof T>(obj: T, key: K) {
     return obj[key];
   }
 
-  private setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
+  private static setProperty<T, K extends keyof T>(
+    obj: T,
+    key: K,
+    value: T[K],
+  ) {
     obj[key] = value;
   }
 
-  private propertiesValidation(
-    properties: Array<keyof typeof obj>, obj: RangeSliderOptions) {
+  private static propertiesValidation(
+    properties: Array<keyof typeof obj>,
+    obj: RangeSliderOptions,
+  ) {
     let flag = false;
-    for (let item of properties) {
-      const dataT = obj[item] ?? null;
+    for (let i = 0; i < properties.length; i += 1) {
+      const dataT = obj[properties[i]] ?? null;
       if (dataT !== null) {
         flag = true;
         break;
@@ -651,8 +715,8 @@ class Model extends Observer {
     return true;
   }
 
-  private isEmpty(data: Prop) {
-    return (data ?? null) != null ? true : false;
+  private static isEmpty(data: Prop) {
+    return (data ?? null) != null;
   }
 
   private checkValue(data: Prop, str: string) {
@@ -660,20 +724,20 @@ class Model extends Observer {
     // использую type assertions так как не нашёл возможности передавать нужный тип
     // не могу отказаться от данной конструкции кода, так как это сильно уменьшает копипаст
     const key = str as keyof typeof _this;
-    const val = this[key];
-    const valF = (val ?? null) != null ? true : false;
+    const value = this[key];
+    const valF = (value ?? null) != null;
 
-    if (!this.isEmpty(data)) {
-      return valF ? val : null;
+    if (!Model.isEmpty(data)) {
+      return valF ? value : null;
     }
     return data;
   }
 
   private setRangeData(options: RangeSliderOptions): boolean {
-    if (!this.propertiesValidation(['min', 'max'], options)) return false;
+    if (!Model.propertiesValidation(['min', 'max'], options)) return false;
 
-    let min: number = options.min;
-    let max: number = options.max;
+    let { min } = options;
+    let { max } = options;
 
     min = +this.checkValue(min, 'min');
     if (min == null) return false;
@@ -690,21 +754,17 @@ class Model extends Observer {
     }
 
     // need to check if new data is differ from the existing data in model
-    if (min != this.min || max != this.max) {
+    if (min !== this.min || max !== this.max) {
       this.min = +min;
       this.max = +max;
 
-      if (this.max < this.to)
-        this.to = this.max;
+      if (this.max < this.to) { this.to = this.max; }
 
-      if (this.max < this.from)
-        this.from = this.max;
+      if (this.max < this.from) { this.from = this.max; }
 
-      if (this.min > this.to)
-        this.to = this.min;
+      if (this.min > this.to) { this.to = this.min; }
 
-      if (this.min > this.from)
-        this.from = this.min;
+      if (this.min > this.from) { this.from = this.min; }
 
       this.notifyOB({
         key: 'RangeData',
@@ -725,35 +785,28 @@ class Model extends Observer {
   }
 
   private setStep(options: RangeSliderOptions): boolean {
-    if (!this.propertiesValidation(
-      [
-        'step',
-        'keyStepOne',
-        'keyStepHold'
-      ], options
-    )) return false;
+    if (!Model.propertiesValidation([
+      'step',
+      'keyStepOne',
+      'keyStepHold',
+    ], options)) return false;
 
-    let step: number = options.step;
-    let keyStepOne: number = options.keyStepOne;
-    let keyStepHold: number = options.keyStepHold;
+    let { step } = options;
+    let { keyStepOne } = options;
+    let { keyStepHold } = options;
 
     step = +this.checkValue(step, 'step');
-    if (step == null)
-      step = 0;
+    if (step == null) { step = 0; }
 
     keyStepOne = +this.checkValue(keyStepOne, 'keyStepOne');
-    if (keyStepOne == null)
-      keyStepOne = 0;
+    if (keyStepOne == null) { keyStepOne = 0; }
 
     keyStepHold = +this.checkValue(keyStepHold, 'keyStepHold');
-    if (keyStepHold == null)
-      keyStepHold = 0;
+    if (keyStepHold == null) { keyStepHold = 0; }
 
     const validVal = (val: number) => {
-      if (val <= this.getRange())
-        return val;
-      else
-        return this.getRange();
+      if (val <= this.getRange()) return val;
+      return this.getRange();
     };
 
     this.step = validVal(+step);
@@ -771,25 +824,24 @@ class Model extends Observer {
   }
 
   private setDotData(options: RangeSliderOptions): boolean {
-    if (!this.propertiesValidation(
-      ['type', 'from', 'to'], options
+    if (!Model.propertiesValidation(
+      ['type', 'from', 'to'],
+      options,
     )) return false;
 
-    let type: string = options.type;
-    let from: number = options.from;
-    let to: number = options.to;
+    let { type } = options;
+    let { from } = options;
+    let { to } = options;
 
-    //check if all necessary data exists
-    if (!this.isEmpty(this.min)) return false;
-    if (!this.isEmpty(this.max)) return false;
+    // check if all necessary data exists
+    if (!Model.isEmpty(this.min)) return false;
+    if (!Model.isEmpty(this.max)) return false;
 
-    if (type == 'single' || type == 'double') {
+    if (type === 'single' || type === 'double') {
       this.type = type;
-    } else {
-      if (this.isEmpty(this.type)) {
-        type = this.type;
-      } else return false;
-    }
+    } else if (Model.isEmpty(this.type)) {
+      type = this.type;
+    } else return false;
 
     from = +this.checkValue(from, 'from');
     if (from == null) return false;
@@ -797,14 +849,12 @@ class Model extends Observer {
     if (from >= this.min && from <= this.max) {
       this.from = +from;
     } else {
-      if (from < this.min)
-        this.from = this.min;
+      if (from < this.min) { this.from = this.min; }
 
-      if (from > this.max)
-        this.from = this.max;
+      if (from > this.max) { this.from = this.max; }
     }
 
-    if (type == 'double') // check FROM and TO
+    if (type === 'double') // check FROM and TO
     {
       to = +this.checkValue(to, 'to');
       if (to == null) return false;
@@ -820,22 +870,20 @@ class Model extends Observer {
       } else {
         this.to = this.max;
       }
+    } else if (this.max >= 2 && this.from <= 2) {
+      this.to = this.to ?? 2;
     } else {
-
-      if (2 <= this.max && 2 >= this.from) {
-        this.to = this.to ?? 2;
-      } else {
-        this.to = this.to ?? this.from;
-      }
-
+      this.to = this.to ?? this.from;
     }
 
-    if (!this.startConfFl && !this.updateConfFl)
+    if (!this.startConfFl && !this.updateConfFl) {
       if (this.gridSnap && !this.step) {
-        this.from = this.getValStep(this.from, this.stepGrid, this.snapNum);
-        if (type == 'double')
-          this.to = this.getValStep(this.to, this.stepGrid, this.snapNum);
+        this.from = Model.getValStep(this.from, this.stepGrid, this.snapNum);
+        if (type === 'double') {
+          this.to = Model.getValStep(this.to, this.stepGrid, this.snapNum);
+        }
       }
+    }
 
     this.notifyOB({
       key: 'DotData',
@@ -844,24 +892,24 @@ class Model extends Observer {
       to: this.to,
     });
 
-    if (this.startConfFl && !this.updateConfFl)
-      if (typeof this.onChange == 'function')
-        this.onChange(this.getOptions());
+    if (this.startConfFl && !this.updateConfFl) {
+      if (typeof this.onChange === 'function') this.onChange(this.getOptions());
+    }
 
     return true;
   }
 
   private setGridSnapData(options: RangeSliderOptions): boolean {
-    if (!this.propertiesValidation(['gridSnap'], options)) {
-      if (this.gridSnap == undefined)
-        this.gridSnap = false;
+    if (!Model.propertiesValidation(['gridSnap'], options)) {
+      if (this.gridSnap === undefined) { this.gridSnap = false; }
       return false;
     }
 
-    if (!this.grid)
+    if (!this.grid) {
       this.gridSnap = false;
-    else
+    } else {
       this.gridSnap = options.gridSnap;
+    }
 
     this.notifyOB({
       key: 'GridSnapData',
@@ -871,18 +919,16 @@ class Model extends Observer {
   }
 
   private setGridData(options: RangeSliderOptions): boolean {
-    if (!this.propertiesValidation(
-      [
-        'grid',
-        'gridNum',
-        'gridStep',
-        'gridRound'
-      ], options
-    )) return false;
+    if (!Model.propertiesValidation([
+      'grid',
+      'gridNum',
+      'gridStep',
+      'gridRound',
+    ], options)) return false;
 
-    let grid: boolean = options.grid;
-    let gridNum: number = options.gridNum;
-    let gridStep: number = options.gridStep;
+    let { grid } = options;
+    let { gridNum } = options;
+    let { gridStep } = options;
     let gridRound: number = Math.trunc(options.gridRound);
 
     if (Number.isNaN(gridRound)) gridRound = null;
@@ -890,7 +936,7 @@ class Model extends Observer {
     grid = Boolean(this.checkValue(grid, 'grid') ?? false);
     this.grid = Boolean(grid);
 
-    if (!this.isEmpty(this.min) || !this.isEmpty(this.max)) return false;
+    if (!Model.isEmpty(this.min) || !Model.isEmpty(this.max)) return false;
 
     gridNum = +this.checkValue(gridNum, 'gridNum') ?? 0;
     gridStep = +this.checkValue(gridStep, 'gridStep') ?? 0;
@@ -902,8 +948,7 @@ class Model extends Observer {
       gridStep = long;
     }
 
-    if (gridStep > this.max)
-      gridStep = this.max;
+    if (gridStep > this.max) { gridStep = this.max; }
 
     if (!gridNum && !gridStep) {
       gridNum = 4;
@@ -939,11 +984,11 @@ class Model extends Observer {
   }
 
   private setOrientationData(options: RangeSliderOptions): boolean {
-    if (!this.propertiesValidation(['orientation'], options)) return false;
+    if (!Model.propertiesValidation(['orientation'], options)) return false;
 
     const orientation = options.orientation.replace(/\s/g, '');
 
-    if (orientation == 'horizontal' || orientation == 'vertical') {
+    if (orientation === 'horizontal' || orientation === 'vertical') {
       this.orientation = orientation;
     } else return false;
 
@@ -956,15 +1001,15 @@ class Model extends Observer {
   }
 
   private setThemeData(options: RangeSliderOptions): boolean {
-    if (!this.propertiesValidation(['theme'], options)) return false;
+    if (!Model.propertiesValidation(['theme'], options)) return false;
 
     const theme = options.theme.replace(/\s/g, '');
 
     if (theme.length <= 20) {
       this.theme = theme;
     } else {
-      console.log('параметр theme - превышает допустимое ' +
-        'количество символов (макс - 20)');
+      console.log('параметр theme - превышает допустимое '
+        + 'количество символов (макс - 20)');
     }
 
     this.notifyOB({
@@ -983,8 +1028,8 @@ class Model extends Observer {
       'onReset',
     ];
     let fl = false;
-    for (let item of checkKey) {
-      if (keyC.lastIndexOf(item) != -1) {
+    for (let i = 0; i < checkKey.length; i += 1) {
+      if (keyC.lastIndexOf(checkKey[i]) !== -1) {
         fl = true;
         break;
       }
@@ -995,43 +1040,50 @@ class Model extends Observer {
       if (fun === null) {
         return null;
       }
-      else if (typeof fun == 'function')
-        return fun;
+      if (typeof fun === 'function') return fun;
+
+      return null;
     };
 
-    if (options.onChange !== this.onChange)
-      if (options.onChange !== undefined)
+    if (options.onChange !== this.onChange) {
+      if (options.onChange !== undefined) {
         this.onChange = checkData(options.onChange);
+      }
+    }
 
-    if (options.onUpdate !== this.onUpdate)
-      if (options.onUpdate !== undefined)
+    if (options.onUpdate !== this.onUpdate) {
+      if (options.onUpdate !== undefined) {
         this.onUpdate = checkData(options.onUpdate);
+      }
+    }
 
-    if (options.onStart !== this.onStart)
-      if (options.onStart !== undefined)
+    if (options.onStart !== this.onStart) {
+      if (options.onStart !== undefined) {
         this.onStart = checkData(options.onStart);
+      }
+    }
 
-    if (options.onReset !== this.onReset)
-      if (options.onReset !== undefined)
+    if (options.onReset !== this.onReset) {
+      if (options.onReset !== undefined) {
         this.onReset = checkData(options.onReset);
+      }
+    }
 
     return true;
   }
 
   private setHintsData(options: RangeSliderOptions): boolean {
-    if (!this.propertiesValidation(
-      [
-        'tipPrefix',
-        'tipPostfix',
-        'tipMinMax',
-        'tipFromTo'
-      ], options
-    )) return false;
+    if (!Model.propertiesValidation([
+      'tipPrefix',
+      'tipPostfix',
+      'tipMinMax',
+      'tipFromTo',
+    ], options)) return false;
 
-    let tipPrefix: string = options.tipPrefix;
-    let tipPostfix: string = options.tipPostfix;
-    let tipMinMax: boolean = options.tipMinMax;
-    let tipFromTo: boolean = options.tipFromTo;
+    let { tipPrefix } = options;
+    let { tipPostfix } = options;
+    let { tipMinMax } = options;
+    let { tipFromTo } = options;
 
     tipPostfix = String(this.checkValue(tipPostfix, 'tipPostfix'));
     if (tipPostfix != null) {
@@ -1077,9 +1129,8 @@ class Model extends Observer {
   }
 
   private setDisabledData(options: RangeSliderOptions): boolean {
-    if (!this.propertiesValidation(['disabled'], options)) {
-      if (this.disabled == undefined)
-        this.disabled = false;
+    if (!Model.propertiesValidation(['disabled'], options)) {
+      if (this.disabled === undefined) { this.disabled = false; }
       return false;
     }
 
@@ -1094,9 +1145,8 @@ class Model extends Observer {
   }
 
   private setBarData(options: RangeSliderOptions): boolean {
-    if (!this.propertiesValidation(['bar'], options)) {
-      if (this.bar == undefined)
-        this.bar = false;
+    if (!Model.propertiesValidation(['bar'], options)) {
+      if (this.bar === undefined) { this.bar = false; }
       return false;
     }
 
@@ -1114,8 +1164,10 @@ class Model extends Observer {
   }
 
   private convertToPercent(options: PositionData) {
-    const { fl, clientXY, shiftXY, position, } = options;
-    const vertical = this.orientation == 'vertical';
+    const {
+      fl, clientXY, shiftXY, position,
+    } = options;
+    const vertical = this.orientation === 'vertical';
     const dotXY = clientXY - shiftXY;
     let num = 0;
 
@@ -1124,34 +1176,33 @@ class Model extends Observer {
     } else {
       num = dotXY - position;
     }
-    const percent = num * 100 / this.wrapWH;
+    const percent = (num * 100) / this.wrapWH;
 
     if (fl) {
       this.limitFrom = percent;
-    }
-    else {
+    } else {
       this.limitTo = percent;
     }
     return percent;
   }
 
   private calcWidthP(width: number) {
-    return (width * 100 / this.wrapWH) / 2;
+    return ((width * 100) / this.wrapWH) / 2;
   }
 
   private calcGridNumStep() {
     let interval = 0;
     let step = 0;
 
-    if (this.gridStep && !this.gridNum) {     // if STEP is defined and interval is set by default
+    if (this.gridStep && !this.gridNum) { // if STEP is defined and interval is set by default
       step = this.gridStep;
-      interval = this.getRange() / step;          // define new interval
-    } else {                                      // calculate in line with interval
+      interval = this.getRange() / step; // define new interval
+    } else { // calculate in line with interval
       interval = this.gridNum;
-      step = (this.max - this.min) / interval;    // define step
+      step = (this.max - this.min) / interval; // define step
     }
     return { interval, step };
   }
 }
 
-export { Model };
+export default Model;

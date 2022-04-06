@@ -1,4 +1,4 @@
-import { RangeSliderOptions } from './glob-interface';
+import RangeSliderOptions from './glob-interface';
 
 interface insideOptions extends RangeSliderOptions {
   readonly fromX?: number,
@@ -45,14 +45,10 @@ abstract class Observer {
   }
 
   protected notifyOB(options: ObserverOptions) {
-    for (let item of this.observers) {
+    this.observers.forEach((item) => {
       item(options);
-    }
+    });
   }
 }
 
 export { Observer, ObserverOptions };
-
-
-
-

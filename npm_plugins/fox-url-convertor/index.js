@@ -1,21 +1,21 @@
-
 class FoxUrlConvertor {
   constructor(options) {
     this.options = this.getConfig(options);
   }
 
   getConfig(options) {
-    return Object.assign({
+    return {
       URLchange: '%5C',
-      URLto: '/'
-    }, options);
+      URLto: '/',
+      ...options,
+    };
   }
 
   setHtmlLink(compiler) {
     this.buildFiles((assets) => {
-      Object.keys(assets).map((i) => {
-        if (i.indexOf('.html') !== -1) { //------------------- получаем только html файлы
-          let HTML = assets[i]._value.toString(); //--------- получаем html код
+      Object.keys(assets).forEach((i) => {
+        if (i.indexOf('.html') !== -1) { // ------------------- получаем только html файлы
+          const HTML = assets[i]._value.toString(); // --------- получаем html код
           const reg = new RegExp(this.options.URLchange, 'g');
           assets[i]._value = HTML.replace(reg, this.options.URLto);
         }
@@ -23,20 +23,22 @@ class FoxUrlConvertor {
     }, compiler, true);
   }
 
-  buildFiles(callback, compiler, fl = false) {
+  buildFiles(callback, compiler, flag = false) {
     compiler.hooks.thisCompilation.tap(
-      { name: 'FoxUrlConvertor' }, (compilation) => {
-        let process = compilation.PROCESS_ASSETS_STAGE_PRE_PROCESS;
-        let additional = compilation.PROCESS_ASSETS_STAGE_ADDITIONAL;
+      { name: 'FoxUrlConvertor' },
+      (compilation) => {
+        const process = compilation.PROCESS_ASSETS_STAGE_PRE_PROCESS;
+        const additional = compilation.PROCESS_ASSETS_STAGE_ADDITIONAL;
         compilation.hooks.processAssets.tap(
           {
             name: 'FoxUrlConvertor',
-            stage: fl ? process : additional,
-            additionalAssets: fl
+            stage: flag ? process : additional,
+            additionalAssets: flag,
           },
-          callback
+          callback,
         );
-      });
+      },
+    );
   }
 
   apply(compiler) {

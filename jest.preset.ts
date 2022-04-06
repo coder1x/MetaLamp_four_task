@@ -1,10 +1,8 @@
-// eslint-disable-next-line camelcase
-const ts_preset = require('ts-jest/jest-preset');
-// eslint-disable-next-line camelcase
-const puppeteer_preset = require('jest-puppeteer/jest-preset');
-
+// eslint-disable-next-line import/no-extraneous-dependencies
+const tsPreset = require('ts-jest/jest-preset');
+const puppeteerPreset = require('jest-puppeteer/jest-preset');
 
 module.exports = Object.assign(
-  ts_preset,
-  puppeteer_preset
+  tsPreset,
+  puppeteerPreset,
 );

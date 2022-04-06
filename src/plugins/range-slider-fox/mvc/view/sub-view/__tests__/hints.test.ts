@@ -1,4 +1,4 @@
-import { Hints } from '../../sub-view/hints';
+import Hints from '../hints';
 
 describe('------- Test Hints API -------', () => {
   let rsName: string;
@@ -82,7 +82,7 @@ describe('------- Test Hints API -------', () => {
     expect(hints.createTipSingle()).toBeFalsy();
   });
 
-  //  deleteTipMinMax 
+  //  deleteTipMinMax
   test(' Delete Min and Max hints DOM-elements ', async () => {
     let fl = await hints.createTipMinMax();
     expect(fl).toBeTruthy();
@@ -92,7 +92,7 @@ describe('------- Test Hints API -------', () => {
     expect(hints.deleteTipMinMax()).toBeFalsy();
   });
 
-  // deleteTipFrom 
+  // deleteTipFrom
   test(' Delete From hint DOM-element ', async () => {
     let fl = await hints.createTipFrom();
     expect(fl).toBeTruthy();
@@ -102,7 +102,7 @@ describe('------- Test Hints API -------', () => {
     expect(hints.deleteTipFrom()).toBeFalsy();
   });
 
-  //  deleteTipTo 
+  //  deleteTipTo
   test(' Delete To hint DOM-element ', async () => {
     let fl = await hints.createTipTo();
     expect(fl).toBeTruthy();
@@ -112,7 +112,7 @@ describe('------- Test Hints API -------', () => {
     expect(hints.deleteTipTo()).toBeFalsy();
   });
 
-  //  deleteTipSingle 
+  //  deleteTipSingle
   test(' Delete Single hint DOM-element ', async () => {
     let fl = await hints.createTipSingle();
     expect(fl).toBeTruthy();
@@ -122,7 +122,7 @@ describe('------- Test Hints API -------', () => {
     expect(hints.deleteTipSingle()).toBeFalsy();
   });
 
-  //  checkTipTo 
+  //  checkTipTo
   test(' Check if both From and TO hints are displayed ', async () => {
     let fl = await hints.checkTipTo();
     expect(fl).toBeTruthy();

@@ -1,10 +1,15 @@
 class Resize {
   wrapper: HTMLElement;
+
   sleep: number;
+
   onChange: Function;
 
-  constructor(wrapper: HTMLElement,
-    sleep: number, onChange: Function) {
+  constructor(
+    wrapper: HTMLElement,
+    sleep: number,
+    onChange: Function,
+  ) {
     this.wrapper = wrapper ?? document.body;
     this.sleep = sleep ?? 200;
     const emptyFun = () => { };
@@ -22,15 +27,15 @@ class Resize {
         setTimeout(resizeEnd, this.sleep);
       } else {
         timeout = false;
-        let totalWidth = this.wrapper.offsetWidth;
-        if (totalWidth != startWidth) {
+        const totalWidth = this.wrapper.offsetWidth;
+        if (totalWidth !== startWidth) {
           this.onChange();
           startWidth = totalWidth;
         }
       }
     };
 
-    this.throttle('resize', 'optimizedResize');
+    Resize.throttle('resize', 'optimizedResize');
 
     window.addEventListener('optimizedResize', () => {
       rTime = new Date();
@@ -41,18 +46,19 @@ class Resize {
     });
   }
 
-  private throttle(type: string, name: string, obj = window) {
+  private static throttle(type: string, name: string, obj = window) {
     let running = false;
-    const func = function () {
+    function func() {
       if (running) { return false; }
       running = true;
-      requestAnimationFrame(function () {
+      requestAnimationFrame(() => {
         obj.dispatchEvent(new CustomEvent(name));
         running = false;
       });
-    };
+      return true;
+    }
     obj.addEventListener(type, func);
   }
 }
 
-export { Resize };
+export default Resize;

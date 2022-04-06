@@ -31,13 +31,13 @@ describe('------- Test View API -------', () => {
       to: 70,
     });
 
-    new Controller(model, view);
+    const objController = new Controller(model, view);
     const data = view.setValueInput(30, 70, 'double');
     expect(data).toBeTruthy();
     expect(data).toBe(domV.value);
   });
 
-  // outDataAttr 
+  // outDataAttr
   test(' Check if all necessary data-attributes are got ', async () => {
     await domV.setAttribute('data-from', '45');
     await domV.setAttribute('data-to', '86');
@@ -53,7 +53,7 @@ describe('------- Test View API -------', () => {
       },
     });
 
-    new Controller(model, view);
+    const objController = new Controller(model, view);
   });
 
   // disabledRangeSlider
@@ -68,9 +68,9 @@ describe('------- Test View API -------', () => {
         op = await view.disabledRangeSlider(false);
         num = +rs.style.opacity;
         expect(+op).toBeCloseTo(num);
-      }
+      },
     });
-    new Controller(model, view);
+    const objController = new Controller(model, view);
   });
 
   // createDomBase
@@ -81,24 +81,24 @@ describe('------- Test View API -------', () => {
         const nodes = view.createDomBase().childNodes;
         const name: string[] = [];
         let line: Element;
-        for (let item of nodes) {
-          let elem: HTMLElement;
-          if (item instanceof HTMLElement)
-            elem = item;
+
+        nodes.forEach((item) => {
+          const elem = item as HTMLElement;
+
           const nC = elem.className;
           if (searchStr(nC, `${jsRsName}__center`)) {
-            line = elem.children[0];
+            [line] = elem.children;
           }
           name.push(nC);
-        }
+        });
 
         expect(searchStr(name[0], `${jsRsName}__top`)).toBeTruthy();
         expect(searchStr(name[1], `${jsRsName}__center`)).toBeTruthy();
         expect(searchStr(name[2], `${jsRsName}__bottom`)).toBeTruthy();
         expect(searchStr(line.className, `${jsRsName}__line`)).toBeTruthy();
-      }
+      },
     });
-    new Controller(model, view);
+    const objController = new Controller(model, view);
   });
 
   // setOrientation
@@ -108,9 +108,9 @@ describe('------- Test View API -------', () => {
         view.setOrientation('vertical');
         const elem = wrap.getElementsByClassName(`${rsName}_vertical`);
         expect(elem[0]).toBeDefined();
-      }
+      },
     });
-    new Controller(model, view);
+    const objController = new Controller(model, view);
   });
 
   // setActions
@@ -133,8 +133,7 @@ describe('------- Test View API -------', () => {
       },
       onUpdate: async () => {
         const spy = await jest.spyOn(model, 'clickLine');
-        const dot =
-          await wrapC.getElementsByClassName(`${jsRsName}__line`);
+        const dot = await wrapC.getElementsByClassName(`${jsRsName}__line`);
         const funP = await mockPointerEvent(dot[0]);
         await funP('click', 34, 45);
         expect(spy).toBeCalledTimes(1);
@@ -157,15 +156,14 @@ describe('------- Test View API -------', () => {
         expect(elem[0]).toBeUndefined();
         elem = wrap.getElementsByClassName('rs-fox');
         expect(elem[0]).toBeDefined();
-      }
+      },
     });
-    new Controller(model, view);
+    const objController = new Controller(model, view);
   });
 
   test(' handle - interface  ', async () => {
     const model = await new Model({
       onStart: async () => {
-
         const elem = view.createDotElem('double');
         expect(elem.constructor.name).toBe('HTMLDivElement');
 
@@ -177,15 +175,14 @@ describe('------- Test View API -------', () => {
 
         const fl = view.setDotActions('double');
         expect(fl).toBeTruthy();
-      }
+      },
     });
-    new Controller(model, view);
+    const objController = new Controller(model, view);
   });
 
   test(' hints - interface  ', async () => {
     const model = await new Model({
       onStart: async () => {
-
         let masFL = view.setHintsData({
           tipPrefix: '',
           tipPostfix: '',
@@ -216,9 +213,9 @@ describe('------- Test View API -------', () => {
           singleXY: 1,
         });
         expect(masFL).not.toContain(true);
-      }
+      },
     });
-    new Controller(model, view);
+    const objController = new Controller(model, view);
   });
 
   test(' Bar - interface  ', async () => {
@@ -229,9 +226,9 @@ describe('------- Test View API -------', () => {
 
         const fl = view.setBar(25, 100);
         expect(fl).toBeTruthy();
-      }
+      },
     });
-    new Controller(model, view);
+    const objController = new Controller(model, view);
   });
 
   test(' Grid - interface  ', async () => {
@@ -261,8 +258,8 @@ describe('------- Test View API -------', () => {
         expect(elem.constructor.name).toBe('HTMLDivElement');
         const fl = await view.deleteGrid();
         expect(fl).toBeTruthy();
-      }
+      },
     });
-    new Controller(model, view);
+    const objController = new Controller(model, view);
   });
 });

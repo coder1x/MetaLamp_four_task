@@ -9,14 +9,23 @@ interface Options {
 
 class Hints {
   private elem: Element;
+
   private tipMinMax: HTMLInputElement;
+
   private tipFromTo: HTMLInputElement;
+
   private tipPrefix: HTMLInputElement;
+
   private tipPostfix: HTMLInputElement;
+
   private tipMinMaxD: boolean;
+
   private tipFromToD: boolean;
+
   private tipPrefixD: string;
+
   private tipPostfixD: string;
+
   private nameClass: string;
 
   constructor(nameClass: string, elem: Element) {
@@ -26,21 +35,23 @@ class Hints {
   }
 
   setData(options: Options) {
-    const { tipMinMax, tipFromTo, tipPrefix, tipPostfix } = options;
+    const {
+      tipMinMax, tipFromTo, tipPrefix, tipPostfix,
+    } = options;
 
-    if (this.tipMinMaxD != tipMinMax) {
+    if (this.tipMinMaxD !== tipMinMax) {
       this.tipMinMax.checked = tipMinMax;
       this.tipMinMaxD = tipMinMax;
     }
-    if (this.tipFromToD != tipFromTo) {
+    if (this.tipFromToD !== tipFromTo) {
       this.tipFromTo.checked = tipFromTo;
       this.tipFromToD = tipFromTo;
     }
-    if (this.tipPrefixD != tipPrefix) {
+    if (this.tipPrefixD !== tipPrefix) {
       this.tipPrefix.value = String(tipPrefix);
       this.tipPrefixD = tipPrefix;
     }
-    if (this.tipPostfixD != tipPostfix) {
+    if (this.tipPostfixD !== tipPostfix) {
       this.tipPostfix.value = String(tipPostfix);
       this.tipPostfixD = tipPostfix;
     }
@@ -52,36 +63,37 @@ class Hints {
       const elem = event.target as HTMLInputElement;
 
       obj.update({
-        [elem.name]: elem.value
+        [elem.name]: elem.value,
       });
     };
 
     const masE = [this.tipPrefix, this.tipPostfix];
-    for (let item of masE) {
-      item.addEventListener('change', data);
-    }
 
-    this.tipMinMax.addEventListener('click', function (event: Event) {
+    masE.forEach((item) => {
+      item.addEventListener('change', data);
+    });
+
+    this.tipMinMax.addEventListener('click', (event: Event) => {
       const elem = event.target as HTMLInputElement;
 
       obj.update({
-        tipMinMax: elem.checked
+        tipMinMax: elem.checked,
       });
     });
 
-    this.tipFromTo.addEventListener('click', function (event: Event) {
+    this.tipFromTo.addEventListener('click', (event: Event) => {
       const elem = event.target as HTMLInputElement;
 
       obj.update({
-        tipFromTo: elem.checked
+        tipFromTo: elem.checked,
       });
     });
   }
 
   private setDom() {
-    const getDom = (str: string): HTMLInputElement => {
-      return this.elem.querySelector(`${this.nameClass}__${str}-wrap input`);
-    };
+    const getDom = (str: string): HTMLInputElement => this.elem.querySelector(
+      `${this.nameClass}__${str}-wrap input`,
+    );
 
     this.tipMinMax = getDom('minmax');
     this.tipFromTo = getDom('fromto');
@@ -90,4 +102,4 @@ class Hints {
   }
 }
 
-export { Hints };
+export default Hints;

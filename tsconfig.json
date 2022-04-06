@@ -7,6 +7,7 @@
       "dom.iterable",
       "esnext"
     ],
+    "baseUrl": ".",
     "sourceMap": false,
     "allowJs": false,
     "skipLibCheck": true,
@@ -22,7 +23,27 @@
     "isolatedModules": false,
     "downlevelIteration": true,
     "noEmit": false,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "paths": {
+      "@api/*": [
+        "api/*"
+      ],
+      "@docs/*": [
+        "docs/*"
+      ],
+      "@script/*": [
+        "script/*"
+      ],
+      "@pages/*": [
+        "pages/*"
+      ],
+      "@store/*": [
+        "store/*"
+      ],
+      "@com/*": [
+        "src/components/*"
+      ],
+    },
   },
   "include": [
     "src"

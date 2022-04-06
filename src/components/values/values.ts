@@ -10,16 +10,27 @@ interface Options {
 
 class Values {
   private elem: Element;
+
   private min: HTMLInputElement;
+
   private max: HTMLInputElement;
+
   private from: HTMLInputElement;
+
   private to: HTMLInputElement;
+
   private step: HTMLInputElement;
+
   private minD: number;
+
   private maxD: number;
+
   private fromD: number;
+
   private toD: number;
+
   private stepD: number;
+
   private nameClass: string;
 
   constructor(nameClass: string, elem: Element) {
@@ -29,29 +40,31 @@ class Values {
   }
 
   setData(options: Options) {
-    const { min, max, from, to, step } = options;
+    const {
+      min, max, from, to, step,
+    } = options;
 
-    if (this.minD != min) {
+    if (this.minD !== min) {
       this.min.value = String(min);
       this.minD = min;
     }
 
-    if (this.maxD != max) {
+    if (this.maxD !== max) {
       this.max.value = String(max);
       this.maxD = max;
     }
 
-    if (this.fromD != from) {
+    if (this.fromD !== from) {
       this.from.value = String(from);
       this.fromD = from;
     }
 
-    if (this.toD != to) {
+    if (this.toD !== to) {
       this.to.value = String(to);
       this.toD = to;
     }
 
-    if (this.stepD != step) {
+    if (this.stepD !== step) {
       this.step.value = String(step);
       this.stepD = step;
     }
@@ -67,11 +80,10 @@ class Values {
     mapInput.set('step', this.step.value);
 
     const data = (e: Event) => {
-      const elem = e.target;
-      if (elem instanceof HTMLInputElement)
-        obj.update({
-          [elem.name]: +mapInput.get(elem.name)
-        });
+      const elem = e.target as HTMLInputElement;
+      obj.update({
+        [elem.name]: +mapInput.get(elem.name),
+      });
     };
 
     const inputProcessing = (event: Event) => {
@@ -89,21 +101,19 @@ class Values {
     };
 
     const masE = [this.min, this.max, this.from, this.to, this.step];
-    for (let item of masE) {
+
+    masE.forEach((item) => {
       item.addEventListener('change', data);
       item.addEventListener('input', inputProcessing);
-    }
+    });
   }
 
   private setDom() {
-    const getDom = (str: string): HTMLInputElement => {
-      return this.elem.querySelector(
-        this.nameClass +
-        '__' +
-        str +
-        '-wrap input'
-      );
-    };
+    const getDom = (str: string): HTMLInputElement => this.elem.querySelector(
+      `${this.nameClass
+      }__${str
+      }-wrap input`,
+    );
 
     this.min = getDom('min');
     this.max = getDom('max');
@@ -113,4 +123,4 @@ class Values {
   }
 }
 
-export { Values };
+export default Values;

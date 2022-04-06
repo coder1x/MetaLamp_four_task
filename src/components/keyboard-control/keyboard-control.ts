@@ -7,10 +7,15 @@ interface Options {
 
 class KeyboardControl {
   private elem: Element;
+
   private keyStepOne: HTMLInputElement;
+
   private keyStepHold: HTMLInputElement;
+
   private keyStepOneD: number;
+
   private keyStepHoldD: number;
+
   private nameClass: string;
 
   constructor(nameClass: string, elem: Element) {
@@ -22,12 +27,12 @@ class KeyboardControl {
   setData(options: Options) {
     const { keyStepOne, keyStepHold } = options;
 
-    if (this.keyStepOneD != keyStepOne) {
+    if (this.keyStepOneD !== keyStepOne) {
       this.keyStepOne.value = String(keyStepOne);
       this.keyStepOneD = keyStepOne;
     }
 
-    if (this.keyStepHoldD != keyStepHold) {
+    if (this.keyStepHoldD !== keyStepHold) {
       this.keyStepHold.value = String(keyStepHold);
       this.keyStepHoldD = keyStepHold;
     }
@@ -43,7 +48,7 @@ class KeyboardControl {
       const elem = event.target as HTMLInputElement;
 
       obj.update({
-        [elem.name]: +mapInput.get(elem.name)
+        [elem.name]: +mapInput.get(elem.name),
       });
     };
 
@@ -59,25 +64,24 @@ class KeyboardControl {
       } else {
         elem.value = mapInput.get(elem.name);
       }
-
     };
 
     const masE = [this.keyStepOne, this.keyStepHold];
 
-    for (let item of masE) {
+    masE.forEach((item) => {
       item.addEventListener('change', data);
       item.addEventListener('input', inputProcessing);
-    }
+    });
   }
 
   private setDom() {
-    const getDom = (str: string): HTMLInputElement => {
-      return this.elem.querySelector(`${this.nameClass}__${str}-wrap input`);
-    };
+    const getDom = (str: string): HTMLInputElement => this.elem.querySelector(
+      `${this.nameClass}__${str}-wrap input`,
+    );
 
     this.keyStepOne = getDom('one');
     this.keyStepHold = getDom('hold');
   }
 }
 
-export { KeyboardControl };
+export default KeyboardControl;

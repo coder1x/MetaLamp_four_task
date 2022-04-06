@@ -10,11 +10,17 @@ type mapKey = Map<string, string>;
 
 class Handle extends Observer {
   private elemFrom: HTMLElement;
+
   private elemTo: HTMLElement;
+
   private rsName: string;
+
   private wrapElem: HTMLElement;
+
   private eventFromF: boolean;
+
   private eventToF: boolean;
+
   private vertical: boolean;
 
   constructor(rsCenter: HTMLElement, rsName: string) {
@@ -26,15 +32,17 @@ class Handle extends Observer {
   }
 
   createDomBase(type: string) {
-    const double = type == 'double' ? true : false;
+    const double = type === 'double';
     if (double && this.elemFrom && this.elemTo) return false;
     if (!double && this.elemFrom && !this.elemTo) return false;
 
     const createElem = (teg: string, className: string[]) => {
       const elem = document.createElement(teg);
-      for (let item of className) {
+
+      className.forEach((item) => {
         elem.classList.add(item);
-      }
+      });
+
       elem.setAttribute('tabindex', '0');
       return elem;
     };
@@ -42,8 +50,8 @@ class Handle extends Observer {
     const fromClassName = `${this.rsName}__from`;
     const toClassName = `${this.rsName}__to`;
 
-    const fromE = this.getElem(this.wrapElem, `js-${fromClassName}`);
-    const toE = this.getElem(this.wrapElem, `js-${toClassName}`);
+    const fromE = Handle.getElem(this.wrapElem, `js-${fromClassName}`);
+    const toE = Handle.getElem(this.wrapElem, `js-${toClassName}`);
 
     // don't create the element if it is already exist
     if (!fromE) {
@@ -58,28 +66,26 @@ class Handle extends Observer {
         this.elemTo = createElem('span', [toClassName, `js-${toClassName}`]);
         this.wrapElem.appendChild(this.elemTo);
       }
-    } else {
-      // remove the dot if it exists
-      if (toE) {
-        toE.remove();
-        this.elemTo = null;
-      }
+    } else if (toE) { // remove the dot if it exists
+      toE.remove();
+      this.elemTo = null;
     }
+
     return this.wrapElem;
   }
 
   setOrientation(str: string) {
-    this.vertical = str == 'vertical' ? true : false;
+    this.vertical = str === 'vertical';
 
     const convertStyle = (elem: CSSStyleDeclaration) => {
       let val = '';
       if (this.vertical) {
-        if (elem.left == '') return false;
+        if (elem.left === '') return false;
         val = elem.left;
         elem.removeProperty('left');
         elem.bottom = val;
       } else {
-        if (elem.bottom == '') return false;
+        if (elem.bottom === '') return false;
         val = elem.bottom;
         elem.removeProperty('bottom');
         elem.left = val;
@@ -89,15 +95,24 @@ class Handle extends Observer {
 
     convertStyle(this.elemFrom.style);
 
-    if (this.elemTo)
+    if (this.elemTo) {
       return convertStyle(this.elemTo.style);
+    }
+
+    return false;
   }
 
   setFrom(fromP: number) {
     if (this.elemFrom) {
-      const val = `${fromP}%`;
+      const value = `${fromP}%`;
       const from = this.elemFrom.style;
-      this.vertical ? from.bottom = val : from.left = val;
+
+      if (this.vertical) {
+        from.bottom = value;
+      } else {
+        from.left = value;
+      }
+
       return from;
     }
     return false;
@@ -107,7 +122,13 @@ class Handle extends Observer {
     if (this.elemTo) {
       const val = `${toP}%`;
       const to = this.elemTo.style;
-      this.vertical ? to.bottom = val : to.left = val;
+
+      if (this.vertical) {
+        to.bottom = val;
+      } else {
+        to.left = val;
+      }
+
       return to;
     }
     return false;
@@ -115,8 +136,8 @@ class Handle extends Observer {
 
   setActions(type: string) {
     const eventFromTo = this.eventFromF && this.eventToF;
-    if (type == 'double' && eventFromTo) return false;
-    if (type == 'single' && eventFromTo) {
+    if (type === 'double' && eventFromTo) return false;
+    if (type === 'single' && eventFromTo) {
       this.eventToF = false;
     }
     let shiftXY = 0;
@@ -127,21 +148,23 @@ class Handle extends Observer {
     directions.set('ArrowLeft', '-');
     directions.set('ArrowDown', '-');
 
-    if (!this.eventFromF)
+    if (!this.eventFromF) {
       this.elemFrom.addEventListener('keydown', (e: KeyboardEvent) => {
         this.keyDown(e, directions, 'from');
       });
+    }
 
-    if (this.elemTo && !this.eventToF)
+    if (this.elemTo && !this.eventToF) {
       this.elemTo.addEventListener('keydown', (e: KeyboardEvent) => {
         this.keyDown(e, directions, 'to');
       });
+    }
 
     const mouseMoveFrom = (event: PointerEvent) => {
       this.moveDot({
-        event: event,
+        event,
         type: 'From',
-        shiftXY
+        shiftXY,
       });
     };
 
@@ -151,12 +174,13 @@ class Handle extends Observer {
     };
 
     const mouseMoveTo = (event: PointerEvent) => {
-      if (type == 'double')
+      if (type === 'double') {
         this.moveDot({
-          event: event,
+          event,
           type: 'To',
-          shiftXY
+          shiftXY,
         });
+      }
     };
 
     const mouseUpTo = () => {
@@ -165,11 +189,11 @@ class Handle extends Observer {
     };
 
     const cancellation = (elem: HTMLElement) => {
-      elem.ondragstart = function () { return false; };
-      elem.onselectstart = function () { return false; };
+      elem.ondragstart = () => false;
+      elem.onselectstart = () => false;
     };
 
-    if (type == 'double') {
+    if (type === 'double') {
       if (!this.eventToF) {
         this.elemTo.addEventListener('pointerdown', (event: PointerEvent) => {
           this.elemTo.style.zIndex = '2';
@@ -187,9 +211,7 @@ class Handle extends Observer {
 
     if (!this.eventFromF) {
       this.elemFrom.addEventListener('pointerdown', (event: PointerEvent) => {
-
-        if (this.elemTo)
-          this.elemTo.style.zIndex = '1';
+        if (this.elemTo) { this.elemTo.style.zIndex = '1'; }
         this.elemFrom.style.zIndex = '2';
 
         shiftXY = this.mouseDown(event, this.elemFrom);
@@ -203,9 +225,9 @@ class Handle extends Observer {
     return true;
   }
 
-  private getElem = (elem: Element, str: string) => {
+  private static getElem(elem: Element, str: string) {
     return elem.getElementsByClassName(str)[0];
-  };
+  }
 
   private moveDot = (options: Pointer) => {
     const { event, type, shiftXY } = options;
@@ -219,31 +241,31 @@ class Handle extends Observer {
 
     this.notifyOB({
       key: 'DotMove',
-      type,  // dot type
+      type, // dot type
       wrapWH, // wrapper width or height
-      position,  // left or bottom coordinates of the wrapper
+      position, // left or bottom coordinates of the wrapper
       clientXY, // coordinates of the dot
       shiftXY, // shift = coordinates of the dot minus coordinates of the dot border
     });
   };
 
   private keyDown = (event: KeyboardEvent, directions: mapKey, dot: string) => {
-    const fl = (event.key == 'ArrowRight' || event.key == 'ArrowLeft');
-    if (this.vertical && fl || !this.vertical && !fl)
-      return false;
+    const fl = (event.key === 'ArrowRight' || event.key === 'ArrowLeft');
+    if ((this.vertical && fl) || (!this.vertical && !fl)) { return false; }
 
     if (!directions.get(event.key)) return false;
     event.preventDefault();
-    const repeat = event.repeat;
+    const { repeat } = event;
     const sign = directions.get(event.key);
 
-    if (sign)
+    if (sign) {
       this.notifyOB({
         key: 'DotKeyDown',
         keyRepeat: repeat,
         keySign: sign,
-        dot: dot,
+        dot,
       });
+    }
     return true;
   };
 
@@ -261,4 +283,4 @@ class Handle extends Observer {
   };
 }
 
-export { Handle };
+export default Handle;

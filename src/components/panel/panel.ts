@@ -1,24 +1,30 @@
 import './panel.scss';
-import { RangeSliderOptions } from
-  '../../components/interface/glob-interface';
-
-import { Values } from '../values/values';
-import { InputData } from '../input-data/input-data';
-import { Grid } from '../grid/grid';
-import { Hints } from '../hints/hints';
-import { Different } from '../different/different';
-import { CopyCode } from '../code/code';
-import { KeyboardControl } from '../keyboard-control/keyboard-control';
+import RangeSliderOptions from '@com/interface/glob-interface.d';
+import Values from '@com/values/values';
+import InputData from '@com/input-data/input-data';
+import Grid from '@com/grid/grid';
+import Hints from '@com/hints/hints';
+import Different from '@com/different/different';
+import CopyCode from '@com/code/code';
+import KeyboardControl from '@com/keyboard-control/keyboard-control';
 
 class Panel {
   private elem: Element;
+
   private objValues: Values;
+
   private objInputData: InputData;
+
   private objGrid: Grid;
+
   private objHints: Hints;
+
   private objDifferent: Different;
+
   private objCopyCode: CopyCode;
+
   private className: string;
+
   private objKeyboardControl: KeyboardControl;
 
   constructor(elem: Element, className: string) {
@@ -48,12 +54,11 @@ class Panel {
     };
 
     const obj = $(elem.firstElementChild).RangeSliderFox({
-      ...options
-      ,
+      ...options,
       onStart,
       onChange,
       onUpdate,
-      onReset
+      onReset,
     }).data('RangeSliderFox'); // will return an object for one item
 
     this.objValues.setAction(obj);
@@ -68,16 +73,15 @@ class Panel {
           onStart: null,
           onChange: null,
           onUpdate: null,
-          onReset: null
+          onReset: null,
         });
-
       } else {
         fl = false;
         obj.update({
           onStart,
           onChange,
           onUpdate,
-          onReset
+          onReset,
         });
       }
     };
@@ -94,12 +98,13 @@ class Panel {
     this.objDifferent = new Different(
       '.js-different',
       this.getDom('.js-different'),
-      this.elem);
+      this.elem,
+    );
     this.objCopyCode = new CopyCode('.js-code', this.getDom('.js-code'));
 
     this.objKeyboardControl = new KeyboardControl(
       '.js-keyboard-control',
-      this.getDom('.js-keyboard-control')
+      this.getDom('.js-keyboard-control'),
     );
   }
 
@@ -144,9 +149,11 @@ class Panel {
 function renderPanel(className: string) {
   const components = document.querySelectorAll(className);
   const objMas: Panel[] = [];
-  for (let elem of components) {
+
+  components.forEach((elem) => {
     objMas.push(new Panel(elem, className));
-  }
+  });
+
   return objMas;
 }
 

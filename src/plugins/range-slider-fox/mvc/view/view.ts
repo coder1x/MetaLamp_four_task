@@ -1,27 +1,42 @@
-import { UpdateTip } from './view.d';
-import { Handle } from './sub-view/handle';
-import { Hints } from './sub-view/hints';
-import { Bar } from './sub-view/bar';
-import { Grid } from './sub-view/grid';
+import UpdateTip from './view.d';
+import Handle from './sub-view/handle';
+import Hints from './sub-view/hints';
+import Bar from './sub-view/bar';
+import Grid from './sub-view/grid';
 import { Observer, ObserverOptions } from '../../observer';
-import { RangeSliderOptions } from '../../glob-interface';
+import RangeSliderOptions from '../../glob-interface';
 
 class View extends Observer {
   private rsName: string;
+
   private wrapSlider: Element;
+
   private rangeSlider: Element;
+
   private rsTop: Element;
+
   private rsCenter: HTMLElement;
+
   private rsBottom: Element;
+
   private rsLine: HTMLElement;
+
   private prevTheme: string;
+
   private vertical: boolean;
+
   private handle: Handle;
+
   private hints: Hints;
+
   private bar: Bar;
+
   private grid: Grid;
+
   private objData: ObserverOptions;
+
   onHandle: Function;
+
   elem: Element;
 
   constructor(elem: Element) {
@@ -35,13 +50,12 @@ class View extends Observer {
 
   async destroy() {
     const typeElem = await this.elem.constructor.name;
-    if (typeElem == 'HTMLInputElement') {
+    if (typeElem === 'HTMLInputElement') {
       const input = this.elem as HTMLInputElement;
       input.value = ' ';
     }
     const elem = await this.wrapSlider.querySelector(`.js-${this.rsName}`);
-    if (elem)
-      await elem.remove();
+    if (elem) { await elem.remove(); }
 
     this.handle = null;
     this.hints = null;
@@ -52,17 +66,16 @@ class View extends Observer {
   setValueInput(from: number, to: number, type: string) {
     const typeElem = this.elem.constructor.name;
     let str = '';
-    if (typeElem == 'HTMLInputElement') {
+    if (typeElem === 'HTMLInputElement') {
       const input = this.elem as HTMLInputElement;
 
       input.value = str;
       str += from;
-      if (type == 'double') {
+      if (type === 'double') {
         str += `,${to}`;
       }
       input.value = str;
-    }
-    else {
+    } else {
       return false;
     }
 
@@ -70,14 +83,15 @@ class View extends Observer {
   }
 
   outDataAttr() {
-    if (this.objData)
-      if (Object.keys(this.objData).length != 0) {
+    if (this.objData) {
+      if (Object.keys(this.objData).length !== 0) {
         this.notifyOB({
           key: 'DataAttributes',
           ...this.objData,
         });
         return this.objData;
       }
+    }
     return false;
   }
 
@@ -88,37 +102,39 @@ class View extends Observer {
   }
 
   getWrapWH() {
-    const size = (this.vertical ?
-      this.rsCenter.offsetHeight :
-      this.rsCenter.offsetWidth);
+    const size = (this.vertical
+      ? this.rsCenter.offsetHeight
+      : this.rsCenter.offsetWidth);
     return size;
   }
 
   createDomBase() {
     const createElem = (teg: string, className: string[]) => {
       const elem = document.createElement(teg);
-      for (let item of className) {
+
+      className.forEach((item) => {
         elem.classList.add(item);
-      }
+      });
+
       return elem;
     };
 
     this.rangeSlider = createElem('div', [this.rsName, `js-${this.rsName}`]);
     this.rsTop = createElem('div', [
       `${this.rsName}__top`,
-      `js-${this.rsName}__top`
+      `js-${this.rsName}__top`,
     ]);
     this.rsCenter = createElem('div', [
       `${this.rsName}__center`,
-      `js-${this.rsName}__center`
+      `js-${this.rsName}__center`,
     ]);
     this.rsBottom = createElem('div', [
       `${this.rsName}__bottom`,
-      `js-${this.rsName}__bottom`
+      `js-${this.rsName}__bottom`,
     ]);
     this.rsLine = createElem('span', [
       `${this.rsName}__line`,
-      `js-${this.rsName}__line`
+      `js-${this.rsName}__line`,
     ]);
 
     this.rsCenter.appendChild(this.rsLine);
@@ -132,8 +148,13 @@ class View extends Observer {
   async setOrientation(str: string) {
     const modify = `${this.rsName}_vertical`;
     const objP = this.rangeSlider.classList;
-    this.vertical = str == 'vertical' ? true : false;
-    this.vertical ? objP.add(modify) : objP.remove(modify);
+    this.vertical = str === 'vertical';
+
+    if (this.vertical) {
+      objP.add(modify);
+    } else {
+      objP.remove(modify);
+    }
 
     await this.handle.setOrientation(str);
     await this.hints.setOrientation(str);
@@ -153,14 +174,13 @@ class View extends Observer {
   }
 
   setTheme(theme: string) {
-    if (this.prevTheme)
-      this.rangeSlider.classList.remove(this.prevTheme);
+    if (this.prevTheme) { this.rangeSlider.classList.remove(this.prevTheme); }
     const classN = `rs-${theme}`;
     this.rangeSlider.classList.add(classN);
     this.prevTheme = classN;
   }
 
-  //--------------------------------- handle
+  // --------------------------------- handle
   createDotElem(type: string) {
     return this.handle.createDomBase(type);
   }
@@ -177,7 +197,7 @@ class View extends Observer {
     return this.handle.setActions(type);
   }
 
-  //--------------------------------- hints
+  // --------------------------------- hints
 
   setHintsData(options: ObserverOptions) {
     const masFL: boolean[] = [];
@@ -186,20 +206,19 @@ class View extends Observer {
     if (options.tipMinMax) {
       masFL.push(this.hints.createTipMinMax());
       this.hints.setValTipMinMax(options.min, options.max);
-    }
-    else {
+    } else {
       masFL.push(this.hints.deleteTipMinMax());
     }
 
     if (options.tipFromTo) {
       masFL.push(this.hints.createTipFrom());
-      if (options.type == 'double') {
+      if (options.type === 'double') {
         masFL.push(this.hints.createTipTo());
         masFL.push(this.hints.createTipSingle());
       }
     } else {
       masFL.push(this.hints.deleteTipFrom());
-      if (options.type == 'double') {
+      if (options.type === 'double') {
         masFL.push(this.hints.deleteTipTo());
         masFL.push(this.hints.deleteTipSingle());
       }
@@ -221,8 +240,7 @@ class View extends Observer {
   }
 
   getWidthTip(startFL: boolean, resetFL: boolean) {
-    if (startFL && !resetFL)
-      this.sizeWrap();
+    if (startFL && !resetFL) { this.sizeWrap(); }
     return this.hints.getWidthTip();
   }
 
@@ -237,7 +255,7 @@ class View extends Observer {
   updateTipValue(from: number, to: number, type: string) {
     const masFL: boolean[] = [];
     masFL.push(Boolean(this.hints.setValTipFrom(from)));
-    if (type == 'double') {
+    if (type === 'double') {
       masFL.push(Boolean(this.hints.setValTipTo(to)));
       masFL.push(Boolean(this.hints.setValTipSingle()));
     }
@@ -254,14 +272,14 @@ class View extends Observer {
     return masFL;
   }
 
-  //--------------------------------- bar
+  // --------------------------------- bar
 
   setVisibleBar(bar: boolean) {
     const masFL: boolean[] = [];
     masFL.push(this.bar.setVisibleBar(bar));
     masFL.push(this.bar.createDomBar());
-    const size = this.vertical ?
-      this.rsLine.offsetWidth : this.rsLine.offsetHeight;
+    const size = this.vertical
+      ? this.rsLine.offsetWidth : this.rsLine.offsetHeight;
     masFL.push(this.bar.setSizeWH(size));
     return masFL;
   }
@@ -270,7 +288,7 @@ class View extends Observer {
     return this.bar.setBar(barX, widthBar);
   }
 
-  //--------------------------------- Grid
+  // --------------------------------- Grid
 
   deleteGrid() {
     return this.grid.deleteGrid();
@@ -317,25 +335,26 @@ class View extends Observer {
     const getDataAttr = (item: string) => {
       const attr = `data-${item}`;
       if (this.elem.hasAttribute(attr)) {
-        const val = this.elem.getAttribute(attr);
+        const value = this.elem.getAttribute(attr);
         const key = options.get(item);
 
         const regNumber = /^-?\d*?[.]?\d*$/;
-        if (regNumber.test(val)) {
-          return [key, Number(val)];
+        if (regNumber.test(value)) {
+          return [key, Number(value)];
         }
 
         const regBoolean = /^(true|false)$/;
-        if (regBoolean.test(val)) {
-          return [key, (val === 'true')];
+        if (regBoolean.test(value)) {
+          return [key, (value === 'true')];
         }
-        return [key, val];
+        return [key, value];
       }
+      return false;
     };
 
     const masDataAttr = [];
 
-    for (let item of options.keys()) {
+    for (const item of options.keys()) {
       const data = getDataAttr(item);
       if (data) {
         const key = data[0];
@@ -346,10 +365,10 @@ class View extends Observer {
     }
 
     this.objData = Object.fromEntries(mapOptions);
-    const observer = new MutationObserver(mut => {
-
+    const observer = new MutationObserver((mut) => {
       const obj: RangeSliderOptions = {};
-      for (let item of mut) {
+
+      mut.forEach((item) => {
         const attr = item.attributeName;
         const opt = attr.replace('data-', '');
         const data = getDataAttr(opt);
@@ -359,9 +378,9 @@ class View extends Observer {
           const val = data[1];
           // использую type assertions так как не нашёл возможности передавать нужный тип
           // не могу отказаться от данной конструкции кода, так как это сильно уменьшает копипаст
-          this.setProperty(obj, key as keyof RangeSliderOptions, val);
+          View.setProperty(obj, key as keyof RangeSliderOptions, val);
         }
-      }
+      });
 
       if (obj) {
         this.notifyOB({
@@ -376,14 +395,19 @@ class View extends Observer {
     });
   }
 
-  private setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
+  private static setProperty<T, K extends keyof T>(
+    obj: T,
+    key: K,
+    value: T[K],
+  ) {
+    // eslint-disable-next-line no-param-reassign
     obj[key] = value;
   }
 
   private init() {
     this.onHandle = async () => {
       await this.createDomBase(); // create basic DOM elements
-      await this.setActions();  // add event listeners
+      await this.setActions(); // add event listeners
 
       this.handle = await new Handle(this.rsCenter, this.rsName);
       this.hints = await new Hints(this.rsTop, this.rsName);
@@ -407,7 +431,6 @@ class View extends Observer {
   };
 
   private sizeWrap() {
-
     let wrapWH = 0;
     if (this.vertical) {
       wrapWH = this.rsCenter.offsetHeight;
@@ -417,9 +440,9 @@ class View extends Observer {
 
     this.notifyOB({
       key: 'SizeWrap',
-      wrapWH: wrapWH,
+      wrapWH,
     });
   }
 }
 
-export { View };
+export default View;

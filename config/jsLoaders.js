@@ -3,27 +3,26 @@ const DP = require('./isDev');
 module.exports = {
   jsLoaders: (ext = 'ts') => {
     let loaders = null;
-    if (ext == 'js') {
+    if (ext === 'js') {
       loaders = [
         {
           loader: 'babel-loader',
         }];
-    }
-    else {
+    } else {
       loaders = [
         {
           loader: 'ts-loader',
           options: {
-            configFile: "tsconfig.web.json"
-          }
-        }
+            configFile: 'tsconfig.web.json',
+          },
+        },
       ];
     }
 
-    if (DP.isDev) {
-      loaders.push('eslint-loader');
-    }
+    // if (DP.isDev) {
+    //   loaders.push('eslint-loader');
+    // }
 
     return loaders;
-  }
+  },
 };

@@ -1,14 +1,17 @@
+const path = require('path');
+
+const { merge } = require('webpack-merge');
 const PATHS = require('./paths');
 const FL = require('./filename');
 const DP = require('./isDev');
 const OPT = require('./optimization');
-const path = require('path');
-const { merge } = require('webpack-merge');
+
 const devServ = require('./webpack.devServer.js');
+
 let confE = null;
 
-let pluginM = ['@plugins/java-import.ts'];
-let demoM = [];
+const pluginM = ['@plugins/java-import.ts'];
+const demoM = [];
 
 if (DP.isProd) {
   demoM.push('./index.ts');
@@ -19,7 +22,7 @@ if (DP.isProd) {
 
 if (DP.isPlugin) {
   confE = {
-    plugin: pluginM
+    plugin: pluginM,
   };
 } else {
   confE = {
@@ -35,7 +38,7 @@ module.exports = merge(devServ, {
 
   // target: DP.isDev ? 'web' : 'browserslist',
   target: 'web',
-  //devtool: DP.isDev ? 'eval-cheap-module-source-map' : 'source-map', //  (карта для браузеров) 
+  // devtool: DP.isDev ? 'eval-cheap-module-source-map' : 'source-map', //  (карта для браузеров)
   devtool: false,
 
   entry: confE,
@@ -58,7 +61,7 @@ module.exports = merge(devServ, {
       '@com': path.join(PATHS.src, 'components'),
       '@': PATHS.src,
       comp: PATHS.components,
-    }
+    },
   },
 
   optimization: OPT.optimization(),

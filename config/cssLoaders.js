@@ -1,14 +1,14 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  cssLoaders: extra => {
+  cssLoaders: (extra) => {
     const loaders = [
       MiniCssExtractPlugin.loader,
       {
         loader: 'css-loader',
         options: {
           sourceMap: false,
-        }
+        },
       },
       {
         loader: 'postcss-loader',
@@ -16,7 +16,7 @@ module.exports = {
           postcssOptions: {
             plugins: [
               [
-                "autoprefixer",
+                'autoprefixer',
                 {
                   // Options
                 },
@@ -30,20 +30,20 @@ module.exports = {
                     'default', {
                       discardComments: {
                         removeAll: true,
-                      }
-                    }
-                  ]
-                }
+                      },
+                    },
+                  ],
+                },
               ],
             ],
-          }
-        }
-      }
+          },
+        },
+      },
     ];
 
     if (extra) {
       loaders.push(extra);
     }
     return loaders;
-  }
+  },
 };

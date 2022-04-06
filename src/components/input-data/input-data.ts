@@ -2,8 +2,11 @@ import './input-data.scss';
 
 class InputData {
   private value: HTMLInputElement;
+
   private input: HTMLInputElement;
+
   private className: string;
+
   private elem: Element;
 
   constructor(className: string, elem: Element) {
@@ -14,21 +17,21 @@ class InputData {
 
   private setDom() {
     this.input = this.elem.querySelector(
-      `${this.className}__slider-wrap input`
+      `${this.className}__slider-wrap input`,
     );
 
     this.value = this.elem.querySelector(
-      '.js-input-data input'
+      '.js-input-data input',
     );
 
     if (this.input) {
-      const _this = this;
+      const obj = this;
       Object.defineProperty(this.input, 'value', {
-        set: function (text) {
+        set(text) {
           if (!text) return;
-          _this.value.value = text;
+          obj.value.value = text;
           this.setAttribute('value', text);
-        }
+        },
       });
     } else {
       this.value.disabled = true;
@@ -36,4 +39,4 @@ class InputData {
   }
 }
 
-export { InputData };
+export default InputData;

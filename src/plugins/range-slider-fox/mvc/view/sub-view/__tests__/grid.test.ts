@@ -1,4 +1,4 @@
-import { Grid } from '../grid';
+import Grid from '../grid';
 import { Controller, Model, View } from '../../../controller/controller';
 import { mockPointerEvent } from '../../../../__tests__/jestUtils';
 
@@ -17,16 +17,14 @@ describe('------- Test Grid API -------', () => {
     grid = await new Grid(wrap, rsName);
   });
 
-  const getConf = () => {
-    return {
-      min: 10,
-      max: 800,
-      grid: true,
-      gridRound: 0,
-      gridStep: 0,
-      gridNum: 40,
-    };
-  };
+  const getConf = () => ({
+    min: 10,
+    max: 800,
+    grid: true,
+    gridRound: 0,
+    gridStep: 0,
+    gridNum: 40,
+  });
 
   const getLenMark = async (model: Model) => {
     const gridM = await model.createMark();
@@ -48,7 +46,7 @@ describe('------- Test Grid API -------', () => {
     expect(grid.setOrientation('horizontal')).toBeFalsy();
   });
 
-  // getOrientation 
+  // getOrientation
   test(' Get information about orientation change ', async () => {
     expect(grid.getOrientation()).toBeTruthy();
   });
@@ -59,7 +57,7 @@ describe('------- Test Grid API -------', () => {
       ...getConf(),
       onStart: () => {
         getLenMark(model);
-      }
+      },
     });
     await model.onHandle();
   });
@@ -72,7 +70,7 @@ describe('------- Test Grid API -------', () => {
         const len = await getLenMark(model);
         const len2 = await getLenDom();
         expect(len).toBe(len2);
-      }
+      },
     });
     await model.onHandle();
   });
@@ -89,7 +87,7 @@ describe('------- Test Grid API -------', () => {
         expect(del).toBeTruthy();
         len2 = await getLenDom();
         expect(len2).toBe(0);
-      }
+      },
     });
     await model.onHandle();
   });
@@ -110,15 +108,13 @@ describe('------- Test Grid API -------', () => {
       onUpdate: async () => {
         const spy = await jest.spyOn(model, 'clickMark');
 
-        const dot =
-          await wrapC.getElementsByClassName(`${jsRsName}__grid-mark`);
+        const dot = await wrapC.getElementsByClassName(`${jsRsName}__grid-mark`);
         const elem = dot[0];
         const funP = await mockPointerEvent(elem);
         await funP('click', 0, 0);
 
         expect(spy).toBeCalledTimes(1);
-        if (elem instanceof HTMLElement)
-          expect(spy).toBeCalledWith(+(elem.innerText));
+        if (elem instanceof HTMLElement) { expect(spy).toBeCalledWith(+(elem.innerText)); }
         await spy.mockClear();
       },
     });

@@ -1,4 +1,4 @@
-import { Bar } from '../bar';
+import Bar from '../bar';
 import { Controller, Model, View } from '../../../controller/controller';
 import { mockPointerEvent } from '../../../../__tests__/jestUtils';
 
@@ -42,8 +42,8 @@ describe('------- Test Bar API -------', () => {
     expect(sbF).toBeTruthy();
     const elem = await wrap.firstElementChild as HTMLElement;
 
-    const left = elem.style.left;
-    const width = elem.style.width;
+    const { left } = elem.style;
+    const { width } = elem.style;
 
     expect(left).toBe('12%');
     expect(width).toBe('23%');
@@ -58,19 +58,19 @@ describe('------- Test Bar API -------', () => {
     expect(orF).toBeTruthy();
     const elem = await wrap.firstElementChild as HTMLElement;
 
-    const bottom = elem.style.bottom;
-    const height = elem.style.height;
+    const { bottom } = elem.style;
+    const { height } = elem.style;
 
     expect(bottom).toBe('34%');
     expect(height).toBe('10%');
   });
 
-  // setSizeWH 
+  // setSizeWH
   test(' Set progress-bar size relating the orientation ', async () => {
     await createBar();
     bar.setSizeWH(25);
     const elem = await wrap.firstElementChild as HTMLElement;
-    const height = elem.style.height;
+    const { height } = elem.style;
     expect(height).toBe('25px');
   });
 
@@ -93,8 +93,7 @@ describe('------- Test Bar API -------', () => {
       },
       onUpdate: async () => {
         const spy = await jest.spyOn(model, 'clickBar');
-        const dot =
-          await wrapC.getElementsByClassName(`${jsRsName}__bar`);
+        const dot = await wrapC.getElementsByClassName(`${jsRsName}__bar`);
         const funP = await mockPointerEvent(dot[0]);
         await funP('click', 34, 45);
         expect(spy).toBeCalledTimes(1);

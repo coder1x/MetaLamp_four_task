@@ -26,6 +26,4 @@ interface RangeSliderOptions {
   readonly onReset?: Function;
 }
 
-export {
-  RangeSliderOptions,
-};
+export default RangeSliderOptions;

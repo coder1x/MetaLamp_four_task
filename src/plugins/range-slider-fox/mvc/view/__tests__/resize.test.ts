@@ -1,4 +1,4 @@
-import { Resize } from '../resize';
+import Resize from '../resize';
 
 interface Options {
   width: number,
@@ -46,18 +46,20 @@ describe('------- Test Resize API -------', () => {
     };
   }
 
-  function mockCustomEvent(element: Window,
-    { eventType }: { eventType: string }): void {
-    const customEvent = new CustomEvent(eventType,
-      { bubbles: true }
+  function mockCustomEvent(
+    element: Window,
+    { eventType }: { eventType: string },
+  ): void {
+    const customEvent = new CustomEvent(
+      eventType,
+      { bubbles: true },
     );
     element.dispatchEvent(customEvent);
   }
 
   // Resize
-  test(' Should call a callback on window ' +
-    'resizing after the defined timeout ', async () => {
-
+  test(' Should call a callback on window '
+    + 'resizing after the defined timeout ', async () => {
       let change = false;
       const wrap = await document.createElement('div');
       await mockElementDimensions(wrap)({

@@ -1,25 +1,35 @@
-import { RangeSliderOptions } from '../../../glob-interface';
+import RangeSliderOptions from '../../../glob-interface';
 import { Controller, Model, View } from '../controller';
 
 function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 describe('------- Test Controller API -------', () => {
   let wrapC: HTMLElement;
   let domC: HTMLInputElement;
   const defaultData = {
-    type: 'single', orientation: 'horizontal',
-    theme: 'base', min: 0,
-    max: 10, to: 2,
-    from: 1, step: 0,
-    keyStepOne: 0, keyStepHold: 0,
-    bar: false, tipPrefix: '',
-    tipPostfix: '', tipMinMax: true,
-    tipFromTo: true, grid: false,
-    gridSnap: false, gridNum: 4,
-    gridStep: 0, gridRound: 0,
-    disabled: false
+    type: 'single',
+    orientation: 'horizontal',
+    theme: 'base',
+    min: 0,
+    max: 10,
+    to: 2,
+    from: 1,
+    step: 0,
+    keyStepOne: 0,
+    keyStepHold: 0,
+    bar: false,
+    tipPrefix: '',
+    tipPostfix: '',
+    tipMinMax: true,
+    tipFromTo: true,
+    grid: false,
+    gridSnap: false,
+    gridNum: 4,
+    gridStep: 0,
+    gridRound: 0,
+    disabled: false,
   };
 
   beforeEach(() => {
@@ -29,30 +39,38 @@ describe('------- Test Controller API -------', () => {
   });
 
   // onStart, onUpdate, update, onReset, reset
-  test(' Check plugin events (onStart, onUpdate, onReset) ' +
-    'and API (update, reset)', () => {
+  test(' Check plugin events (onStart, onUpdate, onReset) '
+    + 'and API (update, reset)', () => {
       const objС = new Controller(new Model({
         onStart: (data: RangeSliderOptions) => {
-
           expect(data).toStrictEqual(defaultData);
 
           const flU = objС.update({
-            type: 'double', orientation: 'vertical',
-            theme: 'fox', min: -120,
-            max: 800, to: 421.18,
-            from: 150.59, step: 4,
-            keyStepOne: 2, keyStepHold: 20,
-            bar: true, tipPrefix: 'rr',
-            tipPostfix: 'tt', tipMinMax: true,
-            tipFromTo: true, grid: true,
+            type: 'double',
+            orientation: 'vertical',
+            theme: 'fox',
+            min: -120,
+            max: 800,
+            to: 421.18,
+            from: 150.59,
+            step: 4,
+            keyStepOne: 2,
+            keyStepHold: 20,
+            bar: true,
+            tipPrefix: 'rr',
+            tipPostfix: 'tt',
+            tipMinMax: true,
+            tipFromTo: true,
+            grid: true,
             gridSnap: false,
-            gridNum: 34, gridStep: 0,
-            gridRound: 2, disabled: false,
+            gridNum: 34,
+            gridStep: 0,
+            gridRound: 2,
+            disabled: false,
           });
           expect(flU).toBeTruthy();
         },
         onUpdate: (data: RangeSliderOptions) => {
-
           const gridPol = 'js-range-slider-fox__grid-pol';
           const node = wrapC.getElementsByClassName(gridPol);
 
@@ -83,7 +101,7 @@ describe('------- Test Controller API -------', () => {
         },
         onReset: (data: RangeSliderOptions) => {
           expect(data).toStrictEqual(defaultData);
-        }
+        },
       }), new View(domC));
     });
 
@@ -101,7 +119,7 @@ describe('------- Test Controller API -------', () => {
       });
     });
 
-    let updateX = jest.fn((data: RangeSliderOptions) => {
+    const updateX = jest.fn((data: RangeSliderOptions) => {
       expect(data.max).toBe(100);
 
       obj.update({
@@ -115,7 +133,6 @@ describe('------- Test Controller API -------', () => {
         obj.update({
           max: 100,
         });
-
       },
       onUpdate: updateX,
     }), new View(domC));
@@ -123,7 +140,6 @@ describe('------- Test Controller API -------', () => {
     await delay(100);
     expect(updateX.mock.calls).toHaveLength(1);
     expect(updateX2.mock.calls).toHaveLength(1);
-
   });
 
   // Input data
@@ -149,8 +165,8 @@ describe('------- Test Controller API -------', () => {
   });
 
   // Data-Attributes static
-  test(' Check if plugin is configured in ' +
-    'line with data-attributes on its start ', async () => {
+  test(' Check if plugin is configured in '
+    + 'line with data-attributes on its start ', async () => {
       await domC.setAttribute('data-from', '5');
       new Controller(new Model({
         onUpdate: (data: RangeSliderOptions) => {
@@ -169,14 +185,14 @@ describe('------- Test Controller API -------', () => {
     }), new View(domC));
 
     await objX.update({
-      from: 4
+      from: 4,
     });
     await delay(100);
     await objX.destroy();
 
     await delay(100);
     await objX.update({
-      from: 8
+      from: 8,
     });
 
     await delay(100);

@@ -4,6 +4,4 @@ interface UpdateTip {
   readonly singleXY?: number,
 }
 
-export {
-  UpdateTip,
-};
+export default UpdateTip;

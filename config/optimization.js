@@ -1,4 +1,4 @@
-const TerserPlugin = require("terser-webpack-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
 const DP = require('./isDev');
 
 module.exports = {
@@ -6,8 +6,8 @@ module.exports = {
     const config = {
       runtimeChunk: DP.isPlugin ? undefined : 'single',
       splitChunks: {
-        chunks: 'all'
-      }
+        chunks: 'all',
+      },
     };
 
     if (DP.isProd) {
@@ -18,5 +18,5 @@ module.exports = {
       ];
     }
     return config;
-  }
+  },
 };
