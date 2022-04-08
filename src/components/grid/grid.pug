@@ -15,6 +15,10 @@ mixin grid(options)
     if(addClass){
     className += ` ${addClass}`}
 
+    const path = '/components/grid/grid.json' 
+    const data = htmlWebpackPlugin.options.getData(path)
+    const textField = data.textField
+
   fieldset(class=`${className} js-${classComp}`)
     - if(!flLabel){
     legend(class=`${classComp}__label`)= label
@@ -31,22 +35,10 @@ mixin grid(options)
       })
 
     div(class=`${classComp}__interval-wrap js-${classComp}__interval-wrap`)
-      +text-field({
-        label: 'Interval',
-        type: 'text',
-        name: 'gridNum'
-      })
+      +text-field(textField.interval)
 
     div(class=`${classComp}__step-wrap js-${classComp}__step-wrap`)
-      +text-field({
-        label: 'Step',
-        type: 'text',
-        name: 'gridStep'
-      })
+      +text-field(textField.step)
       
     div(class=`${classComp}__round-wrap js-${classComp}__round-wrap`)
-      +text-field({
-        label: 'round up to',
-        type: 'text',
-        name: 'gridRound'
-      })
+      +text-field(textField.round)

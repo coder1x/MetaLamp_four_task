@@ -14,21 +14,17 @@ mixin keyboard-control(options)
     if(addClass){
     className += ` ${addClass}`}
 
+    const path = '/components/keyboard-control/keyboard-control.json' 
+    const data = htmlWebpackPlugin.options.getData(path)
+    const textField = data.textField
+
   fieldset(class=`${className} js-${classComp}`)
     - if(!flLabel){
     legend(class=`${classComp}__label`)= label
     -}
 
     div(class=`${classComp}__one-wrap js-${classComp}__one-wrap`)
-      +text-field({
-        label: 'key Step One',
-        type: 'text',
-        name: 'keyStepOne'
-      })
+      +text-field(textField.one)
       
     div(class=`${classComp}__hold-wrap js-${classComp}__hold-wrap`)
-      +text-field({
-        label: 'key Step Hold',
-        type: 'text',
-        name: 'keyStepHold'
-      })
+      +text-field(textField.hold)

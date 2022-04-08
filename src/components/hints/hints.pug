@@ -15,6 +15,10 @@ mixin hints(options)
     if(addClass){
     className += ` ${addClass}`}
 
+    const path = '/components/hints/hints.json' 
+    const data = htmlWebpackPlugin.options.getData(path)
+    const textField = data.textField
+
   fieldset(class=`${className} js-${classComp}`)
     - if(!flLabel){
     legend(class=`${classComp}__label`)= label
@@ -31,15 +35,7 @@ mixin hints(options)
       })
 
     div(class=`${classComp}__prefix-wrap js-${classComp}__prefix-wrap`)
-      +text-field({
-        label: 'Prefix',
-        type: 'text',
-        name: 'tipPrefix'
-      })
+      +text-field(textField.prefix)
       
     div(class=`${classComp}__postfix-wrap js-${classComp}__postfix-wrap`)
-      +text-field({
-        label: 'Postfix',
-        type: 'text',
-        name: 'tipPostfix'
-      })
+      +text-field(textField.postfix)

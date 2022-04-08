@@ -1,0 +1,14 @@
+{
+  "textField": {
+    "one": {
+      "label": "key Step One",
+      "type": "text",
+      "name": "keyStepOne"
+    },
+    "hold": {
+      "label": "key Step Hold",
+      "type": "text",
+      "name": "keyStepHold"
+    }
+  }
+}

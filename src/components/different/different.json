@@ -1,0 +1,21 @@
+{
+  "select": [
+    {
+      "value": "base",
+      "text": "Base",
+      "selected": "js-selected"
+    },
+    {
+      "value": "fox",
+      "text": "Fox"
+    },
+    {
+      "value": "dark",
+      "text": "Dark"
+    },
+    {
+      "value": "classic",
+      "text": "Classic"
+    }
+  ]
+}

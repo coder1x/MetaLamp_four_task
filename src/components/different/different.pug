@@ -15,6 +15,11 @@ mixin different(options)
     if(addClass){
     className += ` ${addClass}`}
 
+    const path = '/components/different/different.json' 
+    const data = htmlWebpackPlugin.options.getData(path)
+    const selectData = data.select
+
+
   fieldset(class=`${className} js-${classComp}`)
     - if(!flLabel){
     legend(class=`${classComp}__label`)= label
@@ -45,30 +50,10 @@ mixin different(options)
         header: 'unsubscribtion',
       })
 
-    -
-      const masOptions = [
-        {
-          value:'base',
-          text:'Base',
-          selected:'js-selected'
-        },
-        {
-          value:'fox',
-          text:'Fox',
-        },
-        {
-          value:'dark',
-          text:'Dark',
-        },
-        {
-          value:'classic',
-          text:'Classic',
-        },
-      ];
     div(class=`${classComp}__select-wrap js-${classComp}__select-wrap`)
       +select({
         label: 'Skin',
-        masOptions: masOptions,
+        masOptions: selectData,
       })
 
     div(class=`${classComp}__reset-wrap`)

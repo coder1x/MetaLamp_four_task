@@ -33,14 +33,15 @@ pluginsM.push(
 if (!DP.isPlugin) {
   pluginsM.push(
     ...pages.map((fileName) => new HTMLWebpackPlugin({
-      getData: () => {
+      getData: (file) => {
         try {
-          return JSON.parse(
-            fs.readFileSync(`./pages/${fileName}/data.json`, 'utf8'),
-          );
+          return JSON.parse(fs.readFileSync(
+            path.join(`${PATHS.src}${file}`),
+            'utf8',
+          ));
         } catch (e) {
           console.warn(
-            `data.json was not provided for page ${fileName}`,
+            `no file ${fileName} json`,
           );
           return {};
         }

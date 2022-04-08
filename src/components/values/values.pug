@@ -13,6 +13,10 @@ mixin values(options)
     className += ` ${classComp}_${modify}`}
     if(addClass){
     className += ` ${addClass}`}
+
+    const path = '/components/values/values.json' 
+    const data = htmlWebpackPlugin.options.getData(path)
+    const textField = data.textField
     
   fieldset(class=`${className} js-${classComp}`)
     - if(!flLabel){
@@ -20,36 +24,16 @@ mixin values(options)
     -}
 
     div(class=`${classComp}__min-wrap js-${classComp}__min-wrap`)
-      +text-field({
-        label: 'Min',
-        type: 'text',
-        name: 'min'
-      })
+      +text-field(textField.min)
 
     div(class=`${classComp}__max-wrap js-${classComp}__max-wrap`)
-      +text-field({
-        label: 'Max',
-        type: 'text',
-        name: 'max'
-      })
+      +text-field(textField.max)
 
     div(class=`${classComp}__from-wrap js-${classComp}__from-wrap`)
-      +text-field({
-        label: 'From',
-        type: 'text',
-        name: 'from'
-      })
+      +text-field(textField.from)
 
     div(class=`${classComp}__to-wrap js-${classComp}__to-wrap`)
-      +text-field({
-        label: 'To',
-        type: 'text',
-        name: 'to'
-      })
+      +text-field(textField.to)
 
     div(class=`${classComp}__step-wrap js-${classComp}__step-wrap`)
-      +text-field({
-        label: 'step',
-        type: 'text',
-        name: 'step'
-      })
+      +text-field(textField.step)

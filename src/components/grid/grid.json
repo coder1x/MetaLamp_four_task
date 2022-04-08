@@ -1,0 +1,19 @@
+{
+  "textField": {
+    "interval": {
+      "label": "Interval",
+      "type": "text",
+      "name": "gridNum"
+    },
+    "step": {
+      "label": "Step",
+      "type": "text",
+      "name": "gridStep"
+    },
+    "round": {
+      "label": "round up to",
+      "type": "text",
+      "name": "gridRound"
+    }
+  }
+}
