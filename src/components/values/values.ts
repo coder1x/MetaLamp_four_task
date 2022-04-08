@@ -21,15 +21,15 @@ class Values {
 
   private step: HTMLInputElement;
 
-  private minD: number;
+  private minCache: number;
 
-  private maxD: number;
+  private maxCache: number;
 
-  private fromD: number;
+  private fromCache: number;
 
-  private toD: number;
+  private toCache: number;
 
-  private stepD: number;
+  private stepCache: number;
 
   private nameClass: string;
 
@@ -44,29 +44,29 @@ class Values {
       min, max, from, to, step,
     } = options;
 
-    if (this.minD !== min) {
+    if (this.minCache !== min) {
       this.min.value = String(min);
-      this.minD = min;
+      this.minCache = min;
     }
 
-    if (this.maxD !== max) {
+    if (this.maxCache !== max) {
       this.max.value = String(max);
-      this.maxD = max;
+      this.maxCache = max;
     }
 
-    if (this.fromD !== from) {
+    if (this.fromCache !== from) {
       this.from.value = String(from);
-      this.fromD = from;
+      this.fromCache = from;
     }
 
-    if (this.toD !== to) {
+    if (this.toCache !== to) {
       this.to.value = String(to);
-      this.toD = to;
+      this.toCache = to;
     }
 
-    if (this.stepD !== step) {
+    if (this.stepCache !== step) {
       this.step.value = String(step);
-      this.stepD = step;
+      this.stepCache = step;
     }
   }
 
@@ -79,8 +79,8 @@ class Values {
     mapInput.set('to', this.to.value);
     mapInput.set('step', this.step.value);
 
-    const data = (e: Event) => {
-      const elem = e.target as HTMLInputElement;
+    const data = (event: Event) => {
+      const elem = event.target as HTMLInputElement;
       obj.update({
         [elem.name]: +mapInput.get(elem.name),
       });
@@ -88,21 +88,21 @@ class Values {
 
     const inputProcessing = (event: Event) => {
       const elem = event.target as HTMLInputElement;
-      const val = elem.value.replace(/[^-.\d]/g, '');
+      const value = elem.value.replace(/[^-.\d]/g, '');
       const regexp = /^-?\d*?[.]?\d*$/;
-      const valid = regexp.test(val);
+      const valid = regexp.test(value);
 
       if (valid) {
-        mapInput.set(elem.name, val);
-        elem.value = val;
+        mapInput.set(elem.name, value);
+        elem.value = value;
       } else {
         elem.value = mapInput.get(elem.name);
       }
     };
 
-    const masE = [this.min, this.max, this.from, this.to, this.step];
+    const inputElements = [this.min, this.max, this.from, this.to, this.step];
 
-    masE.forEach((item) => {
+    inputElements.forEach((item) => {
       item.addEventListener('change', data);
       item.addEventListener('input', inputProcessing);
     });

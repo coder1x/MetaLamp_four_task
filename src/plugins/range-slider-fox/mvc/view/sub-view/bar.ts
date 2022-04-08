@@ -25,29 +25,29 @@ class Bar extends Observer {
   setOrientation(str: string) {
     this.vertical = str === 'vertical';
 
-    const convertStyle = (elem: CSSStyleDeclaration) => {
+    const convertStyle = (style: CSSStyleDeclaration) => {
       let sizeW = '';
       let sizeH = '';
+      const styleDom = style;
 
       const toggleBar = (
         from: keyof CSSStyleDeclaration,
         to: keyof CSSStyleDeclaration,
       ) => {
-        const val = Bar.getProperty(elem, from);
-        if (val === '') return false;
-        sizeW = elem.width;
-        sizeH = elem.height;
-        elem.removeProperty(String(from));
-        const key = to;
-        Bar.setProperty(elem, key, val);
+        const value = Bar.getProperty(styleDom, from);
+        if (value === '') return false;
+        sizeW = styleDom.width;
+        sizeH = styleDom.height;
+        styleDom.removeProperty(String(from));
+        Bar.setProperty(styleDom, to, value);
         return true;
       };
 
       if (this.vertical) {
         if (!toggleBar('left', 'bottom')) return false;
       } else if (!toggleBar('bottom', 'left')) return false;
-      elem.width = sizeH;
-      elem.height = sizeW;
+      styleDom.width = sizeH;
+      styleDom.height = sizeW;
 
       return true;
     };
@@ -78,12 +78,12 @@ class Bar extends Observer {
     if (!this.elemBar) return false;
 
     const sizePX = `${size}px`;
-    const st = this.elemBar.style;
+    const { style } = this.elemBar;
 
     if (this.vertical) {
-      st.width = sizePX;
+      style.width = sizePX;
     } else {
-      st.height = sizePX;
+      style.height = sizePX;
     }
 
     return true;
@@ -92,14 +92,14 @@ class Bar extends Observer {
   setBar(barX: number, widthBar: number) {
     if (!this.elemBar) return false;
 
-    const st = this.elemBar.style;
+    const { style } = this.elemBar;
 
     if (this.vertical) {
-      st.bottom = `${barX}%`;
-      st.height = `${widthBar}%`;
+      style.bottom = `${barX}%`;
+      style.height = `${widthBar}%`;
     } else {
-      st.left = `${barX}%`;
-      st.width = `${widthBar}%`;
+      style.left = `${barX}%`;
+      style.width = `${widthBar}%`;
     }
     return true;
   }
@@ -124,6 +124,7 @@ class Bar extends Observer {
     key: K,
     value: T[K],
   ) {
+    // eslint-disable-next-line no-param-reassign
     obj[key] = value;
   }
 

@@ -65,10 +65,10 @@ class Panel {
     this.objGrid.setAction(obj);
     this.objHints.setAction(obj);
 
-    let fl = false;
+    let flag = false;
     this.objDifferent.onUnsubscribtion = () => {
-      if (!fl) {
-        fl = true;
+      if (!flag) {
+        flag = true;
         obj.update({
           onStart: null,
           onChange: null,
@@ -76,7 +76,7 @@ class Panel {
           onReset: null,
         });
       } else {
-        fl = false;
+        flag = false;
         obj.update({
           onStart,
           onChange,
@@ -148,13 +148,13 @@ class Panel {
 
 function renderPanel(className: string) {
   const components = document.querySelectorAll(className);
-  const objMas: Panel[] = [];
+  const panels: Panel[] = [];
 
   components.forEach((elem) => {
-    objMas.push(new Panel(elem, className));
+    panels.push(new Panel(elem, className));
   });
 
-  return objMas;
+  return panels;
 }
 
 const objPanel = renderPanel('.js-panel');

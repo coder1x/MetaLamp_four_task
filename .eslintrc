@@ -23,6 +23,8 @@
     "import/no-unresolved": "off",
     "import/extensions": "off",
     "import/no-extraneous-dependencies": "off",
+    "no-new": "off",
+    "no-loss-of-precision": "off",
     "semi": [
       1
     ],

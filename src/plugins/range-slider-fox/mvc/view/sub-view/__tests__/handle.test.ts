@@ -32,8 +32,8 @@ describe('------- Test Handle API -------', () => {
   };
 
   const createFromTo = async () => {
-    const wrapH = await handle.createDomBase('double');
-    expect(wrapH).toBeDefined();
+    const wrapper = await handle.createDomBase('double');
+    expect(wrapper).toBeDefined();
     const from = await handle.setFrom(34);
     const to = await handle.setTo(56);
     return { from, to };
@@ -41,98 +41,99 @@ describe('------- Test Handle API -------', () => {
 
   // createDomBase
   test(' Create basic DOM-elements ', async () => {
-    let wrapH = handle.createDomBase('double');
-    expect(wrapH).toBeDefined();
+    let wrapper = handle.createDomBase('double');
+    expect(wrapper).toBeDefined();
 
     let child: HTMLCollection;
-    if (typeof wrapH !== 'boolean') { child = wrapH.children; }
+    if (typeof wrapper !== 'boolean') { child = wrapper.children; }
 
     searchStr(child[0].className, `${jsRsName}__from`);
     searchStr(child[1].className, `${jsRsName}__to`);
 
-    wrapH = await handle.createDomBase('double');
-    expect(wrapH).toBeFalsy();
+    wrapper = await handle.createDomBase('double');
+    expect(wrapper).toBeFalsy();
     await delElem(wrap);
     handle = await new Handle(wrap, rsName);
-    wrapH = await handle.createDomBase('single');
-    expect(wrapH).toBeDefined();
+    wrapper = await handle.createDomBase('single');
+    expect(wrapper).toBeDefined();
 
-    if (typeof wrapH !== 'boolean') { child = wrapH.children; }
+    if (typeof wrapper !== 'boolean') { child = wrapper.children; }
 
     searchStr(child[0].className, `${jsRsName}__from`);
     expect(child[1]).toBeUndefined();
-    wrapH = handle.createDomBase('single');
-    expect(wrapH).toBeFalsy();
+    wrapper = handle.createDomBase('single');
+    expect(wrapper).toBeFalsy();
   });
 
   // setFrom & setTo
   test(' Check if dots got their positioning proprties ', async () => {
     const { from, to } = await createFromTo();
-    let leftF: string;
-    if (typeof from !== 'boolean') { leftF = from.left; }
-    let leftT: string;
-    if (typeof to !== 'boolean') { leftT = to.left; }
-    expect(leftF).toBe('34%');
-    expect(leftT).toBe('56%');
+    let leftFrom: string;
+    if (typeof from !== 'boolean') { leftFrom = from.left; }
+    let leftTo: string;
+    if (typeof to !== 'boolean') { leftTo = to.left; }
+    expect(leftFrom).toBe('34%');
+    expect(leftTo).toBe('56%');
   });
 
   // setOrientation
   test(' Check if orientation is changed ', async () => {
     await createFromTo();
-    let fl = handle.setOrientation('vertical');
-    expect(fl).toBeTruthy();
-    fl = handle.setOrientation('horizontal');
-    expect(fl).toBeTruthy();
+    let flag = handle.setOrientation('vertical');
+    expect(flag).toBeTruthy();
+    flag = handle.setOrientation('horizontal');
+    expect(flag).toBeTruthy();
   });
 
+  const testName = ' Check if an event of dots'
+    + ' movement along the track is triggered ';
   // setActions
-  test(' Check if an event of dots'
-    + ' movement along the track is triggered ', async () => {
-      let wrapC: HTMLElement;
-      let domC: HTMLInputElement;
-      wrapC = document.createElement('div');
-      domC = document.createElement('input');
-      wrapC.appendChild(domC);
+  test(testName, async () => {
+    const wrapper: HTMLElement = document.createElement('div');
+    const input: HTMLInputElement = document.createElement('input');
+    wrapper.appendChild(input);
 
-      await createFromTo();
-      handle.setOrientation('horizontal');
-      const fl = handle.setActions('double');
-      expect(fl).toBeTruthy();
+    await createFromTo();
+    handle.setOrientation('horizontal');
+    const flag = handle.setActions('double');
+    expect(flag).toBeTruthy();
 
-      const model = new Model({
-        type: 'double',
-        onStart: async () => {
-          const spy = await jest.spyOn(model, 'calcDotPosition');
+    const model = new Model({
+      type: 'double',
+      onStart: async () => {
+        const spy = await jest.spyOn(model, 'calcDotPosition');
 
-          const eventDot = async (name: string, val1: number, val2: number) => {
-            const dot = await wrapC.getElementsByClassName(`${jsRsName}__${name}`);
-            const type = name == 'from' ? 'From' : 'To';
-            const funP = await mockPointerEvent(dot[0]);
-            const funK = await mockKeyboardEvent(dot[0]);
-            await funP('pointerdown', val1, 0);
-            await funP('pointermove', val2, 0);
-            await funP('pointerup', 0, 0);
-            await funK('ArrowRight');
-            await funK('ArrowLeft');
+        const eventDot = async (name: string, down: number, move: number) => {
+          const dot = await wrapper.getElementsByClassName(
+            `${jsRsName}__${name}`,
+          );
+          const type = name === 'from' ? 'From' : 'To';
+          const pointer = await mockPointerEvent(dot[0]);
+          const keyboard = await mockKeyboardEvent(dot[0]);
+          await pointer('pointerdown', down, 0);
+          await pointer('pointermove', move, 0);
+          await pointer('pointerup', 0, 0);
+          await keyboard('ArrowRight');
+          await keyboard('ArrowLeft');
 
-            expect(spy).toBeCalledWith(
-              {
-                clientXY: val2,
-                position: 0,
-                shiftXY: val1,
-                type,
-                wrapWH: 0,
-              },
-            );
-            expect(spy).toBeCalledTimes(1);
-            await spy.mockClear();
-          };
+          expect(spy).toBeCalledWith(
+            {
+              clientXY: move,
+              position: 0,
+              shiftXY: down,
+              type,
+              wrapWH: 0,
+            },
+          );
+          expect(spy).toBeCalledTimes(1);
+          await spy.mockClear();
+        };
 
-          await eventDot('from', 85, 82);
-          await eventDot('to', 87, 83);
-        },
-      });
-      const view = await new View(domC);
-      await new Controller(model, view);
+        await eventDot('from', 85, 82);
+        await eventDot('to', 87, 83);
+      },
     });
+    const view = await new View(input);
+    await new Controller(model, view);
+  });
 });

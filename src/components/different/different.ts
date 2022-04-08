@@ -30,15 +30,15 @@ class Different {
 
   private modify: string;
 
-  private disabledD: boolean;
+  private disabledCache: boolean;
 
-  private barD: boolean;
+  private barCache: boolean;
 
-  private typeD: string;
+  private typeCache: string;
 
-  private orientationD: string;
+  private orientationCache: string;
 
-  private themeD: string;
+  private themeCache: string;
 
   private nameClass: string;
 
@@ -56,63 +56,63 @@ class Different {
       disabled, bar, type, orientation, theme,
     } = options;
 
-    if (this.disabledD !== disabled) {
+    if (this.disabledCache !== disabled) {
       this.disabled.checked = disabled;
-      this.disabledD = disabled;
+      this.disabledCache = disabled;
     }
 
-    if (this.barD !== bar) {
+    if (this.barCache !== bar) {
       this.bar.checked = bar;
-      this.barD = bar;
+      this.barCache = bar;
     }
 
-    if (this.typeD !== type) {
+    if (this.typeCache !== type) {
       this.type.checked = type === 'double';
-      this.typeD = type;
+      this.typeCache = type;
     }
 
-    if (this.orientationD !== orientation) {
-      const orientF = orientation !== 'horizontal';
-      this.orientation.checked = orientF;
-      this.orientationD = orientation;
+    if (this.orientationCache !== orientation) {
+      const orientFlag = orientation !== 'horizontal';
+      this.orientation.checked = orientFlag;
+      this.orientationCache = orientation;
 
-      if (orientF) {
+      if (orientFlag) {
         this.panel.classList.add(this.modify);
       } else {
         this.panel.classList.remove(this.modify);
       }
     }
 
-    if (this.themeD !== theme) {
+    if (this.themeCache !== theme) {
       this.select.update(String(theme));
-      this.themeD = theme;
+      this.themeCache = theme;
     }
   }
 
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   setAction(obj: any) {
     const { modify } = this;
-    const objP = this.panel.classList;
+    const objPanel = this.panel.classList;
 
     this.reset.addEventListener('click', () => {
       obj.reset();
     });
 
-    this.select.onChange = (val: string) => {
+    this.select.onChange = (value: string) => {
       obj.update({
-        theme: val,
+        theme: value,
       });
     };
 
-    this.disabled.addEventListener('click', (e: Event) => {
-      const elem = e.target as HTMLInputElement;
+    this.disabled.addEventListener('click', (event: Event) => {
+      const elem = event.target as HTMLInputElement;
       obj.update({
         disabled: elem.checked,
       });
     });
 
-    this.bar.addEventListener('click', (e: Event) => {
-      const elem = e.target as HTMLInputElement;
+    this.bar.addEventListener('click', (event: Event) => {
+      const elem = event.target as HTMLInputElement;
       obj.update({
         bar: elem.checked,
       });
@@ -124,22 +124,22 @@ class Different {
       }
     });
 
-    this.type.addEventListener('click', (e: Event) => {
-      const elem = e.target as HTMLInputElement;
+    this.type.addEventListener('click', (event: Event) => {
+      const elem = event.target as HTMLInputElement;
       const value = elem.checked ? 'double' : 'single';
       obj.update({
         type: value,
       });
     });
 
-    this.orientation.addEventListener('click', (e: Event) => {
-      const elem = e.target as HTMLInputElement;
+    this.orientation.addEventListener('click', (event: Event) => {
+      const elem = event.target as HTMLInputElement;
       const value = elem.checked ? 'vertical' : 'horizontal';
 
       if (elem.checked) {
-        objP.add(modify);
+        objPanel.add(modify);
       } else {
-        objP.remove(modify);
+        objPanel.remove(modify);
       }
 
       obj.update({

@@ -27,17 +27,17 @@ describe('------- Test Grid API -------', () => {
   });
 
   const getLenMark = async (model: Model) => {
-    const gridM = await model.createMark();
-    const elements = await grid.createMark(gridM);
-    const len = elements.childNodes.length;
-    expect(len).toBe(gridM.length);
-    return len;
+    const gridMark = await model.createMark();
+    const elements = await grid.createMark(gridMark);
+    const { length } = elements.childNodes;
+    expect(length).toBe(gridMark.length);
+    return length;
   };
 
   const getLenDom = () => {
     const rsBottom = grid.createDomGrid();
-    const len = rsBottom.firstChild.childNodes.length;
-    return len;
+    const { length } = rsBottom.firstChild.childNodes;
+    return length;
   };
 
   // setOrientation
@@ -67,9 +67,9 @@ describe('------- Test Grid API -------', () => {
     const model = await new Model({
       ...getConf(),
       onStart: async () => {
-        const len = await getLenMark(model);
-        const len2 = await getLenDom();
-        expect(len).toBe(len2);
+        const lenMark = await getLenMark(model);
+        const lenDom = await getLenDom();
+        expect(lenMark).toBe(lenDom);
       },
     });
     await model.onHandle();
@@ -80,13 +80,13 @@ describe('------- Test Grid API -------', () => {
     const model = await new Model({
       ...getConf(),
       onStart: async () => {
-        const len = await getLenMark(model);
-        let len2 = await getLenDom();
-        expect(len).toBe(len2);
+        const lenMark = await getLenMark(model);
+        let lenDom = await getLenDom();
+        expect(lenMark).toBe(lenDom);
         const del = grid.deleteGrid();
         expect(del).toBeTruthy();
-        len2 = await getLenDom();
-        expect(len2).toBe(0);
+        lenDom = await getLenDom();
+        expect(lenDom).toBe(0);
       },
     });
     await model.onHandle();
@@ -94,31 +94,34 @@ describe('------- Test Grid API -------', () => {
 
   // ClickMark
   test(' Check if click event on the grid mark is triggered ', async () => {
-    const wrapC = document.createElement('div');
-    const domC = document.createElement('input');
-    wrapC.appendChild(domC);
-    let obj: Controller;
+    const wrapper = document.createElement('div');
+    const input = document.createElement('input');
+    wrapper.appendChild(input);
+    let objController: Controller;
 
     const model = new Model({
       type: 'double',
       ...getConf(),
       onStart: async () => {
-        obj.update({ bar: false });
+        objController.update({ bar: false });
       },
       onUpdate: async () => {
         const spy = await jest.spyOn(model, 'clickMark');
 
-        const dot = await wrapC.getElementsByClassName(`${jsRsName}__grid-mark`);
-        const elem = dot[0];
-        const funP = await mockPointerEvent(elem);
-        await funP('click', 0, 0);
+        const dot = await wrapper.getElementsByClassName(
+          `${jsRsName}__grid-mark`,
+        );
+        const elem = dot[0] as HTMLElement;
+        const pointer = await mockPointerEvent(elem);
+        await pointer('click', 0, 0);
 
         expect(spy).toBeCalledTimes(1);
-        if (elem instanceof HTMLElement) { expect(spy).toBeCalledWith(+(elem.innerText)); }
+        expect(spy).toBeCalledWith(+(elem.innerText));
+
         await spy.mockClear();
       },
     });
-    const view = await new View(domC);
-    obj = await new Controller(model, view);
+    const view = await new View(input);
+    objController = await new Controller(model, view);
   });
 });

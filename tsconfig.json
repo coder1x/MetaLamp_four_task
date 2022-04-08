@@ -25,21 +25,6 @@
     "noEmit": false,
     "noImplicitAny": true,
     "paths": {
-      "@api/*": [
-        "api/*"
-      ],
-      "@docs/*": [
-        "docs/*"
-      ],
-      "@script/*": [
-        "script/*"
-      ],
-      "@pages/*": [
-        "pages/*"
-      ],
-      "@store/*": [
-        "store/*"
-      ],
       "@com/*": [
         "src/components/*"
       ],

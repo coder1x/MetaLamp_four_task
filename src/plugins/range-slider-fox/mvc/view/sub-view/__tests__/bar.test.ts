@@ -11,8 +11,8 @@ describe('------- Test Bar API -------', () => {
 
   const createBar = async () => {
     await bar.setVisibleBar(true);
-    const domF = await bar.createDomBar();
-    expect(domF).toBeTruthy();
+    const domFlag = await bar.createDomBar();
+    expect(domFlag).toBeTruthy();
   };
 
   beforeEach(() => {
@@ -38,8 +38,8 @@ describe('------- Test Bar API -------', () => {
   // setBar
   test(' Set progress-bar position and width ', async () => {
     await createBar();
-    const sbF = await bar.setBar(12, 23);
-    expect(sbF).toBeTruthy();
+    const barFlag = await bar.setBar(12, 23);
+    expect(barFlag).toBeTruthy();
     const elem = await wrap.firstElementChild as HTMLElement;
 
     const { left } = elem.style;
@@ -52,10 +52,10 @@ describe('------- Test Bar API -------', () => {
   // setOrientation
   test(' Set progress-bar orientation ', async () => {
     await createBar();
-    const sbF = await bar.setBar(34, 10);
-    expect(sbF).toBeTruthy();
-    const orF = await bar.setOrientation('vertical');
-    expect(orF).toBeTruthy();
+    const barFlag = await bar.setBar(34, 10);
+    expect(barFlag).toBeTruthy();
+    const orientationFlag = await bar.setOrientation('vertical');
+    expect(orientationFlag).toBeTruthy();
     const elem = await wrap.firstElementChild as HTMLElement;
 
     const { bottom } = elem.style;
@@ -76,10 +76,10 @@ describe('------- Test Bar API -------', () => {
 
   // clickBar
   test(' Check if click event on the progress-bar is triggered ', async () => {
-    const wrapC = document.createElement('div');
-    const domC = document.createElement('input');
-    wrapC.appendChild(domC);
-    let obj: Controller;
+    const wrapper = document.createElement('div');
+    const input = document.createElement('input');
+    wrapper.appendChild(input);
+    let objController: Controller;
 
     const model = new Model({
       type: 'double',
@@ -89,18 +89,18 @@ describe('------- Test Bar API -------', () => {
       to: 80,
       bar: true,
       onStart: async () => {
-        obj.update({ tipMinMax: false });
+        objController.update({ tipMinMax: false });
       },
       onUpdate: async () => {
         const spy = await jest.spyOn(model, 'clickBar');
-        const dot = await wrapC.getElementsByClassName(`${jsRsName}__bar`);
-        const funP = await mockPointerEvent(dot[0]);
-        await funP('click', 34, 45);
+        const dot = await wrapper.getElementsByClassName(`${jsRsName}__bar`);
+        const pointer = await mockPointerEvent(dot[0]);
+        await pointer('click', 34, 45);
         expect(spy).toBeCalledTimes(1);
         await spy.mockClear();
       },
     });
-    const view = await new View(domC);
-    obj = await new Controller(model, view);
+    const view = await new View(input);
+    objController = await new Controller(model, view);
   });
 });

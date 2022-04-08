@@ -18,25 +18,27 @@ class CopyCode {
 
   setData(options: RangeSliderOptions) {
     const key = Object.keys(options);
-    const val = Object.values(options);
+    const value = Object.values(options);
     const name = this.className.replace('.', '');
     const child = this.ul.childNodes;
-    const fl = !!child.length;
+    const flag = !!child.length;
 
     for (let i = 0; i < key.length; i += 1) {
-      let valT: string;
-      if (typeof val[i] === 'string') { valT = `'${val[i]}'`; } else {
-        valT = val[i];
+      let valStr: string;
+      if (typeof value[i] === 'string') {
+        valStr = `'${value[i]}'`;
+      } else {
+        valStr = value[i];
       }
-      const text = `${key[i]}: ${valT},`;
+      const text = `${key[i]}: ${valStr},`;
 
-      if (!fl) {
+      if (!flag) {
         const item = CopyCode.createElem('li', [`${name}__item`]);
         this.ul.appendChild(item);
         item.innerText = text;
       } else {
-        const item = child[i];
-        if (item instanceof HTMLElement) { item.innerText = text; }
+        const item = child[i] as HTMLElement;
+        item.innerText = text;
       }
     }
   }

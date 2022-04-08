@@ -21,15 +21,15 @@ class Grid {
 
   private gridRound: HTMLInputElement;
 
-  private gridD: boolean;
+  private gridCache: boolean;
 
-  private gridSnapD: boolean;
+  private gridSnapCache: boolean;
 
-  private gridNumD: number;
+  private gridNumCache: number;
 
-  private gridStepD: number;
+  private gridStepCache: number;
 
-  private gridRoundD: number;
+  private gridRoundCache: number;
 
   private nameClass: string;
 
@@ -44,25 +44,25 @@ class Grid {
       grid, gridSnap, gridNum, gridStep, gridRound,
     } = options;
 
-    if (this.gridD !== grid) {
+    if (this.gridCache !== grid) {
       this.grid.checked = grid;
-      this.gridD = grid;
+      this.gridCache = grid;
     }
-    if (this.gridSnapD !== gridSnap) {
+    if (this.gridSnapCache !== gridSnap) {
       this.snap.checked = gridSnap;
-      this.gridSnapD = gridSnap;
+      this.gridSnapCache = gridSnap;
     }
-    if (this.gridNumD !== gridNum) {
+    if (this.gridNumCache !== gridNum) {
       this.interval.value = String(gridNum);
-      this.gridNumD = gridNum;
+      this.gridNumCache = gridNum;
     }
-    if (this.gridStepD !== gridStep) {
+    if (this.gridStepCache !== gridStep) {
       this.step.value = String(gridStep);
-      this.gridStepD = gridStep;
+      this.gridStepCache = gridStep;
     }
-    if (this.gridRoundD !== gridRound) {
+    if (this.gridRoundCache !== gridRound) {
       this.gridRound.value = String(gridRound);
-      this.gridRoundD = gridRound;
+      this.gridRoundCache = gridRound;
     }
   }
 
@@ -95,24 +95,24 @@ class Grid {
       this.step.value = '0';
     });
 
-    const inputProcessing = (e: Event) => {
-      const elem = e.target as HTMLInputElement;
+    const inputProcessing = (event: Event) => {
+      const elem = event.target as HTMLInputElement;
 
-      const val = elem.value.replace(/[^.\d]/g, '');
+      const value = elem.value.replace(/[^.\d]/g, '');
       const regexp = /^\d*?[.]?\d*$/;
-      const valid = regexp.test(val);
+      const valid = regexp.test(value);
 
       if (valid) {
-        mapInput.set(elem.name, val);
-        elem.value = val;
+        mapInput.set(elem.name, value);
+        elem.value = value;
       } else {
         elem.value = mapInput.get(elem.name);
       }
     };
 
-    const masE = [this.interval, this.step, this.gridRound];
+    const inputElements = [this.interval, this.step, this.gridRound];
 
-    masE.forEach((item) => {
+    inputElements.forEach((item) => {
       item.addEventListener('input', inputProcessing);
     });
 

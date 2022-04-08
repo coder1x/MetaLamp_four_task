@@ -97,8 +97,9 @@ class View extends Observer {
 
   disabledRangeSlider(flag: boolean) {
     const elem = this.wrapSlider as HTMLElement;
-    const st = elem.style as CSSStyleDeclaration;
-    return flag ? st.opacity = '0.5' : st.opacity = '1';
+    const style = elem.style as CSSStyleDeclaration;
+    const opacity = flag ? style.opacity = '0.5' : style.opacity = '1';
+    return opacity;
   }
 
   getWrapWH() {
@@ -147,13 +148,13 @@ class View extends Observer {
 
   async setOrientation(str: string) {
     const modify = `${this.rsName}_vertical`;
-    const objP = this.rangeSlider.classList;
+    const { classList } = this.rangeSlider;
     this.vertical = str === 'vertical';
 
     if (this.vertical) {
-      objP.add(modify);
+      classList.add(modify);
     } else {
-      objP.remove(modify);
+      classList.remove(modify);
     }
 
     await this.handle.setOrientation(str);
@@ -175,9 +176,9 @@ class View extends Observer {
 
   setTheme(theme: string) {
     if (this.prevTheme) { this.rangeSlider.classList.remove(this.prevTheme); }
-    const classN = `rs-${theme}`;
-    this.rangeSlider.classList.add(classN);
-    this.prevTheme = classN;
+    const name = `rs-${theme}`;
+    this.rangeSlider.classList.add(name);
+    this.prevTheme = name;
   }
 
   // --------------------------------- handle
@@ -200,47 +201,48 @@ class View extends Observer {
   // --------------------------------- hints
 
   setHintsData(options: ObserverOptions) {
-    const masFL: boolean[] = [];
+    const masFlag: boolean[] = [];
     this.hints.setAdditionalText(options.tipPrefix, options.tipPostfix);
     this.hints.setTipFlag(options.tipFromTo, options.tipMinMax);
+
     if (options.tipMinMax) {
-      masFL.push(this.hints.createTipMinMax());
+      masFlag.push(this.hints.createTipMinMax());
       this.hints.setValTipMinMax(options.min, options.max);
     } else {
-      masFL.push(this.hints.deleteTipMinMax());
+      masFlag.push(this.hints.deleteTipMinMax());
     }
 
     if (options.tipFromTo) {
-      masFL.push(this.hints.createTipFrom());
+      masFlag.push(this.hints.createTipFrom());
       if (options.type === 'double') {
-        masFL.push(this.hints.createTipTo());
-        masFL.push(this.hints.createTipSingle());
+        masFlag.push(this.hints.createTipTo());
+        masFlag.push(this.hints.createTipSingle());
       }
     } else {
-      masFL.push(this.hints.deleteTipFrom());
+      masFlag.push(this.hints.deleteTipFrom());
       if (options.type === 'double') {
-        masFL.push(this.hints.deleteTipTo());
-        masFL.push(this.hints.deleteTipSingle());
+        masFlag.push(this.hints.deleteTipTo());
+        masFlag.push(this.hints.deleteTipSingle());
       }
     }
-    return masFL;
+    return masFlag;
   }
 
   toggleTipTo(to: number) {
-    let fl = false;
+    let flag = false;
     if (!this.hints.checkTipTo()) {
-      fl = this.hints.createTipTo();
-      fl = Boolean(this.hints.setValTipTo(to));
+      flag = this.hints.createTipTo();
+      flag = Boolean(this.hints.setValTipTo(to));
     }
-    return fl;
+    return flag;
   }
 
   updateTipMinMax(min: number, max: number) {
     return this.hints.setValTipMinMax(min, max);
   }
 
-  getWidthTip(startFL: boolean, resetFL: boolean) {
-    if (startFL && !resetFL) { this.sizeWrap(); }
+  getWidthTip(startFlag: boolean, resetFlag: boolean) {
+    if (startFlag && !resetFlag) { this.sizeWrap(); }
     return this.hints.getWidthTip();
   }
 
@@ -253,35 +255,35 @@ class View extends Observer {
   }
 
   updateTipValue(from: number, to: number, type: string) {
-    const masFL: boolean[] = [];
-    masFL.push(Boolean(this.hints.setValTipFrom(from)));
+    const masFlag: boolean[] = [];
+    masFlag.push(Boolean(this.hints.setValTipFrom(from)));
     if (type === 'double') {
-      masFL.push(Boolean(this.hints.setValTipTo(to)));
-      masFL.push(Boolean(this.hints.setValTipSingle()));
+      masFlag.push(Boolean(this.hints.setValTipTo(to)));
+      masFlag.push(Boolean(this.hints.setValTipSingle()));
     }
-    return masFL;
+    return masFlag;
   }
 
-  updateTipPosition(op: UpdateTip) {
-    const masFL: boolean[] = [];
-    masFL.push(Boolean(this.hints.setPositionFrom(op.fromXY)));
-    if (op.toXY && op.singleXY) {
-      masFL.push(Boolean(this.hints.setPositionTo(op.toXY)));
-      masFL.push(Boolean(this.hints.setPositionSingle(op.singleXY)));
+  updateTipPosition(coordinates: UpdateTip) {
+    const masFlag: boolean[] = [];
+    masFlag.push(Boolean(this.hints.setPositionFrom(coordinates.fromXY)));
+    if (coordinates.toXY && coordinates.singleXY) {
+      masFlag.push(Boolean(this.hints.setPositionTo(coordinates.toXY)));
+      masFlag.push(Boolean(this.hints.setPositionSingle(coordinates.singleXY)));
     }
-    return masFL;
+    return masFlag;
   }
 
   // --------------------------------- bar
 
   setVisibleBar(bar: boolean) {
-    const masFL: boolean[] = [];
-    masFL.push(this.bar.setVisibleBar(bar));
-    masFL.push(this.bar.createDomBar());
+    const masFlag: boolean[] = [];
+    masFlag.push(this.bar.setVisibleBar(bar));
+    masFlag.push(this.bar.createDomBar());
     const size = this.vertical
       ? this.rsLine.offsetWidth : this.rsLine.offsetHeight;
-    masFL.push(this.bar.setSizeWH(size));
-    return masFL;
+    masFlag.push(this.bar.setSizeWH(size));
+    return masFlag;
   }
 
   setBar(barX: number, widthBar: number) {
@@ -333,9 +335,9 @@ class View extends Observer {
     const mapOptions = new Map();
 
     const getDataAttr = (item: string) => {
-      const attr = `data-${item}`;
-      if (this.elem.hasAttribute(attr)) {
-        const value = this.elem.getAttribute(attr);
+      const attribute = `data-${item}`;
+      if (this.elem.hasAttribute(attribute)) {
+        const value = this.elem.getAttribute(attribute);
         const key = options.get(item);
 
         const regNumber = /^-?\d*?[.]?\d*$/;
@@ -352,26 +354,26 @@ class View extends Observer {
       return false;
     };
 
-    const masDataAttr = [];
+    const masDataAttr: string[] = [];
 
-    for (const item of options.keys()) {
-      const data = getDataAttr(item);
+    options.forEach((value, key) => {
+      const data = getDataAttr(key);
       if (data) {
-        const key = data[0];
-        const val = data[1];
-        mapOptions.set(key, val);
+        const [dataAttr] = data;
+        const [, valueAttr] = data;
+        mapOptions.set(dataAttr, valueAttr);
       }
-      masDataAttr.push(`data-${item}`);
-    }
+      masDataAttr.push(`data-${key}`);
+    });
 
     this.objData = Object.fromEntries(mapOptions);
-    const observer = new MutationObserver((mut) => {
+    const observer = new MutationObserver((mutation) => {
       const obj: RangeSliderOptions = {};
 
-      mut.forEach((item) => {
+      mutation.forEach((item) => {
         const attr = item.attributeName;
-        const opt = attr.replace('data-', '');
-        const data = getDataAttr(opt);
+        const trimAttr = attr.replace('data-', '');
+        const data = getDataAttr(trimAttr);
 
         if (data) {
           const key = String(data[0]);

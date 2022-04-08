@@ -58,34 +58,37 @@ describe('------- Test Resize API -------', () => {
   }
 
   // Resize
-  test(' Should call a callback on window '
-    + 'resizing after the defined timeout ', async () => {
-      let change = false;
-      const wrap = await document.createElement('div');
-      await mockElementDimensions(wrap)({
-        width: 300,
-        height: 100,
-      });
 
-      jest.useFakeTimers();
-      jest.spyOn(global, 'setTimeout');
+  const testName = ' Should call a callback on window'
+    + ' resizing after the defined timeout ';
 
-      const resize = await new Resize(wrap, 100, () => {
-        change = true;
-      });
-
-      const wrap2 = await document.createElement('div');
-      await mockElementDimensions(wrap2)({
-        width: 250,
-        height: 100,
-      });
-      resize.wrapper = await wrap2;
-
-      await mockCustomEvent(window, { eventType: 'resize' });
-      await jest.runOnlyPendingTimers();
-      await jest.runOnlyPendingTimers();
-
-      expect(change).toBeTruthy();
-      expect(setTimeout).toHaveBeenCalledTimes(1);
+  test(testName, async () => {
+    let change = false;
+    const wrap = await document.createElement('div');
+    await mockElementDimensions(wrap)({
+      width: 300,
+      height: 100,
     });
+
+    jest.useFakeTimers();
+    jest.spyOn(global, 'setTimeout');
+
+    const resize = await new Resize(wrap, 100, () => {
+      change = true;
+    });
+
+    const wrap2 = await document.createElement('div');
+    await mockElementDimensions(wrap2)({
+      width: 250,
+      height: 100,
+    });
+    resize.wrapper = await wrap2;
+
+    await mockCustomEvent(window, { eventType: 'resize' });
+    await jest.runOnlyPendingTimers();
+    await jest.runOnlyPendingTimers();
+
+    expect(change).toBeTruthy();
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+  });
 });

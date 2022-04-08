@@ -6,7 +6,7 @@ mixin footer(options)
     let className = classComp
     
     if(modify){
-      for(let item of modify)
+      for(const item of modify)
     className += ` ${classComp}_${item}`
     }
     if(addClass){

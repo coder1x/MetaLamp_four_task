@@ -51,16 +51,16 @@ class Hints {
 
   setOrientation(str: string) {
     this.vertical = str === 'vertical';
-    let fl: boolean;
-    if (this.tipFrom) { fl = this.convertStyle(this.tipFrom.style); }
+    let flag: boolean;
+    if (this.tipFrom) { flag = this.convertStyle(this.tipFrom.style); }
 
     if (this.tipTo) {
-      fl = this.convertStyle(this.tipTo.style);
+      flag = this.convertStyle(this.tipTo.style);
       if (this.tipSingle) {
-        fl = this.convertStyle(this.tipSingle.style);
+        flag = this.convertStyle(this.tipSingle.style);
       }
     }
-    return fl;
+    return flag;
   }
 
   // ----------------------- create elements
@@ -165,22 +165,22 @@ class Hints {
 
   setPositionFrom(coordXY: number) {
     if (!this.tipFrom) return false;
-    const st = this.tipFrom.style;
-    this.setStylePosition(coordXY, st);
+    const { style } = this.tipFrom;
+    this.setStylePosition(coordXY, style);
     return true;
   }
 
   setPositionTo(coordXY: number) {
     if (!this.tipTo) return false;
-    const st = this.tipTo.style;
-    this.setStylePosition(coordXY, st);
+    const { style } = this.tipTo;
+    this.setStylePosition(coordXY, style);
     return true;
   }
 
   setPositionSingle(coordXY: number) {
     if (!this.tipSingle) return false;
-    const st = this.tipSingle.style;
-    this.setStylePosition(coordXY, st);
+    const { style } = this.tipSingle;
+    this.setStylePosition(coordXY, style);
     return true;
   }
 
@@ -215,11 +215,13 @@ class Hints {
       const tipFromYTop = tipFromXY - tipFromWH;
       const tipToYTop = tipToXY - tipToWH;
       visibilityTipSingle = tipFromYTop <= tipToXY;
+
       if (this.tipTo) {
         visibilityTipMax = tipMaxXY >= tipToYTop || tipMaxXY >= tipFromYTop;
       } else {
         visibilityTipMax = tipMaxXY >= tipFromYTop;
       }
+
       visibilityTipMin = tipMinYTop >= tipFromXY || !this.tipFrom;
     } else {
       tipMinXRight = tipMinXY + tipMinWH;
@@ -242,22 +244,24 @@ class Hints {
     return true;
   }
 
-  private setData(elem: HTMLElement, val: number) {
+  private setData(elem: HTMLElement, value: number) {
     if (elem) {
-      const prefix = this.getPrefix(val);
-      elem.innerText = prefix;
+      const dom = elem;
+      const prefix = this.getPrefix(value);
+      dom.innerText = prefix;
       return prefix;
     }
     return false;
   }
 
-  private setStylePosition(coordXY: number, st: CSSStyleDeclaration) {
+  private setStylePosition(coordXY: number, style: CSSStyleDeclaration) {
+    const styleDom = style;
     if (this.vertical) {
-      st.bottom = `${coordXY}%`;
-      st.removeProperty('left');
+      styleDom.bottom = `${coordXY}%`;
+      styleDom.removeProperty('left');
     } else {
-      st.left = `${coordXY}%`;
-      st.removeProperty('bottom');
+      styleDom.left = `${coordXY}%`;
+      styleDom.removeProperty('bottom');
     }
   }
 
@@ -271,25 +275,26 @@ class Hints {
     return elem;
   }
 
-  private getPrefix(val: number | string) {
-    let text = String(val);
+  private getPrefix(value: number | string) {
+    let text = String(value);
     if (this.tipPostfix) { text = `${this.tipPostfix} ${text}`; }
     if (this.tipPrefix) { text += ` ${this.tipPrefix}`; }
     return text;
   }
 
   private convertStyle = (elem: CSSStyleDeclaration) => {
-    let val = '';
+    const dom = elem;
+    let value = '';
     if (this.vertical) {
-      if (elem.left === '') return false;
-      val = elem.left;
-      elem.removeProperty('left');
-      elem.bottom = val;
+      if (dom.left === '') return false;
+      value = dom.left;
+      dom.removeProperty('left');
+      dom.bottom = value;
     } else {
-      if (elem.bottom === '') return false;
-      val = elem.bottom;
-      elem.removeProperty('bottom');
-      elem.left = val;
+      if (dom.bottom === '') return false;
+      value = dom.bottom;
+      dom.removeProperty('bottom');
+      dom.left = value;
     }
     return true;
   };
@@ -302,8 +307,8 @@ class Hints {
     let tipDotXY = 0;
     let tipDotWH = 0;
     if (elem) {
-      const cr = elem.getBoundingClientRect();
-      tipDotXY = this.vertical ? cr.bottom : cr.left;
+      const elemRect = elem.getBoundingClientRect();
+      tipDotXY = this.vertical ? elemRect.bottom : elemRect.left;
       tipDotWH = this.vertical
         ? elem.offsetHeight : elem.offsetWidth;
     }
@@ -325,13 +330,13 @@ class Hints {
     let tipMaxXY = 0;
     if (this.tipMin) {
       const tip = this.tipMin;
-      const crMin = tip.getBoundingClientRect();
-      const fl = this.vertical;
-      tipMinXY = fl ? crMin.bottom : crMin.left;
-      tipMinWH = fl ? tip.offsetHeight : tip.offsetWidth;
+      const minRect = tip.getBoundingClientRect();
+      const flag = this.vertical;
+      tipMinXY = flag ? minRect.bottom : minRect.left;
+      tipMinWH = flag ? tip.offsetHeight : tip.offsetWidth;
       if (this.tipMax) {
-        const crMax = this.tipMax.getBoundingClientRect();
-        tipMaxXY = fl ? crMax.bottom : crMax.left;
+        const maxRect = this.tipMax.getBoundingClientRect();
+        tipMaxXY = flag ? maxRect.bottom : maxRect.left;
       }
     }
     return { tipMinXY, tipMinWH, tipMaxXY };
@@ -341,14 +346,14 @@ class Hints {
     let tipSingleXY = 0;
     let tipSingleWH = 0;
     let tipSingleB = 0;
-    const fl = this.vertical;
+    const flag = this.vertical;
     const tip = this.tipSingle;
     if (tip) {
-      const cr = tip.getBoundingClientRect();
-      tipSingleXY = fl ? cr.bottom : cr.left;
-      tipSingleWH = fl ? tip.offsetHeight : tip.offsetWidth;
+      const singleRect = tip.getBoundingClientRect();
+      tipSingleXY = flag ? singleRect.bottom : singleRect.left;
+      tipSingleWH = flag ? tip.offsetHeight : tip.offsetWidth;
     }
-    if (fl) {
+    if (flag) {
       tipSingleB = tipSingleXY - tipSingleWH;
     } else {
       tipSingleB = tipSingleXY + tipSingleWH;
@@ -357,7 +362,7 @@ class Hints {
   }
 
   private toggleDisplay(options: CheckTip) {
-    let {
+    const {
       tipMaxXY,
       visibilityTipSingle,
       visibilityTipMax,
@@ -366,25 +371,31 @@ class Hints {
       tipMinXRight,
     } = options;
 
-    const display = (elem: HTMLElement, fl: boolean) => {
-      if (elem) { elem.style.visibility = fl ? 'visible' : 'hidden'; }
+    const display = (elem: HTMLElement, flag: boolean) => {
+      if (elem) {
+        const dom = elem;
+        dom.style.visibility = flag ? 'visible' : 'hidden';
+      }
     };
+
+    let maxVisible = visibilityTipMax;
+    let minVisible = visibilityTipMin;
 
     if (this.tipFrom && this.tipFromTo) {
       if (this.tipTo) {
-        const vis = !visibilityTipSingle;
-        display(this.tipFrom, vis);
-        display(this.tipTo, vis);
+        const visible = !visibilityTipSingle;
+        display(this.tipFrom, visible);
+        display(this.tipTo, visible);
         display(this.tipSingle, visibilityTipSingle);
 
         if (visibilityTipSingle) {
           const { tipSingleXY, tipSingleB } = this.getBoundingSingle();
           if (this.vertical) {
-            if (tipMaxXY >= tipSingleB) visibilityTipMax = true;
-            if (tipMinYTop <= tipSingleXY) visibilityTipMin = false;
+            if (tipMaxXY >= tipSingleB) maxVisible = true;
+            if (tipMinYTop <= tipSingleXY) minVisible = false;
           } else {
-            if (tipMaxXY <= tipSingleB) visibilityTipMax = true;
-            if (tipMinXRight >= tipSingleXY) visibilityTipMin = false;
+            if (tipMaxXY <= tipSingleB) maxVisible = true;
+            if (tipMinXRight >= tipSingleXY) minVisible = false;
           }
         }
       } else {
@@ -394,9 +405,9 @@ class Hints {
     }
 
     if (this.tipMin && this.tipMinMax) {
-      const visMax = !(visibilityTipMax && this.tipFrom);
+      const visMax = !(maxVisible && this.tipFrom);
       display(this.tipMax, visMax);
-      display(this.tipMin, visibilityTipMin);
+      display(this.tipMin, minVisible);
     }
   }
 }

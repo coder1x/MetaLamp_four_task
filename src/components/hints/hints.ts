@@ -18,13 +18,13 @@ class Hints {
 
   private tipPostfix: HTMLInputElement;
 
-  private tipMinMaxD: boolean;
+  private tipMinMaxCache: boolean;
 
-  private tipFromToD: boolean;
+  private tipFromToCache: boolean;
 
-  private tipPrefixD: string;
+  private tipPrefixCache: string;
 
-  private tipPostfixD: string;
+  private tipPostfixCache: string;
 
   private nameClass: string;
 
@@ -39,21 +39,21 @@ class Hints {
       tipMinMax, tipFromTo, tipPrefix, tipPostfix,
     } = options;
 
-    if (this.tipMinMaxD !== tipMinMax) {
+    if (this.tipMinMaxCache !== tipMinMax) {
       this.tipMinMax.checked = tipMinMax;
-      this.tipMinMaxD = tipMinMax;
+      this.tipMinMaxCache = tipMinMax;
     }
-    if (this.tipFromToD !== tipFromTo) {
+    if (this.tipFromToCache !== tipFromTo) {
       this.tipFromTo.checked = tipFromTo;
-      this.tipFromToD = tipFromTo;
+      this.tipFromToCache = tipFromTo;
     }
-    if (this.tipPrefixD !== tipPrefix) {
+    if (this.tipPrefixCache !== tipPrefix) {
       this.tipPrefix.value = String(tipPrefix);
-      this.tipPrefixD = tipPrefix;
+      this.tipPrefixCache = tipPrefix;
     }
-    if (this.tipPostfixD !== tipPostfix) {
+    if (this.tipPostfixCache !== tipPostfix) {
       this.tipPostfix.value = String(tipPostfix);
-      this.tipPostfixD = tipPostfix;
+      this.tipPostfixCache = tipPostfix;
     }
   }
 
@@ -67,9 +67,9 @@ class Hints {
       });
     };
 
-    const masE = [this.tipPrefix, this.tipPostfix];
+    const inputElements = [this.tipPrefix, this.tipPostfix];
 
-    masE.forEach((item) => {
+    inputElements.forEach((item) => {
       item.addEventListener('change', data);
     });
 

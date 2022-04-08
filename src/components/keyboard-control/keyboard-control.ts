@@ -12,9 +12,9 @@ class KeyboardControl {
 
   private keyStepHold: HTMLInputElement;
 
-  private keyStepOneD: number;
+  private keyStepOneCache: number;
 
-  private keyStepHoldD: number;
+  private keyStepHoldCache: number;
 
   private nameClass: string;
 
@@ -27,14 +27,14 @@ class KeyboardControl {
   setData(options: Options) {
     const { keyStepOne, keyStepHold } = options;
 
-    if (this.keyStepOneD !== keyStepOne) {
+    if (this.keyStepOneCache !== keyStepOne) {
       this.keyStepOne.value = String(keyStepOne);
-      this.keyStepOneD = keyStepOne;
+      this.keyStepOneCache = keyStepOne;
     }
 
-    if (this.keyStepHoldD !== keyStepHold) {
+    if (this.keyStepHoldCache !== keyStepHold) {
       this.keyStepHold.value = String(keyStepHold);
-      this.keyStepHoldD = keyStepHold;
+      this.keyStepHoldCache = keyStepHold;
     }
   }
 
@@ -54,21 +54,21 @@ class KeyboardControl {
 
     const inputProcessing = (event: Event) => {
       const elem = event.target as HTMLInputElement;
-      const val = elem.value.replace(/[^-.\d]/g, '');
+      const value = elem.value.replace(/[^-.\d]/g, '');
       const regexp = /^-?\d*?[.]?\d*$/;
-      const valid = regexp.test(val);
+      const valid = regexp.test(value);
 
       if (valid) {
-        mapInput.set(elem.name, val);
-        elem.value = val;
+        mapInput.set(elem.name, value);
+        elem.value = value;
       } else {
         elem.value = mapInput.get(elem.name);
       }
     };
 
-    const masE = [this.keyStepOne, this.keyStepHold];
+    const inputElements = [this.keyStepOne, this.keyStepHold];
 
-    masE.forEach((item) => {
+    inputElements.forEach((item) => {
       item.addEventListener('change', data);
       item.addEventListener('input', inputProcessing);
     });

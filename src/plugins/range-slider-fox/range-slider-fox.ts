@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/extensions
 import { Controller, Model, View } from './mvc/controller/controller';
 
 // eslint-disable-next-line func-names

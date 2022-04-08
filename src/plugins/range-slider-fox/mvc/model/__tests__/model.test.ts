@@ -3,8 +3,8 @@ import Model from '../model';
 interface PositionData {
   clientXY: number,
   shiftXY: number,
-  val: number,
-  fl: boolean
+  value: number,
+  flag: boolean
 }
 
 describe('------- Test Model API -------', () => {
@@ -87,9 +87,9 @@ describe('------- Test Model API -------', () => {
 
   // calcOnePercent
   test(' Check what one percent of a range is equal to ', () => {
-    const max = [1200, 134.67, 800];
-    const min = [-120, 23.54, 0];
-    const result = [13.2, 1.1113, 8];
+    const maxVal = [1200, 134.67, 800];
+    const minVal = [-120, 23.54, 0];
+    const resultVal = [13.2, 1.1113, 8];
 
     const test = async (min: number, max: number, result: number) => {
       const model = await new Model({
@@ -100,8 +100,8 @@ describe('------- Test Model API -------', () => {
       expect(model.calcOnePercent()).toBeCloseTo(result);
     };
 
-    for (let i = 0; i < result.length; i++) {
-      test(min[i], max[i], result[i]);
+    for (let i = 0; i < resultVal.length; i += 1) {
+      test(minVal[i], maxVal[i], resultVal[i]);
     }
   });
 
@@ -111,10 +111,10 @@ describe('------- Test Model API -------', () => {
 
     const position = async (from: number, to: number) => {
       await model.calcOnePercent();
-      const fromP = await model.calcPositionDotFrom();
-      const toP = await model.calcPositionDotTo();
-      expect(+fromP.toFixed(2)).toBeCloseTo(from);
-      expect(+toP.toFixed(2)).toBeCloseTo(to);
+      const fromPosition = await model.calcPositionDotFrom();
+      const toPosition = await model.calcPositionDotTo();
+      expect(+fromPosition.toFixed(2)).toBeCloseTo(from);
+      expect(+toPosition.toFixed(2)).toBeCloseTo(to);
     };
 
     model = await new Model({
@@ -149,199 +149,200 @@ describe('------- Test Model API -------', () => {
     expect(model.setWrapWH(0)).toBeCloseTo(319);
   });
 
+  const testName1 = ' Check dots mooving along '
+    + 'the grid and interaction with each other ';
   //  calcDotPosition
-  test(' Check dots mooving along '
-    + 'the grid and interaction with each other ', async () => {
-      let model: Model;
-      let wrapWH = 1120;
-      let position = 533.7142944335938;
+  test(testName1, async () => {
+    let model: Model;
+    let wrapWH = 1120;
+    let position = 533.7142944335938;
 
-      const positionD = async (op: PositionData) => {
-        const data = await model.calcDotPosition({
-          type: op.fl ? 'From' : 'To',
+    const positionData = async (options: PositionData) => {
+      const data = await model.calcDotPosition({
+        type: options.flag ? 'From' : 'To',
+        wrapWH,
+        position,
+        clientXY: options.clientXY,
+        shiftXY: options.shiftXY,
+      });
+
+      if (data) {
+        if (options.flag) {
+          expect(data.from).toBeCloseTo(options.value);
+          expect(data.to).toBeUndefined();
+        } else {
+          expect(data.to).toBeCloseTo(options.value);
+          expect(data.from).toBeUndefined();
+        }
+      }
+    };
+
+    model = await new Model({
+      type: 'double',
+      min: -120,
+      max: 800,
+      to: 500,
+      from: 80,
+      onStart: async () => {
+        await model.calcOnePercent();
+        await model.calcPositionDotFrom();
+        await model.calcPositionDotTo();
+
+        positionData({
+          clientXY: 929.7144165039062,
+          shiftXY: 3.580322265625,
+          value: 202,
+          flag: true,
+        });
+
+        positionData({
+          clientXY: 100,
+          shiftXY: 3.580322265625,
+          value: -120,
+          flag: true,
+        });
+
+        let data = await model.calcDotPosition({
+          type: 'From',
           wrapWH,
           position,
-          clientXY: op.clientXY,
-          shiftXY: op.shiftXY,
+          clientXY: 1400,
+          shiftXY: 3.580322265625,
+        });
+        if (data) {
+          expect(data.from).toBeCloseTo(500);
+          expect(data.to).toBeCloseTo(500);
+        }
+
+        positionData({
+          clientXY: 1500,
+          shiftXY: 0.08056640625,
+          value: 674,
+          flag: false,
+        });
+
+        positionData({
+          clientXY: 2300,
+          shiftXY: 0.08056640625,
+          value: 800,
+          flag: false,
+        });
+
+        data = await model.calcDotPosition({
+          type: 'To',
+          wrapWH,
+          position,
+          clientXY: 1200,
+          shiftXY: 0.08056640625,
         });
 
         if (data) {
-          if (op.fl) {
-            expect(data.from).toBeCloseTo(op.val);
-            expect(data.to).toBeUndefined();
-          } else {
-            expect(data.to).toBeCloseTo(op.val);
-            expect(data.from).toBeUndefined();
-          }
+          expect(data.from).toBeCloseTo(500);
+          expect(data.to).toBeCloseTo(500);
         }
-      };
-
-      model = await new Model({
-        type: 'double',
-        min: -120,
-        max: 800,
-        to: 500,
-        from: 80,
-        onStart: async () => {
-          await model.calcOnePercent();
-          await model.calcPositionDotFrom();
-          await model.calcPositionDotTo();
-
-          positionD({
-            clientXY: 929.7144165039062,
-            shiftXY: 3.580322265625,
-            val: 202,
-            fl: true,
-          });
-
-          positionD({
-            clientXY: 100,
-            shiftXY: 3.580322265625,
-            val: -120,
-            fl: true,
-          });
-
-          let data = await model.calcDotPosition({
-            type: 'From',
-            wrapWH,
-            position,
-            clientXY: 1400,
-            shiftXY: 3.580322265625,
-          });
-          if (data) {
-            expect(data.from).toBeCloseTo(500);
-            expect(data.to).toBeCloseTo(500);
-          }
-
-          positionD({
-            clientXY: 1500,
-            shiftXY: 0.08056640625,
-            val: 674,
-            fl: false,
-          });
-
-          positionD({
-            clientXY: 2300,
-            shiftXY: 0.08056640625,
-            val: 800,
-            fl: false,
-          });
-
-          data = await model.calcDotPosition({
-            type: 'To',
-            wrapWH,
-            position,
-            clientXY: 1200,
-            shiftXY: 0.08056640625,
-          });
-
-          if (data) {
-            expect(data.from).toBeCloseTo(500);
-            expect(data.to).toBeCloseTo(500);
-          }
-        },
-      });
-      await model.onHandle();
-
-      model = await new Model({
-        type: 'double',
-        orientation: 'vertical',
-        min: -120,
-        max: 800,
-        to: 500,
-        from: 80,
-        step: 5,
-        onStart: async () => {
-          await model.calcOnePercent();
-          await model.calcPositionDotFrom();
-          await model.calcPositionDotTo();
-          wrapWH = 522;
-          position = 721.1786041259766;
-
-          positionD({
-            clientXY: 369.00006103515625,
-            shiftXY: -2.5625,
-            val: 496,
-            fl: false,
-          });
-
-          positionD({
-            clientXY: 521,
-            shiftXY: -1.98211669921875,
-            val: 229,
-            fl: true,
-          });
-        },
-      });
-      await model.onHandle();
-
-      model = await new Model({
-        type: 'double',
-        orientation: 'vertical',
-        min: -120,
-        max: 800,
-        to: 500,
-        from: 80,
-        grid: true,
-        gridSnap: true,
-        gridNum: 40,
-        onStart: async () => {
-          await model.calcOnePercent();
-          await model.calcPositionDotFrom();
-          await model.calcPositionDotTo();
-          wrapWH = 522;
-          position = 721.1786041259766;
-
-          positionD({
-            clientXY: 369.00006103515625,
-            shiftXY: -2.5625,
-            val: 496,
-            fl: false,
-          });
-        },
-      });
-      await model.onHandle();
-
-      model = await new Model({
-        type: 'single',
-        orientation: 'vertical',
-        min: -120,
-        max: 800,
-        to: 500,
-        from: 80,
-        onStart: async () => {
-          await model.calcOnePercent();
-          await model.calcPositionDotFrom();
-          await model.calcPositionDotTo();
-          wrapWH = 522;
-          position = 721.1786041259766;
-
-          positionD({
-            clientXY: 521,
-            shiftXY: -1.98211669921875,
-            val: 229,
-            fl: true,
-          });
-        },
-      });
-      await model.onHandle();
+      },
     });
+    await model.onHandle();
+
+    model = await new Model({
+      type: 'double',
+      orientation: 'vertical',
+      min: -120,
+      max: 800,
+      to: 500,
+      from: 80,
+      step: 5,
+      onStart: async () => {
+        await model.calcOnePercent();
+        await model.calcPositionDotFrom();
+        await model.calcPositionDotTo();
+        wrapWH = 522;
+        position = 721.1786041259766;
+
+        positionData({
+          clientXY: 369.00006103515625,
+          shiftXY: -2.5625,
+          value: 496,
+          flag: false,
+        });
+
+        positionData({
+          clientXY: 521,
+          shiftXY: -1.98211669921875,
+          value: 229,
+          flag: true,
+        });
+      },
+    });
+    await model.onHandle();
+
+    model = await new Model({
+      type: 'double',
+      orientation: 'vertical',
+      min: -120,
+      max: 800,
+      to: 500,
+      from: 80,
+      grid: true,
+      gridSnap: true,
+      gridNum: 40,
+      onStart: async () => {
+        await model.calcOnePercent();
+        await model.calcPositionDotFrom();
+        await model.calcPositionDotTo();
+        wrapWH = 522;
+        position = 721.1786041259766;
+
+        positionData({
+          clientXY: 369.00006103515625,
+          shiftXY: -2.5625,
+          value: 496,
+          flag: false,
+        });
+      },
+    });
+    await model.onHandle();
+
+    model = await new Model({
+      type: 'single',
+      orientation: 'vertical',
+      min: -120,
+      max: 800,
+      to: 500,
+      from: 80,
+      onStart: async () => {
+        await model.calcOnePercent();
+        await model.calcPositionDotFrom();
+        await model.calcPositionDotTo();
+        wrapWH = 522;
+        position = 721.1786041259766;
+
+        positionData({
+          clientXY: 521,
+          shiftXY: -1.98211669921875,
+          value: 229,
+          flag: true,
+        });
+      },
+    });
+    await model.onHandle();
+  });
 
   // calcStep
   test(' Calculate step relating the range ', async () => {
-    let mas = await [0, 2, 4, 6, 8, 10];
+    let masVal = await [0, 2, 4, 6, 8, 10];
 
     let model = await new Model({
       min: 0,
       max: 10,
       step: 2,
       onStart: () => {
-        expect(model.calcStep()).toEqual(mas);
+        expect(model.calcStep()).toEqual(masVal);
       },
     });
     await model.onHandle();
 
-    mas = await [
+    masVal = await [
       -1.45, 1.6,
       4.6, 7.6,
       10.6, 13.6,
@@ -353,7 +354,7 @@ describe('------- Test Model API -------', () => {
       max: 15.234,
       step: 3,
       onStart: () => {
-        expect(model.calcStep()).toEqual(mas);
+        expect(model.calcStep()).toEqual(masVal);
       },
     });
     await model.onHandle();
@@ -387,51 +388,52 @@ describe('------- Test Model API -------', () => {
     await model.onHandle();
   });
 
+  const testName2 = ' Calculate numeral grid'
+    + ' relating range and interval or step ';
   //  createMark
-  test(' Calculate numeral grid'
-    + ' relating range and interval or step ', async () => {
-      let model = await new Model({
-        min: 10,
-        max: 800,
-        gridRound: 0,
-        gridStep: 0,
-        gridNum: 40,
-        onStart: async () => {
-          const mas = [
-            { val: 89, position: 10 },
-            { val: 662, position: 82.5 },
-            { val: 780, position: 97.5 },
-          ];
+  test(testName2, async () => {
+    let model = await new Model({
+      min: 10,
+      max: 800,
+      gridRound: 0,
+      gridStep: 0,
+      gridNum: 40,
+      onStart: async () => {
+        const masVal = [
+          { val: 89, position: 10 },
+          { val: 662, position: 82.5 },
+          { val: 780, position: 97.5 },
+        ];
 
-          const grid = model.createMark();
-          expect(grid[4]).toEqual(mas[0]);
-          expect(grid[33]).toEqual(mas[1]);
-          expect(grid[39]).toEqual(mas[2]);
-        },
-      });
-      await model.onHandle();
-
-      model = await new Model({
-        min: -10.56,
-        max: 800.78,
-        gridRound: 1,
-        gridStep: 15,
-        gridNum: 0,
-        onStart: async () => {
-          const mas = [
-            { val: 64.4, position: 9.243966771020782 },
-            { val: 514.4, position: 64.70776739714547 },
-            { val: 574.4, position: 72.10294081396209 },
-          ];
-
-          const grid = model.createMark();
-          expect(grid[5]).toEqual(mas[0]);
-          expect(grid[35]).toEqual(mas[1]);
-          expect(grid[39]).toEqual(mas[2]);
-        },
-      });
-      await model.onHandle();
+        const grid = model.createMark();
+        expect(grid[4]).toEqual(masVal[0]);
+        expect(grid[33]).toEqual(masVal[1]);
+        expect(grid[39]).toEqual(masVal[2]);
+      },
     });
+    await model.onHandle();
+
+    model = await new Model({
+      min: -10.56,
+      max: 800.78,
+      gridRound: 1,
+      gridStep: 15,
+      gridNum: 0,
+      onStart: async () => {
+        const mas = [
+          { val: 64.4, position: 9.243966771020782 },
+          { val: 514.4, position: 64.70776739714547 },
+          { val: 574.4, position: 72.10294081396209 },
+        ];
+
+        const grid = model.createMark();
+        expect(grid[5]).toEqual(mas[0]);
+        expect(grid[35]).toEqual(mas[1]);
+        expect(grid[39]).toEqual(mas[2]);
+      },
+    });
+    await model.onHandle();
+  });
 
   // calcPositionBar
   test(' Calculate progress-bar position between dots', async () => {
@@ -535,200 +537,206 @@ describe('------- Test Model API -------', () => {
     await model.onHandle();
   });
 
+  const testName3 = ' Check calculation of a click'
+    + ' on a progress-bar between dots ';
   // clickBar
-  test(' Check calculation of a click'
-    + ' on a progress-bar between dots ', async () => {
-      let model = await new Model({
-        type: 'double',
-        min: -120,
-        max: 800,
-        to: 600,
-        from: 100,
-        onStart: async () => {
-          await model.setWrapWH(1120);
-          await model.calcOnePercent();
-          await model.calcPositionDotFrom();
-          await model.calcPositionDotTo();
-          let obj = { from: 344, to: 600 };
-          expect(model.clickBar(297)).toEqual(obj);
-          obj = { from: 344, to: 582 };
-          expect(model.clickBar(290)).toEqual(obj);
-        },
-      });
-      await model.onHandle();
-
-      model = await new Model({
-        orientation: 'vertical',
-        type: 'single',
-        min: -120,
-        max: 800,
-        to: 600,
-        from: 100,
-        onStart: async () => {
-          await model.setWrapWH(1120);
-          await model.calcOnePercent();
-          await model.calcPositionDotFrom();
-          const obj = { from: 92, to: 100 };
-          expect(model.clickBar(10)).toEqual(obj);
-        },
-      });
-      await model.onHandle();
-
-      model = await new Model({
-        type: 'single',
-        min: -120,
-        max: 800,
-        to: 600,
-        from: 100,
-        onStart: async () => {
-          await model.setWrapWH(1120);
-          await model.calcOnePercent();
-          await model.calcPositionDotFrom();
-          const obj = { from: -79, to: 100 };
-          expect(model.clickBar(50)).toEqual(obj);
-        },
-      });
-      await model.onHandle();
+  test(testName3, async () => {
+    let model = await new Model({
+      type: 'double',
+      min: -120,
+      max: 800,
+      to: 600,
+      from: 100,
+      onStart: async () => {
+        await model.setWrapWH(1120);
+        await model.calcOnePercent();
+        await model.calcPositionDotFrom();
+        await model.calcPositionDotTo();
+        let obj = { from: 344, to: 600 };
+        expect(model.clickBar(297)).toEqual(obj);
+        obj = { from: 344, to: 582 };
+        expect(model.clickBar(290)).toEqual(obj);
+      },
     });
+    await model.onHandle();
 
+    model = await new Model({
+      orientation: 'vertical',
+      type: 'single',
+      min: -120,
+      max: 800,
+      to: 600,
+      from: 100,
+      onStart: async () => {
+        await model.setWrapWH(1120);
+        await model.calcOnePercent();
+        await model.calcPositionDotFrom();
+        const obj = { from: 92, to: 100 };
+        expect(model.clickBar(10)).toEqual(obj);
+      },
+    });
+    await model.onHandle();
+
+    model = await new Model({
+      type: 'single',
+      min: -120,
+      max: 800,
+      to: 600,
+      from: 100,
+      onStart: async () => {
+        await model.setWrapWH(1120);
+        await model.calcOnePercent();
+        await model.calcPositionDotFrom();
+        const obj = { from: -79, to: 100 };
+        expect(model.clickBar(50)).toEqual(obj);
+      },
+    });
+    await model.onHandle();
+  });
+
+  const testName4 = ' Check dots values changes '
+    + 'on clicking on the grid element ';
   // clickMark
-  test(' Check dots values changes '
-    + 'on clicking on the grid element ', async () => {
-      let model = await new Model({
-        type: 'double',
-        min: -120,
-        max: 800,
-        to: 600,
-        from: 100,
+  test(testName4, async () => {
+    let model = await new Model({
+      type: 'double',
+      min: -120,
+      max: 800,
+      to: 600,
+      from: 100,
 
-        onStart: async () => {
-          let obj = { from: 150, to: 600 };
-          expect(model.clickMark(150)).toEqual(obj);
+      onStart: async () => {
+        let obj = { from: 150, to: 600 };
+        expect(model.clickMark(150)).toEqual(obj);
 
-          obj = { from: 150, to: 700 };
-          expect(model.clickMark(700)).toEqual(obj);
+        obj = { from: 150, to: 700 };
+        expect(model.clickMark(700)).toEqual(obj);
 
-          obj = { from: 10, to: 700 };
-          expect(model.clickMark(10)).toEqual(obj);
-        },
-      });
-      await model.onHandle();
-
-      model = await new Model({
-        type: 'single',
-        min: -120,
-        max: 800,
-        to: 600,
-        from: 100,
-
-        onStart: async () => {
-          let obj = { from: 150, to: 100 };
-          expect(model.clickMark(150)).toEqual(obj);
-
-          obj = { from: 700, to: 100 };
-          expect(model.clickMark(700)).toEqual(obj);
-
-          obj = { from: 10, to: 100 };
-          expect(model.clickMark(10)).toEqual(obj);
-        },
-      });
-      await model.onHandle();
+        obj = { from: 10, to: 700 };
+        expect(model.clickMark(10)).toEqual(obj);
+      },
     });
+    await model.onHandle();
 
+    model = await new Model({
+      type: 'single',
+      min: -120,
+      max: 800,
+      to: 600,
+      from: 100,
+
+      onStart: async () => {
+        let obj = { from: 150, to: 100 };
+        expect(model.clickMark(150)).toEqual(obj);
+
+        obj = { from: 700, to: 100 };
+        expect(model.clickMark(700)).toEqual(obj);
+
+        obj = { from: 10, to: 100 };
+        expect(model.clickMark(10)).toEqual(obj);
+      },
+    });
+    await model.onHandle();
+  });
+
+  const testName5 = ' Calculate dots positions relating '
+    + 'grid mark and further moovement along the grid ';
   //  calcSnap & snapDot
-  test(' Calculate dots positions relating '
-    + 'grid mark and further moovement along the grid ', async () => {
-      const model = await new Model({
-        type: 'double',
-        min: -120,
-        max: 800,
-        to: 600,
-        from: 100,
-        grid: true,
-        gridSnap: true,
-        gridNum: 20,
+  test(testName5, async () => {
+    const model = await new Model({
+      type: 'double',
+      min: -120,
+      max: 800,
+      to: 600,
+      from: 100,
+      grid: true,
+      gridSnap: true,
+      gridNum: 20,
 
-        onStart: async () => {
-          const mas: number[] = [];
+      onStart: async () => {
+        const snap: number[] = [];
 
-          for (const item of model.createMark()) {
-            mas.push(item.val);
-          }
-          mas.shift();
-          mas.pop();
+        model.createMark().forEach((item) => {
+          snap.push(item.val);
+        });
 
-          const obj = { from: 110, to: 616 };
-          expect(model.calcSnap(mas)).toEqual(obj);
-          expect(model.snapDot()).toEqual(obj);
-        },
-      });
-      await model.onHandle();
+        snap.shift();
+        snap.pop();
+
+        const obj = { from: 110, to: 616 };
+        expect(model.calcSnap(snap)).toEqual(obj);
+        expect(model.snapDot()).toEqual(obj);
+      },
     });
+    await model.onHandle();
+  });
 
+  const testName6 = ' Calculate dots movement when'
+    + ' controlling from keyboard ';
   // calcKeyDown
-  test(' Calculate dots movement when'
-    + ' controlling from keyboard ', async () => {
-      let model = await new Model({
-        type: 'double',
-        min: -120,
-        max: 800,
-        to: 600,
-        from: 100,
-        keyStepOne: 5,
-        keyStepHold: 10,
-        onStart: async () => {
-          let obj = { from: 105, to: 600 };
-          expect(model.calcKeyDown(false, '+', 'from')).toEqual(obj);
-          obj = { from: 100, to: 600 };
-          expect(model.calcKeyDown(false, '-', 'from')).toEqual(obj);
-          obj = { from: 100, to: 605 };
-          expect(model.calcKeyDown(false, '+', 'to')).toEqual(obj);
-          obj = { from: 100, to: 600 };
-          expect(model.calcKeyDown(false, '-', 'to')).toEqual(obj);
-          obj = { from: 110, to: 600 };
-          expect(model.calcKeyDown(true, '+', 'from')).toEqual(obj);
-          obj = { from: 100, to: 600 };
-          expect(model.calcKeyDown(true, '-', 'from')).toEqual(obj);
-          obj = { from: 100, to: 610 };
-          expect(model.calcKeyDown(true, '+', 'to')).toEqual(obj);
-          obj = { from: 100, to: 600 };
-          expect(model.calcKeyDown(true, '-', 'to')).toEqual(obj);
-        },
-      });
-      await model.onHandle();
-
-      model = await new Model({
-        type: 'double',
-        min: -120,
-        max: 800,
-        to: 600,
-        from: 100,
-        grid: true,
-        gridSnap: true,
-        gridNum: 40,
-        keyStepOne: 0,
-        keyStepHold: 0,
-        onStart: async () => {
-          const mas: number[] = [];
-
-          for (const item of model.createMark()) {
-            mas.push(item.val);
-          }
-          mas.shift();
-          mas.pop();
-
-          let obj = { from: 110, to: 593 };
-          expect(model.calcSnap(mas)).toEqual(obj);
-          expect(model.snapDot()).toEqual(obj);
-
-          obj = { from: 133, to: 593 };
-          expect(model.calcKeyDown(false, '+', 'from')).toEqual(obj);
-          obj = { from: 110, to: 593 };
-          expect(model.calcKeyDown(false, '-', 'from')).toEqual(obj);
-          obj = { from: 110, to: 616 };
-          expect(model.calcKeyDown(false, '+', 'to')).toEqual(obj);
-        },
-      });
-      await model.onHandle();
+  test(testName6, async () => {
+    let model = await new Model({
+      type: 'double',
+      min: -120,
+      max: 800,
+      to: 600,
+      from: 100,
+      keyStepOne: 5,
+      keyStepHold: 10,
+      onStart: async () => {
+        let obj = { from: 105, to: 600 };
+        expect(model.calcKeyDown(false, '+', 'from')).toEqual(obj);
+        obj = { from: 100, to: 600 };
+        expect(model.calcKeyDown(false, '-', 'from')).toEqual(obj);
+        obj = { from: 100, to: 605 };
+        expect(model.calcKeyDown(false, '+', 'to')).toEqual(obj);
+        obj = { from: 100, to: 600 };
+        expect(model.calcKeyDown(false, '-', 'to')).toEqual(obj);
+        obj = { from: 110, to: 600 };
+        expect(model.calcKeyDown(true, '+', 'from')).toEqual(obj);
+        obj = { from: 100, to: 600 };
+        expect(model.calcKeyDown(true, '-', 'from')).toEqual(obj);
+        obj = { from: 100, to: 610 };
+        expect(model.calcKeyDown(true, '+', 'to')).toEqual(obj);
+        obj = { from: 100, to: 600 };
+        expect(model.calcKeyDown(true, '-', 'to')).toEqual(obj);
+      },
     });
+    await model.onHandle();
+
+    model = await new Model({
+      type: 'double',
+      min: -120,
+      max: 800,
+      to: 600,
+      from: 100,
+      grid: true,
+      gridSnap: true,
+      gridNum: 40,
+      keyStepOne: 0,
+      keyStepHold: 0,
+      onStart: async () => {
+        const snap: number[] = [];
+
+        model.createMark().forEach((item) => {
+          snap.push(item.val);
+        });
+
+        snap.shift();
+        snap.pop();
+
+        let obj = { from: 110, to: 593 };
+        expect(model.calcSnap(snap)).toEqual(obj);
+        expect(model.snapDot()).toEqual(obj);
+
+        obj = { from: 133, to: 593 };
+        expect(model.calcKeyDown(false, '+', 'from')).toEqual(obj);
+        obj = { from: 110, to: 593 };
+        expect(model.calcKeyDown(false, '-', 'from')).toEqual(obj);
+        obj = { from: 110, to: 616 };
+        expect(model.calcKeyDown(false, '+', 'to')).toEqual(obj);
+      },
+    });
+    await model.onHandle();
+  });
 });

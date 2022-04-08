@@ -4,9 +4,9 @@ import RangeSliderOptions from '../../glob-interface';
 import { ObserverOptions } from '../../observer';
 
 class Controller {
-  private startFL = false;
+  private startFlag = false;
 
-  private resetFL = false;
+  private resetFlag = false;
 
   private lock = false;
 
@@ -24,9 +24,9 @@ class Controller {
 
   async reset() {
     if (this.lock) return false;
-    this.resetFL = await true;
+    this.resetFlag = await true;
     await this.model.reset();
-    this.resetFL = false;
+    this.resetFlag = false;
     return true;
   }
 
@@ -100,7 +100,7 @@ class Controller {
 
     await this.view.outDataAttr();
     await this.funAttributes();
-    this.startFL = true;
+    this.startFlag = true;
     return true;
   };
 
@@ -112,7 +112,7 @@ class Controller {
       this.update(options);
     };
 
-    if (this.startFL) { this.funAttributes(); }
+    if (this.startFlag) { this.funAttributes(); }
 
     return true;
   };
@@ -122,12 +122,12 @@ class Controller {
     if (key !== 'RangeData') return false;
 
     this.model.calcOnePercent();
-    const lockFl = this.startFL && !this.resetFL;
+    const lockFlag = this.startFlag && !this.resetFlag;
 
-    if (lockFl) { this.view.updateTipMinMax(options.min, options.max); }
+    if (lockFlag) { this.view.updateTipMinMax(options.min, options.max); }
 
     const obj = this.model.getOptions();
-    if (obj.grid && lockFl) {
+    if (obj.grid && lockFlag) {
       this.view.deleteGrid();
       this.model.createMark();
       this.view.createDomGrid();
@@ -159,7 +159,7 @@ class Controller {
     if (key !== 'DotData') return false;
     const { type } = options;
 
-    const lockFl = this.startFL && !this.resetFL;
+    const lockFlag = this.startFlag && !this.resetFlag;
     this.view.createDotElem(type); // create dot
     const from = this.model.calcPositionDotFrom();
     this.view.setDotFrom(from);
@@ -172,14 +172,14 @@ class Controller {
     this.view.setDotActions(type);
 
     // ----------  Hints
-    if (type === 'double' && lockFl) { this.view.toggleTipTo(options.to); }
+    if (type === 'double' && lockFlag) { this.view.toggleTipTo(options.to); }
 
-    if (lockFl) {
+    if (lockFlag) {
       this.updateHints(options.type, options.from, options.to);
     }
 
     // ----------  Bar
-    if (lockFl) {
+    if (lockFlag) {
       const position = this.model.calcPositionBar();
       this.view.setBar(position.barX, position.widthBar);
     }
@@ -216,9 +216,9 @@ class Controller {
     const { key } = options;
     if (key !== 'GridData') return false;
 
-    const lockFl = this.startFL && !this.resetFL;
+    const lockFlag = this.startFlag && !this.resetFlag;
 
-    if (lockFl) {
+    if (lockFlag) {
       this.view.deleteGrid();
       if (options.grid) {
         this.model.createMark();
@@ -262,15 +262,15 @@ class Controller {
     this.model.setWrapWH(wrapWH);
     this.view.setHintsData(options);
 
-    const lockFl = this.startFL && !this.resetFL;
+    const lockFlag = this.startFlag && !this.resetFlag;
 
-    if (lockFl) { this.updateHints(options.type, options.from, options.to); }
+    if (lockFlag) { this.updateHints(options.type, options.from, options.to); }
     return true;
   };
 
   private async updateHints(type: string, from: number, to: number) {
     await this.view.updateTipValue(from, to, type);
-    const objTip = await this.view.getWidthTip(this.startFL, this.resetFL);
+    const objTip = await this.view.getWidthTip(this.startFlag, this.resetFlag);
 
     if (objTip.fromWH || objTip.toWH) {
       const fromXY = await this.model.calcPositionTipFrom(objTip.fromWH);
@@ -312,7 +312,7 @@ class Controller {
 
   private handleSizeWrap = (options: ObserverOptions) => {
     const { key } = options;
-    if (key !== 'SizeWrap' || !this.startFL) return false;
+    if (key !== 'SizeWrap' || !this.startFlag) return false;
 
     this.model.setWrapWH(options.wrapWH);
     return true;

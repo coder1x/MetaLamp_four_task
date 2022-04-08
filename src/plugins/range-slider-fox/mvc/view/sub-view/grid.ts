@@ -10,7 +10,7 @@ class Grid extends Observer {
 
   private indent: number;
 
-  private masWH: number[] = [];
+  private sizeWH: number[] = [];
 
   private oddElements: HTMLElement[][] = [[]];
 
@@ -24,7 +24,7 @@ class Grid extends Observer {
 
   private vertical: boolean;
 
-  private resizeF: boolean = false;
+  private resizeFlag: boolean = false;
 
   constructor(elem: HTMLElement | Element, rsName: string) {
     super();
@@ -58,13 +58,13 @@ class Grid extends Observer {
 
       gridMark.innerText = String(val);
       gridPol.appendChild(gridMark);
-      const st = gridPol.style;
+      const { style } = gridPol;
       const pos = `${position}%`;
 
       if (this.vertical) {
-        st.bottom = pos;
+        style.bottom = pos;
       } else {
-        st.left = pos;
+        style.left = pos;
       }
 
       this.elemGrid.appendChild(gridPol);
@@ -97,8 +97,8 @@ class Grid extends Observer {
   }
 
   private setAction(elem: HTMLElement) {
-    elem.addEventListener('click', (e: Event) => {
-      const mark = e.target as HTMLElement;
+    elem.addEventListener('click', (event: Event) => {
+      const mark = event.target as HTMLElement;
       const selector = `js-${this.rsName}__grid-mark`;
       if (Grid.searchStr(mark.className, selector)) {
         this.notifyOB({
@@ -139,17 +139,17 @@ class Grid extends Observer {
     display: string,
     opacity: string,
   ) {
-    const st = elem.style;
-    st.visibility = display;
+    const { style } = elem;
+    style.visibility = display;
     const wrapE = elem.parentNode as HTMLElement;
     wrapE.style.opacity = opacity;
   }
 
   private shapingMark() {
-    this.masWH = [];
+    this.sizeWH = [];
     this.oddElements = [[]];
     this.evenElements = [[]];
-    let elemWH = 0;
+    let markWH = 0;
 
     if (this.previousElem) { this.previousElem.remove(); }
     this.previousElem = null;
@@ -162,57 +162,57 @@ class Grid extends Observer {
       `js-${this.rsName}__grid-pol`,
     );
 
-    const len = gridMarks.length;
-    if (len > 1) {
-      this.lastElem = gridMarks[len - 1];
+    const { length } = gridMarks;
+    if (length > 1) {
+      this.lastElem = gridMarks[length - 1];
     }
 
     let k = 0;
-    for (let i = 0; i < len; i += 1) {
+    for (let i = 0; i < length; i += 1) {
       const mark = gridMarks[i] as HTMLElement;
       const gridPolsT = gridPols[k] as HTMLElement;
       k += 1;
 
-      const stMark = mark.style;
+      const { style } = mark;
 
       if (this.vertical) {
-        stMark.top = `-${mark.offsetHeight / 2}px`;
-        stMark.left = `${gridPolsT.offsetWidth + 2}px`;
-        elemWH += mark.offsetHeight + this.indent;
+        style.top = `-${mark.offsetHeight / 2}px`;
+        style.left = `${gridPolsT.offsetWidth + 2}px`;
+        markWH += mark.offsetHeight + this.indent;
       } else {
-        stMark.left = `-${mark.offsetWidth / 2}px`;
-        stMark.top = `${gridPolsT.offsetHeight + 2}px`;
-        elemWH += mark.offsetWidth + this.indent;
+        style.left = `-${mark.offsetWidth / 2}px`;
+        style.top = `${gridPolsT.offsetHeight + 2}px`;
+        markWH += mark.offsetWidth + this.indent;
       }
 
       this.oddElements[0].push(mark);
     }
 
-    this.masWH.push(elemWH);
+    this.sizeWH.push(markWH);
     this.oddElements[0].shift();
     this.oddElements[0].pop();
 
     let evenMas: HTMLElement[] = [];
 
-    const breakIntoPieces = (mas: HTMLElement[]) => {
-      elemWH = 0;
-      const newMas = mas.filter((elem, i) => {
+    const breakIntoPieces = (elements: HTMLElement[]) => {
+      markWH = 0;
+      const hideMark = elements.filter((elem, i) => {
         if (i % 2 === 0) { // every second element of the array
           evenMas.push(elem);
           return false;
         }
 
-        elemWH += this.vertical ? elem.offsetHeight : elem.offsetWidth;
-        elemWH += this.indent;
+        markWH += this.vertical ? elem.offsetHeight : elem.offsetWidth;
+        markWH += this.indent;
         return true;
       });
 
-      if (newMas.length >= 2) {
-        this.oddElements.push(newMas);
+      if (hideMark.length >= 2) {
+        this.oddElements.push(hideMark);
         this.evenElements.push(evenMas);
         evenMas = [];
-        this.masWH.push(elemWH);
-        breakIntoPieces(newMas);
+        this.sizeWH.push(markWH);
+        breakIntoPieces(hideMark);
       }
     };
 
@@ -221,9 +221,9 @@ class Grid extends Observer {
     this.evenElements.shift();
     this.visibleMark();
 
-    if (!this.resizeF) {
-      this.resizeF = true;
-      const objResize = new Resize(this.elemGrid, 200, () => {
+    if (!this.resizeFlag) {
+      this.resizeFlag = true;
+      new Resize(this.elemGrid, 200, () => {
         if (this.offOn && !this.vertical) {
           this.visibleMark();
         }
@@ -240,8 +240,8 @@ class Grid extends Observer {
 
     const wrapWH = size;
     let i = 0;
-    for (; i < this.masWH.length - 1; i += 1) {
-      if (this.masWH[i] <= wrapWH) { break; }
+    for (; i < this.sizeWH.length - 1; i += 1) {
+      if (this.sizeWH[i] <= wrapWH) { break; }
     }
 
     for (let n = 0; n <= i; n += 1) { // hide honest elements till the necessary level
@@ -259,8 +259,8 @@ class Grid extends Observer {
       snapNum.push(+elem.innerText);
     });
 
-    const len = this.oddElements[i].length - 1;
-    this.previousElem = this.oddElements[i][len];
+    const length = this.oddElements[i].length - 1;
+    this.previousElem = this.oddElements[i][length];
 
     this.visibleLastElem(snapNum);
   }
@@ -268,29 +268,30 @@ class Grid extends Observer {
   private visibleLastElem(snapNum: number[]) {
     if (!this.lastElem || !this.previousElem) return false;
 
-    const lastR = this.lastElem.getBoundingClientRect();
-    const previousR = this.previousElem.getBoundingClientRect();
-    const lastXY = this.vertical ? lastR.bottom : lastR.left;
+    let snap = snapNum;
 
-    let previousXY = this.vertical ? previousR.top : previousR.right;
+    const lastRect = this.lastElem.getBoundingClientRect();
+    const previousRect = this.previousElem.getBoundingClientRect();
+    const lastXY = this.vertical ? lastRect.bottom : lastRect.left;
+
+    let previousXY = this.vertical ? previousRect.top : previousRect.right;
     previousXY += this.indent;
 
     const flag = this.vertical ? previousXY <= lastXY : previousXY > lastXY;
     const number = +this.previousElem.innerText;
-    let snapNumber: number[] = [];
 
     if (flag) {
       Grid.toggleElem(this.previousElem, 'hidden', '0.4');
-      snapNumber = snapNum.filter((item) => item !== number);
+      snap = snap.filter((item) => item !== number);
     } else {
       Grid.toggleElem(this.previousElem, 'visible', '1');
-      const len = snapNum.length - 1;
-      if (snapNum[len] !== number) { snapNum.push(number); }
+      const len = snap.length - 1;
+      if (snap[len] !== number) { snap.push(number); }
     }
 
     this.notifyOB({
       key: 'SnapNum',
-      snapNum: snapNumber,
+      snapNum: snap,
     });
     return true;
   }
