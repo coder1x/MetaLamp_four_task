@@ -1,3 +1,4 @@
+import autoBind from 'auto-bind';
 import { Observer } from '../../../observer';
 
 interface Pointer {
@@ -23,8 +24,15 @@ class Handle extends Observer {
 
   private vertical: boolean;
 
+  private directions: Map<string, string>
+
+  private shiftXY: number = 0;
+
+  private orientation: string;
+
   constructor(rsCenter: HTMLElement, rsName: string) {
     super();
+    autoBind(this);
     this.rsName = rsName;
     this.wrapElem = rsCenter;
     this.eventFromFlag = false;
@@ -141,58 +149,26 @@ class Handle extends Observer {
   }
 
   setActions(type: string) {
+    this.orientation = type;
     const eventFromTo = this.eventFromFlag && this.eventToFlag;
     if (type === 'double' && eventFromTo) return false;
     if (type === 'single' && eventFromTo) {
       this.eventToFlag = false;
     }
-    let shiftXY = 0;
 
-    const directions = new Map();
-    directions.set('ArrowRight', '+');
-    directions.set('ArrowUp', '+');
-    directions.set('ArrowLeft', '-');
-    directions.set('ArrowDown', '-');
+    this.directions = new Map();
+    this.directions.set('ArrowRight', '+');
+    this.directions.set('ArrowUp', '+');
+    this.directions.set('ArrowLeft', '-');
+    this.directions.set('ArrowDown', '-');
 
     if (!this.eventFromFlag) {
-      this.elemFrom.addEventListener('keydown', (event: KeyboardEvent) => {
-        this.keyDown(event, directions, 'from');
-      });
+      this.elemFrom.addEventListener('keydown', this.handleFromKeydown);
     }
 
     if (this.elemTo && !this.eventToFlag) {
-      this.elemTo.addEventListener('keydown', (event: KeyboardEvent) => {
-        this.keyDown(event, directions, 'to');
-      });
+      this.elemTo.addEventListener('keydown', this.handleToKeydown);
     }
-
-    const mouseMoveFrom = (event: PointerEvent) => {
-      this.moveDot({
-        event,
-        type: 'From',
-        shiftXY,
-      });
-    };
-
-    const mouseUpFrom = () => {
-      this.wrapElem.removeEventListener('pointerup', mouseUpFrom);
-      this.wrapElem.removeEventListener('pointermove', mouseMoveFrom);
-    };
-
-    const mouseMoveTo = (event: PointerEvent) => {
-      if (type === 'double') {
-        this.moveDot({
-          event,
-          type: 'To',
-          shiftXY,
-        });
-      }
-    };
-
-    const mouseUpTo = () => {
-      this.wrapElem.removeEventListener('pointerup', mouseUpTo);
-      this.wrapElem.removeEventListener('pointermove', mouseMoveTo);
-    };
 
     const cancellation = (elem: HTMLElement) => {
       const dom = elem;
@@ -202,14 +178,7 @@ class Handle extends Observer {
 
     if (type === 'double') {
       if (!this.eventToFlag) {
-        this.elemTo.addEventListener('pointerdown', (event: PointerEvent) => {
-          this.elemTo.style.zIndex = '2';
-          this.elemFrom.style.zIndex = '1';
-
-          shiftXY = this.mouseDown(event, this.elemTo);
-          this.wrapElem.addEventListener('pointermove', mouseMoveTo);
-          this.wrapElem.addEventListener('pointerup', mouseUpTo);
-        });
+        this.elemTo.addEventListener('pointerdown', this.handleToPointerdown);
 
         cancellation(this.elemTo);
         this.eventToFlag = true;
@@ -217,19 +186,66 @@ class Handle extends Observer {
     }
 
     if (!this.eventFromFlag) {
-      this.elemFrom.addEventListener('pointerdown', (event: PointerEvent) => {
-        if (this.elemTo) { this.elemTo.style.zIndex = '1'; }
-        this.elemFrom.style.zIndex = '2';
-
-        shiftXY = this.mouseDown(event, this.elemFrom);
-        this.wrapElem.addEventListener('pointermove', mouseMoveFrom);
-        this.wrapElem.addEventListener('pointerup', mouseUpFrom);
-      });
+      this.elemFrom.addEventListener('pointerdown', this.handleFromPointerdown);
 
       cancellation(this.elemFrom);
       this.eventFromFlag = true;
     }
     return true;
+  }
+
+  private mouseUpFrom() {
+    this.wrapElem.removeEventListener('pointerup', this.mouseUpFrom);
+    this.wrapElem.removeEventListener('pointermove', this.mouseMoveFrom);
+  }
+
+  private mouseUpTo() {
+    this.wrapElem.removeEventListener('pointerup', this.mouseUpTo);
+    this.wrapElem.removeEventListener('pointermove', this.mouseMoveTo);
+  }
+
+  private handleFromPointerdown(event: PointerEvent) {
+    if (this.elemTo) { this.elemTo.style.zIndex = '1'; }
+    this.elemFrom.style.zIndex = '2';
+
+    this.shiftXY = this.mouseDown(event, this.elemFrom);
+    this.wrapElem.addEventListener('pointermove', this.mouseMoveFrom);
+    this.wrapElem.addEventListener('pointerup', this.mouseUpFrom);
+  }
+
+  private handleToPointerdown(event: PointerEvent) {
+    this.elemTo.style.zIndex = '2';
+    this.elemFrom.style.zIndex = '1';
+
+    this.shiftXY = this.mouseDown(event, this.elemTo);
+    this.wrapElem.addEventListener('pointermove', this.mouseMoveTo);
+    this.wrapElem.addEventListener('pointerup', this.mouseUpTo);
+  }
+
+  private mouseMoveTo(event: PointerEvent) {
+    if (this.orientation === 'double') {
+      this.moveDot({
+        event,
+        type: 'To',
+        shiftXY: this.shiftXY,
+      });
+    }
+  }
+
+  private mouseMoveFrom(event: PointerEvent) {
+    this.moveDot({
+      event,
+      type: 'From',
+      shiftXY: this.shiftXY,
+    });
+  }
+
+  private handleFromKeydown(event: KeyboardEvent) {
+    this.keyDown(event, this.directions, 'from');
+  }
+
+  private handleToKeydown(event: KeyboardEvent) {
+    this.keyDown(event, this.directions, 'to');
   }
 
   private static getElem(elem: Element, str: string) {

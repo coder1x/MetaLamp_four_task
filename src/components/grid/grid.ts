@@ -1,3 +1,4 @@
+import autoBind from 'auto-bind';
 import './grid.scss';
 
 interface Options {
@@ -33,7 +34,12 @@ class Grid {
 
   private nameClass: string;
 
+  private mapInput: Map<string, string>;
+
+  private objRangeSlider: any;
+
   constructor(nameClass: string, elem: Element) {
+    autoBind(this);
     this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
@@ -68,73 +74,83 @@ class Grid {
 
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   setAction(obj: any) {
-    const mapInput = new Map();
-    mapInput.set('gridNum', this.interval.value);
-    mapInput.set('gridStep', this.step.value);
-    mapInput.set('gridRound', this.gridRound.value);
+    this.objRangeSlider = obj;
+    this.mapInput = new Map();
+    this.mapInput.set('gridNum', this.interval.value);
+    this.mapInput.set('gridStep', this.step.value);
+    this.mapInput.set('gridRound', this.gridRound.value);
 
-    this.gridRound.addEventListener('change', () => {
-      obj.update({
-        gridRound: +this.gridRound.value,
-      });
-    });
-
-    this.step.addEventListener('change', () => {
-      obj.update({
-        gridNum: 0,
-        gridStep: +this.step.value,
-      });
-      this.interval.value = '0';
-    });
-
-    this.interval.addEventListener('change', () => {
-      obj.update({
-        gridNum: +this.interval.value,
-        gridStep: 0,
-      });
-      this.step.value = '0';
-    });
-
-    const inputProcessing = (event: Event) => {
-      const elem = event.target as HTMLInputElement;
-
-      const value = elem.value.replace(/[^.\d]/g, '');
-      const regexp = /^\d*?[.]?\d*$/;
-      const valid = regexp.test(value);
-
-      if (valid) {
-        mapInput.set(elem.name, value);
-        elem.value = value;
-      } else {
-        elem.value = mapInput.get(elem.name);
-      }
-    };
+    this.gridRound.addEventListener('change', this.handleGridRoundChange);
+    this.step.addEventListener('change', this.handleStepChange);
+    this.interval.addEventListener('change', this.handleIntervalChange);
 
     const inputElements = [this.interval, this.step, this.gridRound];
 
     inputElements.forEach((item) => {
-      item.addEventListener('input', inputProcessing);
+      item.addEventListener('input', this.handleInputProcessing);
     });
+    this.grid.addEventListener('click', this.handleGridClick);
+    this.snap.addEventListener('click', this.handleSnapClick);
+  }
 
-    this.grid.addEventListener('click', (event: Event) => {
-      const elem = event.target as HTMLInputElement;
+  private handleGridRoundChange(event: Event) {
+    const elem = event.currentTarget as HTMLInputElement;
+    this.objRangeSlider.update({
+      gridRound: +elem.value,
+    });
+  }
 
-      obj.update({
-        grid: elem.checked,
+  private handleStepChange(event: Event) {
+    const elem = event.currentTarget as HTMLInputElement;
+    this.objRangeSlider.update({
+      gridNum: 0,
+      gridStep: +elem.value,
+    });
+    this.interval.value = '0';
+  }
+
+  private handleIntervalChange(event: Event) {
+    const elem = event.currentTarget as HTMLInputElement;
+    this.objRangeSlider.update({
+      gridNum: +elem.value,
+      gridStep: 0,
+    });
+    this.step.value = '0';
+  }
+
+  private handleInputProcessing(event: Event) {
+    const elem = event.currentTarget as HTMLInputElement;
+
+    const value = elem.value.replace(/[^.\d]/g, '');
+    const regexp = /^\d*?[.]?\d*$/;
+    const valid = regexp.test(value);
+
+    if (valid) {
+      this.mapInput.set(elem.name, value);
+      elem.value = value;
+    } else {
+      elem.value = this.mapInput.get(elem.name);
+    }
+  }
+
+  private handleGridClick(event: Event) {
+    const elem = event.currentTarget as HTMLInputElement;
+
+    this.objRangeSlider.update({
+      grid: elem.checked,
+    });
+  }
+
+  private handleSnapClick(event: Event) {
+    const elem = event.currentTarget as HTMLInputElement;
+
+    if (this.grid.checked) {
+      this.objRangeSlider.update({
+        gridSnap: elem.checked,
       });
-    });
-
-    this.snap.addEventListener('click', (event: Event) => {
-      const elem = event.target as HTMLInputElement;
-
-      if (this.grid.checked) {
-        obj.update({
-          gridSnap: elem.checked,
-        });
-      } else {
-        event.preventDefault();
-      }
-    });
+    } else {
+      event.preventDefault();
+    }
   }
 
   private setDom() {

@@ -1,3 +1,4 @@
+import autoBind from 'auto-bind';
 import { Observer } from '../../../observer';
 import Resize from '../resize';
 
@@ -28,9 +29,9 @@ class Grid extends Observer {
 
   constructor(elem: HTMLElement | Element, rsName: string) {
     super();
+    autoBind(this);
     this.rsName = rsName;
-
-    if (elem instanceof HTMLElement) { this.rsBottom = elem; }
+    this.rsBottom = elem as HTMLElement;
     this.init();
   }
 
@@ -97,16 +98,18 @@ class Grid extends Observer {
   }
 
   private setAction(elem: HTMLElement) {
-    elem.addEventListener('click', (event: Event) => {
-      const mark = event.target as HTMLElement;
-      const selector = `js-${this.rsName}__grid-mark`;
-      if (Grid.searchStr(mark.className, selector)) {
-        this.notifyOB({
-          key: 'ClickMark',
-          valueG: Number(mark.innerText),
-        });
-      }
-    });
+    elem.addEventListener('click', this.handleMarkClick);
+  }
+
+  private handleMarkClick(event: Event) {
+    const mark = event.target as HTMLElement;
+    const selector = `js-${this.rsName}__grid-mark`;
+    if (Grid.searchStr(mark.className, selector)) {
+      this.notifyOB({
+        key: 'ClickMark',
+        valueG: Number(mark.innerText),
+      });
+    }
   }
 
   private static createElem(teg: string, className: string[]) {

@@ -1,3 +1,5 @@
+import autoBind from 'auto-bind';
+
 class Resize {
   wrapper: HTMLElement;
 
@@ -5,11 +7,24 @@ class Resize {
 
   onChange: Function;
 
+  private rTime: Date;
+
+  private timeout: boolean = false;
+
+  private running: boolean = false;
+
+  private startWidth: number = 0;
+
+  private eventName: string;
+
+  private objectResize: Window & typeof globalThis;
+
   constructor(
     wrapper: HTMLElement,
     sleep: number,
     onChange: Function,
   ) {
+    autoBind(this);
     this.wrapper = wrapper ?? document.body;
     this.sleep = sleep ?? 200;
     const emptyFun = () => { };
@@ -17,47 +32,50 @@ class Resize {
     this.resize();
   }
 
-  private resize() {
-    let rTime: Date;
-    let timeout = false;
-    let startWidth = this.wrapper.offsetWidth;
-
-    const resizeEnd = () => {
-      if (Number(new Date()) - Number(rTime) < this.sleep) {
-        setTimeout(resizeEnd, this.sleep);
-      } else {
-        timeout = false;
-        const totalWidth = this.wrapper.offsetWidth;
-        if (totalWidth !== startWidth) {
-          this.onChange();
-          startWidth = totalWidth;
-        }
+  private resizeEnd() {
+    if (Number(new Date()) - Number(this.rTime) < this.sleep) {
+      setTimeout(this.resizeEnd, this.sleep);
+    } else {
+      this.timeout = false;
+      const totalWidth = this.wrapper.offsetWidth;
+      if (totalWidth !== this.startWidth) {
+        this.onChange();
+        this.startWidth = totalWidth;
       }
-    };
-
-    Resize.throttle('resize', 'optimizedResize');
-
-    window.addEventListener('optimizedResize', () => {
-      rTime = new Date();
-      if (timeout === false) {
-        timeout = true;
-        setTimeout(resizeEnd, this.sleep);
-      }
-    });
+    }
   }
 
-  private static throttle(type: string, name: string, obj = window) {
-    let running = false;
-    function func() {
-      if (running) { return false; }
-      running = true;
-      requestAnimationFrame(() => {
-        obj.dispatchEvent(new CustomEvent(name));
-        running = false;
-      });
-      return true;
+  private resize() {
+    this.startWidth = this.wrapper.offsetWidth;
+
+    this.throttle('resize', 'optimizedResize');
+
+    window.addEventListener('optimizedResize', this.handleOptimizedResize);
+  }
+
+  private handleOptimizedResize() {
+    this.rTime = new Date();
+    if (this.timeout === false) {
+      this.timeout = true;
+      setTimeout(this.resizeEnd, this.sleep);
     }
-    obj.addEventListener(type, func);
+  }
+
+  private throttle(type: string, name: string, obj = window) {
+    this.eventName = name;
+    this.objectResize = obj;
+
+    obj.addEventListener(type, this.handleThrottle);
+  }
+
+  private handleThrottle() {
+    if (this.running) { return false; }
+    this.running = true;
+    requestAnimationFrame(() => {
+      this.objectResize.dispatchEvent(new CustomEvent(this.eventName));
+      this.running = false;
+    });
+    return true;
   }
 }
 

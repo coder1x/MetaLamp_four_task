@@ -1,3 +1,4 @@
+import autoBind from 'auto-bind';
 import { Observer } from '../../../observer';
 
 class Bar extends Observer {
@@ -13,6 +14,7 @@ class Bar extends Observer {
 
   constructor(elem: HTMLElement | Element, rsName: string) {
     super();
+    autoBind(this);
     this.rsName = rsName;
     this.rsCenter = elem;
   }
@@ -105,13 +107,15 @@ class Bar extends Observer {
   }
 
   private setActions() {
-    this.elemBar.addEventListener('click', (event: MouseEvent) => {
-      const dotXY = this.vertical ? event.offsetY : event.offsetX;
+    this.elemBar.addEventListener('click', this.handleBarClick);
+  }
 
-      this.notifyOB({
-        key: 'ClickBar',
-        clientXY: dotXY,
-      });
+  private handleBarClick(event: MouseEvent) {
+    const dotXY = this.vertical ? event.offsetY : event.offsetX;
+
+    this.notifyOB({
+      key: 'ClickBar',
+      clientXY: dotXY,
     });
   }
 

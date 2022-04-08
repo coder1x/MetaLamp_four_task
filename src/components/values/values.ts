@@ -1,3 +1,4 @@
+import autoBind from 'auto-bind';
 import './values.scss';
 
 interface Options {
@@ -33,7 +34,12 @@ class Values {
 
   private nameClass: string;
 
+  private objRangeSlider: any;
+
+  private mapInput: Map<string, string>
+
   constructor(nameClass: string, elem: Element) {
+    autoBind(this);
     this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
@@ -72,39 +78,40 @@ class Values {
 
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   setAction(obj: any) {
-    const mapInput = new Map();
-    mapInput.set('min', this.min.value);
-    mapInput.set('max', this.max.value);
-    mapInput.set('from', this.from.value);
-    mapInput.set('to', this.to.value);
-    mapInput.set('step', this.step.value);
-
-    const data = (event: Event) => {
-      const elem = event.target as HTMLInputElement;
-      obj.update({
-        [elem.name]: +mapInput.get(elem.name),
-      });
-    };
-
-    const inputProcessing = (event: Event) => {
-      const elem = event.target as HTMLInputElement;
-      const value = elem.value.replace(/[^-.\d]/g, '');
-      const regexp = /^-?\d*?[.]?\d*$/;
-      const valid = regexp.test(value);
-
-      if (valid) {
-        mapInput.set(elem.name, value);
-        elem.value = value;
-      } else {
-        elem.value = mapInput.get(elem.name);
-      }
-    };
+    this.objRangeSlider = obj;
+    this.mapInput = new Map();
+    this.mapInput.set('min', this.min.value);
+    this.mapInput.set('max', this.max.value);
+    this.mapInput.set('from', this.from.value);
+    this.mapInput.set('to', this.to.value);
+    this.mapInput.set('step', this.step.value);
 
     const inputElements = [this.min, this.max, this.from, this.to, this.step];
 
     inputElements.forEach((item) => {
-      item.addEventListener('change', data);
-      item.addEventListener('input', inputProcessing);
+      item.addEventListener('change', this.handleInputChange);
+      item.addEventListener('input', this.handleInputProcessing);
+    });
+  }
+
+  private handleInputProcessing(event: Event) {
+    const elem = event.currentTarget as HTMLInputElement;
+    const value = elem.value.replace(/[^-.\d]/g, '');
+    const regexp = /^-?\d*?[.]?\d*$/;
+    const valid = regexp.test(value);
+
+    if (valid) {
+      this.mapInput.set(elem.name, value);
+      elem.value = value;
+    } else {
+      elem.value = this.mapInput.get(elem.name);
+    }
+  }
+
+  private handleInputChange(event: Event) {
+    const elem = event.currentTarget as HTMLInputElement;
+    this.objRangeSlider.update({
+      [elem.name]: +this.mapInput.get(elem.name),
     });
   }
 

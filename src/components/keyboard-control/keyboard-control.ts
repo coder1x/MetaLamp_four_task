@@ -1,3 +1,4 @@
+import autoBind from 'auto-bind';
 import './keyboard-control.scss';
 
 interface Options {
@@ -18,7 +19,12 @@ class KeyboardControl {
 
   private nameClass: string;
 
+  private objRangeSlider: any;
+
+  private mapInput: Map<string, string>
+
   constructor(nameClass: string, elem: Element) {
+    autoBind(this);
     this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
@@ -40,38 +46,40 @@ class KeyboardControl {
 
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   setAction(obj: any) {
-    const mapInput = new Map();
-    mapInput.set('keyStepOne', this.keyStepOne.value);
-    mapInput.set('keyStepHold', this.keyStepHold.value);
+    this.objRangeSlider = obj;
 
-    const data = (event: Event) => {
-      const elem = event.target as HTMLInputElement;
-
-      obj.update({
-        [elem.name]: +mapInput.get(elem.name),
-      });
-    };
-
-    const inputProcessing = (event: Event) => {
-      const elem = event.target as HTMLInputElement;
-      const value = elem.value.replace(/[^-.\d]/g, '');
-      const regexp = /^-?\d*?[.]?\d*$/;
-      const valid = regexp.test(value);
-
-      if (valid) {
-        mapInput.set(elem.name, value);
-        elem.value = value;
-      } else {
-        elem.value = mapInput.get(elem.name);
-      }
-    };
+    this.mapInput = new Map();
+    this.mapInput.set('keyStepOne', this.keyStepOne.value);
+    this.mapInput.set('keyStepHold', this.keyStepHold.value);
 
     const inputElements = [this.keyStepOne, this.keyStepHold];
 
     inputElements.forEach((item) => {
-      item.addEventListener('change', data);
-      item.addEventListener('input', inputProcessing);
+      item.addEventListener('change', this.handleDataChange);
+      item.addEventListener('input', this.handleInputProcessing);
     });
+  }
+
+  private handleDataChange(event: Event) {
+    const elem = event.currentTarget as HTMLInputElement;
+
+    this.objRangeSlider.update({
+      [elem.name]: +this.mapInput.get(elem.name),
+    });
+  }
+
+  private handleInputProcessing(event: Event) {
+    const elem = event.currentTarget as HTMLInputElement;
+    const value = elem.value.replace(/[^-.\d]/g, '');
+    const regexp = /^-?\d*?[.]?\d*$/;
+    const valid = regexp.test(value);
+
+    if (valid) {
+      this.mapInput.set(elem.name, value);
+      elem.value = value;
+    } else {
+      elem.value = this.mapInput.get(elem.name);
+    }
   }
 
   private setDom() {

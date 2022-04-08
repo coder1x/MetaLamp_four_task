@@ -1,3 +1,4 @@
+import autoBind from 'auto-bind';
 import './code.scss';
 import RangeSliderOptions from '@com/interface/glob-interface';
 
@@ -11,6 +12,7 @@ class CopyCode {
   private ul: Element;
 
   constructor(className: string, component: Element) {
+    autoBind(this);
     this.className = className;
     this.elem = component;
     this.init();
@@ -59,24 +61,28 @@ class CopyCode {
     return elem;
   }
 
-  private setActions() {
+  private handleButtonClick() {
     const child = this.ul.childNodes;
-    this.button.addEventListener('click', () => {
-      let text = '$(\'.demo\').RangeSliderFox({\n';
 
-      child.forEach((item) => {
-        const elem = item as HTMLElement;
-        text += `${elem.innerText}\n`;
-      });
+    let text = '$(\'.demo\').RangeSliderFox({\n';
 
-      text += '});';
-      navigator.clipboard.writeText(text)
-        .then(() => {
-        })
-        .catch((err) => {
-          console.log('Something went wrong', err);
-        });
+    child.forEach((item) => {
+      const elem = item as HTMLElement;
+      text += `${elem.innerText}\n`;
     });
+
+    text += '});';
+
+    navigator.clipboard.writeText(text)
+      .then(() => {
+      })
+      .catch((err) => {
+        console.log('Something went wrong', err);
+      });
+  }
+
+  private setActions() {
+    this.button.addEventListener('click', this.handleButtonClick);
   }
 }
 

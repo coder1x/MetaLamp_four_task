@@ -1,3 +1,4 @@
+import autoBind from 'auto-bind';
 import UpdateTip from './view.d';
 import Handle from './sub-view/handle';
 import Hints from './sub-view/hints';
@@ -41,6 +42,7 @@ class View extends Observer {
 
   constructor(elem: Element) {
     super();
+    autoBind(this);
     this.elem = elem;
     this.rsName = 'range-slider-fox';
     this.wrapSlider = this.elem.parentElement;
@@ -166,12 +168,7 @@ class View extends Observer {
   }
 
   setActions() {
-    this.rsLine.addEventListener('click', (event: MouseEvent) => {
-      this.notifyOB({
-        key: 'ClickLine',
-        clientXY: this.vertical ? event.offsetY : event.offsetX,
-      });
-    });
+    this.rsLine.addEventListener('click', this.handleRsLineClick);
   }
 
   setTheme(theme: string) {
@@ -305,6 +302,13 @@ class View extends Observer {
     position: number,
   }[]) {
     return this.grid.createMark(valMark);
+  }
+
+  private handleRsLineClick(event: MouseEvent) {
+    this.notifyOB({
+      key: 'ClickLine',
+      clientXY: this.vertical ? event.offsetY : event.offsetX,
+    });
   }
 
   private attributesChange() {

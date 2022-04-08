@@ -1,3 +1,4 @@
+import autoBind from 'auto-bind';
 import './different.scss';
 import Select from '@com/select/select';
 
@@ -42,9 +43,12 @@ class Different {
 
   private nameClass: string;
 
+  private objRangeSlider: any;
+
   onUnsubscribtion: Function;
 
   constructor(nameClass: string, elem: Element, panel: Element) {
+    autoBind(this);
     this.nameClass = nameClass;
     this.panel = panel;
     this.elem = elem;
@@ -91,12 +95,9 @@ class Different {
 
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   setAction(obj: any) {
-    const { modify } = this;
-    const objPanel = this.panel.classList;
+    this.objRangeSlider = obj;
 
-    this.reset.addEventListener('click', () => {
-      obj.reset();
-    });
+    this.reset.addEventListener('click', this.handleResetClick);
 
     this.select.onChange = (value: string) => {
       obj.update({
@@ -104,47 +105,61 @@ class Different {
       });
     };
 
-    this.disabled.addEventListener('click', (event: Event) => {
-      const elem = event.target as HTMLInputElement;
-      obj.update({
-        disabled: elem.checked,
-      });
+    this.disabled.addEventListener('click', this.handleDisabledClick);
+    this.bar.addEventListener('click', this.handleBarClick);
+    this.unsubscribtion.addEventListener(
+      'click',
+      this.handleUnsubscribtionClick,
+    );
+    this.type.addEventListener('click', this.handleTypeClick);
+    this.orientation.addEventListener('click', this.handleOrientationClick);
+  }
+
+  private handleResetClick() {
+    this.objRangeSlider.reset();
+  }
+
+  private handleDisabledClick(event: Event) {
+    const elem = event.target as HTMLInputElement;
+    this.objRangeSlider.update({
+      disabled: elem.checked,
     });
+  }
 
-    this.bar.addEventListener('click', (event: Event) => {
-      const elem = event.target as HTMLInputElement;
-      obj.update({
-        bar: elem.checked,
-      });
+  private handleBarClick(event: Event) {
+    const elem = event.target as HTMLInputElement;
+    this.objRangeSlider.update({
+      bar: elem.checked,
     });
+  }
 
-    this.unsubscribtion.addEventListener('click', () => {
-      if (typeof this.onUnsubscribtion === 'function') {
-        this.onUnsubscribtion();
-      }
+  private handleUnsubscribtionClick() {
+    if (typeof this.onUnsubscribtion === 'function') {
+      this.onUnsubscribtion();
+    }
+  }
+
+  private handleTypeClick(event: Event) {
+    const elem = event.target as HTMLInputElement;
+    const value = elem.checked ? 'double' : 'single';
+    this.objRangeSlider.update({
+      type: value,
     });
+  }
 
-    this.type.addEventListener('click', (event: Event) => {
-      const elem = event.target as HTMLInputElement;
-      const value = elem.checked ? 'double' : 'single';
-      obj.update({
-        type: value,
-      });
-    });
+  private handleOrientationClick(event: Event) {
+    const elem = event.target as HTMLInputElement;
+    const value = elem.checked ? 'vertical' : 'horizontal';
+    const { classList } = this.panel;
 
-    this.orientation.addEventListener('click', (event: Event) => {
-      const elem = event.target as HTMLInputElement;
-      const value = elem.checked ? 'vertical' : 'horizontal';
+    if (elem.checked) {
+      classList.add(this.modify);
+    } else {
+      classList.remove(this.modify);
+    }
 
-      if (elem.checked) {
-        objPanel.add(modify);
-      } else {
-        objPanel.remove(modify);
-      }
-
-      obj.update({
-        orientation: value,
-      });
+    this.objRangeSlider.update({
+      orientation: value,
     });
   }
 

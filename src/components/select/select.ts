@@ -1,3 +1,4 @@
+import autoBind from 'auto-bind';
 import './select.scss';
 
 class Select {
@@ -24,6 +25,7 @@ class Select {
   private startFlag = true;
 
   constructor(className: string, elem: Element) {
+    autoBind(this);
     this.className = className;
     this.elem = elem;
     this.init();
@@ -132,72 +134,77 @@ class Select {
     }
   }
 
-  private setActions() {
-    this.displayedWrap.addEventListener('click', () => {
+  private handleDisplayedWrap() {
+    this.toggle();
+  }
+
+  private handleKeydown(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.toggle(true);
+    }
+  }
+
+  private handleButtonKeydown(event: KeyboardEvent) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
       this.toggle();
-    });
+    }
+  }
 
-    const keydown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        this.toggle(true);
-      }
-    };
+  private handleItemsSet(event: MouseEvent | KeyboardEvent) {
+    let flag = false;
+    let mouse: string;
+    let key: string;
 
-    this.button.addEventListener('keydown', keydown);
-    this.options.addEventListener('keydown', keydown);
-    this.button.addEventListener('keydown', (event: KeyboardEvent) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        this.toggle();
-      }
-    });
+    if (event instanceof MouseEvent) {
+      mouse = event.type;
+    }
+    if (event instanceof KeyboardEvent) {
+      key = event.key;
+    }
 
-    const setValue = (event: MouseEvent | KeyboardEvent) => {
-      let flag = false;
-      let mouse: string;
-      let key: string;
+    if (key === 'Enter' || key === ' ') {
+      event.preventDefault();
+      flag = true;
+    } else if (mouse === 'click') { flag = true; }
 
-      if (event instanceof MouseEvent) {
-        mouse = event.type;
-      }
-      if (event instanceof KeyboardEvent) {
-        key = event.key;
-      }
+    if (flag) {
+      const dom = event.target as HTMLElement;
+      this.setValSelect(dom);
+      this.toggle(true);
+    }
+  }
 
-      if (key === 'Enter' || key === ' ') {
-        event.preventDefault();
-        flag = true;
-      } else if (mouse === 'click') { flag = true; }
+  private handleDocumentClick(event: MouseEvent) {
+    const dom = event.target as Element;
+    const elem = dom.closest(`.${this.getModify()}`) ?? false;
+    if (!elem) {
+      this.toggle(true);
+    }
+  }
 
-      if (flag) {
-        const dom = event.target as HTMLElement;
-        this.setValSelect(dom);
-        this.toggle(true);
-      }
-    };
+  private handleDocumentFocusin(event: FocusEvent) {
+    const dom = event.target as Element;
+    const linkEl = dom.closest(`${this.className}__options`) ?? false;
+    const ulEl = dom.closest(`.${this.getModify()}`) ?? false;
+    if (!linkEl && !ulEl) { this.toggle(true); }
+  }
+
+  private setActions() {
+    this.displayedWrap.addEventListener('click', this.handleDisplayedWrap);
+    this.button.addEventListener('keydown', this.handleKeydown);
+    this.options.addEventListener('keydown', this.handleKeydown);
+    this.button.addEventListener('keydown', this.handleButtonKeydown);
 
     this.items.forEach((item) => {
       if (item instanceof HTMLElement) {
-        item.addEventListener('click', setValue);
-        item.addEventListener('keydown', setValue);
+        item.addEventListener('click', this.handleItemsSet);
+        item.addEventListener('keydown', this.handleItemsSet);
       }
     });
-
-    document.addEventListener('click', (event: MouseEvent) => {
-      const dom = event.target as Element;
-      const elem = dom.closest(`.${this.getModify()}`) ?? false;
-      if (!elem) {
-        this.toggle(true);
-      }
-    });
-
-    document.addEventListener('focusin', (event: FocusEvent) => {
-      const dom = event.target as Element;
-      const linkEl = dom.closest(`${this.className}__options`) ?? false;
-      const ulEl = dom.closest(`.${this.getModify()}`) ?? false;
-      if (!linkEl && !ulEl) { this.toggle(true); }
-    });
+    document.addEventListener('click', this.handleDocumentClick);
+    document.addEventListener('focusin', this.handleDocumentFocusin);
   }
 }
 

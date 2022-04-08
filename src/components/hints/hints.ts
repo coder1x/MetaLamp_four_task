@@ -1,3 +1,4 @@
+import autoBind from 'auto-bind';
 import './hints.scss';
 
 interface Options {
@@ -28,7 +29,10 @@ class Hints {
 
   private nameClass: string;
 
+  private objRangeSlider: any;
+
   constructor(nameClass: string, elem: Element) {
+    autoBind(this);
     this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
@@ -59,34 +63,37 @@ class Hints {
 
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   setAction(obj: any) {
-    const data = (event: Event) => {
-      const elem = event.target as HTMLInputElement;
-
-      obj.update({
-        [elem.name]: elem.value,
-      });
-    };
-
+    this.objRangeSlider = obj;
     const inputElements = [this.tipPrefix, this.tipPostfix];
 
     inputElements.forEach((item) => {
-      item.addEventListener('change', data);
+      item.addEventListener('change', this.handleInputData);
     });
+    this.tipMinMax.addEventListener('click', this.handleTipMinMax);
+    this.tipFromTo.addEventListener('click', this.handleTipFromTo);
+  }
 
-    this.tipMinMax.addEventListener('click', (event: Event) => {
-      const elem = event.target as HTMLInputElement;
+  private handleInputData(event: Event) {
+    const elem = event.currentTarget as HTMLInputElement;
 
-      obj.update({
-        tipMinMax: elem.checked,
-      });
+    this.objRangeSlider.update({
+      [elem.name]: elem.value,
     });
+  }
 
-    this.tipFromTo.addEventListener('click', (event: Event) => {
-      const elem = event.target as HTMLInputElement;
+  private handleTipMinMax(event: Event) {
+    const elem = event.target as HTMLInputElement;
 
-      obj.update({
-        tipFromTo: elem.checked,
-      });
+    this.objRangeSlider.update({
+      tipMinMax: elem.checked,
+    });
+  }
+
+  private handleTipFromTo(event: Event) {
+    const elem = event.target as HTMLInputElement;
+
+    this.objRangeSlider.update({
+      tipFromTo: elem.checked,
     });
   }
 
