@@ -1,4 +1,4 @@
-import autoBind from 'auto-bind';
+import { boundMethod } from 'autobind-decorator';
 import './different.scss';
 import Select from '@com/select/select';
 
@@ -48,7 +48,6 @@ class Different {
   onUnsubscribtion: Function;
 
   constructor(nameClass: string, elem: Element, panel: Element) {
-    autoBind(this);
     this.nameClass = nameClass;
     this.panel = panel;
     this.elem = elem;
@@ -115,10 +114,12 @@ class Different {
     this.orientation.addEventListener('click', this.handleOrientationClick);
   }
 
+  @boundMethod
   private handleResetClick() {
     this.objRangeSlider.reset();
   }
 
+  @boundMethod
   private handleDisabledClick(event: Event) {
     const elem = event.target as HTMLInputElement;
     this.objRangeSlider.update({
@@ -126,6 +127,7 @@ class Different {
     });
   }
 
+  @boundMethod
   private handleBarClick(event: Event) {
     const elem = event.target as HTMLInputElement;
     this.objRangeSlider.update({
@@ -133,12 +135,14 @@ class Different {
     });
   }
 
+  @boundMethod
   private handleUnsubscribtionClick() {
     if (typeof this.onUnsubscribtion === 'function') {
       this.onUnsubscribtion();
     }
   }
 
+  @boundMethod
   private handleTypeClick(event: Event) {
     const elem = event.target as HTMLInputElement;
     const value = elem.checked ? 'double' : 'single';
@@ -147,6 +151,7 @@ class Different {
     });
   }
 
+  @boundMethod
   private handleOrientationClick(event: Event) {
     const elem = event.target as HTMLInputElement;
     const value = elem.checked ? 'vertical' : 'horizontal';

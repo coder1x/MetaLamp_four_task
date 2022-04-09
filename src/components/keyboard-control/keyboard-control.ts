@@ -1,4 +1,4 @@
-import autoBind from 'auto-bind';
+import { boundMethod } from 'autobind-decorator';
 import './keyboard-control.scss';
 
 interface Options {
@@ -24,7 +24,6 @@ class KeyboardControl {
   private mapInput: Map<string, string>
 
   constructor(nameClass: string, elem: Element) {
-    autoBind(this);
     this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
@@ -60,6 +59,7 @@ class KeyboardControl {
     });
   }
 
+  @boundMethod
   private handleDataChange(event: Event) {
     const elem = event.currentTarget as HTMLInputElement;
 
@@ -68,6 +68,7 @@ class KeyboardControl {
     });
   }
 
+  @boundMethod
   private handleInputProcessing(event: Event) {
     const elem = event.currentTarget as HTMLInputElement;
     const value = elem.value.replace(/[^-.\d]/g, '');

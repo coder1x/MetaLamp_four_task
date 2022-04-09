@@ -1,3 +1,5 @@
+import { boundMethod } from 'autobind-decorator';
+
 interface CheckTip {
   tipMaxXY: number,
   visibilityTipSingle: boolean,
@@ -282,7 +284,8 @@ class Hints {
     return text;
   }
 
-  private convertStyle = (elem: CSSStyleDeclaration) => {
+  @boundMethod
+  private convertStyle(elem: CSSStyleDeclaration) {
     const dom = elem;
     let value = '';
     if (this.vertical) {
@@ -297,7 +300,7 @@ class Hints {
       dom.left = value;
     }
     return true;
-  };
+  }
 
   private getSizeElem(elem: HTMLElement) {
     return this.vertical ? elem.offsetHeight : elem.offsetWidth;

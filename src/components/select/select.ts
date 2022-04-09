@@ -1,4 +1,4 @@
-import autoBind from 'auto-bind';
+import { boundMethod } from 'autobind-decorator';
 import './select.scss';
 
 class Select {
@@ -25,7 +25,6 @@ class Select {
   private startFlag = true;
 
   constructor(className: string, elem: Element) {
-    autoBind(this);
     this.className = className;
     this.elem = elem;
     this.init();
@@ -134,10 +133,12 @@ class Select {
     }
   }
 
+  @boundMethod
   private handleDisplayedWrap() {
     this.toggle();
   }
 
+  @boundMethod
   private handleKeydown(event: KeyboardEvent) {
     if (event.key === 'Escape') {
       event.preventDefault();
@@ -145,6 +146,7 @@ class Select {
     }
   }
 
+  @boundMethod
   private handleButtonKeydown(event: KeyboardEvent) {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
@@ -152,6 +154,7 @@ class Select {
     }
   }
 
+  @boundMethod
   private handleItemsSet(event: MouseEvent | KeyboardEvent) {
     let flag = false;
     let mouse: string;
@@ -176,6 +179,7 @@ class Select {
     }
   }
 
+  @boundMethod
   private handleDocumentClick(event: MouseEvent) {
     const dom = event.target as Element;
     const elem = dom.closest(`.${this.getModify()}`) ?? false;
@@ -184,6 +188,7 @@ class Select {
     }
   }
 
+  @boundMethod
   private handleDocumentFocusin(event: FocusEvent) {
     const dom = event.target as Element;
     const linkEl = dom.closest(`${this.className}__options`) ?? false;

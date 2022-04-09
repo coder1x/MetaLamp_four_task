@@ -1,4 +1,4 @@
-import autoBind from 'auto-bind';
+import { boundMethod } from 'autobind-decorator';
 import './code.scss';
 import RangeSliderOptions from '@com/interface/glob-interface';
 
@@ -12,7 +12,6 @@ class CopyCode {
   private ul: Element;
 
   constructor(className: string, component: Element) {
-    autoBind(this);
     this.className = className;
     this.elem = component;
     this.init();
@@ -61,6 +60,7 @@ class CopyCode {
     return elem;
   }
 
+  @boundMethod
   private handleButtonClick() {
     const child = this.ul.childNodes;
 

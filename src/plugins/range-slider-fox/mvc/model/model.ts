@@ -1,3 +1,4 @@
+import { boundMethod } from 'autobind-decorator';
 import RangeSliderOptions from '../../glob-interface';
 import { CalcDotPositionOpt, Prop, PositionData } from './model.d';
 import { Observer } from '../../observer';
@@ -300,17 +301,20 @@ class Model extends Observer {
     return stepNum;
   }
 
-  calcPositionTipFrom = (tipFrom: number) => {
+  @boundMethod
+  calcPositionTipFrom(tipFrom: number) {
     const tipFromP = this.calcWidthP(tipFrom - 4);
     return this.fromP - tipFromP;
   }
 
-  calcPositionTipTo = (tipTo: number) => {
+  @boundMethod
+  calcPositionTipTo(tipTo: number) {
     const tipToP = this.calcWidthP(tipTo - 4);
     return this.toP - tipToP;
   }
 
-  calcPositionTipSingle = (singleWH: number) => {
+  @boundMethod
+  calcPositionTipSingle(singleWH: number) {
     const line = (this.toP - this.fromP) / 2;
     const centerFromTo = this.fromP + line;
     const tipSingleP = this.calcWidthP(singleWH);
@@ -367,7 +371,8 @@ class Model extends Observer {
     return { barX, widthBar };
   }
 
-  clickBar = (pointXY: number) => {
+  @boundMethod
+  clickBar(pointXY: number) {
     const vertical = this.orientation === 'vertical';
     const onePercent = this.wrapWH / 100; // one percent of the entire scale
 
@@ -384,7 +389,8 @@ class Model extends Observer {
     return this.clickLine(this.fromP * onePercent + pointXY);
   }
 
-  clickMark = (value: number) => {
+  @boundMethod
+  clickMark(value: number) {
     let { from } = this;
     let { to } = this;
 
@@ -414,7 +420,8 @@ class Model extends Observer {
   }
 
   // ---------------------------------- Line
-  clickLine = (pointXY: number) => {
+  @boundMethod
+  clickLine(pointXY: number) {
     const vertical = this.orientation === 'vertical';
     let { from } = this;
     let { to } = this;
@@ -495,7 +502,8 @@ class Model extends Observer {
     return { from: this.from, to: this.to };
   }
 
-  calcSnap = (snapNum: number[]) => {
+  @boundMethod
+  calcSnap(snapNum: number[]) {
     this.snapNum = [];
     this.snapNum.push(this.min, ...snapNum, this.max);
     this.stepGrid = this.snapNum[1] - this.snapNum[0];

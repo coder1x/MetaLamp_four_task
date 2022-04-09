@@ -1,4 +1,4 @@
-import autoBind from 'auto-bind';
+import { boundMethod } from 'autobind-decorator';
 import UpdateTip from './view.d';
 import Handle from './sub-view/handle';
 import Hints from './sub-view/hints';
@@ -42,7 +42,6 @@ class View extends Observer {
 
   constructor(elem: Element) {
     super();
-    autoBind(this);
     this.elem = elem;
     this.rsName = 'range-slider-fox';
     this.wrapSlider = this.elem.parentElement;
@@ -304,6 +303,7 @@ class View extends Observer {
     return this.grid.createMark(valMark);
   }
 
+  @boundMethod
   private handleRsLineClick(event: MouseEvent) {
     this.notifyOB({
       key: 'ClickLine',
@@ -431,10 +431,11 @@ class View extends Observer {
     this.grid.subscribeOB(this.handleForwarding);
   }
 
-  private handleForwarding = (options: ObserverOptions) => {
+  @boundMethod
+  private handleForwarding(options: ObserverOptions) {
     this.notifyOB({ ...options });
     return true;
-  };
+  }
 
   private sizeWrap() {
     let wrapWH = 0;

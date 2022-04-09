@@ -1,4 +1,4 @@
-import autoBind from 'auto-bind';
+import { boundMethod } from 'autobind-decorator';
 import { Observer } from '../../../observer';
 
 interface Pointer {
@@ -32,7 +32,6 @@ class Handle extends Observer {
 
   constructor(rsCenter: HTMLElement, rsName: string) {
     super();
-    autoBind(this);
     this.rsName = rsName;
     this.wrapElem = rsCenter;
     this.eventFromFlag = false;
@@ -194,16 +193,19 @@ class Handle extends Observer {
     return true;
   }
 
+  @boundMethod
   private mouseUpFrom() {
     this.wrapElem.removeEventListener('pointerup', this.mouseUpFrom);
     this.wrapElem.removeEventListener('pointermove', this.mouseMoveFrom);
   }
 
+  @boundMethod
   private mouseUpTo() {
     this.wrapElem.removeEventListener('pointerup', this.mouseUpTo);
     this.wrapElem.removeEventListener('pointermove', this.mouseMoveTo);
   }
 
+  @boundMethod
   private handleFromPointerdown(event: PointerEvent) {
     if (this.elemTo) { this.elemTo.style.zIndex = '1'; }
     this.elemFrom.style.zIndex = '2';
@@ -213,6 +215,7 @@ class Handle extends Observer {
     this.wrapElem.addEventListener('pointerup', this.mouseUpFrom);
   }
 
+  @boundMethod
   private handleToPointerdown(event: PointerEvent) {
     this.elemTo.style.zIndex = '2';
     this.elemFrom.style.zIndex = '1';
@@ -222,6 +225,7 @@ class Handle extends Observer {
     this.wrapElem.addEventListener('pointerup', this.mouseUpTo);
   }
 
+  @boundMethod
   private mouseMoveTo(event: PointerEvent) {
     if (this.orientation === 'double') {
       this.moveDot({
@@ -232,6 +236,7 @@ class Handle extends Observer {
     }
   }
 
+  @boundMethod
   private mouseMoveFrom(event: PointerEvent) {
     this.moveDot({
       event,
@@ -240,10 +245,12 @@ class Handle extends Observer {
     });
   }
 
+  @boundMethod
   private handleFromKeydown(event: KeyboardEvent) {
     this.keyDown(event, this.directions, 'from');
   }
 
+  @boundMethod
   private handleToKeydown(event: KeyboardEvent) {
     this.keyDown(event, this.directions, 'to');
   }
@@ -252,7 +259,8 @@ class Handle extends Observer {
     return elem.getElementsByClassName(str)[0];
   }
 
-  private moveDot = (options: Pointer) => {
+  @boundMethod
+  private moveDot(options: Pointer) {
     const { event, type, shiftXY } = options;
     const rect = this.wrapElem.getBoundingClientRect();
     const wrap = this.wrapElem;
@@ -270,9 +278,10 @@ class Handle extends Observer {
       clientXY, // coordinates of the dot
       shiftXY, // shift = coordinates of the dot minus coordinates of the dot border
     });
-  };
+  }
 
-  private keyDown = (event: KeyboardEvent, directions: mapKey, dot: string) => {
+  @boundMethod
+  private keyDown(event: KeyboardEvent, directions: mapKey, dot: string) {
     const flag = (event.key === 'ArrowRight' || event.key === 'ArrowLeft');
     if ((this.vertical && flag) || (!this.vertical && !flag)) { return false; }
 
@@ -290,9 +299,10 @@ class Handle extends Observer {
       });
     }
     return true;
-  };
+  }
 
-  private mouseDown = (event: PointerEvent, elem: HTMLElement) => {
+  @boundMethod
+  private mouseDown(event: PointerEvent, elem: HTMLElement) {
     event.preventDefault();
     let shiftXY = 0;
     const rect = elem.getBoundingClientRect();
@@ -303,7 +313,7 @@ class Handle extends Observer {
     }
     elem.setPointerCapture(event.pointerId);
     return shiftXY;
-  };
+  }
 }
 
 export default Handle;

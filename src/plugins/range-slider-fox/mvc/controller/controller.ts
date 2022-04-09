@@ -1,3 +1,4 @@
+import { boundMethod } from 'autobind-decorator';
 import Model from '../model/model';
 import View from '../view/view';
 import RangeSliderOptions from '../../glob-interface';
@@ -94,7 +95,8 @@ class Controller {
     subscribe(this.view, SView);
   }
 
-  private handleStart = async (options: ObserverOptions) => {
+  @boundMethod
+  private async handleStart(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'Start') return false;
 
@@ -102,9 +104,10 @@ class Controller {
     await this.funAttributes();
     this.startFlag = true;
     return true;
-  };
+  }
 
-  private handleDataAttributes = (options: ObserverOptions) => {
+  @boundMethod
+  private handleDataAttributes(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'DataAttributes') return false;
 
@@ -115,9 +118,10 @@ class Controller {
     if (this.startFlag) { this.funAttributes(); }
 
     return true;
-  };
+  }
 
-  private handleRangeData = (options: ObserverOptions) => {
+  @boundMethod
+  private handleRangeData(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'RangeData') return false;
 
@@ -135,26 +139,29 @@ class Controller {
 
     this.model.calcStep();
     return true;
-  };
+  }
 
-  private handleStep = (options: ObserverOptions) => {
+  @boundMethod
+  private handleStep(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'Step') return false;
 
     this.model.calcStep();
     return true;
-  };
+  }
 
-  private handleDotKeyDown = (options: ObserverOptions) => {
+  @boundMethod
+  private handleDotKeyDown(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'DotKeyDown') return false;
     if (this.lock) return false;
 
     this.model.calcKeyDown(options.keyRepeat, options.keySign, options.dot);
     return true;
-  };
+  }
 
-  private handleDotData = (options: ObserverOptions) => {
+  @boundMethod
+  private handleDotData(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'DotData') return false;
     const { type } = options;
@@ -187,9 +194,10 @@ class Controller {
     // ----------  Input
     this.view.setValueInput(options.from, options.to, options.type);
     return true;
-  };
+  }
 
-  private handleDotMove = (options: ObserverOptions) => {
+  @boundMethod
+  private handleDotMove(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'DotMove') return false;
     if (this.lock) return false;
@@ -202,17 +210,19 @@ class Controller {
       shiftXY: options.shiftXY,
     });
     return true;
-  };
+  }
 
-  private handleGridSnapData = (options: ObserverOptions) => {
+  @boundMethod
+  private handleGridSnapData(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'GridSnapData') return false;
 
     this.model.snapDot();
     return true;
-  };
+  }
 
-  private handleGridData = (options: ObserverOptions) => {
+  @boundMethod
+  private handleGridData(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'GridData') return false;
 
@@ -226,9 +236,10 @@ class Controller {
       }
     }
     return true;
-  };
+  }
 
-  private handleOrientationData = async (options: ObserverOptions) => {
+  @boundMethod
+  private async handleOrientationData(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'OrientationData') return false;
 
@@ -244,17 +255,19 @@ class Controller {
       this.view.createDomGrid();
     }
     return true;
-  };
+  }
 
-  private handleThemeData = (options: ObserverOptions) => {
+  @boundMethod
+  private handleThemeData(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'ThemeData') return false;
 
     this.view.setTheme(options.theme);
     return true;
-  };
+  }
 
-  private handleHintsData = (options: ObserverOptions) => {
+  @boundMethod
+  private handleHintsData(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'HintsData') return false;
 
@@ -266,7 +279,7 @@ class Controller {
 
     if (lockFlag) { this.updateHints(options.type, options.from, options.to); }
     return true;
-  };
+  }
 
   private async updateHints(type: string, from: number, to: number) {
     await this.view.updateTipValue(from, to, type);
@@ -292,33 +305,37 @@ class Controller {
     await this.view.checkVisibleTip();
   }
 
-  private handleDisabledData = (options: ObserverOptions) => {
+  @boundMethod
+  private handleDisabledData(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'DisabledData') return false;
 
     this.lock = options.disabled;
     this.view.disabledRangeSlider(options.disabled);
     return true;
-  };
+  }
 
-  private handleClickLine = (options: ObserverOptions) => {
+  @boundMethod
+  private handleClickLine(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'ClickLine') return false;
     if (this.lock) return false;
 
     this.model.clickLine(options.clientXY);
     return true;
-  };
+  }
 
-  private handleSizeWrap = (options: ObserverOptions) => {
+  @boundMethod
+  private handleSizeWrap(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'SizeWrap' || !this.startFlag) return false;
 
     this.model.setWrapWH(options.wrapWH);
     return true;
-  };
+  }
 
-  private handleBarData = (options: ObserverOptions) => {
+  @boundMethod
+  private handleBarData(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'BarData') return false;
 
@@ -326,41 +343,45 @@ class Controller {
     const position = this.model.calcPositionBar();
     this.view.setBar(position.barX, position.widthBar);
     return true;
-  };
+  }
 
-  private handleClickBar = (options: ObserverOptions) => {
+  @boundMethod
+  private handleClickBar(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'ClickBar') return false;
 
     if (this.lock) return false;
     this.model.clickBar(options.clientXY);
     return true;
-  };
+  }
 
-  private handleCreateGrid = (options: ObserverOptions) => {
+  @boundMethod
+  private handleCreateGrid(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'CreateGrid') return false;
 
     this.view.createMark(options.valMark);
     return true;
-  };
+  }
 
-  private handleClickMark = (options: ObserverOptions) => {
+  @boundMethod
+  private handleClickMark(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'ClickMark') return false;
     if (this.lock) return false;
 
     this.model.clickMark(options.valueG);
     return true;
-  };
+  }
 
-  private handleSnapNum = (options: ObserverOptions) => {
+  @boundMethod
+  private handleSnapNum(options: ObserverOptions) {
     const { key } = options;
     if (key !== 'SnapNum') return false;
 
     this.model.calcSnap(options.snapNum);
     return true;
-  };
+  }
 }
 
 export { Controller, Model, View };

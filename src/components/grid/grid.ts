@@ -1,4 +1,4 @@
-import autoBind from 'auto-bind';
+import { boundMethod } from 'autobind-decorator';
 import './grid.scss';
 
 interface Options {
@@ -39,7 +39,6 @@ class Grid {
   private objRangeSlider: any;
 
   constructor(nameClass: string, elem: Element) {
-    autoBind(this);
     this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
@@ -93,6 +92,7 @@ class Grid {
     this.snap.addEventListener('click', this.handleSnapClick);
   }
 
+  @boundMethod
   private handleGridRoundChange(event: Event) {
     const elem = event.currentTarget as HTMLInputElement;
     this.objRangeSlider.update({
@@ -100,6 +100,7 @@ class Grid {
     });
   }
 
+  @boundMethod
   private handleStepChange(event: Event) {
     const elem = event.currentTarget as HTMLInputElement;
     this.objRangeSlider.update({
@@ -109,6 +110,7 @@ class Grid {
     this.interval.value = '0';
   }
 
+  @boundMethod
   private handleIntervalChange(event: Event) {
     const elem = event.currentTarget as HTMLInputElement;
     this.objRangeSlider.update({
@@ -118,6 +120,7 @@ class Grid {
     this.step.value = '0';
   }
 
+  @boundMethod
   private handleInputProcessing(event: Event) {
     const elem = event.currentTarget as HTMLInputElement;
 
@@ -133,6 +136,7 @@ class Grid {
     }
   }
 
+  @boundMethod
   private handleGridClick(event: Event) {
     const elem = event.currentTarget as HTMLInputElement;
 
@@ -141,6 +145,7 @@ class Grid {
     });
   }
 
+  @boundMethod
   private handleSnapClick(event: Event) {
     const elem = event.currentTarget as HTMLInputElement;
 

@@ -1,4 +1,4 @@
-import autoBind from 'auto-bind';
+import { boundMethod } from 'autobind-decorator';
 
 class Resize {
   wrapper: HTMLElement;
@@ -24,7 +24,6 @@ class Resize {
     sleep: number,
     onChange: Function,
   ) {
-    autoBind(this);
     this.wrapper = wrapper ?? document.body;
     this.sleep = sleep ?? 200;
     const emptyFun = () => { };
@@ -32,6 +31,7 @@ class Resize {
     this.resize();
   }
 
+  @boundMethod
   private resizeEnd() {
     if (Number(new Date()) - Number(this.rTime) < this.sleep) {
       setTimeout(this.resizeEnd, this.sleep);
@@ -53,6 +53,7 @@ class Resize {
     window.addEventListener('optimizedResize', this.handleOptimizedResize);
   }
 
+  @boundMethod
   private handleOptimizedResize() {
     this.rTime = new Date();
     if (this.timeout === false) {
@@ -68,6 +69,7 @@ class Resize {
     obj.addEventListener(type, this.handleThrottle);
   }
 
+  @boundMethod
   private handleThrottle() {
     if (this.running) { return false; }
     this.running = true;

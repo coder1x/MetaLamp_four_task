@@ -1,4 +1,4 @@
-import autoBind from 'auto-bind';
+import { boundMethod } from 'autobind-decorator';
 import './values.scss';
 
 interface Options {
@@ -39,7 +39,6 @@ class Values {
   private mapInput: Map<string, string>
 
   constructor(nameClass: string, elem: Element) {
-    autoBind(this);
     this.nameClass = nameClass;
     this.elem = elem;
     this.setDom();
@@ -94,6 +93,7 @@ class Values {
     });
   }
 
+  @boundMethod
   private handleInputProcessing(event: Event) {
     const elem = event.currentTarget as HTMLInputElement;
     const value = elem.value.replace(/[^-.\d]/g, '');
@@ -108,6 +108,7 @@ class Values {
     }
   }
 
+  @boundMethod
   private handleInputChange(event: Event) {
     const elem = event.currentTarget as HTMLInputElement;
     this.objRangeSlider.update({
