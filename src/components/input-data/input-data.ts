@@ -1,11 +1,11 @@
 import './input-data.scss';
 
 class InputData {
-  private value: HTMLInputElement;
+  private value: HTMLInputElement | null = null;
 
-  private input: HTMLInputElement;
+  private input: HTMLInputElement | null = null;
 
-  private className: string;
+  private className: string = '';
 
   private elem: Element;
 
@@ -22,14 +22,17 @@ class InputData {
 
     this.value = this.elem.querySelector(
       '.js-input-data input',
-    );
+    ) as HTMLInputElement;
 
     if (this.input) {
       const obj = this;
       Object.defineProperty(this.input, 'value', {
         set(text) {
-          if (!text) return;
-          obj.value.value = text;
+          if (!text && !obj) return;
+
+          const dom = obj.value as HTMLInputElement;
+
+          dom.value = text;
           this.setAttribute('value', text);
         },
       });

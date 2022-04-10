@@ -7,7 +7,7 @@ class Resize {
 
   onChange: Function;
 
-  private rTime: Date;
+  private rTime: Date = new Date();;
 
   private timeout: boolean = false;
 
@@ -15,9 +15,9 @@ class Resize {
 
   private startWidth: number = 0;
 
-  private eventName: string;
+  private eventName: string = '';
 
-  private objectResize: Window & typeof globalThis;
+  private objectResize: Window & typeof globalThis = window;
 
   constructor(
     wrapper: HTMLElement,

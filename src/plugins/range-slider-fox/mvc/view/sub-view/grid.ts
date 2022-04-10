@@ -7,9 +7,9 @@ class Grid extends Observer {
 
   private rsName: string;
 
-  private elemGrid: HTMLElement;
+  private elemGrid: HTMLElement | null = null;
 
-  private indent: number;
+  private indent: number = 0;
 
   private sizeWH: number[] = [];
 
@@ -17,13 +17,13 @@ class Grid extends Observer {
 
   private evenElements: HTMLElement[][] = [[]];
 
-  private lastElem: Element;
+  private lastElem: Element | null = null;
 
-  private previousElem: HTMLElement;
+  private previousElem: HTMLElement | null = null;
 
-  private offOn: boolean;
+  private offOn: boolean = false;
 
-  private vertical: boolean;
+  private vertical: boolean = false;
 
   private resizeFlag: boolean = false;
 
@@ -67,12 +67,13 @@ class Grid extends Observer {
         style.left = pos;
       }
 
-      this.elemGrid.appendChild(gridPol);
+      if (this.elemGrid) { this.elemGrid.appendChild(gridPol); }
     });
     return this.elemGrid;
   }
 
   createDomGrid() {
+    if (!this.elemGrid) return null;
     this.rsBottom.appendChild(this.elemGrid);
     this.offOn = true;
     this.setAction(this.elemGrid);
@@ -80,6 +81,8 @@ class Grid extends Observer {
   }
 
   deleteGrid() {
+    if (!this.elemGrid) return null;
+
     const items = this.elemGrid.children;
     if (items.length > 0) {
       this.offOn = false;
@@ -149,6 +152,8 @@ class Grid extends Observer {
   }
 
   private shapingMark() {
+    if (!this.elemGrid) return false;
+
     this.sizeWH = [];
     this.oddElements = [[]];
     this.evenElements = [[]];
@@ -232,10 +237,13 @@ class Grid extends Observer {
         }
       });
     }
+
+    return true;
   }
 
   // hide or show values on the scale
   private visibleMark() {
+    if (!this.elemGrid) return false;
     // define element index: show odd values and hide honest ones
     const width = this.elemGrid.offsetWidth;
     const height = this.elemGrid.offsetHeight;
@@ -266,6 +274,8 @@ class Grid extends Observer {
     this.previousElem = this.oddElements[i][length];
 
     this.visibleLastElem(snapNum);
+
+    return true;
   }
 
   private visibleLastElem(snapNum: number[]) {

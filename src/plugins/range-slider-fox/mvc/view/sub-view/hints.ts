@@ -14,25 +14,25 @@ class Hints {
 
   private rsName: string;
 
-  private tipFrom: HTMLElement;
+  private tipFrom: HTMLElement | null = null;
 
-  private tipTo: HTMLElement;
+  private tipTo: HTMLElement | null = null;
 
-  private tipMin: HTMLElement;
+  private tipMin: HTMLElement | null = null;
 
-  private tipMax: HTMLElement;
+  private tipMax: HTMLElement | null = null;
 
-  private tipSingle: HTMLElement;
+  private tipSingle: HTMLElement | null = null;
 
-  private tipPrefix: string;
+  private tipPrefix: string = '';
 
-  private tipPostfix: string;
+  private tipPostfix: string = '';
 
-  private tipFromTo: boolean;
+  private tipFromTo: boolean = false;
 
-  private tipMinMax: boolean;
+  private tipMinMax: boolean = false;
 
-  private vertical: boolean;
+  private vertical: boolean = false;
 
   constructor(elem: HTMLElement | Element, rsName: string) {
     this.rsName = rsName;
@@ -53,7 +53,7 @@ class Hints {
 
   setOrientation(str: string) {
     this.vertical = str === 'vertical';
-    let flag: boolean;
+    let flag: boolean = false;
     if (this.tipFrom) { flag = this.convertStyle(this.tipFrom.style); }
 
     if (this.tipTo) {
@@ -104,7 +104,8 @@ class Hints {
 
   // ------------------- remove elements
   deleteTipMinMax() {
-    if (!this.tipMin && !this.tipMax) return false;
+    if (!this.tipMin || !this.tipMax) return false;
+
     this.tipMin.remove();
     this.tipMax.remove();
     this.tipMin = null;
@@ -140,23 +141,27 @@ class Hints {
   // --------------------------- save values
 
   setValTipMinMax(min: number, max: number) {
+    if (!this.tipMin || !this.tipMax) return false;
+
     const tipMin = this.setData(this.tipMin, min);
     const tipMax = this.setData(this.tipMax, max);
     return { tipMin, tipMax };
   }
 
   setValTipFrom(from: number) {
+    if (!this.tipFrom) return false;
     return this.setData(this.tipFrom, from);
   }
 
   setValTipTo(to: number) {
+    if (!this.tipTo) return false;
     return this.setData(this.tipTo, to);
   }
 
   setValTipSingle() {
     if (!this.tipSingle) return false;
-    const valFrom = this.tipFrom.innerHTML;
-    const valTo = this.tipTo.innerHTML;
+    const valFrom = this.tipFrom && this.tipFrom.innerHTML;
+    const valTo = this.tipTo && this.tipTo.innerHTML;
     const br = '<br>';
     const value = valFrom + (this.vertical ? `${br}↕${br}` : ' ⟷ ') + valTo;
     this.tipSingle.innerHTML = value;
@@ -200,8 +205,8 @@ class Hints {
     if (!this.tipMinMax && !this.tipFromTo) return false;
 
     // ------------------------------------------- get data
-    const { tipFromXY, tipFromWH } = this.getBoundingDot(this.tipFrom);
-    const { tipToXY, tipToWH } = this.getBoundingDot(this.tipTo);
+    const [tipFromXY, tipFromWH] = this.getBoundingDot(this.tipFrom);
+    const [tipToXY, tipToWH] = this.getBoundingDot(this.tipTo);
     const { tipMinXY, tipMinWH, tipMaxXY } = this.getBoundingMinMax();
     //-------------------------------------------
 
@@ -212,26 +217,34 @@ class Hints {
     let tipMinXRight = 0;
 
     // ------------------------------------------- define logic
+
+    const flagTipFrom = tipFromXY || !this.tipFrom;
+
     if (this.vertical) {
-      tipMinYTop = tipMinXY - tipMinWH;
       const tipFromYTop = tipFromXY - tipFromWH;
+      const tipFromMax = tipMaxXY >= tipFromYTop;
       const tipToYTop = tipToXY - tipToWH;
+
+      tipMinYTop = tipMinXY - tipMinWH;
+
       visibilityTipSingle = tipFromYTop <= tipToXY;
 
-      if (this.tipTo) {
-        visibilityTipMax = tipMaxXY >= tipToYTop || tipMaxXY >= tipFromYTop;
-      } else {
-        visibilityTipMax = tipMaxXY >= tipFromYTop;
-      }
+      visibilityTipMax = this.tipTo
+        ? tipMaxXY >= tipToYTop || tipFromMax
+        : tipFromMax;
 
-      visibilityTipMin = tipMinYTop >= tipFromXY || !this.tipFrom;
+      visibilityTipMin = tipMinYTop >= flagTipFrom;
     } else {
       tipMinXRight = tipMinXY + tipMinWH;
+
       const tipFromXRight = tipFromXY + tipFromWH;
       const tipToXRight = tipToXY + tipToWH;
+      const tipMaxTo = tipMaxXY <= tipToXRight;
+      const tipMaxFrom = tipMaxXY <= tipFromXRight;
+
       visibilityTipSingle = tipFromXRight >= tipToXY;
-      visibilityTipMax = tipMaxXY <= tipToXRight || tipMaxXY <= tipFromXRight;
-      visibilityTipMin = tipMinXRight <= tipFromXY || !this.tipFrom;
+      visibilityTipMax = tipMaxTo || tipMaxFrom;
+      visibilityTipMin = tipMinXRight <= flagTipFrom;
     }
 
     // ------------------------------------------- change view
@@ -306,7 +319,7 @@ class Hints {
     return this.vertical ? elem.offsetHeight : elem.offsetWidth;
   }
 
-  private getBoundingDot(elem: HTMLElement) {
+  private getBoundingDot(elem: HTMLElement | null) {
     let tipDotXY = 0;
     let tipDotWH = 0;
     if (elem) {
@@ -315,16 +328,11 @@ class Hints {
       tipDotWH = this.vertical
         ? elem.offsetHeight : elem.offsetWidth;
     }
-    if (elem === this.tipFrom) {
-      return {
-        tipFromXY: tipDotXY,
-        tipFromWH: tipDotWH,
-      };
-    }
-    return {
-      tipToXY: tipDotXY,
-      tipToWH: tipDotWH,
-    };
+
+    return [
+      tipDotXY,
+      tipDotWH,
+    ];
   }
 
   private getBoundingMinMax() {
@@ -374,7 +382,7 @@ class Hints {
       tipMinXRight,
     } = options;
 
-    const display = (elem: HTMLElement, flag: boolean) => {
+    const display = (elem: HTMLElement | null, flag: boolean) => {
       if (elem) {
         const dom = elem;
         dom.style.visibility = flag ? 'visible' : 'hidden';

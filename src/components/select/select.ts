@@ -6,19 +6,19 @@ class Select {
 
   private elem: Element;
 
-  private button: HTMLButtonElement;
+  private button: HTMLButtonElement | null = null;
 
-  private input: HTMLInputElement;
+  private input: HTMLInputElement | null = null;
 
-  private items: Element[];
+  private items: Element[] = [];
 
-  private displayedWrap: HTMLElement;
+  private displayedWrap: HTMLElement | null = null;
 
-  private options: HTMLElement;
+  private options: HTMLElement | null = null;
 
-  onChange: Function;
+  onChange: Function = (value: string) => value;
 
-  onUpdate: Function;
+  onUpdate: Function = (value: string) => value;
 
   private updateFlag = false;
 
@@ -31,6 +31,7 @@ class Select {
   }
 
   getData() {
+    if (!this.input) return '';
     return this.input.value;
   }
 
@@ -55,10 +56,6 @@ class Select {
   }
 
   private init() {
-    const emptyFun = (value: string) => value;
-    this.onChange = emptyFun;
-    this.onUpdate = emptyFun;
-
     this.setDomElem();
     this.setActions();
     this.startFlag = false;
@@ -86,12 +83,16 @@ class Select {
   }
 
   private setValSelect(elem: HTMLElement) {
+    if (!this.button || !this.input) return false;
+
     const text = elem.innerText;
     this.button.innerText = text;
     const value = elem.getAttribute('data-val');
-    this.input.value = value;
+    this.input.value = value ?? '';
 
     if (!this.updateFlag && !this.startFlag) { this.onChange(value); }
+
+    return true;
   }
 
   private setDisplayed() {
@@ -112,9 +113,13 @@ class Select {
   }
 
   private toggle(flag = false) {
+    if (!this.options) return false;
+
     const UlVisible: boolean = Select.getVisible(this.options);
     const flagVisible = !UlVisible && !flag;
     this.toggleModify(this.elem, flagVisible);
+
+    return true;
   }
 
   private getModify() {
@@ -157,8 +162,8 @@ class Select {
   @boundMethod
   private handleItemsSet(event: MouseEvent | KeyboardEvent) {
     let flag = false;
-    let mouse: string;
-    let key: string;
+    let mouse: string = '';
+    let key: string = '';
 
     if (event instanceof MouseEvent) {
       mouse = event.type;
@@ -197,9 +202,14 @@ class Select {
   }
 
   private setActions() {
+    if (!this.displayedWrap || !this.button) return false;
+
     this.displayedWrap.addEventListener('click', this.handleDisplayedWrap);
     this.button.addEventListener('keydown', this.handleKeydown);
-    this.options.addEventListener('keydown', this.handleKeydown);
+
+    if (this.options) {
+      this.options.addEventListener('keydown', this.handleKeydown);
+    }
     this.button.addEventListener('keydown', this.handleButtonKeydown);
 
     this.items.forEach((item) => {
@@ -210,6 +220,8 @@ class Select {
     });
     document.addEventListener('click', this.handleDocumentClick);
     document.addEventListener('focusin', this.handleDocumentFocusin);
+
+    return true;
   }
 }
 

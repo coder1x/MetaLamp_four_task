@@ -62,11 +62,11 @@ describe('------- Test View API -------', () => {
       disabled: false,
       onStart: async () => {
         let opacity = await view.disabledRangeSlider(true);
-        const rs = inputElement.parentElement;
-        let num = +rs.style.opacity;
+        const rs = inputElement.parentElement as HTMLElement;
+        let num = Number(rs.style.opacity);
         expect(+opacity).toBeCloseTo(num);
         opacity = await view.disabledRangeSlider(false);
-        num = +rs.style.opacity;
+        num = Number(rs.style.opacity);
         expect(+opacity).toBeCloseTo(num);
       },
     });
@@ -78,9 +78,10 @@ describe('------- Test View API -------', () => {
     const model = await new Model({
       disabled: false,
       onStart: async () => {
-        const nodes = view.createDomBase().childNodes;
+        const dom = view.createDomBase() as Element;
+        const nodes = dom.childNodes;
         const name: string[] = [];
-        let line: Element;
+        let line: Element | null = null;
 
         nodes.forEach((item) => {
           const elem = item as HTMLElement;
@@ -95,7 +96,10 @@ describe('------- Test View API -------', () => {
         expect(searchStr(name[0], `${jsRsName}__top`)).toBeTruthy();
         expect(searchStr(name[1], `${jsRsName}__center`)).toBeTruthy();
         expect(searchStr(name[2], `${jsRsName}__bottom`)).toBeTruthy();
-        expect(searchStr(line.className, `${jsRsName}__line`)).toBeTruthy();
+
+        if (line) {
+          expect(searchStr(line.className, `${jsRsName}__line`)).toBeTruthy();
+        }
       },
     });
     new Controller(model, view);

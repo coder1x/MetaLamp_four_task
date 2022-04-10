@@ -5,47 +5,47 @@ import { Observer } from '../../observer';
 
 class Model extends Observer {
   // --- data config
-  private type: string;
+  private type: string | undefined = undefined;
 
-  private orientation: string;
+  private orientation: string | undefined = undefined;
 
-  private theme: string;
+  private theme: string | undefined = undefined;
 
-  private min: number;
+  private min: number | undefined = undefined;
 
-  private max: number;
+  private max: number | undefined = undefined;
 
-  private from: number;
+  private from: number | undefined = undefined;
 
-  private to: number;
+  private to: number | undefined = undefined;
 
-  private step: number;
+  private step: number | undefined = undefined;
 
-  private keyStepOne: number;
+  private keyStepOne: number | undefined = undefined;
 
-  private keyStepHold: number;
+  private keyStepHold: number | undefined = undefined;
 
-  private bar: boolean;
+  private bar: boolean | undefined = undefined;
 
-  private tipPrefix: string;
+  private tipPrefix: string | undefined = undefined;
 
-  private tipPostfix: string;
+  private tipPostfix: string | undefined = undefined;
 
-  private tipMinMax: boolean;
+  private tipMinMax: boolean | undefined = undefined;
 
-  private tipFromTo: boolean;
+  private tipFromTo: boolean | undefined = undefined;
 
-  private gridSnap: boolean;
+  private gridSnap: boolean | undefined = undefined;
 
-  private gridNum: number;
+  private gridNum: number | undefined = undefined;
 
-  private gridStep: number;
+  private gridStep: number | undefined = undefined;
 
-  private gridRound: number;
+  private gridRound: number | undefined = undefined;
 
-  private grid: boolean;
+  private grid: boolean | undefined = undefined;
 
-  private disabled: boolean;
+  private disabled: boolean | undefined = undefined;
 
   private defaultData: RangeSliderOptions;
 

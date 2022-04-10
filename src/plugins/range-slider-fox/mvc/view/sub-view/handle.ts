@@ -10,9 +10,9 @@ interface Pointer {
 type mapKey = Map<string, string>;
 
 class Handle extends Observer {
-  private elemFrom: HTMLElement;
+  private elemFrom: HTMLElement | null = null;
 
-  private elemTo: HTMLElement;
+  private elemTo: HTMLElement | null = null;
 
   private rsName: string;
 
@@ -22,13 +22,13 @@ class Handle extends Observer {
 
   private eventToFlag: boolean;
 
-  private vertical: boolean;
+  private vertical: boolean = false;;
 
-  private directions: Map<string, string>
+  private directions: Map<string, string> | null = null;
 
   private shiftXY: number = 0;
 
-  private orientation: string;
+  private orientation: string = '';
 
   constructor(rsCenter: HTMLElement, rsName: string) {
     super();
@@ -106,13 +106,17 @@ class Handle extends Observer {
       return true;
     };
 
-    convertStyle(this.elemFrom.style);
+    let flag = false;
 
-    if (this.elemTo) {
-      return convertStyle(this.elemTo.style);
+    if (this.elemFrom) {
+      flag = convertStyle(this.elemFrom.style);
     }
 
-    return false;
+    if (this.elemTo) {
+      flag = convertStyle(this.elemTo.style);
+    }
+
+    return flag;
   }
 
   setFrom(fromPosition: number) {
@@ -161,7 +165,7 @@ class Handle extends Observer {
     this.directions.set('ArrowLeft', '-');
     this.directions.set('ArrowDown', '-');
 
-    if (!this.eventFromFlag) {
+    if (!this.eventFromFlag && this.elemFrom) {
       this.elemFrom.addEventListener('keydown', this.handleFromKeydown);
     }
 
@@ -176,7 +180,7 @@ class Handle extends Observer {
     };
 
     if (type === 'double') {
-      if (!this.eventToFlag) {
+      if (!this.eventToFlag && this.elemTo) {
         this.elemTo.addEventListener('pointerdown', this.handleToPointerdown);
 
         cancellation(this.elemTo);
@@ -184,7 +188,7 @@ class Handle extends Observer {
       }
     }
 
-    if (!this.eventFromFlag) {
+    if (!this.eventFromFlag && this.elemFrom) {
       this.elemFrom.addEventListener('pointerdown', this.handleFromPointerdown);
 
       cancellation(this.elemFrom);
@@ -207,22 +211,30 @@ class Handle extends Observer {
 
   @boundMethod
   private handleFromPointerdown(event: PointerEvent) {
+    if (!this.elemFrom) return false;
+
     if (this.elemTo) { this.elemTo.style.zIndex = '1'; }
     this.elemFrom.style.zIndex = '2';
 
     this.shiftXY = this.mouseDown(event, this.elemFrom);
     this.wrapElem.addEventListener('pointermove', this.mouseMoveFrom);
     this.wrapElem.addEventListener('pointerup', this.mouseUpFrom);
+
+    return true;
   }
 
   @boundMethod
   private handleToPointerdown(event: PointerEvent) {
+    if (!this.elemFrom || !this.elemTo) return false;
+
     this.elemTo.style.zIndex = '2';
     this.elemFrom.style.zIndex = '1';
 
     this.shiftXY = this.mouseDown(event, this.elemTo);
     this.wrapElem.addEventListener('pointermove', this.mouseMoveTo);
     this.wrapElem.addEventListener('pointerup', this.mouseUpTo);
+
+    return true;
   }
 
   @boundMethod
@@ -247,12 +259,16 @@ class Handle extends Observer {
 
   @boundMethod
   private handleFromKeydown(event: KeyboardEvent) {
+    if (!this.directions) return false;
     this.keyDown(event, this.directions, 'from');
+    return true;
   }
 
   @boundMethod
   private handleToKeydown(event: KeyboardEvent) {
+    if (!this.directions) return false;
     this.keyDown(event, this.directions, 'to');
+    return true;
   }
 
   private static getElem(elem: Element, str: string) {

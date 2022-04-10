@@ -19,7 +19,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "strictNullChecks": false,
+    "strictNullChecks": true,
     "isolatedModules": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,

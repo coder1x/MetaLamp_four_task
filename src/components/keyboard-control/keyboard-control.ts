@@ -9,19 +9,19 @@ interface Options {
 class KeyboardControl {
   private elem: Element;
 
-  private keyStepOne: HTMLInputElement;
+  private keyStepOne: HTMLInputElement | null = null;
 
-  private keyStepHold: HTMLInputElement;
+  private keyStepHold: HTMLInputElement | null = null;
 
-  private keyStepOneCache: number;
+  private keyStepOneCache: number = 0;
 
-  private keyStepHoldCache: number;
+  private keyStepHoldCache: number = 0;
 
-  private nameClass: string;
+  private nameClass: string = '';
 
   private objRangeSlider: any;
 
-  private mapInput: Map<string, string>
+  private mapInput: Map<string, string> | null = null;
 
   constructor(nameClass: string, elem: Element) {
     this.nameClass = nameClass;
@@ -32,14 +32,14 @@ class KeyboardControl {
   setData(options: Options) {
     const { keyStepOne, keyStepHold } = options;
 
-    if (this.keyStepOneCache !== keyStepOne) {
+    if (this.keyStepOneCache !== keyStepOne && this.keyStepOne) {
       this.keyStepOne.value = String(keyStepOne);
-      this.keyStepOneCache = keyStepOne;
+      this.keyStepOneCache = keyStepOne ?? 0;
     }
 
-    if (this.keyStepHoldCache !== keyStepHold) {
+    if (this.keyStepHoldCache !== keyStepHold && this.keyStepHold) {
       this.keyStepHold.value = String(keyStepHold);
-      this.keyStepHoldCache = keyStepHold;
+      this.keyStepHoldCache = keyStepHold ?? 0;
     }
   }
 
@@ -48,12 +48,17 @@ class KeyboardControl {
     this.objRangeSlider = obj;
 
     this.mapInput = new Map();
-    this.mapInput.set('keyStepOne', this.keyStepOne.value);
-    this.mapInput.set('keyStepHold', this.keyStepHold.value);
+
+    const keyStepOne = (this.keyStepOne && this.keyStepOne.value) ?? '';
+    const keyStepHold = (this.keyStepHold && this.keyStepHold.value) ?? '';
+
+    this.mapInput.set('keyStepOne', keyStepOne);
+    this.mapInput.set('keyStepHold', keyStepHold);
 
     const inputElements = [this.keyStepOne, this.keyStepHold];
 
     inputElements.forEach((item) => {
+      if (!item) return;
       item.addEventListener('change', this.handleDataChange);
       item.addEventListener('input', this.handleInputProcessing);
     });
@@ -61,11 +66,13 @@ class KeyboardControl {
 
   @boundMethod
   private handleDataChange(event: Event) {
+    if (!this.mapInput) return false;
     const elem = event.currentTarget as HTMLInputElement;
 
     this.objRangeSlider.update({
-      [elem.name]: +this.mapInput.get(elem.name),
+      [elem.name]: Number(this.mapInput.get(elem.name)),
     });
+    return true;
   }
 
   @boundMethod
@@ -75,18 +82,22 @@ class KeyboardControl {
     const regexp = /^-?\d*?[.]?\d*$/;
     const valid = regexp.test(value);
 
+    if (!this.mapInput) return false;
+
     if (valid) {
       this.mapInput.set(elem.name, value);
       elem.value = value;
     } else {
-      elem.value = this.mapInput.get(elem.name);
+      elem.value = this.mapInput.get(elem.name) ?? '';
     }
+
+    return true;
   }
 
   private setDom() {
-    const getDom = (str: string): HTMLInputElement => this.elem.querySelector(
+    const getDom = (str: string) => this.elem.querySelector(
       `${this.nameClass}__${str}-wrap input`,
-    );
+    ) as HTMLInputElement;
 
     this.keyStepOne = getDom('one');
     this.keyStepHold = getDom('hold');

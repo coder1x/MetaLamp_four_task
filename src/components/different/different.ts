@@ -13,39 +13,39 @@ interface Options {
 class Different {
   private elem: Element;
 
-  private type: HTMLInputElement;
+  private type: HTMLInputElement | null = null;
 
-  private disabled: HTMLInputElement;
+  private disabled: HTMLInputElement | null = null;
 
-  private orientation: HTMLInputElement;
+  private orientation: HTMLInputElement | null = null;
 
-  private bar: HTMLInputElement;
+  private bar: HTMLInputElement | null = null;
 
-  private unsubscribtion: HTMLInputElement;
+  private unsubscribtion: HTMLInputElement | null = null;
 
-  private select: Select;
+  private select: Select | null = null;
 
-  private reset: HTMLButtonElement;
+  private reset: HTMLButtonElement | null = null;
 
-  private panel: Element;
+  private panel: Element | null = null;
 
-  private modify: string;
+  private modify: string = '';
 
-  private disabledCache: boolean;
+  private disabledCache: boolean = false;
 
-  private barCache: boolean;
+  private barCache: boolean = false;
 
-  private typeCache: string;
+  private typeCache: string = '';
 
-  private orientationCache: string;
+  private orientationCache: string = '';
 
-  private themeCache: string;
+  private themeCache: string = '';
 
   private nameClass: string;
 
   private objRangeSlider: any;
 
-  onUnsubscribtion: Function;
+  onUnsubscribtion: Function | null = null;
 
   constructor(nameClass: string, elem: Element, panel: Element) {
     this.nameClass = nameClass;
@@ -59,42 +59,46 @@ class Different {
       disabled, bar, type, orientation, theme,
     } = options;
 
-    if (this.disabledCache !== disabled) {
-      this.disabled.checked = disabled;
-      this.disabledCache = disabled;
+    if (this.disabledCache !== disabled && this.disabled) {
+      this.disabled.checked = disabled ?? false;
+      this.disabledCache = disabled ?? false;
     }
 
-    if (this.barCache !== bar) {
-      this.bar.checked = bar;
-      this.barCache = bar;
+    if (this.barCache !== bar && this.bar) {
+      this.bar.checked = bar ?? false;
+      this.barCache = bar ?? false;
     }
 
-    if (this.typeCache !== type) {
+    if (this.typeCache !== type && this.type) {
       this.type.checked = type === 'double';
-      this.typeCache = type;
+      this.typeCache = type ?? '';
     }
 
-    if (this.orientationCache !== orientation) {
+    if (this.orientationCache !== orientation && this.orientation) {
       const orientFlag = orientation !== 'horizontal';
       this.orientation.checked = orientFlag;
-      this.orientationCache = orientation;
+      this.orientationCache = orientation ?? '';
+
+      const { classList } = this.panel as Element;
 
       if (orientFlag) {
-        this.panel.classList.add(this.modify);
+        classList.add(this.modify);
       } else {
-        this.panel.classList.remove(this.modify);
+        classList.remove(this.modify);
       }
     }
 
-    if (this.themeCache !== theme) {
+    if (this.themeCache !== theme && this.select) {
       this.select.update(String(theme));
-      this.themeCache = theme;
+      this.themeCache = theme ?? '';
     }
   }
 
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   setAction(obj: any) {
     this.objRangeSlider = obj;
+
+    if (!this.reset || !this.select) return false;
 
     this.reset.addEventListener('click', this.handleResetClick);
 
@@ -104,14 +108,24 @@ class Different {
       });
     };
 
+    if (!this.disabled || !this.bar) return false;
+
     this.disabled.addEventListener('click', this.handleDisabledClick);
     this.bar.addEventListener('click', this.handleBarClick);
+
+    if (!this.unsubscribtion || !this.type) return false;
+
     this.unsubscribtion.addEventListener(
       'click',
       this.handleUnsubscribtionClick,
     );
     this.type.addEventListener('click', this.handleTypeClick);
-    this.orientation.addEventListener('click', this.handleOrientationClick);
+
+    if (this.orientation) {
+      this.orientation.addEventListener('click', this.handleOrientationClick);
+    }
+
+    return true;
   }
 
   @boundMethod
@@ -155,7 +169,7 @@ class Different {
   private handleOrientationClick(event: Event) {
     const elem = event.target as HTMLInputElement;
     const value = elem.checked ? 'vertical' : 'horizontal';
-    const { classList } = this.panel;
+    const { classList } = this.panel as Element;
 
     if (elem.checked) {
       classList.add(this.modify);
@@ -169,11 +183,13 @@ class Different {
   }
 
   private setDom() {
-    this.modify = `${this.panel.classList[0]}_vertical`;
+    if (this.panel) {
+      this.modify = `${this.panel.classList[0]}_vertical`;
+    }
 
-    const getDom = (str: string): HTMLInputElement => this.elem.querySelector(
+    const getDom = (str: string) => this.elem.querySelector(
       `${this.nameClass}__${str}-wrap input`,
-    );
+    ) as HTMLInputElement;
 
     this.type = getDom('double');
     this.disabled = getDom('disabled');
@@ -181,7 +197,7 @@ class Different {
     this.unsubscribtion = getDom('unsubscribtion');
     this.orientation = getDom('vertical');
     this.reset = this.elem.querySelector(`${this.nameClass}__reset`);
-    const selectE = this.elem.querySelector('.js-select');
+    const selectE = this.elem.querySelector('.js-select') as Element;
     this.select = new Select('.js-select', selectE);
   }
 }

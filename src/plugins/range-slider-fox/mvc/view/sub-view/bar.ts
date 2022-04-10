@@ -6,11 +6,11 @@ class Bar extends Observer {
 
   private rsName: string;
 
-  private elemBar: HTMLElement;
+  private elemBar: HTMLElement | null = null;
 
-  private bar: boolean;
+  private bar: boolean = false;
 
-  private vertical: boolean;
+  private vertical: boolean = false;
 
   constructor(elem: HTMLElement | Element, rsName: string) {
     super();
@@ -106,7 +106,11 @@ class Bar extends Observer {
   }
 
   private setActions() {
+    if (!this.elemBar) return false;
+
     this.elemBar.addEventListener('click', this.handleBarClick);
+
+    return true;
   }
 
   @boundMethod

@@ -7,9 +7,9 @@ class CopyCode {
 
   private elem: Element;
 
-  private button: HTMLButtonElement;
+  private button: HTMLButtonElement | null = null;
 
-  private ul: Element;
+  private ul: Element | null = null;
 
   constructor(className: string, component: Element) {
     this.className = className;
@@ -18,6 +18,8 @@ class CopyCode {
   }
 
   setData(options: RangeSliderOptions) {
+    if (!this.ul) return false;
+
     const key = Object.keys(options);
     const value = Object.values(options);
     const name = this.className.replace('.', '');
@@ -42,6 +44,8 @@ class CopyCode {
         item.innerText = text;
       }
     }
+
+    return true;
   }
 
   private init() {
@@ -62,6 +66,8 @@ class CopyCode {
 
   @boundMethod
   private handleButtonClick() {
+    if (!this.ul) return false;
+
     const child = this.ul.childNodes;
 
     let text = '$(\'.demo\').RangeSliderFox({\n';
@@ -79,10 +85,14 @@ class CopyCode {
       .catch((err) => {
         console.log('Something went wrong', err);
       });
+
+    return true;
   }
 
   private setActions() {
-    this.button.addEventListener('click', this.handleButtonClick);
+    if (this.button) {
+      this.button.addEventListener('click', this.handleButtonClick);
+    }
   }
 }
 
