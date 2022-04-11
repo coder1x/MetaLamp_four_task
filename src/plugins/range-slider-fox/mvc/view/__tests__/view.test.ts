@@ -98,7 +98,8 @@ describe('------- Test View API -------', () => {
         expect(searchStr(name[2], `${jsRsName}__bottom`)).toBeTruthy();
 
         if (line) {
-          expect(searchStr(line.className, `${jsRsName}__line`)).toBeTruthy();
+          const elem = line as Element;
+          expect(searchStr(elem.className, `${jsRsName}__line`)).toBeTruthy();
         }
       },
     });
@@ -168,7 +169,7 @@ describe('------- Test View API -------', () => {
   test(' handle - interface  ', async () => {
     const model = await new Model({
       onStart: async () => {
-        const elem = view.createDotElem('double');
+        const elem = view.createDotElem('double') as HTMLElement;
         expect(elem.constructor.name).toBe('HTMLDivElement');
 
         const from = view.setDotFrom(15);
@@ -201,7 +202,7 @@ describe('------- Test View API -------', () => {
         expect(view.toggleTipTo(20)).toBeFalsy();
 
         const objMinMax = view.updateTipMinMax(10, 50);
-        expect(objMinMax).toEqual({ tipMin: false, tipMax: false });
+        expect(objMinMax).toBeFalsy();
 
         const size = view.getWidthTip(true, false);
         expect(size).toEqual({ fromWH: 0, toWH: 0, singleWH: 0 });
@@ -238,7 +239,7 @@ describe('------- Test View API -------', () => {
   test(' Grid - interface  ', async () => {
     const model = await new Model({
       onStart: async () => {
-        let elem = await view.createDomGrid();
+        let elem = await view.createDomGrid() as HTMLElement;
         expect(elem.constructor.name).toBe('HTMLDivElement');
         elem = await view.createMark([
           {
@@ -257,7 +258,7 @@ describe('------- Test View API -------', () => {
             val: 1,
             position: 1,
           },
-        ]);
+        ]) as HTMLElement;
 
         expect(elem.constructor.name).toBe('HTMLDivElement');
         const flag = await view.deleteGrid();

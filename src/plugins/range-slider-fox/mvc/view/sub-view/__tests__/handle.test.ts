@@ -44,8 +44,10 @@ describe('------- Test Handle API -------', () => {
     let wrapper = handle.createDomBase('double');
     expect(wrapper).toBeDefined();
 
-    let child: HTMLCollection;
+    let child: HTMLCollection | null = null;
     if (typeof wrapper !== 'boolean') { child = wrapper.children; }
+
+    if (!child) return;
 
     searchStr(child[0].className, `${jsRsName}__from`);
     searchStr(child[1].className, `${jsRsName}__to`);
@@ -68,9 +70,9 @@ describe('------- Test Handle API -------', () => {
   // setFrom & setTo
   test(' Check if dots got their positioning proprties ', async () => {
     const { from, to } = await createFromTo();
-    let leftFrom: string;
+    let leftFrom: string = '';
     if (typeof from !== 'boolean') { leftFrom = from.left; }
-    let leftTo: string;
+    let leftTo: string = '';
     if (typeof to !== 'boolean') { leftTo = to.left; }
     expect(leftFrom).toBe('34%');
     expect(leftTo).toBe('56%');

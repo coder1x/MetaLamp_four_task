@@ -40,7 +40,7 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    model.onHandle();
+    if (model.onHandle) { model.onHandle(); }
   });
 
   // reset
@@ -61,7 +61,7 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    model.onHandle();
+    if (model.onHandle) { model.onHandle(); }
   });
 
   // update
@@ -82,7 +82,7 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    model.onHandle();
+    if (model.onHandle) { model.onHandle(); }
   });
 
   // calcOnePercent
@@ -96,7 +96,8 @@ describe('------- Test Model API -------', () => {
         min,
         max,
       });
-      await model.onHandle();
+
+      if (model.onHandle) { await model.onHandle(); }
       expect(model.calcOnePercent()).toBeCloseTo(result);
     };
 
@@ -137,13 +138,15 @@ describe('------- Test Model API -------', () => {
         await position(40.34, 79.84);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
   });
 
   //  setWrapWH
   test(' Set wrapper width or height', async () => {
     const model = await new Model({});
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
     expect(model.setWrapWH(450)).toBeCloseTo(450);
     expect(model.setWrapWH(450.67)).toBeCloseTo(450.67);
     expect(model.setWrapWH(0)).toBeCloseTo(319);
@@ -169,10 +172,10 @@ describe('------- Test Model API -------', () => {
       if (data) {
         if (options.flag) {
           expect(data.from).toBeCloseTo(options.value);
-          expect(data.to).toBeUndefined();
+          expect(data.to).toBeNull();
         } else {
           expect(data.to).toBeCloseTo(options.value);
-          expect(data.from).toBeUndefined();
+          expect(data.from).toBeNull();
         }
       }
     };
@@ -242,7 +245,8 @@ describe('------- Test Model API -------', () => {
         }
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
 
     model = await new Model({
       type: 'double',
@@ -274,7 +278,8 @@ describe('------- Test Model API -------', () => {
         });
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
 
     model = await new Model({
       type: 'double',
@@ -301,7 +306,8 @@ describe('------- Test Model API -------', () => {
         });
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
 
     model = await new Model({
       type: 'single',
@@ -325,7 +331,8 @@ describe('------- Test Model API -------', () => {
         });
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
   });
 
   // calcStep
@@ -340,7 +347,8 @@ describe('------- Test Model API -------', () => {
         expect(model.calcStep()).toEqual(masVal);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
 
     masVal = await [
       -1.45, 1.6,
@@ -357,7 +365,8 @@ describe('------- Test Model API -------', () => {
         expect(model.calcStep()).toEqual(masVal);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
   });
 
   // calcPositionTip: From, To, Single
@@ -385,7 +394,8 @@ describe('------- Test Model API -------', () => {
         expect(+single.toFixed(2)).toBeCloseTo(47.83);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
   });
 
   const testName2 = ' Calculate numeral grid'
@@ -411,7 +421,8 @@ describe('------- Test Model API -------', () => {
         expect(grid[39]).toEqual(masVal[2]);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
 
     model = await new Model({
       min: -10.56,
@@ -432,7 +443,8 @@ describe('------- Test Model API -------', () => {
         expect(grid[39]).toEqual(mas[2]);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
   });
 
   // calcPositionBar
@@ -452,7 +464,8 @@ describe('------- Test Model API -------', () => {
         expect(model.calcPositionBar()).toEqual(obj);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
 
     model = await new Model({
       type: 'single',
@@ -468,7 +481,8 @@ describe('------- Test Model API -------', () => {
         expect(model.calcPositionBar()).toEqual(obj);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
   });
 
   // clickLine
@@ -496,7 +510,8 @@ describe('------- Test Model API -------', () => {
         expect(model.clickLine(1100)).toEqual(obj);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
 
     model = await new Model({
       type: 'single',
@@ -513,7 +528,8 @@ describe('------- Test Model API -------', () => {
         expect(model.clickLine(300).from).toBeCloseTo(554);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
 
     model = await new Model({
       type: 'double',
@@ -534,7 +550,8 @@ describe('------- Test Model API -------', () => {
         expect(from).toBeCloseTo(-121);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
   });
 
   const testName3 = ' Check calculation of a click'
@@ -558,7 +575,8 @@ describe('------- Test Model API -------', () => {
         expect(model.clickBar(290)).toEqual(obj);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
 
     model = await new Model({
       orientation: 'vertical',
@@ -575,7 +593,8 @@ describe('------- Test Model API -------', () => {
         expect(model.clickBar(10)).toEqual(obj);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
 
     model = await new Model({
       type: 'single',
@@ -591,7 +610,8 @@ describe('------- Test Model API -------', () => {
         expect(model.clickBar(50)).toEqual(obj);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
   });
 
   const testName4 = ' Check dots values changes '
@@ -616,7 +636,8 @@ describe('------- Test Model API -------', () => {
         expect(model.clickMark(10)).toEqual(obj);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
 
     model = await new Model({
       type: 'single',
@@ -636,7 +657,8 @@ describe('------- Test Model API -------', () => {
         expect(model.clickMark(10)).toEqual(obj);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
   });
 
   const testName5 = ' Calculate dots positions relating '
@@ -668,7 +690,8 @@ describe('------- Test Model API -------', () => {
         expect(model.snapDot()).toEqual(obj);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
   });
 
   const testName6 = ' Calculate dots movement when'
@@ -702,7 +725,8 @@ describe('------- Test Model API -------', () => {
         expect(model.calcKeyDown(true, '-', 'to')).toEqual(obj);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
 
     model = await new Model({
       type: 'double',
@@ -737,6 +761,7 @@ describe('------- Test Model API -------', () => {
         expect(model.calcKeyDown(false, '+', 'to')).toEqual(obj);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
   });
 });

@@ -60,7 +60,8 @@ class Controller {
     if (!this.view || !this.model) return false;
 
     if (this.view.onHandle) { await this.view.onHandle(); }
-    await this.model.onHandle();
+
+    if (this.model.onHandle) { await this.model.onHandle(); }
 
     return true;
   }
@@ -285,7 +286,7 @@ class Controller {
 
     await this.view.setOrientation(orientation);
     const obj = await this.model.getOptions();
-    this.updateHints(obj.type, obj.from, obj.to);
+    this.updateHints(obj.type ?? '', obj.from ?? 0, obj.to ?? 0);
 
     // -------- grid
 

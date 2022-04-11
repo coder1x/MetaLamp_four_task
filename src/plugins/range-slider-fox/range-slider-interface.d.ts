@@ -1,31 +1,31 @@
 /* eslint no-unused-vars: off */
 
 interface RangeSliderOptions {
-  readonly type?: string;
-  readonly orientation?: string;
-  readonly theme?: string;
-  readonly min?: number;
-  readonly max?: number;
-  readonly from?: number;
-  readonly to?: number;
-  readonly step?: number,
-  readonly keyStepOne?: number,
-  readonly keyStepHold?: number,
-  readonly bar?: boolean;
-  readonly grid?: boolean;
-  readonly gridSnap?: boolean;
-  readonly tipPrefix?: string;
-  readonly tipPostfix?: string;
-  readonly tipMinMax?: boolean;
-  readonly tipFromTo?: boolean;
-  readonly gridNum?: number;
-  readonly gridStep?: number;
-  readonly gridRound?: number;
-  readonly disabled?: boolean;
-  readonly onStart?: Function;
-  readonly onChange?: Function;
-  readonly onUpdate?: Function;
-  readonly onReset?: Function;
+  readonly type?: string | null;
+  readonly orientation?: string | null;
+  readonly theme?: string | null;
+  readonly min?: number | null;
+  readonly max?: number | null;
+  readonly from?: number | null;
+  readonly to?: number | null;
+  readonly step?: number | null,
+  readonly keyStepOne?: number | null,
+  readonly keyStepHold?: number | null,
+  readonly bar?: boolean | null;
+  readonly grid?: boolean | null;
+  readonly gridSnap?: boolean | null;
+  readonly tipPrefix?: string | null;
+  readonly tipPostfix?: string | null;
+  readonly tipMinMax?: boolean | null;
+  readonly tipFromTo?: boolean | null;
+  readonly gridNum?: number | null;
+  readonly gridStep?: number | null;
+  readonly gridRound?: number | null;
+  readonly disabled?: boolean | null;
+  readonly onStart?: Function | null;
+  readonly onChange?: Function | null;
+  readonly onUpdate?: Function | null;
+  readonly onReset?: Function | null;
 }
 
 interface RangeSliderFoxFunction {

@@ -28,15 +28,16 @@ describe('------- Test Grid API -------', () => {
 
   const getLenMark = async (model: Model) => {
     const gridMark = await model.createMark();
-    const elements = await grid.createMark(gridMark);
+    const elements = await grid.createMark(gridMark) as HTMLElement;
     const { length } = elements.childNodes;
     expect(length).toBe(gridMark.length);
     return length;
   };
 
   const getLenDom = () => {
-    const rsBottom = grid.createDomGrid();
-    const { length } = rsBottom.firstChild.childNodes;
+    const rsBottom = grid.createDomGrid() as HTMLElement;
+    const dom = rsBottom.firstChild as HTMLElement;
+    const { length } = dom.childNodes;
     return length;
   };
 
@@ -59,7 +60,8 @@ describe('------- Test Grid API -------', () => {
         getLenMark(model);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
   });
 
   // createDomGrid
@@ -72,7 +74,8 @@ describe('------- Test Grid API -------', () => {
         expect(lenMark).toBe(lenDom);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
   });
 
   // deleteGrid
@@ -89,7 +92,8 @@ describe('------- Test Grid API -------', () => {
         expect(lenDom).toBe(0);
       },
     });
-    await model.onHandle();
+
+    if (model.onHandle) { await model.onHandle(); }
   });
 
   // ClickMark

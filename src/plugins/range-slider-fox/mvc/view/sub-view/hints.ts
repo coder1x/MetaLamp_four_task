@@ -218,33 +218,28 @@ class Hints {
 
     // ------------------------------------------- define logic
 
-    const flagTipFrom = tipFromXY || !this.tipFrom;
-
     if (this.vertical) {
-      const tipFromYTop = tipFromXY - tipFromWH;
-      const tipFromMax = tipMaxXY >= tipFromYTop;
-      const tipToYTop = tipToXY - tipToWH;
-
       tipMinYTop = tipMinXY - tipMinWH;
+      const tipFromYTop = tipFromXY - tipFromWH;
+      const tipToYTop = tipToXY - tipToWH;
 
       visibilityTipSingle = tipFromYTop <= tipToXY;
 
-      visibilityTipMax = this.tipTo
-        ? tipMaxXY >= tipToYTop || tipFromMax
-        : tipFromMax;
+      if (this.tipTo) {
+        visibilityTipMax = tipMaxXY >= tipToYTop || tipMaxXY >= tipFromYTop;
+      } else {
+        visibilityTipMax = tipMaxXY >= tipFromYTop;
+      }
 
-      visibilityTipMin = tipMinYTop >= flagTipFrom;
+      visibilityTipMin = tipMinYTop >= tipFromXY || !this.tipFrom;
     } else {
       tipMinXRight = tipMinXY + tipMinWH;
-
       const tipFromXRight = tipFromXY + tipFromWH;
       const tipToXRight = tipToXY + tipToWH;
-      const tipMaxTo = tipMaxXY <= tipToXRight;
-      const tipMaxFrom = tipMaxXY <= tipFromXRight;
 
       visibilityTipSingle = tipFromXRight >= tipToXY;
-      visibilityTipMax = tipMaxTo || tipMaxFrom;
-      visibilityTipMin = tipMinXRight <= flagTipFrom;
+      visibilityTipMax = tipMaxXY <= tipToXRight || tipMaxXY <= tipFromXRight;
+      visibilityTipMin = tipMinXRight <= tipFromXY || !this.tipFrom;
     }
 
     // ------------------------------------------- change view
