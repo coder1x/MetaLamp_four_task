@@ -216,4 +216,4 @@ obj.destroy()
 * UML class diagram:
 ![readme](_tmp/UML.png)
 * <a href="https://plugins.su/UML.png">UML full-size image view </a>
-* <a href="https://github.com/coder1x/readme/blob/master/_tmp/UML.drawio">UML class diagram (drawio)</a>
+* <a href="https://github.com/coder1x/readme/blob/master/src/plugins/range-slider-fox/uml/uml.drawio">UML class diagram (drawio)</a>
