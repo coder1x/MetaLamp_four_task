@@ -122,18 +122,20 @@ class Values {
     return true;
   }
 
-  private setDom() {
-    const getDom = (str: string) => this.elem.querySelector(
+  private getDom(str: string) {
+    return this.elem.querySelector(
       `${this.nameClass
       }__${str
       }-wrap input`,
     ) as HTMLInputElement;
+  }
 
-    this.min = getDom('min');
-    this.max = getDom('max');
-    this.from = getDom('from');
-    this.to = getDom('to');
-    this.step = getDom('step');
+  private setDom() {
+    this.min = this.getDom('min');
+    this.max = this.getDom('max');
+    this.from = this.getDom('from');
+    this.to = this.getDom('to');
+    this.step = this.getDom('step');
   }
 }
 

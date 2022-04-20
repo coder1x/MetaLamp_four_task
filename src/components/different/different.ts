@@ -180,20 +180,22 @@ class Different {
     });
   }
 
+  private getDom(str: string) {
+    return this.elem.querySelector(
+      `${this.nameClass}__${str}-wrap input`,
+    ) as HTMLInputElement;
+  }
+
   private setDom() {
     if (this.panel) {
       this.modify = `${this.panel.classList[0]}_vertical`;
     }
 
-    const getDom = (str: string) => this.elem.querySelector(
-      `${this.nameClass}__${str}-wrap input`,
-    ) as HTMLInputElement;
-
-    this.type = getDom('double');
-    this.disabled = getDom('disabled');
-    this.bar = getDom('bar');
-    this.unsubscribtion = getDom('unsubscribtion');
-    this.orientation = getDom('vertical');
+    this.type = this.getDom('double');
+    this.disabled = this.getDom('disabled');
+    this.bar = this.getDom('bar');
+    this.unsubscribtion = this.getDom('unsubscribtion');
+    this.orientation = this.getDom('vertical');
     this.reset = this.elem.querySelector(`${this.nameClass}__reset`);
 
     this.select = new Select(

@@ -94,13 +94,15 @@ class KeyboardControl {
     return true;
   }
 
-  private setDom() {
-    const getDom = (str: string) => this.elem.querySelector(
+  private getDom(str: string) {
+    return this.elem.querySelector(
       `${this.nameClass}__${str}-wrap input`,
     ) as HTMLInputElement;
+  }
 
-    this.keyStepOne = getDom('one');
-    this.keyStepHold = getDom('hold');
+  private setDom() {
+    this.keyStepOne = this.getDom('one');
+    this.keyStepHold = this.getDom('hold');
   }
 }
 

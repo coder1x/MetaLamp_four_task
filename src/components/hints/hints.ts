@@ -104,15 +104,17 @@ class Hints {
     });
   }
 
-  private setDom() {
-    const getDom = (str: string) => this.elem.querySelector(
+  private getDom(str: string) {
+    return this.elem.querySelector(
       `${this.nameClass}__${str}-wrap input`,
     ) as HTMLInputElement;
+  }
 
-    this.tipMinMax = getDom('minmax');
-    this.tipFromTo = getDom('fromto');
-    this.tipPrefix = getDom('prefix');
-    this.tipPostfix = getDom('postfix');
+  private setDom() {
+    this.tipMinMax = this.getDom('minmax');
+    this.tipFromTo = this.getDom('fromto');
+    this.tipPrefix = this.getDom('prefix');
+    this.tipPostfix = this.getDom('postfix');
   }
 }
 

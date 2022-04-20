@@ -45,10 +45,11 @@ class Grid extends Observer {
     return !(width > height);
   }
 
-  createMark = (valMark: {
+  @boundMethod
+  createMark(valMark: {
     val: number,
     position: number,
-  }[]) => {
+  }[]) {
     valMark.forEach((item) => {
       const { val, position } = item;
       const polName = `${this.rsName}__grid-pol`;

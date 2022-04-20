@@ -66,14 +66,14 @@ class Controller {
     return true;
   }
 
+  private static subscribe(talking: Model | View, items: Function[]) {
+    return items.forEach((item) => {
+      talking.subscribeOB(item);
+    });
+  }
+
   private createListeners() {
     if (!this.model || !this.view) return false;
-
-    const subscribe = (talking: Model | View, items: Function[]) => {
-      items.forEach((item) => {
-        talking.subscribeOB(item);
-      });
-    };
 
     const SModel = [
       this.handleStart,
@@ -90,7 +90,7 @@ class Controller {
       this.handleStep,
     ];
 
-    subscribe(this.model, SModel);
+    Controller.subscribe(this.model, SModel);
 
     const SView = [
       this.handleDotMove,
@@ -103,7 +103,7 @@ class Controller {
       this.handleDataAttributes,
     ];
 
-    subscribe(this.view, SView);
+    Controller.subscribe(this.view, SView);
 
     return true;
   }

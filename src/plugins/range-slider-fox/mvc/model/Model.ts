@@ -333,14 +333,6 @@ class Model extends Observer {
       position: number,
     }[] = [];
 
-    const calcPositionGrid = (value: number, step: number) => {
-      const shift = value + step;
-      return {
-        value: shift,
-        position: ((shift - (this.min ?? 0)) * 100) / this.getRange(),
-      };
-    };
-
     const notify = (valueG: number, position: number) => {
       masMark.push({
         val: +valueG.toFixed(this.gridRound ?? 0),
@@ -350,11 +342,11 @@ class Model extends Observer {
 
     notify(this.min ?? 0, 0);
     const { interval, step } = this.calcGridNumStep();
-    let obj = calcPositionGrid(this.min ?? 0, step);
+    let obj = this.calcPositionGrid(this.min ?? 0, step);
     notify(obj.value, obj.position);
 
     for (let i = 1; i < interval - 1; i += 1) {
-      obj = calcPositionGrid(obj.value, step);
+      obj = this.calcPositionGrid(obj.value, step);
       notify(obj.value, obj.position);
     }
     notify(this.max ?? 0, 100);
@@ -626,6 +618,14 @@ class Model extends Observer {
     return { from, to };
   }
 
+  private calcPositionGrid(value: number, step: number) {
+    const shift = value + step;
+    return {
+      value: shift,
+      position: ((shift - (this.min ?? 0)) * 100) / this.getRange(),
+    };
+  }
+
   private static getValStep(value: number, step: number, items: number[]) {
     for (let i = 0; i < items.length; i += 1) {
       const item = items[i];
@@ -803,6 +803,11 @@ class Model extends Observer {
     return false;
   }
 
+  private validVal(val: number) {
+    if (val <= this.getRange()) return val;
+    return this.getRange();
+  }
+
   private setStep(options: RangeSliderOptions): boolean {
     if (!Model.propertiesValidation([
       'step',
@@ -823,14 +828,9 @@ class Model extends Observer {
     keyStepHold = Number(this.checkValue(keyStepHold, 'keyStepHold'));
     if (keyStepHold == null) { keyStepHold = 0; }
 
-    const validVal = (val: number) => {
-      if (val <= this.getRange()) return val;
-      return this.getRange();
-    };
-
-    this.step = validVal(+step);
-    this.keyStepOne = validVal(+keyStepOne);
-    this.keyStepHold = validVal(+keyStepHold);
+    this.step = this.validVal(+step);
+    this.keyStepOne = this.validVal(+keyStepOne);
+    this.keyStepHold = this.validVal(+keyStepHold);
 
     this.notifyOB({
       key: 'Step',
@@ -1048,6 +1048,15 @@ class Model extends Observer {
     return true;
   }
 
+  private static checkData(fun: Function | null) {
+    if (fun === null) {
+      return null;
+    }
+    if (typeof fun === 'function') return fun;
+
+    return null;
+  }
+
   private setCallbacks(options: RangeSliderOptions): boolean {
     const checkKey = [
       'onStart',
@@ -1064,36 +1073,27 @@ class Model extends Observer {
     }
     if (!flag) return false;
 
-    const checkData = (fun: Function | null) => {
-      if (fun === null) {
-        return null;
-      }
-      if (typeof fun === 'function') return fun;
-
-      return null;
-    };
-
     if (options.onChange !== this.onChange) {
       if (options.onChange !== undefined) {
-        this.onChange = checkData(options.onChange);
+        this.onChange = Model.checkData(options.onChange);
       }
     }
 
     if (options.onUpdate !== this.onUpdate) {
       if (options.onUpdate !== undefined) {
-        this.onUpdate = checkData(options.onUpdate);
+        this.onUpdate = Model.checkData(options.onUpdate);
       }
     }
 
     if (options.onStart !== this.onStart) {
       if (options.onStart !== undefined) {
-        this.onStart = checkData(options.onStart);
+        this.onStart = Model.checkData(options.onStart);
       }
     }
 
     if (options.onReset !== this.onReset) {
       if (options.onReset !== undefined) {
-        this.onReset = checkData(options.onReset);
+        this.onReset = Model.checkData(options.onReset);
       }
     }
 

@@ -43,17 +43,6 @@ class Handle extends Observer {
     if (double && this.elemFrom && this.elemTo) return false;
     if (!double && this.elemFrom && !this.elemTo) return false;
 
-    const createElem = (teg: string, className: string[]) => {
-      const elem = document.createElement(teg);
-
-      className.forEach((item) => {
-        elem.classList.add(item);
-      });
-
-      elem.setAttribute('tabindex', '0');
-      return elem;
-    };
-
     const fromClassName = `${this.rsName}__from`;
     const toClassName = `${this.rsName}__to`;
 
@@ -62,7 +51,7 @@ class Handle extends Observer {
 
     // don't create the element if it is already exist
     if (!fromElement) {
-      this.elemFrom = createElem(
+      this.elemFrom = Handle.createElem(
         'span',
         [
           fromClassName,
@@ -75,7 +64,10 @@ class Handle extends Observer {
     if (double) {
       // don't create the element if it is already exist
       if (!toElement) {
-        this.elemTo = createElem('span', [toClassName, `js-${toClassName}`]);
+        this.elemTo = Handle.createElem(
+          'span',
+          [toClassName, `js-${toClassName}`],
+        );
         this.wrapElem.appendChild(this.elemTo);
       }
     } else if (toElement) { // remove the dot if it exists
@@ -173,17 +165,11 @@ class Handle extends Observer {
       this.elemTo.addEventListener('keydown', this.handleToKeydown);
     }
 
-    const cancellation = (elem: HTMLElement) => {
-      const dom = elem;
-      dom.ondragstart = () => false;
-      dom.onselectstart = () => false;
-    };
-
     if (type === 'double') {
       if (!this.eventToFlag && this.elemTo) {
         this.elemTo.addEventListener('pointerdown', this.handleToPointerdown);
 
-        cancellation(this.elemTo);
+        Handle.cancellation(this.elemTo);
         this.eventToFlag = true;
       }
     }
@@ -191,10 +177,27 @@ class Handle extends Observer {
     if (!this.eventFromFlag && this.elemFrom) {
       this.elemFrom.addEventListener('pointerdown', this.handleFromPointerdown);
 
-      cancellation(this.elemFrom);
+      Handle.cancellation(this.elemFrom);
       this.eventFromFlag = true;
     }
     return true;
+  }
+
+  private static cancellation(elem: HTMLElement) {
+    const dom = elem;
+    dom.ondragstart = () => false;
+    dom.onselectstart = () => false;
+  }
+
+  private static createElem(teg: string, className: string[]) {
+    const elem = document.createElement(teg);
+
+    className.forEach((item) => {
+      elem.classList.add(item);
+    });
+
+    elem.setAttribute('tabindex', '0');
+    return elem;
   }
 
   @boundMethod

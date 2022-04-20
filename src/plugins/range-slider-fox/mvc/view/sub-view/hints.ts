@@ -368,6 +368,13 @@ class Hints {
     return { tipSingleXY, tipSingleB };
   }
 
+  private static display(elem: HTMLElement | null, flag: boolean) {
+    if (elem) {
+      const dom = elem;
+      dom.style.visibility = flag ? 'visible' : 'hidden';
+    }
+  }
+
   private toggleDisplay(options: CheckTip) {
     const {
       tipMaxXY,
@@ -378,22 +385,15 @@ class Hints {
       tipMinXRight,
     } = options;
 
-    const display = (elem: HTMLElement | null, flag: boolean) => {
-      if (elem) {
-        const dom = elem;
-        dom.style.visibility = flag ? 'visible' : 'hidden';
-      }
-    };
-
     let maxVisible = visibilityTipMax;
     let minVisible = visibilityTipMin;
 
     if (this.tipFrom && this.tipFromTo) {
       if (this.tipTo) {
         const visible = !visibilityTipSingle;
-        display(this.tipFrom, visible);
-        display(this.tipTo, visible);
-        display(this.tipSingle, visibilityTipSingle);
+        Hints.display(this.tipFrom, visible);
+        Hints.display(this.tipTo, visible);
+        Hints.display(this.tipSingle, visibilityTipSingle);
 
         if (visibilityTipSingle) {
           const { tipSingleXY, tipSingleB } = this.getBoundingSingle();
@@ -406,14 +406,14 @@ class Hints {
           }
         }
       } else {
-        display(this.tipFrom, true);
-        display(this.tipSingle, false);
+        Hints.display(this.tipFrom, true);
+        Hints.display(this.tipSingle, false);
       }
     }
 
     if (this.tipMin && this.tipMinMax) {
-      display(this.tipMax, !(maxVisible && this.tipFrom));
-      display(this.tipMin, minVisible);
+      Hints.display(this.tipMax, !(maxVisible && this.tipFrom));
+      Hints.display(this.tipMin, minVisible);
     }
   }
 }

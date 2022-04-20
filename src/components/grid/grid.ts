@@ -184,16 +184,18 @@ class Grid {
     return true;
   }
 
-  private setDom() {
-    const getDom = (str: string) => this.elem.querySelector(
+  private getDom(str: string) {
+    return this.elem.querySelector(
       `${this.nameClass}__${str}-wrap input`,
     ) as HTMLInputElement;
+  }
 
-    this.grid = getDom('grid');
-    this.snap = getDom('snap');
-    this.interval = getDom('interval');
-    this.step = getDom('step');
-    this.gridRound = getDom('round');
+  private setDom() {
+    this.grid = this.getDom('grid');
+    this.snap = this.getDom('snap');
+    this.interval = this.getDom('interval');
+    this.step = this.getDom('step');
+    this.gridRound = this.getDom('round');
   }
 }
 

@@ -117,31 +117,34 @@ class View extends Observer {
     return size;
   }
 
+  static createElem(teg: string, className: string[]) {
+    const elem = document.createElement(teg);
+
+    className.forEach((item) => {
+      elem.classList.add(item);
+    });
+
+    return elem;
+  }
+
   createDomBase() {
-    const createElem = (teg: string, className: string[]) => {
-      const elem = document.createElement(teg);
-
-      className.forEach((item) => {
-        elem.classList.add(item);
-      });
-
-      return elem;
-    };
-
-    this.rangeSlider = createElem('div', [this.rsName, `js-${this.rsName}`]);
-    this.rsTop = createElem('div', [
+    this.rangeSlider = View.createElem(
+      'div',
+      [this.rsName, `js-${this.rsName}`],
+    );
+    this.rsTop = View.createElem('div', [
       `${this.rsName}__top`,
       `js-${this.rsName}__top`,
     ]);
-    this.rsCenter = createElem('div', [
+    this.rsCenter = View.createElem('div', [
       `${this.rsName}__center`,
       `js-${this.rsName}__center`,
     ]);
-    this.rsBottom = createElem('div', [
+    this.rsBottom = View.createElem('div', [
       `${this.rsName}__bottom`,
       `js-${this.rsName}__bottom`,
     ]);
-    this.rsLine = createElem('span', [
+    this.rsLine = View.createElem('span', [
       `${this.rsName}__line`,
       `js-${this.rsName}__line`,
     ]);
