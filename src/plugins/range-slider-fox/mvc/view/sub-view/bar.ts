@@ -115,11 +115,9 @@ class Bar extends Observer {
 
   @boundMethod
   private handleBarClick(event: MouseEvent) {
-    const dotXY = this.vertical ? event.offsetY : event.offsetX;
-
     this.notifyOB({
       key: 'ClickBar',
-      clientXY: dotXY,
+      clientXY: this.vertical ? event.offsetY : event.offsetX,
     });
   }
 

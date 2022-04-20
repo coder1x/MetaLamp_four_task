@@ -119,9 +119,8 @@ class Model extends Observer {
 
   reset() {
     const options = this.defaultData ?? {};
-    const opKey = Object.keys(options);
 
-    opKey.forEach((key) => {
+    Object.keys(options).forEach((key) => {
       // использую type assertions так как не нашёл возможности передавать нужный тип
       // не могу отказаться от данной конструкции кода, так как это сильно уменьшает копипаст
       const value = Model.getProperty(options, key as keyof RangeSliderOptions);
@@ -184,19 +183,13 @@ class Model extends Observer {
   // ---------------------------------- Handle
 
   calcPositionDotFrom() {
-    const from = this.from ?? 0;
-    const min = this.min ?? 0;
-
-    this.fromP = (from - min) / this.valP; // left dot position (in %)
+    this.fromP = ((this.from ?? 0) - (this.min ?? 0)) / this.valP; // left dot position (in %)
     this.limitFrom = this.fromP;
     return this.fromP;
   }
 
   calcPositionDotTo() {
-    const to = this.to ?? 0;
-    const min = this.min ?? 0;
-
-    this.toP = (to - min) / this.valP; // right dot position (in %)
+    this.toP = ((this.to ?? 0) - (this.min ?? 0)) / this.valP; // right dot position (in %)
     this.limitTo = this.toP;
     return this.toP;
   }
@@ -220,8 +213,6 @@ class Model extends Observer {
       position: options.position,
     });
 
-    const limitDot = !(this.limitFrom > this.limitTo);
-
     if (percent < 0) percent = 0;
     if (percent > 100) percent = 100;
 
@@ -230,7 +221,7 @@ class Model extends Observer {
     if (typeFlag) { // if single dot
       this.fromP = percent;
       fromFlag = true;
-    } else if (limitDot) { // if double dot and FROM is less than TO
+    } else if (!(this.limitFrom > this.limitTo)) { // if double dot and FROM is less than TO
       // depending on which dot is mooving
       if (typeFrom) {
         this.fromP = percent;
@@ -319,26 +310,24 @@ class Model extends Observer {
 
   @boundMethod
   calcPositionTipFrom(tipFrom: number) {
-    const tipFromP = this.calcWidthP(tipFrom - 4);
-    return this.fromP - tipFromP;
+    return this.fromP - this.calcWidthP(tipFrom - 4);
   }
 
   @boundMethod
   calcPositionTipTo(tipTo: number) {
-    const tipToP = this.calcWidthP(tipTo - 4);
-    return this.toP - tipToP;
+    return this.toP - this.calcWidthP(tipTo - 4);
   }
 
   @boundMethod
   calcPositionTipSingle(singleWH: number) {
-    const line = (this.toP - this.fromP) / 2;
-    const centerFromTo = this.fromP + line;
-    const tipSingleP = this.calcWidthP(singleWH);
-    return centerFromTo - tipSingleP;
+    return (
+      this.fromP
+      + ((this.toP - this.fromP) / 2)
+      - this.calcWidthP(singleWH)
+    );
   }
 
   createMark() {
-    const range = this.getRange();
     const masMark: {
       val: number,
       position: number,
@@ -346,15 +335,17 @@ class Model extends Observer {
 
     const calcPositionGrid = (value: number, step: number) => {
       const shift = value + step;
-      const min = this.min ?? 0;
-      const position = ((shift - min) * 100) / range;
-      return { value: shift, position };
+      return {
+        value: shift,
+        position: ((shift - (this.min ?? 0)) * 100) / this.getRange(),
+      };
     };
 
     const notify = (valueG: number, position: number) => {
-      const gridRound = this.gridRound ?? 0;
-      const val = +valueG.toFixed(gridRound);
-      masMark.push({ val, position });
+      masMark.push({
+        val: +valueG.toFixed(this.gridRound ?? 0),
+        position,
+      });
     };
 
     notify(this.min ?? 0, 0);
@@ -394,10 +385,9 @@ class Model extends Observer {
     const vertical = this.orientation === 'vertical';
     const onePercent = this.wrapWH / 100; // one percent of the entire scale
 
-    const verticalC = (valPercent: number) => {
-      const remainderPercent = 100 - valPercent;
-      return this.clickLine(remainderPercent * onePercent + pointXY);
-    };
+    const verticalC = (valPercent: number) => this.clickLine(
+      ((100 - valPercent) * onePercent) + pointXY,
+    );
 
     if (this.type === 'single') {
       if (vertical) return verticalC(this.fromP);
@@ -440,7 +430,6 @@ class Model extends Observer {
   // ---------------------------------- Line
   @boundMethod
   clickLine(pointXY: number) {
-    const vertical = this.orientation === 'vertical';
     let { from } = this;
     let { to } = this;
     let fromFlag = false;
@@ -449,7 +438,7 @@ class Model extends Observer {
     const onePercent = this.wrapWH / 100; // one percent of the entire scale
     let pointPercent = 0;
 
-    if (vertical) {
+    if (this.orientation === 'vertical') {
       pointPercent = 100 - (pointXY / onePercent); // total percentage in the clicked area
     } else {
       pointPercent = pointXY / onePercent; // total percentage in the clicked area
@@ -612,8 +601,9 @@ class Model extends Observer {
           this.keyStepOne = 1;
         }
         if (!this.keyStepHold && this.keyStepOne) {
-          const length = Model.trimFraction(this.keyStepOne);
-          this.keyStepHold = +this.keyStepOne.toFixed(length);
+          this.keyStepHold = +this.keyStepOne.toFixed(
+            Model.trimFraction(this.keyStepOne),
+          );
         }
 
         if (repeat) {
@@ -640,8 +630,7 @@ class Model extends Observer {
     for (let i = 0; i < items.length; i += 1) {
       const item = items[i];
       if (value < item) {
-        const ost = step - (item - value);
-        return ost < step / 2
+        return (step - (item - value)) < step / 2
           ? items[i ? i - 1 : i] : item;
       }
     }
@@ -657,9 +646,7 @@ class Model extends Observer {
   }
 
   private static trimFraction(num: number) {
-    const integer = Math.trunc(num);
-    const str = String(num).replace(`${integer}.`, '');
-    return str.length;
+    return String(num).replace(`${Math.trunc(num)}.`, '').length;
   }
 
   private defaultConfig(options: RangeSliderOptions) {
@@ -1028,8 +1015,7 @@ class Model extends Observer {
   private setOrientationData(options: RangeSliderOptions): boolean {
     if (!Model.propertiesValidation(['orientation'], options)) return false;
 
-    const str = options.orientation ?? '';
-    const orientation = str.replace(/\s/g, '');
+    const orientation = options.orientation ?? ''.replace(/\s/g, '');
 
     if (orientation === 'horizontal' || orientation === 'vertical') {
       this.orientation = orientation;
@@ -1046,8 +1032,7 @@ class Model extends Observer {
   private setThemeData(options: RangeSliderOptions): boolean {
     if (!Model.propertiesValidation(['theme'], options)) return false;
 
-    const str = options.theme ?? '';
-    const theme = str.replace(/\s/g, '');
+    const theme = options.theme ?? ''.replace(/\s/g, '');
 
     if (theme.length <= 20) {
       this.theme = theme;
@@ -1064,7 +1049,6 @@ class Model extends Observer {
   }
 
   private setCallbacks(options: RangeSliderOptions): boolean {
-    const keyC = Object.keys(options);
     const checkKey = [
       'onStart',
       'onChange',
@@ -1073,7 +1057,7 @@ class Model extends Observer {
     ];
     let flag = false;
     for (let i = 0; i < checkKey.length; i += 1) {
-      if (keyC.lastIndexOf(checkKey[i]) !== -1) {
+      if (Object.keys(options).lastIndexOf(checkKey[i]) !== -1) {
         flag = true;
         break;
       }
@@ -1211,11 +1195,10 @@ class Model extends Observer {
     const {
       fl, clientXY, shiftXY, position,
     } = options;
-    const vertical = this.orientation === 'vertical';
     const dotXY = clientXY - shiftXY;
     let number = 0;
 
-    if (vertical) {
+    if (this.orientation === 'vertical') {
       number = position - dotXY;
     } else {
       number = dotXY - position;

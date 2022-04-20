@@ -143,9 +143,10 @@ class Hints {
   setValTipMinMax(min: number, max: number) {
     if (!this.tipMin || !this.tipMax) return false;
 
-    const tipMin = this.setData(this.tipMin, min);
-    const tipMax = this.setData(this.tipMax, max);
-    return { tipMin, tipMax };
+    return {
+      tipMin: this.setData(this.tipMin, min),
+      tipMax: this.setData(this.tipMax, max),
+    };
   }
 
   setValTipFrom(from: number) {
@@ -411,8 +412,7 @@ class Hints {
     }
 
     if (this.tipMin && this.tipMinMax) {
-      const visMax = !(maxVisible && this.tipFrom);
-      display(this.tipMax, visMax);
+      display(this.tipMax, !(maxVisible && this.tipFrom));
       display(this.tipMin, minVisible);
     }
   }

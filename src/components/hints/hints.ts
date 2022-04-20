@@ -2,10 +2,10 @@ import { boundMethod } from 'autobind-decorator';
 import './hints.scss';
 
 interface Options {
-  tipMinMax?: boolean;
-  tipFromTo?: boolean;
-  tipPrefix?: string;
-  tipPostfix?: string;
+  tipMinMax?: boolean | null;
+  tipFromTo?: boolean | null;
+  tipPrefix?: string | null;
+  tipPostfix?: string | null;
 }
 
 class Hints {
@@ -63,9 +63,8 @@ class Hints {
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   setAction(obj: any) {
     this.objRangeSlider = obj;
-    const inputElements = [this.tipPrefix, this.tipPostfix];
 
-    inputElements.forEach((item) => {
+    [this.tipPrefix, this.tipPostfix].forEach((item) => {
       if (!item) return;
       item.addEventListener('change', this.handleInputData);
     });

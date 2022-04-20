@@ -2,11 +2,11 @@ import { boundMethod } from 'autobind-decorator';
 import './grid.scss';
 
 interface Options {
-  grid?: boolean;
-  gridSnap?: boolean;
-  gridNum?: number;
-  gridStep?: number;
-  gridRound?: number;
+  grid?: boolean | null;
+  gridSnap?: boolean | null;
+  gridNum?: number | null;
+  gridStep?: number | null;
+  gridRound?: number | null;
 }
 
 class Grid {
@@ -76,13 +76,18 @@ class Grid {
     this.objRangeSlider = obj;
     this.mapInput = new Map();
 
-    const interval = (this.interval && this.interval.value) ?? '';
-    const step = (this.step && this.step.value) ?? '';
-    const gridRound = (this.gridRound && this.gridRound.value) ?? '';
-
-    this.mapInput.set('gridNum', interval);
-    this.mapInput.set('gridStep', step);
-    this.mapInput.set('gridRound', gridRound);
+    this.mapInput.set(
+      'gridNum',
+      (this.interval && this.interval.value) ?? '',
+    );
+    this.mapInput.set(
+      'gridStep',
+      (this.step && this.step.value) ?? '',
+    );
+    this.mapInput.set(
+      'gridRound',
+      (this.gridRound && this.gridRound.value) ?? '',
+    );
 
     if (!this.gridRound || !this.step) return false;
 
@@ -93,9 +98,7 @@ class Grid {
 
     this.interval.addEventListener('change', this.handleIntervalChange);
 
-    const inputElements = [this.interval, this.step, this.gridRound];
-
-    inputElements.forEach((item) => {
+    [this.interval, this.step, this.gridRound].forEach((item) => {
       item.addEventListener('input', this.handleInputProcessing);
     });
     this.grid.addEventListener('click', this.handleGridClick);
@@ -145,9 +148,8 @@ class Grid {
     const elem = event.currentTarget as HTMLInputElement;
     const value = elem.value.replace(/[^.\d]/g, '');
     const regexp = /^\d*?[.]?\d*$/;
-    const valid = regexp.test(value);
 
-    if (valid) {
+    if (regexp.test(value)) {
       this.mapInput.set(elem.name, value);
       elem.value = value;
     } else {

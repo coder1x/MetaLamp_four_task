@@ -3,11 +3,11 @@ import './different.scss';
 import Select from '@com/select/Select';
 
 interface Options {
-  type?: string;
-  disabled?: boolean;
-  bar?: boolean;
-  orientation?: string;
-  theme?: string;
+  type?: string | null;
+  disabled?: boolean | null;
+  bar?: boolean | null;
+  orientation?: string | null;
+  theme?: string | null;
 }
 
 class Different {
@@ -159,16 +159,14 @@ class Different {
   @boundMethod
   private handleTypeClick(event: Event) {
     const elem = event.target as HTMLInputElement;
-    const value = elem.checked ? 'double' : 'single';
     this.objRangeSlider.update({
-      type: value,
+      type: elem.checked ? 'double' : 'single',
     });
   }
 
   @boundMethod
   private handleOrientationClick(event: Event) {
     const elem = event.target as HTMLInputElement;
-    const value = elem.checked ? 'vertical' : 'horizontal';
     const { classList } = this.panel as Element;
 
     if (elem.checked) {
@@ -178,7 +176,7 @@ class Different {
     }
 
     this.objRangeSlider.update({
-      orientation: value,
+      orientation: elem.checked ? 'vertical' : 'horizontal',
     });
   }
 
@@ -197,8 +195,11 @@ class Different {
     this.unsubscribtion = getDom('unsubscribtion');
     this.orientation = getDom('vertical');
     this.reset = this.elem.querySelector(`${this.nameClass}__reset`);
-    const selectE = this.elem.querySelector('.js-select') as Element;
-    this.select = new Select('.js-select', selectE);
+
+    this.select = new Select(
+      '.js-select',
+      this.elem.querySelector('.js-select') as Element,
+    );
   }
 }
 

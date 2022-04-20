@@ -62,15 +62,13 @@ class Select {
   }
 
   private getElement(str: string, domBase?: Element) {
-    const dom = domBase ?? this.elem;
-    const selector = this.className + str;
-    return dom.querySelector(selector);
+    return (domBase ?? this.elem).querySelector(this.className + str);
   }
 
   private getElements(str: string, domBase?: Element): Element[] {
-    const dom = domBase ?? this.elem;
-    const selector = this.className + str;
-    return [...dom.querySelectorAll(selector)];
+    return [
+      ...(domBase ?? this.elem).querySelectorAll(this.className + str),
+    ];
   }
 
   private setDomElem() {
@@ -85,8 +83,7 @@ class Select {
   private setValSelect(elem: HTMLElement) {
     if (!this.button || !this.input) return false;
 
-    const text = elem.innerText;
-    this.button.innerText = text;
+    this.button.innerText = elem.innerText;
     const value = elem.getAttribute('data-val');
     this.input.value = value ?? '';
 
@@ -107,34 +104,33 @@ class Select {
   }
 
   private static getVisible(elem: HTMLElement) {
-    const display = window.getComputedStyle(elem, null)
-      .getPropertyValue('display');
-    return display !== 'none';
+    return window.getComputedStyle(elem, null)
+      .getPropertyValue('display') !== 'none';
   }
 
   private toggle(flag = false) {
     if (!this.options) return false;
 
-    const UlVisible: boolean = Select.getVisible(this.options);
-    const flagVisible = !UlVisible && !flag;
-    this.toggleModify(this.elem, flagVisible);
+    this.toggleModify(
+      this.elem,
+      !Select.getVisible(this.options) && !flag,
+    );
 
     return true;
   }
 
   private getModify() {
-    const selector = `${this.className.replace('js-', '')}_visible`;
-    return selector.replace(/^\./, '');
+    return `${this.className.replace('js-', '')}_visible`.replace(/^\./, '');
   }
 
   private toggleModify(elem: Element, flag = false) {
     const clearName = this.getModify();
-    const objClass = elem.classList;
+    const { classList } = elem;
 
     if (flag) {
-      objClass.add(clearName);
+      classList.add(clearName);
     } else {
-      objClass.remove(clearName);
+      classList.remove(clearName);
     }
   }
 
@@ -178,16 +174,15 @@ class Select {
     } else if (mouse === 'click') { flag = true; }
 
     if (flag) {
-      const dom = event.target as HTMLElement;
-      this.setValSelect(dom);
+      this.setValSelect(event.target as HTMLElement);
       this.toggle(true);
     }
   }
 
   @boundMethod
   private handleDocumentClick(event: MouseEvent) {
-    const dom = event.target as Element;
-    const elem = dom.closest(`.${this.getModify()}`) ?? false;
+    const elem = (event.target as Element)
+      .closest(`.${this.getModify()}`) ?? false;
     if (!elem) {
       this.toggle(true);
     }

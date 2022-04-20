@@ -143,15 +143,14 @@ class Controller {
     this.model.calcOnePercent();
     const lockFlag = this.startFlag && !this.resetFlag;
 
-    const min = options.min ?? 0;
-    const max = options.max ?? 0;
-
     if (lockFlag) {
-      this.view.updateTipMinMax(min, max);
+      this.view.updateTipMinMax(
+        options.min ?? 0,
+        options.max ?? 0,
+      );
     }
 
-    const obj = this.model.getOptions();
-    if (obj.grid && lockFlag) {
+    if (this.model.getOptions().grid && lockFlag) {
       this.view.deleteGrid();
       this.model.createMark();
       this.view.createDomGrid();
@@ -176,11 +175,11 @@ class Controller {
     if (key !== 'DotKeyDown' || !this.model) return false;
     if (this.lock) return false;
 
-    const keyRepeat = options.keyRepeat ?? false;
-    const keySign = options.keySign ?? '';
-    const dot = options.dot ?? '';
-
-    this.model.calcKeyDown(keyRepeat, keySign, dot);
+    this.model.calcKeyDown(
+      options.keyRepeat ?? false,
+      options.keySign ?? '',
+      options.dot ?? '',
+    );
     return true;
   }
 
@@ -194,12 +193,10 @@ class Controller {
 
     const lockFlag = this.startFlag && !this.resetFlag;
     this.view.createDotElem(type); // create dot
-    const fromCalc = this.model.calcPositionDotFrom();
-    this.view.setDotFrom(fromCalc);
+    this.view.setDotFrom(this.model.calcPositionDotFrom());
 
     if (type === 'double') {
-      const to = this.model.calcPositionDotTo();
-      this.view.setDotTo(to);
+      this.view.setDotTo(this.model.calcPositionDotTo());
     }
 
     this.view.setDotActions(type);
@@ -231,18 +228,12 @@ class Controller {
     if (key !== 'DotMove' || !this.model) return false;
     if (this.lock) return false;
 
-    const type = options.type ?? '';
-    const wrapWH = options.wrapWH ?? 0;
-    const position = options.position ?? 0;
-    const clientXY = options.clientXY ?? 0;
-    const shiftXY = options.shiftXY ?? 0;
-
     this.model.calcDotPosition({
-      type,
-      wrapWH,
-      position,
-      clientXY,
-      shiftXY,
+      type: options.type ?? '',
+      wrapWH: options.wrapWH ?? 0,
+      position: options.position ?? 0,
+      clientXY: options.clientXY ?? 0,
+      shiftXY: options.shiftXY ?? 0,
     });
     return true;
   }
@@ -263,9 +254,7 @@ class Controller {
 
     if (!this.view || !this.model) return false;
 
-    const lockFlag = this.startFlag && !this.resetFlag;
-
-    if (lockFlag) {
+    if (this.startFlag && !this.resetFlag) {
       this.view.deleteGrid();
       if (options.grid) {
         this.model.createMark();
@@ -282,9 +271,7 @@ class Controller {
 
     if (!this.view || !this.model) return false;
 
-    const orientation = options.orientation ?? '';
-
-    await this.view.setOrientation(orientation);
+    await this.view.setOrientation(options.orientation ?? '');
     const obj = await this.model.getOptions();
     this.updateHints(obj.type ?? '', obj.from ?? 0, obj.to ?? 0);
 
@@ -303,8 +290,7 @@ class Controller {
     const { key } = options;
     if (key !== 'ThemeData' || !this.view) return false;
 
-    const theme = options.theme ?? '';
-    this.view.setTheme(theme);
+    this.view.setTheme(options.theme ?? '');
     return true;
   }
 
@@ -315,17 +301,16 @@ class Controller {
 
     if (!this.view || !this.model) return false;
 
-    const wrapWH = this.view.getWrapWH();
-    this.model.setWrapWH(wrapWH);
+    this.model.setWrapWH(this.view.getWrapWH());
     this.view.setHintsData(options);
 
-    const lockFlag = this.startFlag && !this.resetFlag;
-
-    const type = options.type ?? '';
-    const from = options.from ?? 0;
-    const to = options.to ?? 0;
-
-    if (lockFlag) { this.updateHints(type, from, to); }
+    if (this.startFlag && !this.resetFlag) {
+      this.updateHints(
+        options.type ?? '',
+        options.from ?? 0,
+        options.to ?? 0,
+      );
+    }
     return true;
   }
 
@@ -376,8 +361,7 @@ class Controller {
     if (key !== 'ClickLine' || !this.model) return false;
     if (this.lock) return false;
 
-    const clientXY = options.clientXY ?? 0;
-    this.model.clickLine(clientXY);
+    this.model.clickLine(options.clientXY ?? 0);
     return true;
   }
 
@@ -388,8 +372,7 @@ class Controller {
 
     if (!this.model) return false;
 
-    const wrapWH = options.wrapWH ?? 0;
-    this.model.setWrapWH(wrapWH);
+    this.model.setWrapWH(options.wrapWH ?? 0);
 
     return true;
   }
@@ -401,9 +384,7 @@ class Controller {
 
     if (!this.view || !this.model) return false;
 
-    const bar = options.bar ?? false;
-
-    this.view.setVisibleBar(bar);
+    this.view.setVisibleBar(options.bar ?? false);
     const position = this.model.calcPositionBar();
     this.view.setBar(position.barX, position.widthBar);
     return true;
@@ -416,9 +397,7 @@ class Controller {
 
     if (this.lock) return false;
 
-    const clientXY = options.clientXY ?? 0;
-
-    this.model.clickBar(clientXY);
+    this.model.clickBar(options.clientXY ?? 0);
     return true;
   }
 
@@ -427,8 +406,7 @@ class Controller {
     const { key } = options;
     if (key !== 'CreateGrid' || !this.view) return false;
 
-    const valMark = options.valMark ?? [];
-    this.view.createMark(valMark);
+    this.view.createMark(options.valMark ?? []);
     return true;
   }
 
@@ -438,8 +416,7 @@ class Controller {
     if (key !== 'ClickMark' || !this.model) return false;
     if (this.lock) return false;
 
-    const valueG = options.valueG ?? 0;
-    this.model.clickMark(valueG);
+    this.model.clickMark(options.valueG ?? 0);
     return true;
   }
 
@@ -448,8 +425,7 @@ class Controller {
     const { key } = options;
     if (key !== 'SnapNum' || !this.model) return false;
 
-    const snapNum = options.snapNum ?? [];
-    this.model.calcSnap(snapNum);
+    this.model.calcSnap(options.snapNum ?? []);
     return true;
   }
 }

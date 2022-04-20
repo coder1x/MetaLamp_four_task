@@ -39,8 +39,8 @@ class Panel {
 
   createRangeSlider(options: RangeSliderOptions) {
     if (!this.elem) return false;
-    const selector = `${this.className}__slider-wrap`;
-    const elem = this.elem.querySelector(selector);
+
+    const elem = this.elem.querySelector(`${this.className}__slider-wrap`);
 
     const onStart = (data: RangeSliderOptions) => {
       this.setDataS(data);
@@ -206,10 +206,9 @@ class Panel {
 }
 
 function renderPanel(className: string) {
-  const components = document.querySelectorAll(className);
   const panels: Panel[] = [];
 
-  components.forEach((elem) => {
+  document.querySelectorAll(className).forEach((elem) => {
     panels.push(new Panel(elem, className));
   });
 

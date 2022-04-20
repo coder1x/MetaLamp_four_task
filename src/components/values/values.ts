@@ -2,11 +2,11 @@ import { boundMethod } from 'autobind-decorator';
 import './values.scss';
 
 interface Options {
-  min?: number;
-  max?: number;
-  from?: number;
-  to?: number;
-  step?: number;
+  min?: number | null;
+  max?: number | null;
+  from?: number | null;
+  to?: number | null;
+  step?: number | null;
 }
 
 class Values {
@@ -80,21 +80,13 @@ class Values {
     this.objRangeSlider = obj;
     this.mapInput = new Map();
 
-    const min = (this.min && this.min.value) ?? '';
-    const max = (this.max && this.max.value) ?? '';
-    const from = (this.from && this.from.value) ?? '';
-    const to = (this.to && this.to.value) ?? '';
-    const step = (this.step && this.step.value) ?? '';
+    this.mapInput.set('min', (this.min && this.min.value) ?? '');
+    this.mapInput.set('max', (this.max && this.max.value) ?? '');
+    this.mapInput.set('from', (this.from && this.from.value) ?? '');
+    this.mapInput.set('to', (this.to && this.to.value) ?? '');
+    this.mapInput.set('step', (this.step && this.step.value) ?? '');
 
-    this.mapInput.set('min', min);
-    this.mapInput.set('max', max);
-    this.mapInput.set('from', from);
-    this.mapInput.set('to', to);
-    this.mapInput.set('step', step);
-
-    const inputElements = [this.min, this.max, this.from, this.to, this.step];
-
-    inputElements.forEach((item) => {
+    [this.min, this.max, this.from, this.to, this.step].forEach((item) => {
       if (item) {
         item.addEventListener('change', this.handleInputChange);
         item.addEventListener('input', this.handleInputProcessing);
@@ -107,11 +99,10 @@ class Values {
     const elem = event.currentTarget as HTMLInputElement;
     const value = elem.value.replace(/[^-.\d]/g, '');
     const regexp = /^-?\d*?[.]?\d*$/;
-    const valid = regexp.test(value);
 
     if (!this.mapInput) return false;
 
-    if (valid) {
+    if (regexp.test(value)) {
       this.mapInput.set(elem.name, value);
       elem.value = value;
     } else {

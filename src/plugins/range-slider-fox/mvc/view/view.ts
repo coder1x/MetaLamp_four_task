@@ -71,9 +71,8 @@ class View extends Observer {
   setValueInput(from: number, to: number, type: string) {
     if (!this.elem) return false;
 
-    const typeElem = this.elem.constructor.name;
     let str = '';
-    if (typeElem === 'HTMLInputElement') {
+    if (this.elem.constructor.name === 'HTMLInputElement') {
       const input = this.elem as HTMLInputElement;
 
       input.value = str;
@@ -229,20 +228,23 @@ class View extends Observer {
     if (!this.hints) return [];
 
     const masFlag: boolean[] = [];
-    const tipPrefix = options.tipPrefix ?? '';
-    const tipPostfix = options.tipPostfix ?? '';
-    this.hints.setAdditionalText(tipPrefix, tipPostfix);
+    this.hints.setAdditionalText(
+      options.tipPrefix ?? '',
+      options.tipPostfix ?? '',
+    );
 
-    const tipFromTo = options.tipFromTo ?? false;
-    const tipMinMax = options.tipMinMax ?? false;
-    this.hints.setTipFlag(tipFromTo, tipMinMax);
+    this.hints.setTipFlag(
+      options.tipFromTo ?? false,
+      options.tipMinMax ?? false,
+    );
 
     if (options.tipMinMax) {
       masFlag.push(this.hints.createTipMinMax());
 
-      const min = options.min ?? 0;
-      const max = options.max ?? 0;
-      this.hints.setValTipMinMax(min, max);
+      this.hints.setValTipMinMax(
+        options.min ?? 0,
+        options.max ?? 0,
+      );
     } else {
       masFlag.push(this.hints.deleteTipMinMax());
     }
@@ -309,8 +311,8 @@ class View extends Observer {
   updateTipPosition(coordinates: UpdateTip) {
     if (!this.hints) return [];
     const masFlag: boolean[] = [];
-    const fromXY = coordinates.fromXY ?? 0;
-    masFlag.push(Boolean(this.hints.setPositionFrom(fromXY)));
+
+    masFlag.push(Boolean(this.hints.setPositionFrom(coordinates.fromXY ?? 0)));
     if (coordinates.toXY && coordinates.singleXY) {
       masFlag.push(Boolean(this.hints.setPositionTo(coordinates.toXY)));
       masFlag.push(Boolean(this.hints.setPositionSingle(coordinates.singleXY)));
@@ -327,10 +329,10 @@ class View extends Observer {
     masFlag.push(this.bar.setVisibleBar(bar));
     masFlag.push(this.bar.createDomBar());
 
-    const size = this.vertical
-      ? this.rsLine.offsetWidth : this.rsLine.offsetHeight;
-
-    masFlag.push(this.bar.setSizeWH(size));
+    masFlag.push(this.bar.setSizeWH(
+      this.vertical
+        ? this.rsLine.offsetWidth : this.rsLine.offsetHeight,
+    ));
 
     return masFlag;
   }
@@ -403,13 +405,11 @@ class View extends Observer {
         const value = this.elem.getAttribute(attribute) ?? '';
         const key = options.get(item);
 
-        const regNumber = /^-?\d*?[.]?\d*$/;
-        if (regNumber.test(value)) {
+        if (/^-?\d*?[.]?\d*$/.test(value)) {
           return [key, Number(value)];
         }
 
-        const regBoolean = /^(true|false)$/;
-        if (regBoolean.test(value)) {
+        if (/^(true|false)$/.test(value)) {
           return [key, (value === 'true')];
         }
         return [key, value];
@@ -434,9 +434,9 @@ class View extends Observer {
       const obj: RangeSliderOptions = {};
 
       mutation.forEach((item) => {
-        const attr = item.attributeName ?? '';
-        const trimAttr = attr.replace('data-', '');
-        const data = getDataAttr(trimAttr);
+        const data = getDataAttr(
+          (item.attributeName ?? '').replace('data-', ''),
+        );
 
         if (data) {
           const key = String(data[0]);
@@ -455,11 +455,12 @@ class View extends Observer {
       }
     });
 
-    const dom = this.elem as Element;
-
-    observer.observe(dom, {
-      attributeFilter: masDataAttr,
-    });
+    observer.observe(
+      (this.elem as Element),
+      {
+        attributeFilter: masDataAttr,
+      },
+    );
   }
 
   private static setProperty<T, K extends keyof T>(

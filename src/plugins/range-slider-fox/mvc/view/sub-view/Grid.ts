@@ -83,8 +83,7 @@ class Grid extends Observer {
   deleteGrid() {
     if (!this.elemGrid) return null;
 
-    const items = this.elemGrid.children;
-    if (items.length > 0) {
+    if (this.elemGrid.children.length > 0) {
       this.offOn = false;
       while (this.elemGrid.firstChild) {
         this.elemGrid.firstChild.remove();
@@ -95,8 +94,7 @@ class Grid extends Observer {
   }
 
   private static searchStr(text: string, str: string) {
-    const regexp = new RegExp(str, 'g');
-    return regexp.test(text);
+    return new RegExp(str, 'g').test(text);
   }
 
   private setAction(elem: HTMLElement) {
@@ -106,8 +104,7 @@ class Grid extends Observer {
   @boundMethod
   private handleMarkClick(event: Event) {
     const mark = event.target as HTMLElement;
-    const selector = `js-${this.rsName}__grid-mark`;
-    if (Grid.searchStr(mark.className, selector)) {
+    if (Grid.searchStr(mark.className, `js-${this.rsName}__grid-mark`)) {
       this.notifyOB({
         key: 'ClickMark',
         valueG: Number(mark.innerText),
@@ -131,11 +128,9 @@ class Grid extends Observer {
     const gridName = `${this.rsName}__grid`;
     this.elemGrid = Grid.createElem('div', [gridName, `js-${gridName}`]);
 
-    const observer = new MutationObserver(() => {
+    new MutationObserver(() => {
       this.shapingMark();
-    });
-
-    observer.observe(this.rsBottom, {
+    }).observe(this.rsBottom, {
       childList: true,
     });
   }
@@ -245,11 +240,10 @@ class Grid extends Observer {
   private visibleMark() {
     if (!this.elemGrid) return false;
     // define element index: show odd values and hide honest ones
-    const width = this.elemGrid.offsetWidth;
-    const height = this.elemGrid.offsetHeight;
-    const size = this.vertical ? height : width;
+    const wrapWH = this.vertical
+      ? this.elemGrid.offsetHeight
+      : this.elemGrid.offsetWidth;
 
-    const wrapWH = size;
     let i = 0;
     for (; i < this.sizeWH.length - 1; i += 1) {
       if (this.sizeWH[i] <= wrapWH) { break; }
@@ -270,8 +264,7 @@ class Grid extends Observer {
       snapNum.push(+elem.innerText);
     });
 
-    const length = this.oddElements[i].length - 1;
-    this.previousElem = this.oddElements[i][length];
+    this.previousElem = this.oddElements[i][this.oddElements[i].length - 1];
 
     this.visibleLastElem(snapNum);
 

@@ -1,6 +1,6 @@
 import { boundMethod } from 'autobind-decorator';
 import './code.scss';
-import RangeSliderOptions from '@com/interface/glob-interface';
+import RangeSliderOptions from '@com/interface/glob-interface.d';
 
 class CopyCode {
   private className: string;
@@ -22,7 +22,6 @@ class CopyCode {
 
     const key = Object.keys(options);
     const value = Object.values(options);
-    const name = this.className.replace('.', '');
     const child = this.ul.childNodes;
     const flag = !!child.length;
 
@@ -36,7 +35,10 @@ class CopyCode {
       const text = `${key[i]}: ${valStr},`;
 
       if (!flag) {
-        const item = CopyCode.createElem('li', [`${name}__item`]);
+        const item = CopyCode.createElem(
+          'li',
+          [`${this.className.replace('.', '')}__item`],
+        );
         this.ul.appendChild(item);
         item.innerText = text;
       } else {
@@ -68,11 +70,9 @@ class CopyCode {
   private handleButtonClick() {
     if (!this.ul) return false;
 
-    const child = this.ul.childNodes;
-
     let text = '$(\'.demo\').RangeSliderFox({\n';
 
-    child.forEach((item) => {
+    this.ul.childNodes.forEach((item) => {
       const elem = item as HTMLElement;
       text += `${elem.innerText}\n`;
     });

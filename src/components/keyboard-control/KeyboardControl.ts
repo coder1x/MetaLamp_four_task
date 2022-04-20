@@ -2,8 +2,8 @@ import { boundMethod } from 'autobind-decorator';
 import './keyboard-control.scss';
 
 interface Options {
-  keyStepOne?: number;
-  keyStepHold?: number;
+  keyStepOne?: number | null;
+  keyStepHold?: number | null;
 }
 
 class KeyboardControl {
@@ -49,15 +49,16 @@ class KeyboardControl {
 
     this.mapInput = new Map();
 
-    const keyStepOne = (this.keyStepOne && this.keyStepOne.value) ?? '';
-    const keyStepHold = (this.keyStepHold && this.keyStepHold.value) ?? '';
+    this.mapInput.set(
+      'keyStepOne',
+      (this.keyStepOne && this.keyStepOne.value) ?? '',
+    );
+    this.mapInput.set(
+      'keyStepHold',
+      (this.keyStepHold && this.keyStepHold.value) ?? '',
+    );
 
-    this.mapInput.set('keyStepOne', keyStepOne);
-    this.mapInput.set('keyStepHold', keyStepHold);
-
-    const inputElements = [this.keyStepOne, this.keyStepHold];
-
-    inputElements.forEach((item) => {
+    [this.keyStepOne, this.keyStepHold].forEach((item) => {
       if (!item) return;
       item.addEventListener('change', this.handleDataChange);
       item.addEventListener('input', this.handleInputProcessing);
@@ -80,11 +81,10 @@ class KeyboardControl {
     const elem = event.currentTarget as HTMLInputElement;
     const value = elem.value.replace(/[^-.\d]/g, '');
     const regexp = /^-?\d*?[.]?\d*$/;
-    const valid = regexp.test(value);
 
     if (!this.mapInput) return false;
 
-    if (valid) {
+    if (regexp.test(value)) {
       this.mapInput.set(elem.name, value);
       elem.value = value;
     } else {
