@@ -6,7 +6,7 @@ mixin hints(options)
     const label = options.label ?? ''
     const modify = options.modify ?? ''
     const addClass = options.class ?? ''
-    const flLabel = options.flLabel ?? false
+    const flLabel = options.flLabel
     const classComp = 'hints'
     let className = classComp
     
@@ -15,8 +15,11 @@ mixin hints(options)
     if(addClass){
     className += ` ${addClass}`}
 
-    const path = '/components/hints/hints.json' 
-    const data = htmlWebpackPlugin.options.getData(path)
+    const path = require('path').resolve(
+    'src/components/hints/','hints.json'
+    )
+    const data = JSON.parse(require('fs').readFileSync(path)); 
+
     const textField = data.textField
 
   fieldset(class=`${className} js-${classComp}`)

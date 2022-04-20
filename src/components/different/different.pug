@@ -6,7 +6,7 @@ mixin different(options)
     const label = options.label ?? ''
     const modify = options.modify ?? ''
     const addClass = options.class ?? ''
-    const flLabel = options.flLabel ?? false
+    const flLabel = options.flLabel
     const classComp = 'different'
     let className = classComp
     
@@ -15,10 +15,12 @@ mixin different(options)
     if(addClass){
     className += ` ${addClass}`}
 
-    const path = '/components/different/different.json' 
-    const data = htmlWebpackPlugin.options.getData(path)
-    const selectData = data.select
+    const path = require('path').resolve(
+    'src/components/different/','different.json'
+    )
+    const data = JSON.parse(require('fs').readFileSync(path)); 
 
+    const selectData = data.select
 
   fieldset(class=`${className} js-${classComp}`)
     - if(!flLabel){

@@ -33,19 +33,6 @@ pluginsM.push(
 if (!DP.isPlugin) {
   pluginsM.push(
     ...pages.map((fileName) => new HTMLWebpackPlugin({
-      getData: (file) => {
-        try {
-          return JSON.parse(fs.readFileSync(
-            path.join(`${PATHS.src}${file}`),
-            'utf8',
-          ));
-        } catch (e) {
-          console.warn(
-            `no file ${fileName} json`,
-          );
-          return {};
-        }
-      },
       filename: `./${fileName}.html`,
       template: `./pages/${fileName}/${fileName}.pug`,
       alwaysWriteToDisk: true,
