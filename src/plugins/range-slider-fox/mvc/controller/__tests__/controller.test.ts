@@ -1,5 +1,5 @@
 import RangeSliderOptions from '../../../glob-interface';
-import { Controller, Model, View } from '../controller';
+import { Controller, Model, View } from '../Controller';
 
 function delay(time: number) {
   return new Promise((resolve, reject) => {

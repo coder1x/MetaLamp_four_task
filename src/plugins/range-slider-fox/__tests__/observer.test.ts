@@ -1,4 +1,4 @@
-import { Observer, ObserverOptions } from '../observer';
+import { Observer, ObserverOptions } from '../Observer';
 
 class TestOB extends Observer {
   notifyTest(options: ObserverOptions) {

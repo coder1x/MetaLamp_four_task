@@ -1,5 +1,5 @@
-import Grid from '../grid';
-import { Controller, Model, View } from '../../../controller/controller';
+import Grid from '../Grid';
+import { Controller, Model, View } from '../../../controller/Controller';
 import { mockPointerEvent } from '../../../../__tests__/jestUtils';
 
 describe('------- Test Grid API -------', () => {

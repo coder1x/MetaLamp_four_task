@@ -1,5 +1,5 @@
-import Bar from '../bar';
-import { Controller, Model, View } from '../../../controller/controller';
+import Bar from '../Bar';
+import { Controller, Model, View } from '../../../controller/Controller';
 import { mockPointerEvent } from '../../../../__tests__/jestUtils';
 
 // диапазон между ползунками

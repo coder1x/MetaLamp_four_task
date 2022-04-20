@@ -1,5 +1,5 @@
-import Handle from '../handle';
-import { Controller, Model, View } from '../../../controller/controller';
+import Handle from '../Handle';
+import { Controller, Model, View } from '../../../controller/Controller';
 import {
   mockPointerEvent,
   mockKeyboardEvent,

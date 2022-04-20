@@ -1,4 +1,4 @@
-import Hints from '../hints';
+import Hints from '../Hints';
 
 describe('------- Test Hints API -------', () => {
   let rsName: string;

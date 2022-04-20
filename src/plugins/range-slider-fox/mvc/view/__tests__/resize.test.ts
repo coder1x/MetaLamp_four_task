@@ -1,4 +1,4 @@
-import Resize from '../resize';
+import Resize from '../Resize';
 
 interface Options {
   width: number,

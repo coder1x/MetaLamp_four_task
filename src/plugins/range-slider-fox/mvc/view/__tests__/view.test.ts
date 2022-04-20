@@ -1,4 +1,4 @@
-import { Controller, Model, View } from '../../controller/controller';
+import { Controller, Model, View } from '../../controller/Controller';
 import { mockPointerEvent } from '../../../__tests__/jestUtils';
 
 describe('------- Test View API -------', () => {

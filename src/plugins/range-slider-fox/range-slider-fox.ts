@@ -1,4 +1,4 @@
-import { Controller, Model, View } from './mvc/controller/controller';
+import { Controller, Model, View } from './mvc/controller/Controller';
 
 // eslint-disable-next-line func-names
 $.fn.RangeSliderFox = function (options) {
