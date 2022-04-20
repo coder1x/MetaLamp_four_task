@@ -18,20 +18,17 @@ describe('------- Test View API -------', () => {
   });
 
   function searchStr(text: string, str: string) {
-    const regexp = new RegExp(str, 'g');
-    return regexp.test(text);
+    return new RegExp(str, 'g').test(text);
   }
 
   // setValueInput
   test(' Check Input DOM-element value changing ', () => {
-    const model = new Model({
+    new Controller(new Model({
       min: 0,
       max: 100,
       from: 30,
       to: 70,
-    });
-
-    new Controller(model, view);
+    }), view);
     const data = view.setValueInput(30, 70, 'double');
     expect(data).toBeTruthy();
     expect(data).toBe(inputElement.value);
@@ -172,14 +169,11 @@ describe('------- Test View API -------', () => {
         const elem = view.createDotElem('double') as HTMLElement;
         expect(elem.constructor.name).toBe('HTMLDivElement');
 
-        const from = view.setDotFrom(15);
-        expect(typeof from).toBe('object');
+        expect(typeof view.setDotFrom(15)).toBe('object');
 
-        const to = view.setDotTo(20);
-        expect(typeof to).toBe('object');
+        expect(typeof view.setDotTo(20)).toBe('object');
 
-        const flag = view.setDotActions('double');
-        expect(flag).toBeTruthy();
+        expect(view.setDotActions('double')).toBeTruthy();
       },
     });
     new Controller(model, view);
@@ -201,11 +195,13 @@ describe('------- Test View API -------', () => {
         expect(masFlag.indexOf(false)).toBe(-1);
         expect(view.toggleTipTo(20)).toBeFalsy();
 
-        const objMinMax = view.updateTipMinMax(10, 50);
-        expect(objMinMax).toBeFalsy();
+        expect(view.updateTipMinMax(10, 50)).toBeFalsy();
 
-        const size = view.getWidthTip(true, false);
-        expect(size).toEqual({ fromWH: 0, toWH: 0, singleWH: 0 });
+        expect(view.getWidthTip(true, false)).toEqual({
+          fromWH: 0,
+          toWH: 0,
+          singleWH: 0,
+        });
         expect(view.deleteTipTo()).toBeFalsy();
         expect(view.checkVisibleTip()).toBeFalsy();
 
@@ -226,11 +222,8 @@ describe('------- Test View API -------', () => {
   test(' Bar - interface  ', async () => {
     const model = await new Model({
       onStart: async () => {
-        const masFlag = view.setVisibleBar(true);
-        expect(masFlag).not.toContain(false);
-
-        const flag = view.setBar(25, 100);
-        expect(flag).toBeTruthy();
+        expect(view.setVisibleBar(true)).not.toContain(false);
+        expect(view.setBar(25, 100)).toBeTruthy();
       },
     });
     new Controller(model, view);
@@ -261,8 +254,7 @@ describe('------- Test View API -------', () => {
         ]) as HTMLElement;
 
         expect(elem.constructor.name).toBe('HTMLDivElement');
-        const flag = await view.deleteGrid();
-        expect(flag).toBeTruthy();
+        expect(await view.deleteGrid()).toBeTruthy();
       },
     });
     new Controller(model, view);

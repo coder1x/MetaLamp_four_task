@@ -50,11 +50,10 @@ describe('------- Test Resize API -------', () => {
     element: Window,
     { eventType }: { eventType: string },
   ): void {
-    const customEvent = new CustomEvent(
+    element.dispatchEvent(new CustomEvent(
       eventType,
       { bubbles: true },
-    );
-    element.dispatchEvent(customEvent);
+    ));
   }
 
   // Resize

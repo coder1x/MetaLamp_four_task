@@ -11,8 +11,7 @@ describe('------- Test Bar API -------', () => {
 
   const createBar = async () => {
     await bar.setVisibleBar(true);
-    const domFlag = await bar.createDomBar();
-    expect(domFlag).toBeTruthy();
+    expect(await bar.createDomBar()).toBeTruthy();
   };
 
   beforeEach(() => {
@@ -38,8 +37,7 @@ describe('------- Test Bar API -------', () => {
   // setBar
   test(' Set progress-bar position and width ', async () => {
     await createBar();
-    const barFlag = await bar.setBar(12, 23);
-    expect(barFlag).toBeTruthy();
+    expect(await bar.setBar(12, 23)).toBeTruthy();
     const elem = await wrap.firstElementChild as HTMLElement;
 
     const { left } = elem.style;
@@ -52,10 +50,8 @@ describe('------- Test Bar API -------', () => {
   // setOrientation
   test(' Set progress-bar orientation ', async () => {
     await createBar();
-    const barFlag = await bar.setBar(34, 10);
-    expect(barFlag).toBeTruthy();
-    const orientationFlag = await bar.setOrientation('vertical');
-    expect(orientationFlag).toBeTruthy();
+    expect(await bar.setBar(34, 10)).toBeTruthy();
+    expect(await bar.setOrientation('vertical')).toBeTruthy();
     const elem = await wrap.firstElementChild as HTMLElement;
 
     const { bottom } = elem.style;

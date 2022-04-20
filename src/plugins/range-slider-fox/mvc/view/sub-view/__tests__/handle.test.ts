@@ -21,8 +21,7 @@ describe('------- Test Handle API -------', () => {
   });
 
   function searchStr(text: string, str: string) {
-    const regexp = new RegExp(str, 'g');
-    expect(regexp.test(text)).toBeTruthy();
+    expect(new RegExp(str, 'g').test(text)).toBeTruthy();
   }
 
   const delElem = (elem: HTMLElement) => {
@@ -32,8 +31,7 @@ describe('------- Test Handle API -------', () => {
   };
 
   const createFromTo = async () => {
-    const wrapper = await handle.createDomBase('double');
-    expect(wrapper).toBeDefined();
+    expect(await handle.createDomBase('double')).toBeDefined();
     const from = await handle.setFrom(34);
     const to = await handle.setTo(56);
     return { from, to };
@@ -97,8 +95,7 @@ describe('------- Test Handle API -------', () => {
 
     await createFromTo();
     handle.setOrientation('horizontal');
-    const flag = handle.setActions('double');
-    expect(flag).toBeTruthy();
+    expect(handle.setActions('double')).toBeTruthy();
 
     const model = new Model({
       type: 'double',
@@ -109,7 +106,7 @@ describe('------- Test Handle API -------', () => {
           const dot = await wrapper.getElementsByClassName(
             `${jsRsName}__${name}`,
           );
-          const type = name === 'from' ? 'From' : 'To';
+
           const pointer = await mockPointerEvent(dot[0]);
           const keyboard = await mockKeyboardEvent(dot[0]);
           await pointer('pointerdown', down, 0);
@@ -123,7 +120,7 @@ describe('------- Test Handle API -------', () => {
               clientXY: move,
               position: 0,
               shiftXY: down,
-              type,
+              type: name === 'from' ? 'From' : 'To',
               wrapWH: 0,
             },
           );

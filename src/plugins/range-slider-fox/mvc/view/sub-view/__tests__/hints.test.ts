@@ -16,19 +16,18 @@ describe('------- Test Hints API -------', () => {
   });
 
   function searchStr(text: string, str: string) {
-    const regexp = new RegExp(str, 'g');
-    return regexp.test(text);
+    return new RegExp(str, 'g').test(text);
   }
 
   const checkDom = async (name: string) => {
-    const dom = await wrap.firstChild as HTMLElement;
-    const flag = searchStr(dom.className, `${jsRsName}__tip-${name}`);
-    expect(flag).toBeTruthy();
+    expect(searchStr(
+      (await wrap.firstChild as HTMLElement).className,
+      `${jsRsName}__tip-${name}`,
+    )).toBeTruthy();
   };
 
   const checkStyle = async (value: string) => {
-    const dom = await wrap.firstChild as HTMLElement;
-    expect(dom.style.left).toBe(value);
+    expect((await wrap.firstChild as HTMLElement).style.left).toBe(value);
   };
 
   // setTipFlag
@@ -47,8 +46,7 @@ describe('------- Test Hints API -------', () => {
 
   // createTipMinMax
   test(' Create Min and Max hints DOM-elements ', async () => {
-    const flag = await hints.createTipMinMax();
-    expect(flag).toBeTruthy();
+    expect(await hints.createTipMinMax()).toBeTruthy();
     const tips = await wrap.children;
 
     let classNameF = searchStr(tips[0].className, `${jsRsName}__tip-min`);
@@ -60,24 +58,21 @@ describe('------- Test Hints API -------', () => {
 
   // createTipFrom
   test(' Create From hint DOM-element ', async () => {
-    const flag = await hints.createTipFrom();
-    expect(flag).toBeTruthy();
+    expect(await hints.createTipFrom()).toBeTruthy();
     checkDom('from');
     expect(hints.createTipFrom()).toBeFalsy();
   });
 
   // createTipTo
   test(' Create To hint DOM-element ', async () => {
-    const flag = await hints.createTipTo();
-    expect(flag).toBeTruthy();
+    expect(await hints.createTipTo()).toBeTruthy();
     checkDom('to');
     expect(hints.createTipTo()).toBeFalsy();
   });
 
   // createTipSingle
   test(' Create Single hint DOM-element ', async () => {
-    const flag = await hints.createTipSingle();
-    expect(flag).toBeTruthy();
+    expect(await hints.createTipSingle()).toBeTruthy();
     checkDom('single');
     expect(hints.createTipSingle()).toBeFalsy();
   });
@@ -136,24 +131,21 @@ describe('------- Test Hints API -------', () => {
   //  setPositionFrom
   test(' Set From hint position ', async () => {
     await hints.createTipFrom();
-    const flag = await hints.setPositionFrom(34);
-    expect(flag).toBeTruthy();
+    expect(await hints.setPositionFrom(34)).toBeTruthy();
     checkStyle('34%');
   });
 
   // setPositionTo
   test(' Set To hint position ', async () => {
     await hints.createTipTo();
-    const flag = await hints.setPositionTo(34);
-    expect(flag).toBeTruthy();
+    expect(await hints.setPositionTo(34)).toBeTruthy();
     checkStyle('34%');
   });
 
   // setPositionSingle
   test(' Set Single hint position ', async () => {
     await hints.createTipSingle();
-    const flag = await hints.setPositionSingle(34);
-    expect(flag).toBeTruthy();
+    expect(await hints.setPositionSingle(34)).toBeTruthy();
     checkStyle('34%');
   });
 
@@ -173,13 +165,8 @@ describe('------- Test Hints API -------', () => {
     flag = await hints.setOrientation('vertical');
     expect(flag).toBeTruthy();
 
-    const from = await wrap.children[0] as HTMLElement;
-    expect(from.style.bottom).toBe('20%');
-
-    const to = await wrap.children[1] as HTMLElement;
-    expect(to.style.bottom).toBe('34%');
-
-    const single = await wrap.children[2] as HTMLElement;
-    expect(single.style.bottom).toBe('27%');
+    expect((await wrap.children[0] as HTMLElement).style.bottom).toBe('20%');
+    expect((await wrap.children[1] as HTMLElement).style.bottom).toBe('34%');
+    expect((await wrap.children[2] as HTMLElement).style.bottom).toBe('27%');
   });
 });

@@ -78,10 +78,9 @@ describe('------- Test Controller API -------', () => {
         expect(flagUpdate).toBeTruthy();
       },
       onUpdate: (data: RangeSliderOptions) => {
-        const gridPol = 'js-range-slider-fox__grid-pol';
-        const node = wrapper.getElementsByClassName(gridPol);
-
-        expect(node).toHaveLength(35);
+        expect(wrapper.getElementsByClassName(
+          'js-range-slider-fox__grid-pol',
+        )).toHaveLength(35);
         expect(data.type).toBe('double');
         expect(data.min).toBeCloseTo(-120);
         expect(data.max).toBeCloseTo(800);
@@ -103,8 +102,7 @@ describe('------- Test Controller API -------', () => {
         expect(data.gridRound).toBeCloseTo(2);
         expect(data.disabled).toBeFalsy();
 
-        const flagReset = objController.reset();
-        expect(flagReset).toBeTruthy();
+        expect(objController.reset()).toBeTruthy();
       },
       onReset: (data: RangeSliderOptions) => {
         expect(data).toStrictEqual(defaultData);

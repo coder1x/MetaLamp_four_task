@@ -35,8 +35,7 @@ describe('------- Test Grid API -------', () => {
   };
 
   const getLenDom = () => {
-    const rsBottom = grid.createDomGrid() as HTMLElement;
-    const dom = rsBottom.firstChild as HTMLElement;
+    const dom = (grid.createDomGrid() as HTMLElement).firstChild as HTMLElement;
     const { length } = dom.childNodes;
     return length;
   };
@@ -69,9 +68,7 @@ describe('------- Test Grid API -------', () => {
     const model = await new Model({
       ...getConf(),
       onStart: async () => {
-        const lenMark = await getLenMark(model);
-        const lenDom = await getLenDom();
-        expect(lenMark).toBe(lenDom);
+        expect(await getLenMark(model)).toBe(await getLenDom());
       },
     });
 

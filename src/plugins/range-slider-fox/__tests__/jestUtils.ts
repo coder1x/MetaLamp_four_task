@@ -4,12 +4,12 @@ function mockPointerEvent(element: Element) {
     clientX: number,
     clientY: number,
   ) {
-    const conf = { bubbles: true, clientX, clientY };
-    const pointerEvent = new MouseEvent(eventType, conf);
     const dom = element;
     dom.setPointerCapture = jest.fn(dom.setPointerCapture);
     dom.releasePointerCapture = jest.fn(dom.releasePointerCapture);
-    dom.dispatchEvent(pointerEvent);
+    dom.dispatchEvent(
+      new MouseEvent(eventType, { bubbles: true, clientX, clientY }),
+    );
   };
 }
 
@@ -19,12 +19,12 @@ function mockKeyboardEvent(element: Element) {
     eventType = 'keydown',
     repeat = false,
   ) {
-    const conf = { code, repeat, bubbles: true };
-    const keyboardEvent = new KeyboardEvent(eventType, conf);
     const dom = element;
     dom.setPointerCapture = jest.fn(dom.setPointerCapture);
     dom.releasePointerCapture = jest.fn(dom.releasePointerCapture);
-    dom.dispatchEvent(keyboardEvent);
+    dom.dispatchEvent(
+      new KeyboardEvent(eventType, { code, repeat, bubbles: true }),
+    );
   };
 }
 
