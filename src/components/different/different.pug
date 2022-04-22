@@ -4,14 +4,14 @@ include ../select/select.pug
 mixin different(options)
   -
     const label = options.label ?? ''
-    const modify = options.modify ?? ''
+    const modifier = options.modifier ?? ''
     const addClass = options.class ?? ''
-    const flLabel = options.flLabel
-    const classComp = 'different'
-    let className = classComp
+    const isLabeled = options.isLabeled
+    const classComponent = 'different'
+    let className = classComponent
     
-    if(modify){
-    className += ` ${classComp}_${modify}`}
+    if(modifier){
+    className += ` ${classComponent}_${modifier}`}
     if(addClass){
     className += ` ${addClass}`}
 
@@ -22,44 +22,44 @@ mixin different(options)
 
     const selectData = data.select
 
-  fieldset(class=`${className} js-${classComp}`)
-    - if(!flLabel){
-    legend(class=`${classComp}__label`)= label
+  fieldset(class=`${className} js-${classComponent}`)
+    - if(!isLabeled){
+    legend(class=`${classComponent}__label`)= label
     -}
 
-    div(class=`${classComp}__double-wrap js-${classComp}__double-wrap`)
+    div(class=`${classComponent}__double-wrap js-${classComponent}__double-wrap`)
       +toggle-buttons({
         header: 'double',
       })
 
-    div(class=`${classComp}__disabled-wrap js-${classComp}__disabled-wrap`)
+    div(class=`${classComponent}__disabled-wrap js-${classComponent}__disabled-wrap`)
       +toggle-buttons({
         header: 'disabled',
       })
 
-    div(class=`${classComp}__vertical-wrap js-${classComp}__vertical-wrap`)
+    div(class=`${classComponent}__vertical-wrap js-${classComponent}__vertical-wrap`)
       +toggle-buttons({
         header: 'vertical',
       })
 
-    div(class=`${classComp}__bar-wrap js-${classComp}__bar-wrap`)
+    div(class=`${classComponent}__bar-wrap js-${classComponent}__bar-wrap`)
       +toggle-buttons({
         header: 'bar',
       })
 
-    div(class=`${classComp}__unsubscribtion-wrap js-${classComp}__unsubscribtion-wrap`)
+    div(class=`${classComponent}__unsubscribtion-wrap js-${classComponent}__unsubscribtion-wrap`)
       +toggle-buttons({
         header: 'unsubscribtion',
       })
 
-    div(class=`${classComp}__select-wrap js-${classComp}__select-wrap`)
+    div(class=`${classComponent}__select-wrap js-${classComponent}__select-wrap`)
       +select({
         label: 'Skin',
-        masOptions: selectData,
+        list: selectData,
       })
 
-    div(class=`${classComp}__reset-wrap`)
-      button(class=`${classComp}__reset js-${classComp}__reset`) Reset
+    div(class=`${classComponent}__reset-wrap`)
+      button(class=`${classComponent}__reset js-${classComponent}__reset`) Reset
       
-    div(class=`${classComp}__apply-wrap`)
-      button(class=`${classComp}__apply`) Apply
+    div(class=`${classComponent}__apply-wrap`)
+      button(class=`${classComponent}__apply`) Apply

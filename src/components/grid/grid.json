@@ -3,7 +3,7 @@
     "interval": {
       "label": "Interval",
       "type": "text",
-      "name": "gridNum"
+      "name": "gridNumber"
     },
     "step": {
       "label": "Step",

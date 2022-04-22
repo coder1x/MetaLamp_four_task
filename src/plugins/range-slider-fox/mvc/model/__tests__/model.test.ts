@@ -26,7 +26,7 @@ describe('------- Test Model API -------', () => {
     tipFromTo: true,
     grid: false,
     gridSnap: false,
-    gridNum: 4,
+    gridNumber: 4,
     gridStep: 0,
     gridRound: 0,
     disabled: false,
@@ -290,7 +290,7 @@ describe('------- Test Model API -------', () => {
       from: 80,
       grid: true,
       gridSnap: true,
-      gridNum: 40,
+      gridNumber: 40,
       onStart: async () => {
         await model.calcOnePercent();
         await model.calcPositionDotFrom();
@@ -407,7 +407,7 @@ describe('------- Test Model API -------', () => {
       max: 800,
       gridRound: 0,
       gridStep: 0,
-      gridNum: 40,
+      gridNumber: 40,
       onStart: async () => {
         const masVal = [
           { val: 89, position: 10 },
@@ -429,7 +429,7 @@ describe('------- Test Model API -------', () => {
       max: 800.78,
       gridRound: 1,
       gridStep: 15,
-      gridNum: 0,
+      gridNumber: 0,
       onStart: async () => {
         const mas = [
           { val: 64.4, position: 9.243966771020782 },
@@ -673,7 +673,7 @@ describe('------- Test Model API -------', () => {
       from: 100,
       grid: true,
       gridSnap: true,
-      gridNum: 20,
+      gridNumber: 20,
 
       onStart: async () => {
         const snap: number[] = [];
@@ -736,7 +736,7 @@ describe('------- Test Model API -------', () => {
       from: 100,
       grid: true,
       gridSnap: true,
-      gridNum: 40,
+      gridNumber: 40,
       keyStepOne: 0,
       keyStepHold: 0,
       onStart: async () => {

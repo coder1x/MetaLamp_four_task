@@ -37,7 +37,7 @@ class Model extends Observer {
 
   private gridSnap: boolean | null = null;
 
-  private gridNum: number | null = null;
+  private gridNumber: number | null = null;
 
   private gridStep: number | null = null;
 
@@ -62,7 +62,7 @@ class Model extends Observer {
 
   private wrapWH: number = 0;
 
-  private snapNum: number[] = [];
+  private snapNumber: number[] = [];
 
   private stepNum: number[] = [];
 
@@ -110,7 +110,7 @@ class Model extends Observer {
       tipFromTo: this.tipFromTo,
       grid: this.grid,
       gridSnap: this.gridSnap,
-      gridNum: this.gridNum,
+      gridNumber: this.gridNumber,
       gridStep: this.gridStep,
       gridRound: this.gridRound,
       disabled: this.disabled,
@@ -251,10 +251,10 @@ class Model extends Observer {
 
     if (this.gridSnap && !this.step) {
       if (fromFlag) {
-        from = Model.getValStep(from ?? 0, this.stepGrid, this.snapNum);
+        from = Model.getValStep(from ?? 0, this.stepGrid, this.snapNumber);
       }
       if (!typeFlag && toFlag) {
-        to = Model.getValStep(to ?? 0, this.stepGrid, this.snapNum);
+        to = Model.getValStep(to ?? 0, this.stepGrid, this.snapNumber);
       }
     }
 
@@ -482,10 +482,10 @@ class Model extends Observer {
   snapDot() {
     if (!this.gridSnap) return false;
 
-    this.from = Model.getValStep(this.from ?? 0, this.stepGrid, this.snapNum);
+    this.from = Model.getValStep(this.from ?? 0, this.stepGrid, this.snapNumber);
 
     if (this.type === 'double') {
-      this.to = Model.getValStep(this.to ?? 0, this.stepGrid, this.snapNum);
+      this.to = Model.getValStep(this.to ?? 0, this.stepGrid, this.snapNumber);
     }
 
     this.notifyOB({
@@ -502,10 +502,10 @@ class Model extends Observer {
   }
 
   @boundMethod
-  calcSnap(snapNum: number[]) {
-    this.snapNum = [];
-    this.snapNum.push(this.min ?? 0, ...snapNum, this.max ?? 0);
-    this.stepGrid = this.snapNum[1] - this.snapNum[0];
+  calcSnap(snapNumber: number[]) {
+    this.snapNumber = [];
+    this.snapNumber.push(this.min ?? 0, ...snapNumber, this.max ?? 0);
+    this.stepGrid = this.snapNumber[1] - this.snapNumber[0];
 
     return this.snapDot();
   }
@@ -519,10 +519,10 @@ class Model extends Observer {
     const keyFlag = !this.keyStepOne && !this.keyStepHold;
 
     if (this.gridSnap && !this.step && keyFlag) {
-      const prev = this.snapNum[this.snapNum.length - 2];
+      const prev = this.snapNumber[this.snapNumber.length - 2];
 
       const value = (i: number) => {
-        const number = this.snapNum[!signFlag ? i - 2 : i];
+        const number = this.snapNumber[!signFlag ? i - 2 : i];
 
         if (dotFlag) {
           from = number;
@@ -539,7 +539,7 @@ class Model extends Observer {
         }
         if (from === this.min) {
           if (signFlag) {
-            [, from] = this.snapNum;
+            [, from] = this.snapNumber;
             return false;
           }
         } else if (from === this.max) {
@@ -564,8 +564,8 @@ class Model extends Observer {
         return true;
       };
 
-      for (let i = 0; i < this.snapNum.length; i += 1) {
-        const item = this.snapNum[i];
+      for (let i = 0; i < this.snapNumber.length; i += 1) {
+        const item = this.snapNumber[i];
         if (!moveFrom(item, i)) break;
         if (!moveTo(item, i)) break;
       }
@@ -671,7 +671,7 @@ class Model extends Observer {
       tipFromTo: true, // hints are off
       grid: false, // scale is off
       gridSnap: false, // dot can't stop between scale marks
-      gridNum: 0, // amount of intervals the scale is split into
+      gridNumber: 0, // amount of intervals the scale is split into
       gridStep: 0, // amount of steps in the interval
       gridRound: 0, // fractional rounding
       disabled: false, // slider enabled or disabled
@@ -902,13 +902,13 @@ class Model extends Observer {
         this.from = Model.getValStep(
           this.from ?? 0,
           this.stepGrid,
-          this.snapNum,
+          this.snapNumber,
         );
         if (type === 'double') {
           this.to = Model.getValStep(
             this.to ?? 0,
             this.stepGrid,
-            this.snapNum,
+            this.snapNumber,
           );
         }
       }
@@ -950,13 +950,13 @@ class Model extends Observer {
   private setGridData(options: RangeSliderOptions): boolean {
     if (!Model.propertiesValidation([
       'grid',
-      'gridNum',
+      'gridNumber',
       'gridStep',
       'gridRound',
     ], options)) return false;
 
     let { grid } = options;
-    let { gridNum } = options;
+    let { gridNumber } = options;
     let { gridStep } = options;
     let gridRound: number | null = Math.trunc(options.gridRound ?? 0);
 
@@ -967,7 +967,7 @@ class Model extends Observer {
 
     if (!Model.isEmpty(this.min) || !Model.isEmpty(this.max)) return false;
 
-    gridNum = Number(this.checkValue(gridNum, 'gridNum') ?? 0);
+    gridNumber = Number(this.checkValue(gridNumber, 'gridNumber') ?? 0);
     gridStep = Number(this.checkValue(gridStep, 'gridStep') ?? 0);
     gridRound = Number(this.checkValue(gridRound, 'gridRound') ?? 0);
 
@@ -979,8 +979,8 @@ class Model extends Observer {
 
     if (gridStep > (this.max ?? 0)) { gridStep = this.max; }
 
-    if (!gridNum && !gridStep) {
-      gridNum = 4;
+    if (!gridNumber && !gridStep) {
+      gridNumber = 4;
     }
 
     if (gridRound < 0 || gridRound > 100) {
@@ -988,7 +988,7 @@ class Model extends Observer {
     }
 
     this.gridRound = Number(gridRound);
-    this.gridNum = Number(gridNum);
+    this.gridNumber = Number(gridNumber);
     this.gridStep = Number(gridStep);
 
     if (!this.grid) {
@@ -1004,7 +1004,7 @@ class Model extends Observer {
     this.notifyOB({
       key: 'GridData',
       grid: this.grid,
-      gridNum: this.gridNum,
+      gridNumber: this.gridNumber,
       gridStep: this.gridStep,
       gridRound: this.gridRound,
     });
@@ -1221,11 +1221,11 @@ class Model extends Observer {
     let interval = 0;
     let step = 0;
 
-    if (this.gridStep && !this.gridNum) { // if STEP is defined and interval is set by default
+    if (this.gridStep && !this.gridNumber) { // if STEP is defined and interval is set by default
       step = this.gridStep;
       interval = this.getRange() / step; // define new interval
     } else { // calculate in line with interval
-      interval = this.gridNum ?? 0;
+      interval = this.gridNumber ?? 0;
       step = ((this.max ?? 0) - (this.min ?? 0)) / interval; // define step
     }
     return { interval, step };

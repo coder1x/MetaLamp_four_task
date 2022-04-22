@@ -183,21 +183,21 @@ class Handle extends Observer {
     return true;
   }
 
-  private static cancellation(elem: HTMLElement) {
-    const dom = elem;
+  private static cancellation(element: HTMLElement) {
+    const dom = element;
     dom.ondragstart = () => false;
     dom.onselectstart = () => false;
   }
 
   private static createElem(teg: string, className: string[]) {
-    const elem = document.createElement(teg);
+    const element = document.createElement(teg);
 
     className.forEach((item) => {
-      elem.classList.add(item);
+      element.classList.add(item);
     });
 
-    elem.setAttribute('tabindex', '0');
-    return elem;
+    element.setAttribute('tabindex', '0');
+    return element;
   }
 
   @boundMethod
@@ -274,8 +274,8 @@ class Handle extends Observer {
     return true;
   }
 
-  private static getElem(elem: Element, str: string) {
-    return elem.getElementsByClassName(str)[0];
+  private static getElem(element: Element, str: string) {
+    return element.getElementsByClassName(str)[0];
   }
 
   @boundMethod
@@ -321,16 +321,16 @@ class Handle extends Observer {
   }
 
   @boundMethod
-  private mouseDown(event: PointerEvent, elem: HTMLElement) {
+  private mouseDown(event: PointerEvent, element: HTMLElement) {
     event.preventDefault();
     let shiftXY = 0;
-    const rect = elem.getBoundingClientRect();
+    const rect = element.getBoundingClientRect();
     if (this.vertical) {
       shiftXY = event.clientY - rect.bottom;
     } else {
       shiftXY = event.clientX - rect.left;
     }
-    elem.setPointerCapture(event.pointerId);
+    element.setPointerCapture(event.pointerId);
     return shiftXY;
   }
 }

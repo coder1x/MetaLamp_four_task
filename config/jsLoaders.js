@@ -1,4 +1,4 @@
-const DP = require('./isDev');
+const env = require('./isDev');
 
 module.exports = {
   jsLoaders: (ext = 'ts') => {
@@ -19,7 +19,7 @@ module.exports = {
       ];
     }
 
-    if (DP.isDev) {
+    if (env.isDev) {
       loaders.push('eslint-loader');
     }
 

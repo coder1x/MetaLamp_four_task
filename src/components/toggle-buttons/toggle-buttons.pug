@@ -2,24 +2,24 @@ mixin toggle-buttons(options)
   -
     const header = options.header ?? ''
     const label = options.label ?? ''
-    const modify = options.modify ?? ''
+    const modifier = options.modifier ?? ''
     const addClass = options.class ?? ''
-    const flLabel = options.flLabel
-    const classComp = 'toggle-buttons'
-    let className = classComp
+    const isLabeled = options.isLabeled
+    const classComponent = 'toggle-buttons'
+    let className = classComponent
     
-    if(modify){
-    className += ` ${classComp}_${modify}`}
+    if(modifier){
+    className += ` ${classComponent}_${modifier}`}
     if(addClass){
     className += ` ${addClass}`}
 
   div(class=className)
-    - if(!flLabel){
-    p(class=`${classComp}__header`)= header
+    - if(!isLabeled){
+    p(class=`${classComponent}__header`)= header
     -}
     
-    div(class=`${classComp}__tog`)
-      label(class=`${classComp}__label`)= label
-        input(class=`${classComp}__input` type='checkbox' name='toggle')
-        span(class=`${classComp}__bef`)
+    div(class=`${classComponent}__tog`)
+      label(class=`${classComponent}__label`)= label
+        input(class=`${classComponent}__input` type='checkbox' name='toggle')
+        span(class=`${classComponent}__bef`)
 

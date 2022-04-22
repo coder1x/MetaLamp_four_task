@@ -7,7 +7,7 @@ interface Options {
 }
 
 class KeyboardControl {
-  private elem: Element;
+  private element: Element;
 
   private keyStepOne: HTMLInputElement | null = null;
 
@@ -23,10 +23,10 @@ class KeyboardControl {
 
   private mapInput: Map<string, string> | null = null;
 
-  constructor(nameClass: string, elem: Element) {
+  constructor(nameClass: string, element: Element) {
     this.nameClass = nameClass;
-    this.elem = elem;
-    this.setDom();
+    this.element = element;
+    this.setDomElement();
   }
 
   setData(options: Options) {
@@ -44,8 +44,8 @@ class KeyboardControl {
   }
 
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
-  setAction(obj: any) {
-    this.objRangeSlider = obj;
+  bindEvent(rangeSlider: any) {
+    this.objRangeSlider = rangeSlider;
 
     this.mapInput = new Map();
 
@@ -68,41 +68,41 @@ class KeyboardControl {
   @boundMethod
   private handleDataChange(event: Event) {
     if (!this.mapInput) return false;
-    const elem = event.currentTarget as HTMLInputElement;
+    const element = event.currentTarget as HTMLInputElement;
 
     this.objRangeSlider.update({
-      [elem.name]: Number(this.mapInput.get(elem.name)),
+      [element.name]: Number(this.mapInput.get(element.name)),
     });
     return true;
   }
 
   @boundMethod
   private handleInputProcessing(event: Event) {
-    const elem = event.currentTarget as HTMLInputElement;
-    const value = elem.value.replace(/[^-.\d]/g, '');
+    const element = event.currentTarget as HTMLInputElement;
+    const value = element.value.replace(/[^-.\d]/g, '');
     const regexp = /^-?\d*?[.]?\d*$/;
 
     if (!this.mapInput) return false;
 
     if (regexp.test(value)) {
-      this.mapInput.set(elem.name, value);
-      elem.value = value;
+      this.mapInput.set(element.name, value);
+      element.value = value;
     } else {
-      elem.value = this.mapInput.get(elem.name) ?? '';
+      element.value = this.mapInput.get(element.name) ?? '';
     }
 
     return true;
   }
 
-  private getDom(str: string) {
-    return this.elem.querySelector(
-      `${this.nameClass}__${str}-wrap input`,
+  private getDomElement(string: string) {
+    return this.element.querySelector(
+      `${this.nameClass}__${string}-wrap input`,
     ) as HTMLInputElement;
   }
 
-  private setDom() {
-    this.keyStepOne = this.getDom('one');
-    this.keyStepHold = this.getDom('hold');
+  private setDomElement() {
+    this.keyStepOne = this.getDomElement('one');
+    this.keyStepHold = this.getDomElement('hold');
   }
 }
 

@@ -14,7 +14,7 @@ interface insideOptions extends RangeSliderOptions {
     val: number,
     position: number,
   }[],
-  readonly snapNum?: number[],
+  readonly snapNumber?: number[],
   readonly wrapWH?: number,
   readonly position?: number,
   readonly clientXY?: number,

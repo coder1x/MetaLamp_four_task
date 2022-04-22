@@ -8,19 +8,19 @@ include ../keyboard-control/keyboard-control.pug
 
 mixin panel(options)
   -
-    const modify = options.modify ?? ''
+    const modifier = options.modifier ?? ''
     const addClass = options.class ?? ''
     const theme = options.theme ?? 'base'
-    const classComp = 'panel'
-    let className = classComp
+    const classComponent = 'panel'
+    let className = classComponent
     
-    if(modify){
-    className += ` ${classComp}_${modify}`}
+    if(modifier){
+    className += ` ${classComponent}_${modifier}`}
     if(addClass){
     className += ` ${addClass}`}
 
-  div(class=`${className} js-${classComp}`)
-    div(class=`${classComp}__slider-wrap js-${classComp}__slider-wrap`)
+  div(class=`${className} js-${classComponent}`)
+    div(class=`${classComponent}__slider-wrap js-${classComponent}__slider-wrap`)
       input(class=`rslider__${theme} visually-hidden` 
       type='text' 
       name='DATA' 
@@ -29,23 +29,23 @@ mixin panel(options)
       readonly=''
       )
 
-    div(class=`${classComp}__values-wrap`)
+    div(class=`${classComponent}__values-wrap`)
       +values({label: 'Values',})
 
-    div(class=`${classComp}__input-data-wrap`)
+    div(class=`${classComponent}__input-data-wrap`)
       +input-data({label: 'Input data',})
 
-    div(class=`${classComp}__keyboard-control-wrap`)
+    div(class=`${classComponent}__keyboard-control-wrap`)
       +keyboard-control({label: 'keyboard control',})
 
-    div(class=`${classComp}__grid-wrap`)
+    div(class=`${classComponent}__grid-wrap`)
       +grid({label: 'Grid',})
 
-    div(class=`${classComp}__different-wrap`)
+    div(class=`${classComponent}__different-wrap`)
       +different({label: 'Different',})
 
-    div(class=`${classComp}__hints-wrap`)
+    div(class=`${classComponent}__hints-wrap`)
       +hints({label: 'Hints',})
       
-    div(class=`${classComp}__code-wrap`)
+    div(class=`${classComponent}__code-wrap`)
       +code({label: 'Config code',})

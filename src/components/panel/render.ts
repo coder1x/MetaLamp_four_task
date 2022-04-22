@@ -3,16 +3,16 @@ import Panel from './Panel';
 function renderPanel(className: string) {
   const panels: Panel[] = [];
 
-  document.querySelectorAll(className).forEach((elem) => {
-    panels.push(new Panel(elem, className));
+  document.querySelectorAll(className).forEach((element) => {
+    panels.push(new Panel(element, className));
   });
 
   return panels;
 }
 
-const objPanel = renderPanel('.js-panel');
+const objectPanel = renderPanel('.js-panel');
 
-objPanel[0].createRangeSlider({
+objectPanel[0].createRangeSlider({
   type: 'double',
   theme: 'fox',
   min: -120,
@@ -21,10 +21,10 @@ objPanel[0].createRangeSlider({
   to: 500,
   bar: true,
   grid: true,
-  gridNum: 40,
+  gridNumber: 40,
 });
 
-objPanel[1].createRangeSlider({
+objectPanel[1].createRangeSlider({
   type: 'double',
   orientation: 'vertical',
   theme: 'dark',
@@ -37,7 +37,7 @@ objPanel[1].createRangeSlider({
   gridStep: 33,
 });
 
-objPanel[2].createRangeSlider({
+objectPanel[2].createRangeSlider({
   type: 'double',
   min: -120,
   max: 800,

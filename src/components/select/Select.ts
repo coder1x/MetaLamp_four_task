@@ -4,7 +4,7 @@ import './select.scss';
 class Select {
   private className: string;
 
-  private elem: Element;
+  private element: Element;
 
   private button: HTMLButtonElement | null = null;
 
@@ -20,13 +20,13 @@ class Select {
 
   onUpdate: Function = (value: string) => value;
 
-  private updateFlag = false;
+  private isUpdated = false;
 
-  private startFlag = true;
+  private isStarted = true;
 
-  constructor(className: string, elem: Element) {
+  constructor(className: string, element: Element) {
     this.className = className;
-    this.elem = elem;
+    this.element = element;
     this.init();
   }
 
@@ -36,21 +36,21 @@ class Select {
   }
 
   update(value: string) {
-    this.updateFlag = true;
-    let flag = false;
+    this.isUpdated = true;
+    let isData = false;
 
     for (let i = 0; i < this.items.length; i += 1) {
-      const dom = this.items[i] as HTMLElement;
-      const data = dom.getAttribute('data-val');
+      const element = this.items[i] as HTMLElement;
+      const data = element.getAttribute('data-value');
       if (data === value) {
-        flag = true;
-        this.setValSelect(dom);
+        isData = true;
+        this.setValueSelect(element);
         break;
       }
     }
 
-    this.updateFlag = false;
-    if (flag) {
+    this.isUpdated = false;
+    if (isData) {
       this.onUpdate(value);
     }
   }
@@ -58,16 +58,16 @@ class Select {
   private init() {
     this.setDomElem();
     this.setActions();
-    this.startFlag = false;
+    this.isStarted = false;
   }
 
-  private getElement(str: string, domBase?: Element) {
-    return (domBase ?? this.elem).querySelector(this.className + str);
+  private getElement(string: string, parentElement?: Element) {
+    return (parentElement ?? this.element).querySelector(this.className + string);
   }
 
-  private getElements(str: string, domBase?: Element): Element[] {
+  private getElements(str: string, parentElement?: Element): Element[] {
     return [
-      ...(domBase ?? this.elem).querySelectorAll(this.className + str),
+      ...(parentElement ?? this.element).querySelectorAll(this.className + str),
     ];
   }
 
@@ -80,54 +80,55 @@ class Select {
     this.setDisplayed();
   }
 
-  private setValSelect(elem: HTMLElement) {
+  private setValueSelect(element: HTMLElement) {
     if (!this.button || !this.input) return false;
 
-    this.button.innerText = elem.innerText;
-    const value = elem.getAttribute('data-val');
+    this.button.innerText = element.innerText;
+    const value = element.getAttribute('data-value');
     this.input.value = value ?? '';
 
-    if (!this.updateFlag && !this.startFlag) { this.onChange(value); }
+    if (!this.isUpdated && !this.isStarted) { this.onChange(value); }
 
     return true;
   }
 
   private setDisplayed() {
     for (let i = 0; i < this.items.length; i += 1) {
-      const dom = this.items[i] as HTMLElement;
-      if (dom.classList.contains('js-selected')) {
-        this.setValSelect(dom);
-        dom.classList.remove('js-selected');
+      const element = this.items[i] as HTMLElement;
+      const { classList } = element;
+      if (classList.contains('js-selected')) {
+        this.setValueSelect(element);
+        classList.remove('js-selected');
         break;
       }
     }
   }
 
-  private static getVisible(elem: HTMLElement) {
-    return window.getComputedStyle(elem, null)
+  private static getVisible(element: HTMLElement) {
+    return window.getComputedStyle(element, null)
       .getPropertyValue('display') !== 'none';
   }
 
-  private toggle(flag = false) {
+  private toggle(isVisible = false) {
     if (!this.options) return false;
 
-    this.toggleModify(
-      this.elem,
-      !Select.getVisible(this.options) && !flag,
+    this.toggleModifier(
+      this.element,
+      !Select.getVisible(this.options) && !isVisible,
     );
 
     return true;
   }
 
-  private getModify() {
+  private getModifier() {
     return `${this.className.replace('js-', '')}_visible`.replace(/^\./, '');
   }
 
-  private toggleModify(elem: Element, flag = false) {
-    const clearName = this.getModify();
-    const { classList } = elem;
+  private toggleModifier(element: Element, isVisible = false) {
+    const clearName = this.getModifier();
+    const { classList } = element;
 
-    if (flag) {
+    if (isVisible) {
       classList.add(clearName);
     } else {
       classList.remove(clearName);
@@ -157,7 +158,7 @@ class Select {
 
   @boundMethod
   private handleItemsSet(event: MouseEvent | KeyboardEvent) {
-    let flag = false;
+    let isSelected = false;
     let mouse: string = '';
     let key: string = '';
 
@@ -170,30 +171,30 @@ class Select {
 
     if (key === 'Enter' || key === ' ') {
       event.preventDefault();
-      flag = true;
-    } else if (mouse === 'click') { flag = true; }
+      isSelected = true;
+    } else if (mouse === 'click') { isSelected = true; }
 
-    if (flag) {
-      this.setValSelect(event.target as HTMLElement);
+    if (isSelected) {
+      this.setValueSelect(event.target as HTMLElement);
       this.toggle(true);
     }
   }
 
   @boundMethod
   private handleDocumentClick(event: MouseEvent) {
-    const elem = (event.target as Element)
-      .closest(`.${this.getModify()}`) ?? false;
-    if (!elem) {
+    const element = (event.target as Element)
+      .closest(`.${this.getModifier()}`) ?? false;
+    if (!element) {
       this.toggle(true);
     }
   }
 
   @boundMethod
   private handleDocumentFocusin(event: FocusEvent) {
-    const dom = event.target as Element;
-    const linkEl = dom.closest(`${this.className}__options`) ?? false;
-    const ulEl = dom.closest(`.${this.getModify()}`) ?? false;
-    if (!linkEl && !ulEl) { this.toggle(true); }
+    const element = event.target as Element;
+    const isLink = element.closest(`${this.className}__options`) ?? false;
+    const isList = element.closest(`.${this.getModifier()}`) ?? false;
+    if (!isLink && !isList) { this.toggle(true); }
   }
 
   private setActions() {

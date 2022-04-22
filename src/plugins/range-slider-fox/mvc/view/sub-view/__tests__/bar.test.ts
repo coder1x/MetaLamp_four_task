@@ -38,10 +38,10 @@ describe('------- Test Bar API -------', () => {
   test(' Set progress-bar position and width ', async () => {
     await createBar();
     expect(await bar.setBar(12, 23)).toBeTruthy();
-    const elem = await wrap.firstElementChild as HTMLElement;
+    const element = await wrap.firstElementChild as HTMLElement;
 
-    const { left } = elem.style;
-    const { width } = elem.style;
+    const { left } = element.style;
+    const { width } = element.style;
 
     expect(left).toBe('12%');
     expect(width).toBe('23%');
@@ -52,10 +52,10 @@ describe('------- Test Bar API -------', () => {
     await createBar();
     expect(await bar.setBar(34, 10)).toBeTruthy();
     expect(await bar.setOrientation('vertical')).toBeTruthy();
-    const elem = await wrap.firstElementChild as HTMLElement;
+    const element = await wrap.firstElementChild as HTMLElement;
 
-    const { bottom } = elem.style;
-    const { height } = elem.style;
+    const { bottom } = element.style;
+    const { height } = element.style;
 
     expect(bottom).toBe('34%');
     expect(height).toBe('10%');
@@ -65,8 +65,8 @@ describe('------- Test Bar API -------', () => {
   test(' Set progress-bar size relating the orientation ', async () => {
     await createBar();
     bar.setSizeWH(25);
-    const elem = await wrap.firstElementChild as HTMLElement;
-    const { height } = elem.style;
+    const element = await wrap.firstElementChild as HTMLElement;
+    const { height } = element.style;
     expect(height).toBe('25px');
   });
 

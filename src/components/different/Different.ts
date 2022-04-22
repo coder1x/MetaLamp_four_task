@@ -11,7 +11,7 @@ interface Options {
 }
 
 class Different {
-  private elem: Element;
+  private element: Element;
 
   private type: HTMLInputElement | null = null;
 
@@ -29,7 +29,7 @@ class Different {
 
   private panel: Element | null = null;
 
-  private modify: string = '';
+  private modifier: string = '';
 
   private disabledCache: boolean = false;
 
@@ -47,11 +47,11 @@ class Different {
 
   onUnsubscribtion: Function | null = null;
 
-  constructor(nameClass: string, elem: Element, panel: Element) {
+  constructor(nameClass: string, element: Element, panel: Element) {
     this.nameClass = nameClass;
     this.panel = panel;
-    this.elem = elem;
-    this.setDom();
+    this.element = element;
+    this.setDomElement();
   }
 
   setData(options: Options) {
@@ -82,9 +82,9 @@ class Different {
       const { classList } = this.panel as Element;
 
       if (orientFlag) {
-        classList.add(this.modify);
+        classList.add(this.modifier);
       } else {
-        classList.remove(this.modify);
+        classList.remove(this.modifier);
       }
     }
 
@@ -95,15 +95,15 @@ class Different {
   }
 
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
-  setAction(obj: any) {
-    this.objRangeSlider = obj;
+  bindEvent(rangeSlider: any) {
+    this.objRangeSlider = rangeSlider;
 
     if (!this.reset || !this.select) return false;
 
     this.reset.addEventListener('click', this.handleResetClick);
 
     this.select.onChange = (value: string) => {
-      obj.update({
+      rangeSlider.update({
         theme: value,
       });
     };
@@ -135,17 +135,17 @@ class Different {
 
   @boundMethod
   private handleDisabledClick(event: Event) {
-    const elem = event.target as HTMLInputElement;
+    const element = event.target as HTMLInputElement;
     this.objRangeSlider.update({
-      disabled: elem.checked,
+      disabled: element.checked,
     });
   }
 
   @boundMethod
   private handleBarClick(event: Event) {
-    const elem = event.target as HTMLInputElement;
+    const element = event.target as HTMLInputElement;
     this.objRangeSlider.update({
-      bar: elem.checked,
+      bar: element.checked,
     });
   }
 
@@ -158,49 +158,49 @@ class Different {
 
   @boundMethod
   private handleTypeClick(event: Event) {
-    const elem = event.target as HTMLInputElement;
+    const element = event.target as HTMLInputElement;
     this.objRangeSlider.update({
-      type: elem.checked ? 'double' : 'single',
+      type: element.checked ? 'double' : 'single',
     });
   }
 
   @boundMethod
   private handleOrientationClick(event: Event) {
-    const elem = event.target as HTMLInputElement;
+    const element = event.target as HTMLInputElement;
     const { classList } = this.panel as Element;
 
-    if (elem.checked) {
-      classList.add(this.modify);
+    if (element.checked) {
+      classList.add(this.modifier);
     } else {
-      classList.remove(this.modify);
+      classList.remove(this.modifier);
     }
 
     this.objRangeSlider.update({
-      orientation: elem.checked ? 'vertical' : 'horizontal',
+      orientation: element.checked ? 'vertical' : 'horizontal',
     });
   }
 
-  private getDom(str: string) {
-    return this.elem.querySelector(
+  private getDomElement(str: string) {
+    return this.element.querySelector(
       `${this.nameClass}__${str}-wrap input`,
     ) as HTMLInputElement;
   }
 
-  private setDom() {
+  private setDomElement() {
     if (this.panel) {
-      this.modify = `${this.panel.classList[0]}_vertical`;
+      this.modifier = `${this.panel.classList[0]}_vertical`;
     }
 
-    this.type = this.getDom('double');
-    this.disabled = this.getDom('disabled');
-    this.bar = this.getDom('bar');
-    this.unsubscribtion = this.getDom('unsubscribtion');
-    this.orientation = this.getDom('vertical');
-    this.reset = this.elem.querySelector(`${this.nameClass}__reset`);
+    this.type = this.getDomElement('double');
+    this.disabled = this.getDomElement('disabled');
+    this.bar = this.getDomElement('bar');
+    this.unsubscribtion = this.getDomElement('unsubscribtion');
+    this.orientation = this.getDomElement('vertical');
+    this.reset = this.element.querySelector(`${this.nameClass}__reset`);
 
     this.select = new Select(
       '.js-select',
-      this.elem.querySelector('.js-select') as Element,
+      this.element.querySelector('.js-select') as Element,
     );
   }
 }

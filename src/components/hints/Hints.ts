@@ -9,7 +9,7 @@ interface Options {
 }
 
 class Hints {
-  private elem: Element;
+  private element: Element;
 
   private tipMinMax: HTMLInputElement | null = null;
 
@@ -31,10 +31,10 @@ class Hints {
 
   private objRangeSlider: any;
 
-  constructor(nameClass: string, elem: Element) {
+  constructor(nameClass: string, element: Element) {
     this.nameClass = nameClass;
-    this.elem = elem;
-    this.setDom();
+    this.element = element;
+    this.setDomElement();
   }
 
   setData(options: Options) {
@@ -61,8 +61,8 @@ class Hints {
   }
 
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
-  setAction(obj: any) {
-    this.objRangeSlider = obj;
+  bindEvent(rangeSlider: any) {
+    this.objRangeSlider = rangeSlider;
 
     [this.tipPrefix, this.tipPostfix].forEach((item) => {
       if (!item) return;
@@ -79,42 +79,42 @@ class Hints {
 
   @boundMethod
   private handleInputData(event: Event) {
-    const elem = event.currentTarget as HTMLInputElement;
+    const element = event.currentTarget as HTMLInputElement;
 
     this.objRangeSlider.update({
-      [elem.name]: elem.value,
+      [element.name]: element.value,
     });
   }
 
   @boundMethod
   private handleTipMinMax(event: Event) {
-    const elem = event.target as HTMLInputElement;
+    const element = event.target as HTMLInputElement;
 
     this.objRangeSlider.update({
-      tipMinMax: elem.checked,
+      tipMinMax: element.checked,
     });
   }
 
   @boundMethod
   private handleTipFromTo(event: Event) {
-    const elem = event.target as HTMLInputElement;
+    const element = event.target as HTMLInputElement;
 
     this.objRangeSlider.update({
-      tipFromTo: elem.checked,
+      tipFromTo: element.checked,
     });
   }
 
-  private getDom(str: string) {
-    return this.elem.querySelector(
-      `${this.nameClass}__${str}-wrap input`,
+  private getDomElement(string: string) {
+    return this.element.querySelector(
+      `${this.nameClass}__${string}-wrap input`,
     ) as HTMLInputElement;
   }
 
-  private setDom() {
-    this.tipMinMax = this.getDom('minmax');
-    this.tipFromTo = this.getDom('fromto');
-    this.tipPrefix = this.getDom('prefix');
-    this.tipPostfix = this.getDom('postfix');
+  private setDomElement() {
+    this.tipMinMax = this.getDomElement('minmax');
+    this.tipFromTo = this.getDomElement('fromto');
+    this.tipPrefix = this.getDomElement('prefix');
+    this.tipPostfix = this.getDomElement('postfix');
   }
 }
 

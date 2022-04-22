@@ -4,14 +4,14 @@ include ../text-field/text-field.pug
 mixin grid(options)
   -
     const label = options.label ?? ''
-    const modify = options.modify ?? ''
+    const modifier = options.modifier ?? ''
     const addClass = options.class ?? ''
-    const flLabel = options.flLabel
-    const classComp = 'grid'
-    let className = classComp
+    const isLabeled = options.isLabeled
+    const classComponent = 'grid'
+    let className = classComponent
     
-    if(modify){
-    className += ` ${classComp}_${modify}`}
+    if(modifier){
+    className += ` ${classComponent}_${modifier}`}
     if(addClass){
     className += ` ${addClass}`}
 
@@ -22,26 +22,26 @@ mixin grid(options)
 
     const textField = data.textField
 
-  fieldset(class=`${className} js-${classComp}`)
-    - if(!flLabel){
-    legend(class=`${classComp}__label`)= label
+  fieldset(class=`${className} js-${classComponent}`)
+    - if(!isLabeled){
+    legend(class=`${classComponent}__label`)= label
     -}
 
-    div(class=`${classComp}__grid-wrap js-${classComp}__grid-wrap`)
+    div(class=`${classComponent}__grid-wrap js-${classComponent}__grid-wrap`)
       +toggle-buttons({
         header: 'Grid',
       })
 
-    div(class=`${classComp}__snap-wrap js-${classComp}__snap-wrap`)
+    div(class=`${classComponent}__snap-wrap js-${classComponent}__snap-wrap`)
       +toggle-buttons({
         header: 'Snap',
       })
 
-    div(class=`${classComp}__interval-wrap js-${classComp}__interval-wrap`)
+    div(class=`${classComponent}__interval-wrap js-${classComponent}__interval-wrap`)
       +text-field(textField.interval)
 
-    div(class=`${classComp}__step-wrap js-${classComp}__step-wrap`)
+    div(class=`${classComponent}__step-wrap js-${classComponent}__step-wrap`)
       +text-field(textField.step)
       
-    div(class=`${classComp}__round-wrap js-${classComp}__round-wrap`)
+    div(class=`${classComponent}__round-wrap js-${classComponent}__round-wrap`)
       +text-field(textField.round)

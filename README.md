@@ -72,7 +72,7 @@ $('.rslider__fox').RangeSliderFox({
     tipFromTo: true,
     grid: true,
     gridSnap: false,
-    gridNum: 40,
+    gridNumber: 40,
     onStart: (data) => {
       console.log(data.type);
       console.log(data.orientation); 
@@ -91,7 +91,7 @@ $('.rslider__fox').RangeSliderFox({
       console.log(data.tipFromTo);
       console.log(data.grid);
       console.log(data.gridSnap);
-      console.log(data.gridNum);
+      console.log(data.gridNumber);
       console.log(data.gridStep);
       console.log(data.gridRound);
       console.log(data.disabled);
@@ -111,17 +111,17 @@ $('.rslider__fox').RangeSliderFox({
 ## Usage API:
 
 ```javascript
-const obj = $(dom).RangeSliderFox({}).data('RangeSliderFox');
+const object = $(dom).RangeSliderFox({}).data('RangeSliderFox');
 
 // This piece of code will change range values and set the dot on position 350.
-obj.update({
+object.update({
 min:0,
 max:600,
 from:350
 })
 
 // unsubscribe from events
-obj.update({
+object.update({
   onStart:null,
   onChange:null,
   onUpdate:null,
@@ -129,12 +129,12 @@ obj.update({
 })
 
 
-obj.reset()
+object.reset()
 
 // reset - will reset all the setup to the values which were 
 // passed on initialization or will take default values
 
-obj.destroy() 
+object.destroy() 
 
 // destroy - will destroy slider instance, DOM-elements and all related events.
 
@@ -161,7 +161,7 @@ obj.destroy()
 | tipFromTo | data-tip-from-to | true | boolean | FromTo hints view (on or off) |
 | grid | data-grid | false | boolean | Scale view (on or off) |
 | gridSnap | data-grid-snap | false | boolean | Dot can stop between scale marks (yes or no) |
-| gridNum | data-grid-num | 0 (n, n.n..) | number | Amount of intervals the scale is split into |
+| gridNumber | data-grid-num | 0 (n, n.n..) | number | Amount of intervals the scale is split into |
 | gridStep | data-grid-step | 0 (n, n.n..) | number | Amount of steps in the interval |
 | gridRound | data-grid-round | 0 (n) | number | Fractional rounding |
 | disabled | data-disabled | false | boolean | Slider enabled or disabled |
@@ -172,7 +172,7 @@ obj.destroy()
 
 ## details
 
-* only one of values gridNum or gridStep can be set for scale. If both of them are set, gridStep will be ignored
+* only one of values gridNumber or gridStep can be set for scale. If both of them are set, gridStep will be ignored
 
 * gridSnap is ignored if one of parameters step, keyStepOne, keyStepHold is set
 

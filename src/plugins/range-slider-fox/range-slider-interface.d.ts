@@ -18,7 +18,7 @@ interface RangeSliderOptions {
   readonly tipPostfix?: string | null;
   readonly tipMinMax?: boolean | null;
   readonly tipFromTo?: boolean | null;
-  readonly gridNum?: number | null;
+  readonly gridNumber?: number | null;
   readonly gridStep?: number | null;
   readonly gridRound?: number | null;
   readonly disabled?: boolean | null;

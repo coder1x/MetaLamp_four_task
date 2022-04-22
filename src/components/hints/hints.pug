@@ -4,14 +4,14 @@ include ../text-field/text-field.pug
 mixin hints(options)
   -
     const label = options.label ?? ''
-    const modify = options.modify ?? ''
+    const modifier = options.modifier ?? ''
     const addClass = options.class ?? ''
-    const flLabel = options.flLabel
-    const classComp = 'hints'
-    let className = classComp
+    const isLabeled = options.isLabeled
+    const classComponent = 'hints'
+    let className = classComponent
     
-    if(modify){
-    className += ` ${classComp}_${modify}`}
+    if(modifier){
+    className += ` ${classComponent}_${modifier}`}
     if(addClass){
     className += ` ${addClass}`}
 
@@ -22,23 +22,23 @@ mixin hints(options)
 
     const textField = data.textField
 
-  fieldset(class=`${className} js-${classComp}`)
-    - if(!flLabel){
-    legend(class=`${classComp}__label`)= label
+  fieldset(class=`${className} js-${classComponent}`)
+    - if(!isLabeled){
+    legend(class=`${classComponent}__label`)= label
     -}
 
-    div(class=`${classComp}__minmax-wrap js-${classComp}__minmax-wrap`)
+    div(class=`${classComponent}__minmax-wrap js-${classComponent}__minmax-wrap`)
       +toggle-buttons({
         header: 'min - max',
       })
 
-    div(class=`${classComp}__fromto-wrap js-${classComp}__fromto-wrap`)
+    div(class=`${classComponent}__fromto-wrap js-${classComponent}__fromto-wrap`)
       +toggle-buttons({
         header: 'from - to',
       })
 
-    div(class=`${classComp}__prefix-wrap js-${classComp}__prefix-wrap`)
+    div(class=`${classComponent}__prefix-wrap js-${classComponent}__prefix-wrap`)
       +text-field(textField.prefix)
       
-    div(class=`${classComp}__postfix-wrap js-${classComp}__postfix-wrap`)
+    div(class=`${classComponent}__postfix-wrap js-${classComponent}__postfix-wrap`)
       +text-field(textField.postfix)

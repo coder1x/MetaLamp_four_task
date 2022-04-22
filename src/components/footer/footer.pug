@@ -1,13 +1,13 @@
 mixin footer(options)
   -
-    const modify = options.modify ?? []
+    const modifier = options.modifier ?? []
     const addClass = options.class ?? ''
-    const classComp = 'footer'
-    let className = classComp
+    const classComponent = 'footer'
+    let className = classComponent
     
-    if(modify){
-      for(const item of modify)
-    className += ` ${classComp}_${item}`
+    if(modifier){
+      for(const item of modifier)
+    className += ` ${classComponent}_${item}`
     }
     if(addClass){
     className += ` ${addClass}`}

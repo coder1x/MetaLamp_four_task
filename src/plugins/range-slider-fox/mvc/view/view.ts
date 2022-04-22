@@ -38,27 +38,27 @@ class View extends Observer {
 
   onHandle: Function | null = null;
 
-  elem: Element | null = null;
+  element: Element | null = null;
 
-  constructor(elem: Element) {
+  constructor(element: Element) {
     super();
-    this.elem = elem;
+    this.element = element;
     this.rsName = 'range-slider-fox';
-    this.wrapSlider = this.elem.parentElement;
+    this.wrapSlider = this.element.parentElement;
 
     this.init();
   }
 
   async destroy() {
-    if (!this.elem || !this.wrapSlider) return false;
+    if (!this.element || !this.wrapSlider) return false;
 
-    const typeElem = await this.elem.constructor.name;
+    const typeElem = await this.element.constructor.name;
     if (typeElem === 'HTMLInputElement') {
-      const input = this.elem as HTMLInputElement;
+      const input = this.element as HTMLInputElement;
       input.value = ' ';
     }
-    const elem = await this.wrapSlider.querySelector(`.js-${this.rsName}`);
-    if (elem) { await elem.remove(); }
+    const element = await this.wrapSlider.querySelector(`.js-${this.rsName}`);
+    if (element) { await element.remove(); }
 
     this.handle = null;
     this.hints = null;
@@ -69,11 +69,11 @@ class View extends Observer {
   }
 
   setValueInput(from: number, to: number, type: string) {
-    if (!this.elem) return false;
+    if (!this.element) return false;
 
     let str = '';
-    if (this.elem.constructor.name === 'HTMLInputElement') {
-      const input = this.elem as HTMLInputElement;
+    if (this.element.constructor.name === 'HTMLInputElement') {
+      const input = this.element as HTMLInputElement;
 
       input.value = str;
       str += from;
@@ -102,8 +102,8 @@ class View extends Observer {
   }
 
   disabledRangeSlider(flag: boolean) {
-    const elem = this.wrapSlider as HTMLElement;
-    const style = elem.style as CSSStyleDeclaration;
+    const element = this.wrapSlider as HTMLElement;
+    const style = element.style as CSSStyleDeclaration;
     const opacity = flag ? style.opacity = '0.5' : style.opacity = '1';
     return opacity;
   }
@@ -118,13 +118,13 @@ class View extends Observer {
   }
 
   static createElem(teg: string, className: string[]) {
-    const elem = document.createElement(teg);
+    const element = document.createElement(teg);
 
     className.forEach((item) => {
-      elem.classList.add(item);
+      element.classList.add(item);
     });
 
-    return elem;
+    return element;
   }
 
   createDomBase() {
@@ -160,14 +160,14 @@ class View extends Observer {
   }
 
   async setOrientation(str: string) {
-    const modify = `${this.rsName}_vertical`;
+    const modifier = `${this.rsName}_vertical`;
     const { classList } = this.rangeSlider as Element;
     this.vertical = str === 'vertical';
 
     if (this.vertical) {
-      classList.add(modify);
+      classList.add(modifier);
     } else {
-      classList.remove(modify);
+      classList.remove(modifier);
     }
 
     if (!this.handle || !this.hints) return false;
@@ -389,7 +389,7 @@ class View extends Observer {
       ['bar', 'bar'],
       ['grid', 'grid'],
       ['grid-snap', 'gridSnap'],
-      ['grid-num', 'gridNum'],
+      ['grid-num', 'gridNumber'],
       ['grid-step', 'gridStep'],
       ['grid-round', 'gridRound'],
       ['tip-min-max', 'tipMinMax'],
@@ -401,11 +401,11 @@ class View extends Observer {
     const mapOptions = new Map();
 
     const getDataAttr = (item: string) => {
-      if (!this.elem) return false;
+      if (!this.element) return false;
 
       const attribute = `data-${item}`;
-      if (this.elem.hasAttribute(attribute)) {
-        const value = this.elem.getAttribute(attribute) ?? '';
+      if (this.element.hasAttribute(attribute)) {
+        const value = this.element.getAttribute(attribute) ?? '';
         const key = options.get(item);
 
         if (/^-?\d*?[.]?\d*$/.test(value)) {
@@ -459,7 +459,7 @@ class View extends Observer {
     });
 
     observer.observe(
-      (this.elem as Element),
+      (this.element as Element),
       {
         attributeFilter: masDataAttr,
       },

@@ -32,7 +32,7 @@ describe('------- Test Controller API -------', () => {
     tipFromTo: true,
     grid: false,
     gridSnap: false,
-    gridNum: 4,
+    gridNumber: 4,
     gridStep: 0,
     gridRound: 0,
     disabled: false,
@@ -70,7 +70,7 @@ describe('------- Test Controller API -------', () => {
           tipFromTo: true,
           grid: true,
           gridSnap: false,
-          gridNum: 34,
+          gridNumber: 34,
           gridStep: 0,
           gridRound: 2,
           disabled: false,
@@ -97,7 +97,7 @@ describe('------- Test Controller API -------', () => {
         expect(data.tipFromTo).toBeTruthy();
         expect(data.grid).toBeTruthy();
         expect(data.gridSnap).toBeFalsy();
-        expect(data.gridNum).toBeCloseTo(34);
+        expect(data.gridNumber).toBeCloseTo(34);
         expect(data.gridStep).toBeCloseTo(0);
         expect(data.gridRound).toBeCloseTo(2);
         expect(data.disabled).toBeFalsy();

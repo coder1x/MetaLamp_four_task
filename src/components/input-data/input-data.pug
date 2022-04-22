@@ -3,23 +3,23 @@ include ../text-field/text-field.pug
 mixin input-data(options)
   -
     const label = options.label ?? ''
-    const modify = options.modify ?? ''
+    const modifier = options.modifier ?? ''
     const addClass = options.class ?? ''
-    const flLabel = options.flLabel
-    const classComp = 'input-data'
-    let className = classComp
+    const isLabeled = options.isLabeled
+    const classComponent = 'input-data'
+    let className = classComponent
     
-    if(modify){
-    className += ` ${classComp}_${modify}`}
+    if(modifier){
+    className += ` ${classComponent}_${modifier}`}
     if(addClass){
     className += ` ${addClass}`}
 
-  fieldset(class=`${className} js-${classComp}`)
-    - if(!flLabel){
-    legend(class=`${classComp}__label`)= label
+  fieldset(class=`${className} js-${classComponent}`)
+    - if(!isLabeled){
+    legend(class=`${classComponent}__label`)= label
     -}
     
-    div(class=`${classComp}__value-wrap`)
+    div(class=`${classComponent}__value-wrap`)
       +text-field({
         label: 'value',
         type: 'text',

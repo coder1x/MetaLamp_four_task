@@ -5,44 +5,44 @@ import RangeSliderOptions from '@com/interface/glob-interface.d';
 class CopyCode {
   private className: string;
 
-  private elem: Element;
+  private element: Element;
 
   private button: HTMLButtonElement | null = null;
 
-  private ul: Element | null = null;
+  private list: Element | null = null;
 
   constructor(className: string, component: Element) {
     this.className = className;
-    this.elem = component;
+    this.element = component;
     this.init();
   }
 
   setData(options: RangeSliderOptions) {
-    if (!this.ul) return false;
+    if (!this.list) return false;
 
     const key = Object.keys(options);
-    const value = Object.values(options);
-    const child = this.ul.childNodes;
-    const flag = !!child.length;
+    const values = Object.values(options);
+    const { childNodes } = this.list;
+    const isChildNodes = !!childNodes.length;
 
     for (let i = 0; i < key.length; i += 1) {
-      let valStr: string;
-      if (typeof value[i] === 'string') {
-        valStr = `'${value[i]}'`;
+      let value: string;
+      if (typeof values[i] === 'string') {
+        value = `'${values[i]}'`;
       } else {
-        valStr = value[i];
+        value = values[i];
       }
-      const text = `${key[i]}: ${valStr},`;
+      const text = `${key[i]}: ${value},`;
 
-      if (!flag) {
+      if (!isChildNodes) {
         const item = CopyCode.createElem(
           'li',
           [`${this.className.replace('.', '')}__item`],
         );
-        this.ul.appendChild(item);
+        this.list.appendChild(item);
         item.innerText = text;
       } else {
-        const item = child[i] as HTMLElement;
+        const item = childNodes[i] as HTMLElement;
         item.innerText = text;
       }
     }
@@ -51,30 +51,30 @@ class CopyCode {
   }
 
   private init() {
-    this.ul = this.elem.querySelector(`${this.className}__options`);
-    this.button = this.elem.querySelector(`${this.className}__copy`);
+    this.list = this.element.querySelector(`${this.className}__options`);
+    this.button = this.element.querySelector(`${this.className}__copy`);
     this.setActions();
   }
 
   private static createElem(teg: string, className: string[]) {
-    const elem = document.createElement(teg);
+    const element = document.createElement(teg);
 
     className.forEach((item) => {
-      elem.classList.add(item);
+      element.classList.add(item);
     });
 
-    return elem;
+    return element;
   }
 
   @boundMethod
   private handleButtonClick() {
-    if (!this.ul) return false;
+    if (!this.list) return false;
 
     let text = '$(\'.demo\').RangeSliderFox({\n';
 
-    this.ul.childNodes.forEach((item) => {
-      const elem = item as HTMLElement;
-      text += `${elem.innerText}\n`;
+    this.list.childNodes.forEach((item) => {
+      const element = item as HTMLElement;
+      text += `${element.innerText}\n`;
     });
 
     text += '});';

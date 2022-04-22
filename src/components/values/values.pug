@@ -3,14 +3,14 @@ include ../text-field/text-field.pug
 mixin values(options)
   -
     const label = options.label ?? ''
-    const modify = options.modify ?? ''
+    const modifier = options.modifier ?? ''
     const addClass = options.class ?? ''
-    const flLabel = options.flLabel
-    const classComp = 'values'
-    let className = classComp
+    const isLabeled = options.isLabeled
+    const classComponent = 'values'
+    let className = classComponent
     
-    if(modify){
-    className += ` ${classComp}_${modify}`}
+    if(modifier){
+    className += ` ${classComponent}_${modifier}`}
     if(addClass){
     className += ` ${addClass}`}
 
@@ -21,22 +21,22 @@ mixin values(options)
 
     const textField = data.textField
     
-  fieldset(class=`${className} js-${classComp}`)
-    - if(!flLabel){
-    legend(class=`${classComp}__label`)= label
+  fieldset(class=`${className} js-${classComponent}`)
+    - if(!isLabeled){
+    legend(class=`${classComponent}__label`)= label
     -}
 
-    div(class=`${classComp}__min-wrap js-${classComp}__min-wrap`)
+    div(class=`${classComponent}__min-wrap js-${classComponent}__min-wrap`)
       +text-field(textField.min)
 
-    div(class=`${classComp}__max-wrap js-${classComp}__max-wrap`)
+    div(class=`${classComponent}__max-wrap js-${classComponent}__max-wrap`)
       +text-field(textField.max)
 
-    div(class=`${classComp}__from-wrap js-${classComp}__from-wrap`)
+    div(class=`${classComponent}__from-wrap js-${classComponent}__from-wrap`)
       +text-field(textField.from)
 
-    div(class=`${classComp}__to-wrap js-${classComp}__to-wrap`)
+    div(class=`${classComponent}__to-wrap js-${classComponent}__to-wrap`)
       +text-field(textField.to)
 
-    div(class=`${classComp}__step-wrap js-${classComp}__step-wrap`)
+    div(class=`${classComponent}__step-wrap js-${classComponent}__step-wrap`)
       +text-field(textField.step)

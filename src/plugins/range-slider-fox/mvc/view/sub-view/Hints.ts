@@ -34,9 +34,9 @@ class Hints {
 
   private vertical: boolean = false;
 
-  constructor(elem: HTMLElement | Element, rsName: string) {
+  constructor(element: HTMLElement | Element, rsName: string) {
     this.rsName = rsName;
-    this.rsTop = elem;
+    this.rsTop = element;
   }
 
   setTipFlag(tipFromTo: boolean, tipMinMax: boolean) {
@@ -255,9 +255,9 @@ class Hints {
     return true;
   }
 
-  private setData(elem: HTMLElement, value: number) {
-    if (elem) {
-      const dom = elem;
+  private setData(element: HTMLElement, value: number) {
+    if (element) {
+      const dom = element;
       const prefix = this.getPrefix(value);
       dom.innerText = prefix;
       return prefix;
@@ -277,13 +277,13 @@ class Hints {
   }
 
   private static createElem(teg: string, className: string[]) {
-    const elem = document.createElement(teg);
+    const element = document.createElement(teg);
 
     className.forEach((item) => {
-      elem.classList.add(item);
+      element.classList.add(item);
     });
 
-    return elem;
+    return element;
   }
 
   private getPrefix(value: number | string) {
@@ -294,8 +294,8 @@ class Hints {
   }
 
   @boundMethod
-  private convertStyle(elem: CSSStyleDeclaration) {
-    const dom = elem;
+  private convertStyle(element: CSSStyleDeclaration) {
+    const dom = element;
     let value = '';
     if (this.vertical) {
       if (dom.left === '') return false;
@@ -311,18 +311,18 @@ class Hints {
     return true;
   }
 
-  private getSizeElem(elem: HTMLElement) {
-    return this.vertical ? elem.offsetHeight : elem.offsetWidth;
+  private getSizeElem(element: HTMLElement) {
+    return this.vertical ? element.offsetHeight : element.offsetWidth;
   }
 
-  private getBoundingDot(elem: HTMLElement | null) {
+  private getBoundingDot(element: HTMLElement | null) {
     let tipDotXY = 0;
     let tipDotWH = 0;
-    if (elem) {
-      const elemRect = elem.getBoundingClientRect();
+    if (element) {
+      const elemRect = element.getBoundingClientRect();
       tipDotXY = this.vertical ? elemRect.bottom : elemRect.left;
       tipDotWH = this.vertical
-        ? elem.offsetHeight : elem.offsetWidth;
+        ? element.offsetHeight : element.offsetWidth;
     }
 
     return [
@@ -368,9 +368,9 @@ class Hints {
     return { tipSingleXY, tipSingleB };
   }
 
-  private static display(elem: HTMLElement | null, flag: boolean) {
-    if (elem) {
-      const dom = elem;
+  private static display(element: HTMLElement | null, flag: boolean) {
+    if (element) {
+      const dom = element;
       dom.style.visibility = flag ? 'visible' : 'hidden';
     }
   }

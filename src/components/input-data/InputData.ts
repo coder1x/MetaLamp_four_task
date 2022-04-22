@@ -7,32 +7,32 @@ class InputData {
 
   private className: string = '';
 
-  private elem: Element;
+  private element: Element;
 
-  constructor(className: string, elem: Element) {
+  constructor(className: string, element: Element) {
     this.className = className;
-    this.elem = elem;
-    this.setDom();
+    this.element = element;
+    this.setDomElement();
   }
 
-  private setDom() {
-    this.input = this.elem.querySelector(
+  private setDomElement() {
+    this.input = this.element.querySelector(
       `${this.className}__slider-wrap input`,
     );
 
-    this.value = this.elem.querySelector(
+    this.value = this.element.querySelector(
       '.js-input-data input',
     ) as HTMLInputElement;
 
     if (this.input) {
-      const obj = this;
+      const objThis = this;
       Object.defineProperty(this.input, 'value', {
         set(text) {
-          if (!text && !obj) return;
+          if (!text && !objThis) return;
 
-          const dom = obj.value as HTMLInputElement;
+          const input = objThis.value as HTMLInputElement;
 
-          dom.value = text;
+          input.value = text;
           this.setAttribute('value', text);
         },
       });

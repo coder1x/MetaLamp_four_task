@@ -1,16 +1,16 @@
 const TerserPlugin = require('terser-webpack-plugin');
-const DP = require('./isDev');
+const env = require('./isDev');
 
 module.exports = {
   optimization: () => {
     const config = {
-      runtimeChunk: DP.isPlugin ? undefined : 'single',
+      runtimeChunk: env.isPlugin ? undefined : 'single',
       splitChunks: {
         chunks: 'all',
       },
     };
 
-    if (DP.isProd) {
+    if (env.isProd) {
       config.minimizer = [
         new TerserPlugin({
           parallel: true,

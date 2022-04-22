@@ -3,14 +3,14 @@ include ../text-field/text-field.pug
 mixin keyboard-control(options)
   -
     const label = options.label ?? ''
-    const modify = options.modify ?? ''
+    const modifier = options.modifier ?? ''
     const addClass = options.class ?? ''
-    const flLabel = options.flLabel
-    const classComp = 'keyboard-control'
-    let className = classComp
+    const isLabeled = options.isLabeled
+    const classComponent = 'keyboard-control'
+    let className = classComponent
     
-    if(modify){
-    className += ` ${classComp}_${modify}`}
+    if(modifier){
+    className += ` ${classComponent}_${modifier}`}
     if(addClass){
     className += ` ${addClass}`}
 
@@ -21,13 +21,13 @@ mixin keyboard-control(options)
 
     const textField = data.textField
 
-  fieldset(class=`${className} js-${classComp}`)
-    - if(!flLabel){
-    legend(class=`${classComp}__label`)= label
+  fieldset(class=`${className} js-${classComponent}`)
+    - if(!isLabeled){
+    legend(class=`${classComponent}__label`)= label
     -}
 
-    div(class=`${classComp}__one-wrap js-${classComp}__one-wrap`)
+    div(class=`${classComponent}__one-wrap js-${classComponent}__one-wrap`)
       +text-field(textField.one)
       
-    div(class=`${classComp}__hold-wrap js-${classComp}__hold-wrap`)
+    div(class=`${classComponent}__hold-wrap js-${classComponent}__hold-wrap`)
       +text-field(textField.hold)

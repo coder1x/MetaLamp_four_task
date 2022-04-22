@@ -45,9 +45,9 @@ class Controller {
   async destroy() {
     this.lock = true;
     if (!this.view) return false;
-    const elem = await this.view.elem as Element;
-    if (elem.constructor.name !== 'HTMLInputElement') return false;
-    await $.data(elem, 'RangeSliderFox', null);
+    const element = await this.view.element as Element;
+    if (element.constructor.name !== 'HTMLInputElement') return false;
+    await $.data(element, 'RangeSliderFox', null);
     await this.view.destroy();
     this.view = null;
     this.model = null;
@@ -423,9 +423,9 @@ class Controller {
   @boundMethod
   private handleSnapNum(options: ObserverOptions) {
     const { key } = options;
-    if (key !== 'SnapNum' || !this.model) return false;
+    if (key !== 'snapNumber' || !this.model) return false;
 
-    this.model.calcSnap(options.snapNum ?? []);
+    this.model.calcSnap(options.snapNumber ?? []);
     return true;
   }
 }

@@ -81,11 +81,11 @@ describe('------- Test View API -------', () => {
         let line: Element | null = null;
 
         nodes.forEach((item) => {
-          const elem = item as HTMLElement;
+          const element = item as HTMLElement;
 
-          const { className } = elem;
+          const { className } = element;
           if (searchStr(className, `${jsRsName}__center`)) {
-            [line] = elem.children;
+            [line] = element.children;
           }
           name.push(className);
         });
@@ -95,8 +95,8 @@ describe('------- Test View API -------', () => {
         expect(searchStr(name[2], `${jsRsName}__bottom`)).toBeTruthy();
 
         if (line) {
-          const elem = line as Element;
-          expect(searchStr(elem.className, `${jsRsName}__line`)).toBeTruthy();
+          const element = line as Element;
+          expect(searchStr(element.className, `${jsRsName}__line`)).toBeTruthy();
         }
       },
     });
@@ -108,8 +108,8 @@ describe('------- Test View API -------', () => {
     const model = await new Model({
       onStart: async () => {
         view.setOrientation('vertical');
-        const elem = wrap.getElementsByClassName(`${rsName}_vertical`);
-        expect(elem[0]).toBeDefined();
+        const element = wrap.getElementsByClassName(`${rsName}_vertical`);
+        expect(element[0]).toBeDefined();
       },
     });
     new Controller(model, view);
@@ -151,13 +151,13 @@ describe('------- Test View API -------', () => {
     const model = await new Model({
       onStart: async () => {
         view.setTheme('dark');
-        let elem = wrap.getElementsByClassName('rs-dark');
-        expect(elem[0]).toBeDefined();
+        let element = wrap.getElementsByClassName('rs-dark');
+        expect(element[0]).toBeDefined();
         view.setTheme('fox');
-        elem = wrap.getElementsByClassName('rs-dark');
-        expect(elem[0]).toBeUndefined();
-        elem = wrap.getElementsByClassName('rs-fox');
-        expect(elem[0]).toBeDefined();
+        element = wrap.getElementsByClassName('rs-dark');
+        expect(element[0]).toBeUndefined();
+        element = wrap.getElementsByClassName('rs-fox');
+        expect(element[0]).toBeDefined();
       },
     });
     new Controller(model, view);
@@ -166,8 +166,8 @@ describe('------- Test View API -------', () => {
   test(' handle - interface  ', async () => {
     const model = await new Model({
       onStart: async () => {
-        const elem = view.createDotElem('double') as HTMLElement;
-        expect(elem.constructor.name).toBe('HTMLDivElement');
+        const element = view.createDotElem('double') as HTMLElement;
+        expect(element.constructor.name).toBe('HTMLDivElement');
 
         expect(typeof view.setDotFrom(15)).toBe('object');
 
@@ -232,9 +232,9 @@ describe('------- Test View API -------', () => {
   test(' Grid - interface  ', async () => {
     const model = await new Model({
       onStart: async () => {
-        let elem = await view.createDomGrid() as HTMLElement;
-        expect(elem.constructor.name).toBe('HTMLDivElement');
-        elem = await view.createMark([
+        let element = await view.createDomGrid() as HTMLElement;
+        expect(element.constructor.name).toBe('HTMLDivElement');
+        element = await view.createMark([
           {
             val: 1,
             position: 1,
@@ -253,7 +253,7 @@ describe('------- Test View API -------', () => {
           },
         ]) as HTMLElement;
 
-        expect(elem.constructor.name).toBe('HTMLDivElement');
+        expect(element.constructor.name).toBe('HTMLDivElement');
         expect(await view.deleteGrid()).toBeTruthy();
       },
     });

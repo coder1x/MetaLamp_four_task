@@ -10,7 +10,7 @@ interface Options {
 }
 
 class Values {
-  private elem: Element;
+  private element: Element;
 
   private min: HTMLInputElement | null = null;
 
@@ -38,10 +38,10 @@ class Values {
 
   private mapInput: Map<string, string> | null = null;
 
-  constructor(nameClass: string, elem: Element) {
+  constructor(nameClass: string, element: Element) {
     this.nameClass = nameClass;
-    this.elem = elem;
-    this.setDom();
+    this.element = element;
+    this.setDomElement();
   }
 
   setData(options: Options) {
@@ -76,8 +76,8 @@ class Values {
   }
 
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
-  setAction(obj: any) {
-    this.objRangeSlider = obj;
+  bindEvent(rangeSlider: any) {
+    this.objRangeSlider = rangeSlider;
     this.mapInput = new Map();
 
     this.mapInput.set('min', (this.min && this.min.value) ?? '');
@@ -96,17 +96,17 @@ class Values {
 
   @boundMethod
   private handleInputProcessing(event: Event) {
-    const elem = event.currentTarget as HTMLInputElement;
-    const value = elem.value.replace(/[^-.\d]/g, '');
+    const element = event.currentTarget as HTMLInputElement;
+    const value = element.value.replace(/[^-.\d]/g, '');
     const regexp = /^-?\d*?[.]?\d*$/;
 
     if (!this.mapInput) return false;
 
     if (regexp.test(value)) {
-      this.mapInput.set(elem.name, value);
-      elem.value = value;
+      this.mapInput.set(element.name, value);
+      element.value = value;
     } else {
-      elem.value = this.mapInput.get(elem.name) ?? '';
+      element.value = this.mapInput.get(element.name) ?? '';
     }
 
     return true;
@@ -115,27 +115,27 @@ class Values {
   @boundMethod
   private handleInputChange(event: Event) {
     if (!this.mapInput) return false;
-    const elem = event.currentTarget as HTMLInputElement;
+    const element = event.currentTarget as HTMLInputElement;
     this.objRangeSlider.update({
-      [elem.name]: Number(this.mapInput.get(elem.name)),
+      [element.name]: Number(this.mapInput.get(element.name)),
     });
     return true;
   }
 
-  private getDom(str: string) {
-    return this.elem.querySelector(
+  private getDomElement(string: string) {
+    return this.element.querySelector(
       `${this.nameClass
-      }__${str
+      }__${string
       }-wrap input`,
     ) as HTMLInputElement;
   }
 
-  private setDom() {
-    this.min = this.getDom('min');
-    this.max = this.getDom('max');
-    this.from = this.getDom('from');
-    this.to = this.getDom('to');
-    this.step = this.getDom('step');
+  private setDomElement() {
+    this.min = this.getDomElement('min');
+    this.max = this.getDomElement('max');
+    this.from = this.getDomElement('from');
+    this.to = this.getDomElement('to');
+    this.step = this.getDomElement('step');
   }
 }
 

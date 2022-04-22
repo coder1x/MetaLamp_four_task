@@ -23,7 +23,7 @@ describe('------- Test Grid API -------', () => {
     grid: true,
     gridRound: 0,
     gridStep: 0,
-    gridNum: 40,
+    gridNumber: 40,
   });
 
   const getLenMark = async (model: Model) => {
@@ -112,12 +112,12 @@ describe('------- Test Grid API -------', () => {
         const dot = await wrapper.getElementsByClassName(
           `${jsRsName}__grid-mark`,
         );
-        const elem = dot[0] as HTMLElement;
-        const pointer = await mockPointerEvent(elem);
+        const element = dot[0] as HTMLElement;
+        const pointer = await mockPointerEvent(element);
         await pointer('click', 0, 0);
 
         expect(spy).toBeCalledTimes(1);
-        expect(spy).toBeCalledWith(+(elem.innerText));
+        expect(spy).toBeCalledWith(+(element.innerText));
 
         await spy.mockClear();
       },

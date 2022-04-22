@@ -12,10 +12,10 @@ class Bar extends Observer {
 
   private vertical: boolean = false;
 
-  constructor(elem: HTMLElement | Element, rsName: string) {
+  constructor(element: HTMLElement | Element, rsName: string) {
     super();
     this.rsName = rsName;
-    this.rsCenter = elem;
+    this.rsCenter = element;
   }
 
   setVisibleBar(bar: boolean) {
@@ -135,12 +135,12 @@ class Bar extends Observer {
   }
 
   private static createElem(teg: string, className: string[]) {
-    const elem = document.createElement(teg);
+    const element = document.createElement(teg);
     className.forEach((item) => {
-      elem.classList.add(item);
+      element.classList.add(item);
     });
 
-    return elem;
+    return element;
   }
 }
 

@@ -9,14 +9,14 @@ const FoxFavicon = require('fox-favicon');
 const FoxUrlConvertor = require('fox-url-convertor');
 
 const path = require('path');
-const DP = require('./isDev');
+const env = require('./isDev');
 const FL = require('./filename');
-const PATHS = require('./paths');
+const paths = require('./paths');
 
-const PAGES_DIR = path.join(PATHS.src, '/pages/');
+const pagesDir = path.join(paths.src, '/pages/');
 
 const pages = [];
-fs.readdirSync(PAGES_DIR).forEach((file) => {
+fs.readdirSync(pagesDir).forEach((file) => {
   pages.push(file.split('/', 2));
 });
 
@@ -24,14 +24,14 @@ const description = 'Узнайте, как использовать Range Slide
   + ' на нескольких практических демонстрациях';
 const keywords = 'range slider, diapason, interval, price range, price slider';
 
-const pluginsM = [];
+const pluginsArr = [];
 
-pluginsM.push(
+pluginsArr.push(
   new CleanWebpackPlugin(),
 );
 
-if (!DP.isPlugin) {
-  pluginsM.push(
+if (!env.isPlugin) {
+  pluginsArr.push(
     ...pages.map((fileName) => new HTMLWebpackPlugin({
       filename: `./${fileName}.html`,
       template: `./pages/${fileName}/${fileName}.pug`,
@@ -103,8 +103,8 @@ if (!DP.isPlugin) {
   );
 }
 
-if (!DP.isPlugin) {
-  pluginsM.push(
+if (!env.isPlugin) {
+  pluginsArr.push(
     new FoxUrlConvertor({
       URLchange: '%5C',
       URLto: '/',
@@ -112,14 +112,14 @@ if (!DP.isPlugin) {
   );
 }
 
-pluginsM.push(
+pluginsArr.push(
   new FoxFavicon({
-    src: path.join(PATHS.src, PATHS.assets, 'images/icon/favicon.png'),
+    src: path.join(paths.src, paths.assets, 'images/icon/favicon.png'),
     path: 'assets/favicons/',
     // pathManifest: '/assets/favicons/',
     // 'https://plugins.su/
     urlIcon: 'assets/favicons/',
-    devMode: DP.isPlugin ? true : DP.isDev,
+    devMode: env.isPlugin ? true : env.isDev,
     appName: 'Plugin Range Slider Fox',
     appShortName: 'Range Slider Fox',
     appDescription: 'Узнайте, как использовать Range Slider Fox'
@@ -164,14 +164,14 @@ pluginsM.push(
   }),
 );
 
-pluginsM.push(
+pluginsArr.push(
   new MiniCssExtractPlugin({
     filename: FL.filename('css'),
   }),
 );
 
-if (!DP.isPlugin) {
-  pluginsM.push(
+if (!env.isPlugin) {
+  pluginsArr.push(
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
@@ -180,10 +180,10 @@ if (!DP.isPlugin) {
   );
 }
 
-pluginsM.push(
+pluginsArr.push(
   new webpack.HotModuleReplacementPlugin({ multiStep: true }),
 );
 
 module.exports = {
-  plugins: pluginsM,
+  plugins: pluginsArr,
 };

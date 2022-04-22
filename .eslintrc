@@ -34,7 +34,7 @@
         "ignoreUrls": true,
         "ignoreComments": true,
         "ignoreRegExpLiterals": true,
-        "code": 80
+        "code": 100
       }
     ],
     "jest/no-disabled-tests": "warn",

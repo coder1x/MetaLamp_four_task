@@ -9,60 +9,62 @@ import CopyCode from '@com/code/CopyCode';
 import KeyboardControl from '@com/keyboard-control/KeyboardControl';
 
 interface Actions {
-  setAction: Function
+  bindEvent: Function
 }
 
 class Panel {
-  private elem: Element | null = null;
+  private element: Element | null = null;
 
-  private objValues: Values | null = null;
+  private objectValues: Values | null = null;
 
-  private objInputData: InputData | null = null;
+  private objectInputData: InputData | null = null;
 
-  private objGrid: Grid | null = null;
+  private objectGrid: Grid | null = null;
 
-  private objHints: Hints | null = null;
+  private objectHints: Hints | null = null;
 
-  private objDifferent: Different | null = null;
+  private objectDifferent: Different | null = null;
 
-  private objCopyCode: CopyCode | null = null;
+  private objectCopyCode: CopyCode | null = null;
 
   private className: string = '';
 
-  private objKeyboardControl: KeyboardControl | null = null;
+  private objectKeyboardControl: KeyboardControl | null = null;
 
-  constructor(elem: Element, className: string) {
-    this.elem = elem;
+  constructor(element: Element, className: string) {
+    this.element = element;
     this.className = className;
     this.init();
   }
 
   createRangeSlider(options: RangeSliderOptions) {
-    if (!this.elem) return false;
+    if (!this.element) return false;
 
-    const elem = this.elem.querySelector(`${this.className}__slider-wrap`);
+    const element = this.element.querySelector(
+      `${this.className}__slider-wrap`,
+    );
 
     const onStart = (data: RangeSliderOptions) => {
-      this.setDataS(data);
+      this.setDataStart(data);
     };
 
     const onChange = (data: RangeSliderOptions) => {
-      this.setDataC(data);
+      this.setDataChange(data);
     };
 
     const onUpdate = (data: RangeSliderOptions) => {
-      this.setDataU(data);
+      this.setDataUpdate(data);
     };
 
     const onReset = (data: RangeSliderOptions) => {
-      this.setDataR(data);
+      this.setDataReset(data);
     };
 
-    const dom = elem && elem.firstElementChild;
+    const child = element && element.firstElementChild;
 
-    if (!dom) return false;
+    if (!child) return false;
 
-    const obj = $(dom).RangeSliderFox({
+    const rangeSlider = $(child).RangeSliderFox({
       ...options,
       onStart,
       onChange,
@@ -70,31 +72,31 @@ class Panel {
       onReset,
     }).data('RangeSliderFox'); // will return an object for one item
 
-    const setAction = <T extends Actions | null>(object: T) => {
+    const bindEvent = <T extends Actions | null>(object: T) => {
       if (!object) return false;
-      object.setAction(obj);
+      object.bindEvent(rangeSlider);
       return true;
     };
 
-    setAction(this.objValues);
-    setAction(this.objGrid);
-    setAction(this.objHints);
+    bindEvent(this.objectValues);
+    bindEvent(this.objectGrid);
+    bindEvent(this.objectHints);
 
-    let flag = false;
+    let isSubscribed = false;
 
-    if (this.objDifferent) {
-      this.objDifferent.onUnsubscribtion = () => {
-        if (!flag) {
-          flag = true;
-          obj.update({
+    if (this.objectDifferent) {
+      this.objectDifferent.onUnsubscribtion = () => {
+        if (!isSubscribed) {
+          isSubscribed = true;
+          rangeSlider.update({
             onStart: null,
             onChange: null,
             onUpdate: null,
             onReset: null,
           });
         } else {
-          flag = false;
-          obj.update({
+          isSubscribed = false;
+          rangeSlider.update({
             onStart,
             onChange,
             onUpdate,
@@ -104,100 +106,100 @@ class Panel {
       };
     }
 
-    setAction(this.objDifferent);
-    setAction(this.objKeyboardControl);
+    bindEvent(this.objectDifferent);
+    bindEvent(this.objectKeyboardControl);
 
     return true;
   }
 
   private init() {
-    this.objValues = new Values(
+    this.objectValues = new Values(
       '.js-values',
-      this.getDom('.js-values') as Element,
+      this.getDomElement('.js-values') as Element,
     );
 
-    if (this.elem) {
-      this.objInputData = new InputData(this.className, this.elem);
+    if (this.element) {
+      this.objectInputData = new InputData(this.className, this.element);
     }
-    this.objGrid = new Grid(
+    this.objectGrid = new Grid(
       '.js-grid',
-      this.getDom('.js-grid') as Element,
+      this.getDomElement('.js-grid') as Element,
     );
-    this.objHints = new Hints(
+    this.objectHints = new Hints(
       '.js-hints',
-      this.getDom('.js-hints') as Element,
+      this.getDomElement('.js-hints') as Element,
     );
 
-    if (this.elem) {
-      this.objDifferent = new Different(
+    if (this.element) {
+      this.objectDifferent = new Different(
         '.js-different',
-        this.getDom('.js-different') as Element,
-        this.elem,
+        this.getDomElement('.js-different') as Element,
+        this.element,
       );
     }
-    this.objCopyCode = new CopyCode(
+    this.objectCopyCode = new CopyCode(
       '.js-code',
-      this.getDom('.js-code') as Element,
+      this.getDomElement('.js-code') as Element,
     );
 
-    this.objKeyboardControl = new KeyboardControl(
+    this.objectKeyboardControl = new KeyboardControl(
       '.js-keyboard-control',
-      this.getDom('.js-keyboard-control') as Element,
+      this.getDomElement('.js-keyboard-control') as Element,
     );
   }
 
-  private getDom(str: string) {
-    if (!this.elem) return null;
-    return this.elem.querySelector(str);
+  private getDomElement(string: string) {
+    if (!this.element) return null;
+    return this.element.querySelector(string);
   }
 
-  private setDataS(data: RangeSliderOptions) {
+  private setDataStart(data: RangeSliderOptions) {
     [
-      this.objValues,
-      this.objCopyCode,
-      this.objDifferent,
-      this.objKeyboardControl,
-      this.objGrid,
-      this.objHints,
+      this.objectValues,
+      this.objectCopyCode,
+      this.objectDifferent,
+      this.objectKeyboardControl,
+      this.objectGrid,
+      this.objectHints,
     ].forEach((item) => {
       if (!item) return;
       item.setData({ ...data });
     });
   }
 
-  private setDataC(data: RangeSliderOptions) {
+  private setDataChange(data: RangeSliderOptions) {
     [
-      this.objValues,
-      this.objCopyCode,
-      this.objKeyboardControl,
+      this.objectValues,
+      this.objectCopyCode,
+      this.objectKeyboardControl,
     ].forEach((item) => {
       if (!item) return;
       item.setData({ ...data });
     });
   }
 
-  private setDataU(data: RangeSliderOptions) {
+  private setDataUpdate(data: RangeSliderOptions) {
     [
-      this.objValues,
-      this.objCopyCode,
-      this.objDifferent,
-      this.objKeyboardControl,
-      this.objGrid,
-      this.objHints,
+      this.objectValues,
+      this.objectCopyCode,
+      this.objectDifferent,
+      this.objectKeyboardControl,
+      this.objectGrid,
+      this.objectHints,
     ].forEach((item) => {
       if (!item) return;
       item.setData({ ...data });
     });
   }
 
-  private setDataR(data: RangeSliderOptions) {
+  private setDataReset(data: RangeSliderOptions) {
     [
-      this.objValues,
-      this.objCopyCode,
-      this.objDifferent,
-      this.objKeyboardControl,
-      this.objGrid,
-      this.objHints,
+      this.objectValues,
+      this.objectCopyCode,
+      this.objectDifferent,
+      this.objectKeyboardControl,
+      this.objectGrid,
+      this.objectHints,
     ].forEach((item) => {
       if (!item) return;
       item.setData({ ...data });

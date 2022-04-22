@@ -24,9 +24,9 @@ describe('------- Test Handle API -------', () => {
     expect(new RegExp(str, 'g').test(text)).toBeTruthy();
   }
 
-  const delElem = (elem: HTMLElement) => {
-    while (elem.firstChild) {
-      elem.firstChild.remove();
+  const delElem = (element: HTMLElement) => {
+    while (element.firstChild) {
+      element.firstChild.remove();
     }
   };
 

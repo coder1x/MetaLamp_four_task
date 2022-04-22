@@ -4,13 +4,13 @@ import './grid.scss';
 interface Options {
   grid?: boolean | null;
   gridSnap?: boolean | null;
-  gridNum?: number | null;
+  gridNumber?: number | null;
   gridStep?: number | null;
   gridRound?: number | null;
 }
 
 class Grid {
-  private elem: Element;
+  private element: Element;
 
   private grid: HTMLInputElement | null = null;
 
@@ -38,15 +38,15 @@ class Grid {
 
   private objRangeSlider: any;
 
-  constructor(nameClass: string, elem: Element) {
+  constructor(nameClass: string, element: Element) {
     this.nameClass = nameClass;
-    this.elem = elem;
-    this.setDom();
+    this.element = element;
+    this.setDomElement();
   }
 
   setData(options: Options) {
     const {
-      grid, gridSnap, gridNum, gridStep, gridRound,
+      grid, gridSnap, gridNumber, gridStep, gridRound,
     } = options;
 
     if (this.gridCache !== grid && this.grid) {
@@ -57,9 +57,9 @@ class Grid {
       this.snap.checked = gridSnap ?? false;
       this.gridSnapCache = gridSnap ?? false;
     }
-    if (this.gridNumCache !== gridNum && this.interval) {
-      this.interval.value = String(gridNum);
-      this.gridNumCache = gridNum ?? 0;
+    if (this.gridNumCache !== gridNumber && this.interval) {
+      this.interval.value = String(gridNumber);
+      this.gridNumCache = gridNumber ?? 0;
     }
     if (this.gridStepCache !== gridStep && this.step) {
       this.step.value = String(gridStep);
@@ -72,12 +72,12 @@ class Grid {
   }
 
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
-  setAction(obj: any) {
-    this.objRangeSlider = obj;
+  bindEvent(rangeSlider: any) {
+    this.objRangeSlider = rangeSlider;
     this.mapInput = new Map();
 
     this.mapInput.set(
-      'gridNum',
+      'gridNumber',
       (this.interval && this.interval.value) ?? '',
     );
     this.mapInput.set(
@@ -112,19 +112,19 @@ class Grid {
 
   @boundMethod
   private handleGridRoundChange(event: Event) {
-    const elem = event.currentTarget as HTMLInputElement;
+    const element = event.currentTarget as HTMLInputElement;
     this.objRangeSlider.update({
-      gridRound: +elem.value,
+      gridRound: +element.value,
     });
   }
 
   @boundMethod
   private handleStepChange(event: Event) {
     if (!this.interval) return false;
-    const elem = event.currentTarget as HTMLInputElement;
+    const element = event.currentTarget as HTMLInputElement;
     this.objRangeSlider.update({
-      gridNum: 0,
-      gridStep: +elem.value,
+      gridNumber: 0,
+      gridStep: +element.value,
     });
     this.interval.value = '0';
     return true;
@@ -133,9 +133,9 @@ class Grid {
   @boundMethod
   private handleIntervalChange(event: Event) {
     if (!this.step) return false;
-    const elem = event.currentTarget as HTMLInputElement;
+    const element = event.currentTarget as HTMLInputElement;
     this.objRangeSlider.update({
-      gridNum: +elem.value,
+      gridNumber: +element.value,
       gridStep: 0,
     });
     this.step.value = '0';
@@ -145,15 +145,15 @@ class Grid {
   @boundMethod
   private handleInputProcessing(event: Event) {
     if (!this.mapInput) return false;
-    const elem = event.currentTarget as HTMLInputElement;
-    const value = elem.value.replace(/[^.\d]/g, '');
+    const element = event.currentTarget as HTMLInputElement;
+    const value = element.value.replace(/[^.\d]/g, '');
     const regexp = /^\d*?[.]?\d*$/;
 
     if (regexp.test(value)) {
-      this.mapInput.set(elem.name, value);
-      elem.value = value;
+      this.mapInput.set(element.name, value);
+      element.value = value;
     } else {
-      elem.value = this.mapInput.get(elem.name) ?? '';
+      element.value = this.mapInput.get(element.name) ?? '';
     }
 
     return true;
@@ -161,21 +161,21 @@ class Grid {
 
   @boundMethod
   private handleGridClick(event: Event) {
-    const elem = event.currentTarget as HTMLInputElement;
+    const element = event.currentTarget as HTMLInputElement;
 
     this.objRangeSlider.update({
-      grid: elem.checked,
+      grid: element.checked,
     });
   }
 
   @boundMethod
   private handleSnapClick(event: Event) {
     if (!this.grid) return false;
-    const elem = event.currentTarget as HTMLInputElement;
+    const element = event.currentTarget as HTMLInputElement;
 
     if (this.grid.checked) {
       this.objRangeSlider.update({
-        gridSnap: elem.checked,
+        gridSnap: element.checked,
       });
     } else {
       event.preventDefault();
@@ -184,18 +184,18 @@ class Grid {
     return true;
   }
 
-  private getDom(str: string) {
-    return this.elem.querySelector(
-      `${this.nameClass}__${str}-wrap input`,
+  private getDomElement(string: string) {
+    return this.element.querySelector(
+      `${this.nameClass}__${string}-wrap input`,
     ) as HTMLInputElement;
   }
 
-  private setDom() {
-    this.grid = this.getDom('grid');
-    this.snap = this.getDom('snap');
-    this.interval = this.getDom('interval');
-    this.step = this.getDom('step');
-    this.gridRound = this.getDom('round');
+  private setDomElement() {
+    this.grid = this.getDomElement('grid');
+    this.snap = this.getDomElement('snap');
+    this.interval = this.getDomElement('interval');
+    this.step = this.getDomElement('step');
+    this.gridRound = this.getDomElement('round');
   }
 }
 
