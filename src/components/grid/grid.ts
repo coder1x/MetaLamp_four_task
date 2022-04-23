@@ -34,7 +34,7 @@ class Grid {
 
   private nameClass: string;
 
-  private mapInput: Map<string, string> | null = null;
+  private fieldValues: Map<string, string> | null = null;
 
   private objRangeSlider: any;
 
@@ -74,17 +74,17 @@ class Grid {
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   bindEvent(rangeSlider: any) {
     this.objRangeSlider = rangeSlider;
-    this.mapInput = new Map();
+    this.fieldValues = new Map();
 
-    this.mapInput.set(
+    this.fieldValues.set(
       'gridNumber',
       (this.interval && this.interval.value) ?? '',
     );
-    this.mapInput.set(
+    this.fieldValues.set(
       'gridStep',
       (this.step && this.step.value) ?? '',
     );
-    this.mapInput.set(
+    this.fieldValues.set(
       'gridRound',
       (this.gridRound && this.gridRound.value) ?? '',
     );
@@ -144,16 +144,16 @@ class Grid {
 
   @boundMethod
   private handleInputProcessing(event: Event) {
-    if (!this.mapInput) return false;
+    if (!this.fieldValues) return false;
     const element = event.currentTarget as HTMLInputElement;
     const value = element.value.replace(/[^.\d]/g, '');
     const regexp = /^\d*?[.]?\d*$/;
 
     if (regexp.test(value)) {
-      this.mapInput.set(element.name, value);
+      this.fieldValues.set(element.name, value);
       element.value = value;
     } else {
-      element.value = this.mapInput.get(element.name) ?? '';
+      element.value = this.fieldValues.get(element.name) ?? '';
     }
 
     return true;

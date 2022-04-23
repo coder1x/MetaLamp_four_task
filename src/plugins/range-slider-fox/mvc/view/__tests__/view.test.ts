@@ -2,22 +2,22 @@ import { Controller, Model, View } from '../../controller/Controller';
 import { mockPointerEvent } from '../../../__tests__/jestUtils';
 
 describe('------- Test View API -------', () => {
-  let wrap: HTMLElement;
+  let wrapper: HTMLElement;
   let inputElement: HTMLInputElement;
   let view: View;
-  let rsName: string;
-  let jsRsName: string;
+  let rangeSliderName: string;
+  let jsRangeSliderName: string;
 
   beforeEach(() => {
-    rsName = 'range-slider-fox';
-    jsRsName = `js-${rsName}`;
-    wrap = document.createElement('div');
+    rangeSliderName = 'range-slider-fox';
+    jsRangeSliderName = `js-${rangeSliderName}`;
+    wrapper = document.createElement('div');
     inputElement = document.createElement('input');
-    wrap.appendChild(inputElement);
+    wrapper.appendChild(inputElement);
     view = new View(inputElement);
   });
 
-  function searchStr(text: string, str: string) {
+  function searchString(text: string, str: string) {
     return new RegExp(str, 'g').test(text);
   }
 
@@ -34,7 +34,7 @@ describe('------- Test View API -------', () => {
     expect(data).toBe(inputElement.value);
   });
 
-  // outDataAttr
+  // outputDataAttribute
   test(' Check if all necessary data-attributes are got ', async () => {
     await inputElement.setAttribute('data-from', '45');
     await inputElement.setAttribute('data-to', '86');
@@ -45,8 +45,8 @@ describe('------- Test View API -------', () => {
       from: 30,
       to: 70,
       onStart: async () => {
-        const obj = { from: 45, to: 86 };
-        expect(view.outDataAttr()).toEqual(obj);
+        const data = { from: 45, to: 86 };
+        expect(view.outputDataAttribute()).toEqual(data);
       },
     });
 
@@ -59,44 +59,44 @@ describe('------- Test View API -------', () => {
       disabled: false,
       onStart: async () => {
         let opacity = await view.disabledRangeSlider(true);
-        const rs = inputElement.parentElement as HTMLElement;
-        let num = Number(rs.style.opacity);
-        expect(+opacity).toBeCloseTo(num);
+        const rangeSliderElement = inputElement.parentElement as HTMLElement;
+        let numberOpacity = Number(rangeSliderElement.style.opacity);
+        expect(+opacity).toBeCloseTo(numberOpacity);
         opacity = await view.disabledRangeSlider(false);
-        num = Number(rs.style.opacity);
-        expect(+opacity).toBeCloseTo(num);
+        numberOpacity = Number(rangeSliderElement.style.opacity);
+        expect(+opacity).toBeCloseTo(numberOpacity);
       },
     });
     new Controller(model, view);
   });
 
-  // createDomBase
+  // createDomElementBase
   test(' Create basic DOM-elements ', async () => {
     const model = await new Model({
       disabled: false,
       onStart: async () => {
-        const dom = view.createDomBase() as Element;
-        const nodes = dom.childNodes;
-        const name: string[] = [];
+        const domElement = view.createDomElementBase() as Element;
+        const nodes = domElement.childNodes;
+        const names: string[] = [];
         let line: Element | null = null;
 
         nodes.forEach((item) => {
           const element = item as HTMLElement;
 
           const { className } = element;
-          if (searchStr(className, `${jsRsName}__center`)) {
+          if (searchString(className, `${jsRangeSliderName}__center`)) {
             [line] = element.children;
           }
-          name.push(className);
+          names.push(className);
         });
 
-        expect(searchStr(name[0], `${jsRsName}__top`)).toBeTruthy();
-        expect(searchStr(name[1], `${jsRsName}__center`)).toBeTruthy();
-        expect(searchStr(name[2], `${jsRsName}__bottom`)).toBeTruthy();
+        expect(searchString(names[0], `${jsRangeSliderName}__top`)).toBeTruthy();
+        expect(searchString(names[1], `${jsRangeSliderName}__center`)).toBeTruthy();
+        expect(searchString(names[2], `${jsRangeSliderName}__bottom`)).toBeTruthy();
 
         if (line) {
           const element = line as Element;
-          expect(searchStr(element.className, `${jsRsName}__line`)).toBeTruthy();
+          expect(searchString(element.className, `${jsRangeSliderName}__line`)).toBeTruthy();
         }
       },
     });
@@ -108,20 +108,20 @@ describe('------- Test View API -------', () => {
     const model = await new Model({
       onStart: async () => {
         view.setOrientation('vertical');
-        const element = wrap.getElementsByClassName(`${rsName}_vertical`);
+        const element = wrapper.getElementsByClassName(`${rangeSliderName}_vertical`);
         expect(element[0]).toBeDefined();
       },
     });
     new Controller(model, view);
   });
 
-  // setActions
+  // bindEvent
   test(' Check if click event on the grid range is triggered ', async () => {
-    const wrapper: HTMLElement = document.createElement('div');
+    const parentElement: HTMLElement = document.createElement('div');
     const input: HTMLInputElement = document.createElement('input');
-    wrapper.appendChild(input);
+    parentElement.appendChild(input);
 
-    let obj: Controller;
+    let controller: Controller;
 
     const model = new Model({
       type: 'double',
@@ -131,11 +131,11 @@ describe('------- Test View API -------', () => {
       to: 80,
       bar: false,
       onStart: async () => {
-        obj.update({ tipMinMax: false });
+        controller.update({ tipMinMax: false });
       },
       onUpdate: async () => {
         const spy = await jest.spyOn(model, 'clickLine');
-        const dot = await wrapper.getElementsByClassName(`${jsRsName}__line`);
+        const dot = await parentElement.getElementsByClassName(`${jsRangeSliderName}__line`);
         const pointer = await mockPointerEvent(dot[0]);
         await pointer('click', 34, 45);
         expect(spy).toBeCalledTimes(1);
@@ -143,7 +143,7 @@ describe('------- Test View API -------', () => {
       },
     });
     const objView = await new View(input);
-    obj = await new Controller(model, objView);
+    controller = await new Controller(model, objView);
   });
 
   // setTheme
@@ -151,12 +151,12 @@ describe('------- Test View API -------', () => {
     const model = await new Model({
       onStart: async () => {
         view.setTheme('dark');
-        let element = wrap.getElementsByClassName('rs-dark');
+        let element = wrapper.getElementsByClassName('rs-dark');
         expect(element[0]).toBeDefined();
         view.setTheme('fox');
-        element = wrap.getElementsByClassName('rs-dark');
+        element = wrapper.getElementsByClassName('rs-dark');
         expect(element[0]).toBeUndefined();
-        element = wrap.getElementsByClassName('rs-fox');
+        element = wrapper.getElementsByClassName('rs-fox');
         expect(element[0]).toBeDefined();
       },
     });
@@ -166,7 +166,7 @@ describe('------- Test View API -------', () => {
   test(' handle - interface  ', async () => {
     const model = await new Model({
       onStart: async () => {
-        const element = view.createDotElem('double') as HTMLElement;
+        const element = view.createDotElement('double') as HTMLElement;
         expect(element.constructor.name).toBe('HTMLDivElement');
 
         expect(typeof view.setDotFrom(15)).toBe('object');
@@ -182,7 +182,7 @@ describe('------- Test View API -------', () => {
   test(' hints - interface  ', async () => {
     const model = await new Model({
       onStart: async () => {
-        let masFlag = view.setHintsData({
+        let areHintsExist = view.setHintsData({
           tipPrefix: '',
           tipPostfix: '',
           tipFromTo: false,
@@ -192,28 +192,28 @@ describe('------- Test View API -------', () => {
           type: 'single',
         });
 
-        expect(masFlag.indexOf(false)).toBe(-1);
+        expect(areHintsExist.indexOf(false)).toBe(-1);
         expect(view.toggleTipTo(20)).toBeFalsy();
 
         expect(view.updateTipMinMax(10, 50)).toBeFalsy();
 
         expect(view.getWidthTip(true, false)).toEqual({
-          fromWH: 0,
-          toWH: 0,
-          singleWH: 0,
+          fromWidthHeight: 0,
+          toWidthHeight: 0,
+          singleWidthHeight: 0,
         });
         expect(view.deleteTipTo()).toBeFalsy();
         expect(view.checkVisibleTip()).toBeFalsy();
 
-        masFlag = view.updateTipValue(10, 30, 'double');
-        expect(masFlag).not.toContain(true);
+        areHintsExist = view.updateTipValue(10, 30, 'double');
+        expect(areHintsExist).not.toContain(true);
 
-        masFlag = view.updateTipPosition({
+        areHintsExist = view.updateTipPosition({
           fromXY: 1,
           toXY: 1,
           singleXY: 1,
         });
-        expect(masFlag).not.toContain(true);
+        expect(areHintsExist).not.toContain(true);
       },
     });
     new Controller(model, view);
@@ -232,23 +232,23 @@ describe('------- Test View API -------', () => {
   test(' Grid - interface  ', async () => {
     const model = await new Model({
       onStart: async () => {
-        let element = await view.createDomGrid() as HTMLElement;
+        let element = await view.createDomElementGrid() as HTMLElement;
         expect(element.constructor.name).toBe('HTMLDivElement');
         element = await view.createMark([
           {
-            val: 1,
+            value: 1,
             position: 1,
           },
           {
-            val: 1,
+            value: 1,
             position: 1,
           },
           {
-            val: 1,
+            value: 1,
             position: 1,
           },
           {
-            val: 1,
+            value: 1,
             position: 1,
           },
         ]) as HTMLElement;

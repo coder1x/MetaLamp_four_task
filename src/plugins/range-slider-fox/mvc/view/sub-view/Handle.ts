@@ -10,17 +10,17 @@ interface Pointer {
 type mapKey = Map<string, string>;
 
 class Handle extends Observer {
-  private elemFrom: HTMLElement | null = null;
+  private elementFrom: HTMLElement | null = null;
 
-  private elemTo: HTMLElement | null = null;
+  private elementTo: HTMLElement | null = null;
 
-  private rsName: string;
+  private rangeSliderName: string;
 
-  private wrapElem: HTMLElement;
+  private wrapperElement: HTMLElement;
 
-  private eventFromFlag: boolean;
+  private isFromEvent: boolean;
 
-  private eventToFlag: boolean;
+  private isToEvent: boolean;
 
   private vertical: boolean = false;;
 
@@ -30,52 +30,52 @@ class Handle extends Observer {
 
   private orientation: string = '';
 
-  constructor(rsCenter: HTMLElement, rsName: string) {
+  constructor(rsCenter: HTMLElement, rangeSliderName: string) {
     super();
-    this.rsName = rsName;
-    this.wrapElem = rsCenter;
-    this.eventFromFlag = false;
-    this.eventToFlag = false;
+    this.rangeSliderName = rangeSliderName;
+    this.wrapperElement = rsCenter;
+    this.isFromEvent = false;
+    this.isToEvent = false;
   }
 
-  createDomBase(type: string) {
+  createDomElementBase(type: string) {
     const double = type === 'double';
-    if (double && this.elemFrom && this.elemTo) return false;
-    if (!double && this.elemFrom && !this.elemTo) return false;
+    if (double && this.elementFrom && this.elementTo) return false;
+    if (!double && this.elementFrom && !this.elementTo) return false;
 
-    const fromClassName = `${this.rsName}__from`;
-    const toClassName = `${this.rsName}__to`;
+    const fromClassName = `${this.rangeSliderName}__from`;
+    const toClassName = `${this.rangeSliderName}__to`;
 
-    const fromElement = Handle.getElem(this.wrapElem, `js-${fromClassName}`);
-    const toElement = Handle.getElem(this.wrapElem, `js-${toClassName}`);
+    const fromElement = Handle.getElement(this.wrapperElement, `js-${fromClassName}`);
+    const toElement = Handle.getElement(this.wrapperElement, `js-${toClassName}`);
 
     // don't create the element if it is already exist
     if (!fromElement) {
-      this.elemFrom = Handle.createElem(
+      this.elementFrom = Handle.createElement(
         'span',
         [
           fromClassName,
           `js-${fromClassName}`,
         ],
       );
-      this.wrapElem.appendChild(this.elemFrom);
+      this.wrapperElement.appendChild(this.elementFrom);
     }
 
     if (double) {
       // don't create the element if it is already exist
       if (!toElement) {
-        this.elemTo = Handle.createElem(
+        this.elementTo = Handle.createElement(
           'span',
           [toClassName, `js-${toClassName}`],
         );
-        this.wrapElem.appendChild(this.elemTo);
+        this.wrapperElement.appendChild(this.elementTo);
       }
     } else if (toElement) { // remove the dot if it exists
       toElement.remove();
-      this.elemTo = null;
+      this.elementTo = null;
     }
 
-    return this.wrapElem;
+    return this.wrapperElement;
   }
 
   setOrientation(str: string) {
@@ -100,21 +100,21 @@ class Handle extends Observer {
 
     let flag = false;
 
-    if (this.elemFrom) {
-      flag = convertStyle(this.elemFrom.style);
+    if (this.elementFrom) {
+      flag = convertStyle(this.elementFrom.style);
     }
 
-    if (this.elemTo) {
-      flag = convertStyle(this.elemTo.style);
+    if (this.elementTo) {
+      flag = convertStyle(this.elementTo.style);
     }
 
     return flag;
   }
 
   setFrom(fromPosition: number) {
-    if (this.elemFrom) {
+    if (this.elementFrom) {
       const value = `${fromPosition}%`;
-      const from = this.elemFrom.style;
+      const from = this.elementFrom.style;
 
       if (this.vertical) {
         from.bottom = value;
@@ -128,9 +128,9 @@ class Handle extends Observer {
   }
 
   setTo(toPosition: number) {
-    if (this.elemTo) {
+    if (this.elementTo) {
       const value = `${toPosition}%`;
-      const { style } = this.elemTo;
+      const { style } = this.elementTo;
 
       if (this.vertical) {
         style.bottom = value;
@@ -143,12 +143,12 @@ class Handle extends Observer {
     return false;
   }
 
-  setActions(type: string) {
+  bindEvent(type: string) {
     this.orientation = type;
-    const eventFromTo = this.eventFromFlag && this.eventToFlag;
+    const eventFromTo = this.isFromEvent && this.isToEvent;
     if (type === 'double' && eventFromTo) return false;
     if (type === 'single' && eventFromTo) {
-      this.eventToFlag = false;
+      this.isToEvent = false;
     }
 
     this.directions = new Map();
@@ -157,39 +157,39 @@ class Handle extends Observer {
     this.directions.set('ArrowLeft', '-');
     this.directions.set('ArrowDown', '-');
 
-    if (!this.eventFromFlag && this.elemFrom) {
-      this.elemFrom.addEventListener('keydown', this.handleFromKeydown);
+    if (!this.isFromEvent && this.elementFrom) {
+      this.elementFrom.addEventListener('keydown', this.handleFromKeydown);
     }
 
-    if (this.elemTo && !this.eventToFlag) {
-      this.elemTo.addEventListener('keydown', this.handleToKeydown);
+    if (this.elementTo && !this.isToEvent) {
+      this.elementTo.addEventListener('keydown', this.handleToKeydown);
     }
 
     if (type === 'double') {
-      if (!this.eventToFlag && this.elemTo) {
-        this.elemTo.addEventListener('pointerdown', this.handleToPointerdown);
+      if (!this.isToEvent && this.elementTo) {
+        this.elementTo.addEventListener('pointerdown', this.handleToPointerdown);
 
-        Handle.cancellation(this.elemTo);
-        this.eventToFlag = true;
+        Handle.cancellation(this.elementTo);
+        this.isToEvent = true;
       }
     }
 
-    if (!this.eventFromFlag && this.elemFrom) {
-      this.elemFrom.addEventListener('pointerdown', this.handleFromPointerdown);
+    if (!this.isFromEvent && this.elementFrom) {
+      this.elementFrom.addEventListener('pointerdown', this.handleFromPointerdown);
 
-      Handle.cancellation(this.elemFrom);
-      this.eventFromFlag = true;
+      Handle.cancellation(this.elementFrom);
+      this.isFromEvent = true;
     }
     return true;
   }
 
   private static cancellation(element: HTMLElement) {
-    const dom = element;
-    dom.ondragstart = () => false;
-    dom.onselectstart = () => false;
+    const domElement = element;
+    domElement.ondragstart = () => false;
+    domElement.onselectstart = () => false;
   }
 
-  private static createElem(teg: string, className: string[]) {
+  private static createElement(teg: string, className: string[]) {
     const element = document.createElement(teg);
 
     className.forEach((item) => {
@@ -201,47 +201,47 @@ class Handle extends Observer {
   }
 
   @boundMethod
-  private mouseUpFrom() {
-    this.wrapElem.removeEventListener('pointerup', this.mouseUpFrom);
-    this.wrapElem.removeEventListener('pointermove', this.mouseMoveFrom);
+  private handleMouseUpFrom() {
+    this.wrapperElement.removeEventListener('pointerup', this.handleMouseUpFrom);
+    this.wrapperElement.removeEventListener('pointermove', this.handleMouseMoveFrom);
   }
 
   @boundMethod
-  private mouseUpTo() {
-    this.wrapElem.removeEventListener('pointerup', this.mouseUpTo);
-    this.wrapElem.removeEventListener('pointermove', this.mouseMoveTo);
+  private handleMouseUpTo() {
+    this.wrapperElement.removeEventListener('pointerup', this.handleMouseUpTo);
+    this.wrapperElement.removeEventListener('pointermove', this.handleMouseMoveTo);
   }
 
   @boundMethod
   private handleFromPointerdown(event: PointerEvent) {
-    if (!this.elemFrom) return false;
+    if (!this.elementFrom) return false;
 
-    if (this.elemTo) { this.elemTo.style.zIndex = '1'; }
-    this.elemFrom.style.zIndex = '2';
+    if (this.elementTo) { this.elementTo.style.zIndex = '1'; }
+    this.elementFrom.style.zIndex = '2';
 
-    this.shiftXY = this.mouseDown(event, this.elemFrom);
-    this.wrapElem.addEventListener('pointermove', this.mouseMoveFrom);
-    this.wrapElem.addEventListener('pointerup', this.mouseUpFrom);
+    this.shiftXY = this.mouseDown(event, this.elementFrom);
+    this.wrapperElement.addEventListener('pointermove', this.handleMouseMoveFrom);
+    this.wrapperElement.addEventListener('pointerup', this.handleMouseUpFrom);
 
     return true;
   }
 
   @boundMethod
   private handleToPointerdown(event: PointerEvent) {
-    if (!this.elemFrom || !this.elemTo) return false;
+    if (!this.elementFrom || !this.elementTo) return false;
 
-    this.elemTo.style.zIndex = '2';
-    this.elemFrom.style.zIndex = '1';
+    this.elementTo.style.zIndex = '2';
+    this.elementFrom.style.zIndex = '1';
 
-    this.shiftXY = this.mouseDown(event, this.elemTo);
-    this.wrapElem.addEventListener('pointermove', this.mouseMoveTo);
-    this.wrapElem.addEventListener('pointerup', this.mouseUpTo);
+    this.shiftXY = this.mouseDown(event, this.elementTo);
+    this.wrapperElement.addEventListener('pointermove', this.handleMouseMoveTo);
+    this.wrapperElement.addEventListener('pointerup', this.handleMouseUpTo);
 
     return true;
   }
 
   @boundMethod
-  private mouseMoveTo(event: PointerEvent) {
+  private handleMouseMoveTo(event: PointerEvent) {
     if (this.orientation === 'double') {
       this.moveDot({
         event,
@@ -252,7 +252,7 @@ class Handle extends Observer {
   }
 
   @boundMethod
-  private mouseMoveFrom(event: PointerEvent) {
+  private handleMouseMoveFrom(event: PointerEvent) {
     this.moveDot({
       event,
       type: 'From',
@@ -274,25 +274,24 @@ class Handle extends Observer {
     return true;
   }
 
-  private static getElem(element: Element, str: string) {
-    return element.getElementsByClassName(str)[0];
+  private static getElement(element: Element, string: string) {
+    return element.getElementsByClassName(string)[0];
   }
 
   @boundMethod
   private moveDot(options: Pointer) {
     const { event, type, shiftXY } = options;
-    const rect = this.wrapElem.getBoundingClientRect();
-    const wrap = this.wrapElem;
-    const flag = this.vertical;
+    const rect = this.wrapperElement.getBoundingClientRect();
+    const wrapper = this.wrapperElement;
 
-    const wrapWH = flag ? wrap.offsetHeight : wrap.offsetWidth;
-    const position = flag ? rect.bottom : rect.left;
-    const clientXY = flag ? event.clientY : event.clientX;
+    const wrapperWidthHeight = this.vertical ? wrapper.offsetHeight : wrapper.offsetWidth;
+    const position = this.vertical ? rect.bottom : rect.left;
+    const clientXY = this.vertical ? event.clientY : event.clientX;
 
     this.notifyOB({
       key: 'DotMove',
       type, // dot type
-      wrapWH, // wrapper width or height
+      wrapperWidthHeight, // wrapper width or height
       position, // left or bottom coordinates of the wrapper
       clientXY, // coordinates of the dot
       shiftXY, // shift = coordinates of the dot minus coordinates of the dot border
@@ -301,8 +300,12 @@ class Handle extends Observer {
 
   @boundMethod
   private keyDown(event: KeyboardEvent, directions: mapKey, dot: string) {
-    const flag = (event.key === 'ArrowRight' || event.key === 'ArrowLeft');
-    if ((this.vertical && flag) || (!this.vertical && !flag)) { return false; }
+    const isHorizontalMovement = (event.key === 'ArrowRight' || event.key === 'ArrowLeft');
+    const isVertical = this.vertical && isHorizontalMovement;
+    const isHorizontal = (!this.vertical && !isHorizontalMovement);
+    if (isVertical || isHorizontal) {
+      return false;
+    }
 
     if (!directions.get(event.key)) return false;
     event.preventDefault();

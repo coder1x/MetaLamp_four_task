@@ -3,99 +3,99 @@ import { Observer } from '../../../Observer';
 import Resize from '../Resize';
 
 class Grid extends Observer {
-  private rsBottom: HTMLElement;
+  private rangeSliderBottom: HTMLElement;
 
-  private rsName: string;
+  private rangeSliderName: string;
 
-  private elemGrid: HTMLElement | null = null;
+  private elementGrid: HTMLElement | null = null;
 
   private indent: number = 0;
 
-  private sizeWH: number[] = [];
+  private sizeWidthHeight: number[] = [];
 
   private oddElements: HTMLElement[][] = [[]];
 
   private evenElements: HTMLElement[][] = [[]];
 
-  private lastElem: Element | null = null;
+  private lastElement: Element | null = null;
 
-  private previousElem: HTMLElement | null = null;
+  private previousElement: HTMLElement | null = null;
 
   private offOn: boolean = false;
 
   private vertical: boolean = false;
 
-  private resizeFlag: boolean = false;
+  private isResized: boolean = false;
 
-  constructor(element: HTMLElement | Element, rsName: string) {
+  constructor(element: HTMLElement | Element, rangeSliderName: string) {
     super();
-    this.rsName = rsName;
-    this.rsBottom = element as HTMLElement;
+    this.rangeSliderName = rangeSliderName;
+    this.rangeSliderBottom = element as HTMLElement;
     this.init();
   }
 
-  setOrientation(str: string) {
-    this.vertical = str === 'vertical';
+  setOrientation(string: string) {
+    this.vertical = string === 'vertical';
     return this.vertical;
   }
 
   getOrientation() {
-    const width = this.rsBottom.offsetWidth;
-    const height = this.rsBottom.offsetHeight;
+    const width = this.rangeSliderBottom.offsetWidth;
+    const height = this.rangeSliderBottom.offsetHeight;
     return !(width > height);
   }
 
   @boundMethod
-  createMark(valMark: {
-    val: number,
+  createMark(valueMark: {
+    value: number,
     position: number,
   }[]) {
-    valMark.forEach((item) => {
-      const { val, position } = item;
-      const polName = `${this.rsName}__grid-pol`;
-      const gridPol = Grid.createElem('div', [polName, `js-${polName}`]);
-      const markName = `${this.rsName}__grid-mark`;
-      const gridMark = Grid.createElem('span', [markName, `js-${markName}`]);
+    valueMark.forEach((item) => {
+      const { value, position } = item;
+      const lineName = `${this.rangeSliderName}__grid-line`;
+      const gridLine = Grid.createElement('div', [lineName, `js-${lineName}`]);
+      const markName = `${this.rangeSliderName}__grid-mark`;
+      const gridMark = Grid.createElement('span', [markName, `js-${markName}`]);
 
-      gridMark.innerText = String(val);
-      gridPol.appendChild(gridMark);
-      const { style } = gridPol;
-      const pos = `${position}%`;
+      gridMark.innerText = String(value);
+      gridLine.appendChild(gridMark);
+      const { style } = gridLine;
+      const positionLine = `${position}%`;
 
       if (this.vertical) {
-        style.bottom = pos;
+        style.bottom = positionLine;
       } else {
-        style.left = pos;
+        style.left = positionLine;
       }
 
-      if (this.elemGrid) { this.elemGrid.appendChild(gridPol); }
+      if (this.elementGrid) { this.elementGrid.appendChild(gridLine); }
     });
-    return this.elemGrid;
+    return this.elementGrid;
   }
 
-  createDomGrid() {
-    if (!this.elemGrid) return null;
-    this.rsBottom.appendChild(this.elemGrid);
+  createDomElementGrid() {
+    if (!this.elementGrid) return null;
+    this.rangeSliderBottom.appendChild(this.elementGrid);
     this.offOn = true;
-    this.bindEvent(this.elemGrid);
-    return this.rsBottom;
+    this.bindEvent(this.elementGrid);
+    return this.rangeSliderBottom;
   }
 
   deleteGrid() {
-    if (!this.elemGrid) return null;
+    if (!this.elementGrid) return null;
 
-    if (this.elemGrid.children.length > 0) {
+    if (this.elementGrid.children.length > 0) {
       this.offOn = false;
-      while (this.elemGrid.firstChild) {
-        this.elemGrid.firstChild.remove();
+      while (this.elementGrid.firstChild) {
+        this.elementGrid.firstChild.remove();
       }
       return true;
     }
     return false;
   }
 
-  private static searchStr(text: string, str: string) {
-    return new RegExp(str, 'g').test(text);
+  private static searchString(text: string, regExp: string) {
+    return new RegExp(regExp, 'g').test(text);
   }
 
   private bindEvent(element: HTMLElement) {
@@ -105,15 +105,15 @@ class Grid extends Observer {
   @boundMethod
   private handleMarkClick(event: Event) {
     const mark = event.target as HTMLElement;
-    if (Grid.searchStr(mark.className, `js-${this.rsName}__grid-mark`)) {
+    if (Grid.searchString(mark.className, `js-${this.rangeSliderName}__grid-mark`)) {
       this.notifyOB({
         key: 'ClickMark',
-        valueG: Number(mark.innerText),
+        valueGrid: Number(mark.innerText),
       });
     }
   }
 
-  private static createElem(teg: string, className: string[]) {
+  private static createElement(teg: string, className: string[]) {
     const element = document.createElement(teg);
 
     className.forEach((item) => {
@@ -126,17 +126,17 @@ class Grid extends Observer {
   private init() {
     this.offOn = false;
     this.indent = 4; // indent in pixels between values on the scale
-    const gridName = `${this.rsName}__grid`;
-    this.elemGrid = Grid.createElem('div', [gridName, `js-${gridName}`]);
+    const gridName = `${this.rangeSliderName}__grid`;
+    this.elementGrid = Grid.createElement('div', [gridName, `js-${gridName}`]);
 
     new MutationObserver(() => {
       this.shapingMark();
-    }).observe(this.rsBottom, {
+    }).observe(this.rangeSliderBottom, {
       childList: true,
     });
   }
 
-  private static toggleElem(
+  private static toggleElement(
     element: HTMLElement,
     display: string,
     opacity: string,
@@ -148,74 +148,74 @@ class Grid extends Observer {
   }
 
   private shapingMark() {
-    if (!this.elemGrid) return false;
+    if (!this.elementGrid) return false;
 
-    this.sizeWH = [];
+    this.sizeWidthHeight = [];
     this.oddElements = [[]];
     this.evenElements = [[]];
-    let markWH = 0;
+    let markWidthHeight = 0;
 
-    if (this.previousElem) { this.previousElem.remove(); }
-    this.previousElem = null;
+    if (this.previousElement) { this.previousElement.remove(); }
+    this.previousElement = null;
 
-    const gridMarks = this.elemGrid.getElementsByClassName(
-      `js-${this.rsName}__grid-mark`,
+    const gridMarks = this.elementGrid.getElementsByClassName(
+      `js-${this.rangeSliderName}__grid-mark`,
     );
 
-    const gridPols = this.elemGrid.getElementsByClassName(
-      `js-${this.rsName}__grid-pol`,
+    const gridLines = this.elementGrid.getElementsByClassName(
+      `js-${this.rangeSliderName}__grid-line`,
     );
 
     const { length } = gridMarks;
     if (length > 1) {
-      this.lastElem = gridMarks[length - 1];
+      this.lastElement = gridMarks[length - 1];
     }
 
-    let k = 0;
+    let lineLength = 0;
     for (let i = 0; i < length; i += 1) {
       const mark = gridMarks[i] as HTMLElement;
-      const gridPolsT = gridPols[k] as HTMLElement;
-      k += 1;
+      const gridLine = gridLines[lineLength] as HTMLElement;
+      lineLength += 1;
 
       const { style } = mark;
 
       if (this.vertical) {
         style.top = `-${mark.offsetHeight / 2}px`;
-        style.left = `${gridPolsT.offsetWidth + 2}px`;
-        markWH += mark.offsetHeight + this.indent;
+        style.left = `${gridLine.offsetWidth + 2}px`;
+        markWidthHeight += mark.offsetHeight + this.indent;
       } else {
         style.left = `-${mark.offsetWidth / 2}px`;
-        style.top = `${gridPolsT.offsetHeight + 2}px`;
-        markWH += mark.offsetWidth + this.indent;
+        style.top = `${gridLine.offsetHeight + 2}px`;
+        markWidthHeight += mark.offsetWidth + this.indent;
       }
 
       this.oddElements[0].push(mark);
     }
 
-    this.sizeWH.push(markWH);
+    this.sizeWidthHeight.push(markWidthHeight);
     this.oddElements[0].shift();
     this.oddElements[0].pop();
 
-    let evenMas: HTMLElement[] = [];
+    let evenElements: HTMLElement[] = [];
 
     const breakIntoPieces = (elements: HTMLElement[]) => {
-      markWH = 0;
+      markWidthHeight = 0;
       const hideMark = elements.filter((element, i) => {
         if (i % 2 === 0) { // every second element of the array
-          evenMas.push(element);
+          evenElements.push(element);
           return false;
         }
 
-        markWH += this.vertical ? element.offsetHeight : element.offsetWidth;
-        markWH += this.indent;
+        markWidthHeight += this.vertical ? element.offsetHeight : element.offsetWidth;
+        markWidthHeight += this.indent;
         return true;
       });
 
       if (hideMark.length >= 2) {
         this.oddElements.push(hideMark);
-        this.evenElements.push(evenMas);
-        evenMas = [];
-        this.sizeWH.push(markWH);
+        this.evenElements.push(evenElements);
+        evenElements = [];
+        this.sizeWidthHeight.push(markWidthHeight);
         breakIntoPieces(hideMark);
       }
     };
@@ -225,9 +225,9 @@ class Grid extends Observer {
     this.evenElements.shift();
     this.visibleMark();
 
-    if (!this.resizeFlag) {
-      this.resizeFlag = true;
-      new Resize(this.elemGrid, 200, () => {
+    if (!this.isResized) {
+      this.isResized = true;
+      new Resize(this.elementGrid, 200, () => {
         if (this.offOn && !this.vertical) {
           this.visibleMark();
         }
@@ -239,21 +239,21 @@ class Grid extends Observer {
 
   // hide or show values on the scale
   private visibleMark() {
-    if (!this.elemGrid) return false;
+    if (!this.elementGrid) return false;
     // define element index: show odd values and hide honest ones
-    const wrapWH = this.vertical
-      ? this.elemGrid.offsetHeight
-      : this.elemGrid.offsetWidth;
+    const wrapperWidthHeight = this.vertical
+      ? this.elementGrid.offsetHeight
+      : this.elementGrid.offsetWidth;
 
     let i = 0;
-    for (; i < this.sizeWH.length - 1; i += 1) {
-      if (this.sizeWH[i] <= wrapWH) { break; }
+    for (; i < this.sizeWidthHeight.length - 1; i += 1) {
+      if (this.sizeWidthHeight[i] <= wrapperWidthHeight) { break; }
     }
 
     for (let n = 0; n <= i; n += 1) { // hide honest elements till the necessary level
       if (this.evenElements[n]) {
         this.evenElements[n].forEach((element) => {
-          Grid.toggleElem(element, 'hidden', '0.4');
+          Grid.toggleElement(element, 'hidden', '0.4');
         });
       }
     }
@@ -261,43 +261,43 @@ class Grid extends Observer {
     const snapNumber: number[] = [];
 
     this.oddElements[i].forEach((element) => { // show the necessary elements only
-      Grid.toggleElem(element, 'visible', '1');
+      Grid.toggleElement(element, 'visible', '1');
       snapNumber.push(+element.innerText);
     });
 
-    this.previousElem = this.oddElements[i][this.oddElements[i].length - 1];
+    this.previousElement = this.oddElements[i][this.oddElements[i].length - 1];
 
-    this.visibleLastElem(snapNumber);
+    this.visibleLastElement(snapNumber);
 
     return true;
   }
 
-  private visibleLastElem(snapNumber: number[]) {
-    if (!this.lastElem || !this.previousElem) return false;
+  private visibleLastElement(snapNumber: number[]) {
+    if (!this.lastElement || !this.previousElement) return false;
 
     let snap = snapNumber;
 
-    const lastRect = this.lastElem.getBoundingClientRect();
-    const previousRect = this.previousElem.getBoundingClientRect();
+    const lastRect = this.lastElement.getBoundingClientRect();
+    const previousRect = this.previousElement.getBoundingClientRect();
     const lastXY = this.vertical ? lastRect.bottom : lastRect.left;
 
     let previousXY = this.vertical ? previousRect.top : previousRect.right;
     previousXY += this.indent;
 
-    const flag = this.vertical ? previousXY <= lastXY : previousXY > lastXY;
-    const number = +this.previousElem.innerText;
+    const isVisible = this.vertical ? previousXY <= lastXY : previousXY > lastXY;
+    const number = +this.previousElement.innerText;
 
-    if (flag) {
-      Grid.toggleElem(this.previousElem, 'hidden', '0.4');
+    if (isVisible) {
+      Grid.toggleElement(this.previousElement, 'hidden', '0.4');
       snap = snap.filter((item) => item !== number);
     } else {
-      Grid.toggleElem(this.previousElem, 'visible', '1');
-      const len = snap.length - 1;
-      if (snap[len] !== number) { snap.push(number); }
+      Grid.toggleElement(this.previousElement, 'visible', '1');
+      const length = snap.length - 1;
+      if (snap[length] !== number) { snap.push(number); }
     }
 
     this.notifyOB({
-      key: 'snapNumber',
+      key: 'SnapNumber',
       snapNumber: snap,
     });
     return true;

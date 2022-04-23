@@ -21,7 +21,7 @@ class KeyboardControl {
 
   private objRangeSlider: any;
 
-  private mapInput: Map<string, string> | null = null;
+  private fieldValues: Map<string, string> | null = null;
 
   constructor(nameClass: string, element: Element) {
     this.nameClass = nameClass;
@@ -47,13 +47,13 @@ class KeyboardControl {
   bindEvent(rangeSlider: any) {
     this.objRangeSlider = rangeSlider;
 
-    this.mapInput = new Map();
+    this.fieldValues = new Map();
 
-    this.mapInput.set(
+    this.fieldValues.set(
       'keyStepOne',
       (this.keyStepOne && this.keyStepOne.value) ?? '',
     );
-    this.mapInput.set(
+    this.fieldValues.set(
       'keyStepHold',
       (this.keyStepHold && this.keyStepHold.value) ?? '',
     );
@@ -67,11 +67,11 @@ class KeyboardControl {
 
   @boundMethod
   private handleDataChange(event: Event) {
-    if (!this.mapInput) return false;
+    if (!this.fieldValues) return false;
     const element = event.currentTarget as HTMLInputElement;
 
     this.objRangeSlider.update({
-      [element.name]: Number(this.mapInput.get(element.name)),
+      [element.name]: Number(this.fieldValues.get(element.name)),
     });
     return true;
   }
@@ -82,13 +82,13 @@ class KeyboardControl {
     const value = element.value.replace(/[^-.\d]/g, '');
     const regexp = /^-?\d*?[.]?\d*$/;
 
-    if (!this.mapInput) return false;
+    if (!this.fieldValues) return false;
 
     if (regexp.test(value)) {
-      this.mapInput.set(element.name, value);
+      this.fieldValues.set(element.name, value);
       element.value = value;
     } else {
-      element.value = this.mapInput.get(element.name) ?? '';
+      element.value = this.fieldValues.get(element.name) ?? '';
     }
 
     return true;

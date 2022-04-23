@@ -7,7 +7,7 @@ class Resize {
 
   onChange: Function;
 
-  private rTime: Date = new Date();;
+  private currentTime: Date = new Date();;
 
   private timeout: boolean = false;
 
@@ -26,14 +26,14 @@ class Resize {
   ) {
     this.wrapper = wrapper ?? document.body;
     this.sleep = sleep ?? 200;
-    const emptyFun = () => { };
-    this.onChange = onChange ?? emptyFun;
+    const emptyFunction = () => { };
+    this.onChange = onChange ?? emptyFunction;
     this.resize();
   }
 
   @boundMethod
   private resizeEnd() {
-    if (Number(new Date()) - Number(this.rTime) < this.sleep) {
+    if (Number(new Date()) - Number(this.currentTime) < this.sleep) {
       setTimeout(this.resizeEnd, this.sleep);
     } else {
       this.timeout = false;
@@ -55,18 +55,18 @@ class Resize {
 
   @boundMethod
   private handleOptimizedResize() {
-    this.rTime = new Date();
+    this.currentTime = new Date();
     if (this.timeout === false) {
       this.timeout = true;
       setTimeout(this.resizeEnd, this.sleep);
     }
   }
 
-  private throttle(type: string, name: string, obj = window) {
+  private throttle(type: string, name: string, object = window) {
     this.eventName = name;
-    this.objectResize = obj;
+    this.objectResize = object;
 
-    obj.addEventListener(type, this.handleThrottle);
+    object.addEventListener(type, this.handleThrottle);
   }
 
   @boundMethod

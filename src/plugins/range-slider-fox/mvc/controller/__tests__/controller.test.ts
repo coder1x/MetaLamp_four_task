@@ -48,11 +48,11 @@ describe('------- Test Controller API -------', () => {
     + 'and API (update, reset)';
   // onStart, onUpdate, update, onReset, reset
   test(testName1, () => {
-    const objController = new Controller(new Model({
+    const controller = new Controller(new Model({
       onStart: (data: RangeSliderOptions) => {
         expect(data).toStrictEqual(defaultData);
 
-        const flagUpdate = objController.update({
+        const flagUpdate = controller.update({
           type: 'double',
           orientation: 'vertical',
           theme: 'fox',
@@ -79,7 +79,7 @@ describe('------- Test Controller API -------', () => {
       },
       onUpdate: (data: RangeSliderOptions) => {
         expect(wrapper.getElementsByClassName(
-          'js-range-slider-fox__grid-pol',
+          'js-range-slider-fox__grid-line',
         )).toHaveLength(35);
         expect(data.type).toBe('double');
         expect(data.min).toBeCloseTo(-120);
@@ -102,7 +102,7 @@ describe('------- Test Controller API -------', () => {
         expect(data.gridRound).toBeCloseTo(2);
         expect(data.disabled).toBeFalsy();
 
-        expect(objController.reset()).toBeTruthy();
+        expect(controller.reset()).toBeTruthy();
       },
       onReset: (data: RangeSliderOptions) => {
         expect(data).toStrictEqual(defaultData);
@@ -111,40 +111,40 @@ describe('------- Test Controller API -------', () => {
   });
 
   test(' Check unsubscribtion from events  ', async () => {
-    let objController: Controller;
-    const updateMax = jest.fn((data: RangeSliderOptions) => {
+    let controller: Controller;
+    const updateOne = jest.fn((data: RangeSliderOptions) => {
       expect(data.max).toBe(150);
 
-      objController.update({
+      controller.update({
         onUpdate: null,
       });
 
-      objController.update({
+      controller.update({
         max: 50,
       });
     });
 
-    const updateX = jest.fn((data: RangeSliderOptions) => {
+    const updateTwo = jest.fn((data: RangeSliderOptions) => {
       expect(data.max).toBe(100);
 
-      objController.update({
+      controller.update({
         max: 150,
-        onUpdate: updateMax,
+        onUpdate: updateOne,
       });
     });
 
-    objController = new Controller(new Model({
+    controller = new Controller(new Model({
       onStart: () => {
-        objController.update({
+        controller.update({
           max: 100,
         });
       },
-      onUpdate: updateX,
+      onUpdate: updateTwo,
     }), new View(input));
 
     await delay(100);
-    expect(updateX.mock.calls).toHaveLength(1);
-    expect(updateMax.mock.calls).toHaveLength(1);
+    expect(updateTwo.mock.calls).toHaveLength(1);
+    expect(updateOne.mock.calls).toHaveLength(1);
   });
 
   // Input data
@@ -182,26 +182,26 @@ describe('------- Test Controller API -------', () => {
   });
 
   test(' destroy - plugin removal ', async () => {
-    const fun = jest.fn(() => {
+    const functionTest = jest.fn(() => {
     });
 
-    const objController = await new Controller(new Model({
-      onUpdate: fun,
+    const controller = await new Controller(new Model({
+      onUpdate: functionTest,
     }), new View(input));
 
-    await objController.update({
+    await controller.update({
       from: 4,
     });
     await delay(100);
-    await objController.destroy();
+    await controller.destroy();
 
     await delay(100);
-    await objController.update({
+    await controller.update({
       from: 8,
     });
 
     await delay(100);
-    expect(fun.mock.calls).toHaveLength(1);
+    expect(functionTest.mock.calls).toHaveLength(1);
     expect(input.value).toBe(' ');
   });
 });

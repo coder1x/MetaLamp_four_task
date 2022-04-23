@@ -3,21 +3,21 @@ import { Controller, Model, View } from '../../../controller/Controller';
 import { mockPointerEvent } from '../../../../__tests__/jestUtils';
 
 describe('------- Test Grid API -------', () => {
-  let rsName: string;
-  let wrap: HTMLElement;
+  let rangeSliderName: string;
+  let wrapper: HTMLElement;
   let grid: Grid;
-  let jsRsName: string;
+  let jsRangeSliderName: string;
 
   beforeEach(async () => {
-    rsName = 'range-slider-fox';
-    jsRsName = `js-${rsName}`;
-    wrap = document.createElement('div');
-    wrap.classList.add(`${rsName}__bottom`);
-    wrap.classList.add(`${jsRsName}__bottom`);
-    grid = await new Grid(wrap, rsName);
+    rangeSliderName = 'range-slider-fox';
+    jsRangeSliderName = `js-${rangeSliderName}`;
+    wrapper = document.createElement('div');
+    wrapper.classList.add(`${rangeSliderName}__bottom`);
+    wrapper.classList.add(`${jsRangeSliderName}__bottom`);
+    grid = await new Grid(wrapper, rangeSliderName);
   });
 
-  const getConf = () => ({
+  const getConfig = () => ({
     min: 10,
     max: 800,
     grid: true,
@@ -26,7 +26,7 @@ describe('------- Test Grid API -------', () => {
     gridNumber: 40,
   });
 
-  const getLenMark = async (model: Model) => {
+  const getLengthMark = async (model: Model) => {
     const gridMark = await model.createMark();
     const elements = await grid.createMark(gridMark) as HTMLElement;
     const { length } = elements.childNodes;
@@ -34,9 +34,9 @@ describe('------- Test Grid API -------', () => {
     return length;
   };
 
-  const getLenDom = () => {
-    const dom = (grid.createDomGrid() as HTMLElement).firstChild as HTMLElement;
-    const { length } = dom.childNodes;
+  const getLengthDom = () => {
+    const domElement = (grid.createDomElementGrid() as HTMLElement).firstChild as HTMLElement;
+    const { length } = domElement.childNodes;
     return length;
   };
 
@@ -54,21 +54,21 @@ describe('------- Test Grid API -------', () => {
   // createMark
   test(' Create grid DOM-elements ', async () => {
     const model = await new Model({
-      ...getConf(),
+      ...getConfig(),
       onStart: () => {
-        getLenMark(model);
+        getLengthMark(model);
       },
     });
 
     if (model.onHandle) { await model.onHandle(); }
   });
 
-  // createDomGrid
+  // createDomElementGrid
   test(' Add grid to the plugin interface ', async () => {
     const model = await new Model({
-      ...getConf(),
+      ...getConfig(),
       onStart: async () => {
-        expect(await getLenMark(model)).toBe(await getLenDom());
+        expect(await getLengthMark(model)).toBe(await getLengthDom());
       },
     });
 
@@ -78,15 +78,15 @@ describe('------- Test Grid API -------', () => {
   // deleteGrid
   test(' Delete grid ', async () => {
     const model = await new Model({
-      ...getConf(),
+      ...getConfig(),
       onStart: async () => {
-        const lenMark = await getLenMark(model);
-        let lenDom = await getLenDom();
-        expect(lenMark).toBe(lenDom);
-        const del = grid.deleteGrid();
-        expect(del).toBeTruthy();
-        lenDom = await getLenDom();
-        expect(lenDom).toBe(0);
+        const lengthMark = await getLengthMark(model);
+        let lengthDom = await getLengthDom();
+        expect(lengthMark).toBe(lengthDom);
+        const isDeleted = grid.deleteGrid();
+        expect(isDeleted).toBeTruthy();
+        lengthDom = await getLengthDom();
+        expect(lengthDom).toBe(0);
       },
     });
 
@@ -95,22 +95,22 @@ describe('------- Test Grid API -------', () => {
 
   // ClickMark
   test(' Check if click event on the grid mark is triggered ', async () => {
-    const wrapper = document.createElement('div');
+    const parentElement = document.createElement('div');
     const input = document.createElement('input');
-    wrapper.appendChild(input);
-    let objController: Controller;
+    parentElement.appendChild(input);
+    let controller: Controller;
 
     const model = new Model({
       type: 'double',
-      ...getConf(),
+      ...getConfig(),
       onStart: async () => {
-        objController.update({ bar: false });
+        controller.update({ bar: false });
       },
       onUpdate: async () => {
         const spy = await jest.spyOn(model, 'clickMark');
 
-        const dot = await wrapper.getElementsByClassName(
-          `${jsRsName}__grid-mark`,
+        const dot = await parentElement.getElementsByClassName(
+          `${jsRangeSliderName}__grid-mark`,
         );
         const element = dot[0] as HTMLElement;
         const pointer = await mockPointerEvent(element);
@@ -123,6 +123,6 @@ describe('------- Test Grid API -------', () => {
       },
     });
     const view = await new View(input);
-    objController = await new Controller(model, view);
+    controller = await new Controller(model, view);
   });
 });

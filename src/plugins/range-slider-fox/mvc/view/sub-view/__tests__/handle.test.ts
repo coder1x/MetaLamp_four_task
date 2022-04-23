@@ -6,63 +6,63 @@ import {
 } from '../../../../__tests__/jestUtils';
 
 describe('------- Test Handle API -------', () => {
-  let rsName: string;
-  let wrap: HTMLElement;
+  let rangeSliderName: string;
+  let wrapperElement: HTMLElement;
   let handle: Handle;
-  let jsRsName: string;
+  let jsRangeSliderName: string;
 
   beforeEach(async () => {
-    rsName = 'range-slider-fox';
-    jsRsName = `js-${rsName}`;
-    wrap = document.createElement('div');
-    wrap.classList.add(`${rsName}__center`);
-    wrap.classList.add(`${jsRsName}__center`);
-    handle = await new Handle(wrap, rsName);
+    rangeSliderName = 'range-slider-fox';
+    jsRangeSliderName = `js-${rangeSliderName}`;
+    wrapperElement = document.createElement('div');
+    wrapperElement.classList.add(`${rangeSliderName}__center`);
+    wrapperElement.classList.add(`${jsRangeSliderName}__center`);
+    handle = await new Handle(wrapperElement, rangeSliderName);
   });
 
-  function searchStr(text: string, str: string) {
-    expect(new RegExp(str, 'g').test(text)).toBeTruthy();
+  function searchStr(text: string, string: string) {
+    expect(new RegExp(string, 'g').test(text)).toBeTruthy();
   }
 
-  const delElem = (element: HTMLElement) => {
+  const delElement = (element: HTMLElement) => {
     while (element.firstChild) {
       element.firstChild.remove();
     }
   };
 
   const createFromTo = async () => {
-    expect(await handle.createDomBase('double')).toBeDefined();
+    expect(await handle.createDomElementBase('double')).toBeDefined();
     const from = await handle.setFrom(34);
     const to = await handle.setTo(56);
     return { from, to };
   };
 
-  // createDomBase
+  // createDomElementBase
   test(' Create basic DOM-elements ', async () => {
-    let wrapper = handle.createDomBase('double');
-    expect(wrapper).toBeDefined();
+    let parentElement = handle.createDomElementBase('double');
+    expect(parentElement).toBeDefined();
 
     let child: HTMLCollection | null = null;
-    if (typeof wrapper !== 'boolean') { child = wrapper.children; }
+    if (typeof parentElement !== 'boolean') { child = parentElement.children; }
 
     if (!child) return;
 
-    searchStr(child[0].className, `${jsRsName}__from`);
-    searchStr(child[1].className, `${jsRsName}__to`);
+    searchStr(child[0].className, `${jsRangeSliderName}__from`);
+    searchStr(child[1].className, `${jsRangeSliderName}__to`);
 
-    wrapper = await handle.createDomBase('double');
-    expect(wrapper).toBeFalsy();
-    await delElem(wrap);
-    handle = await new Handle(wrap, rsName);
-    wrapper = await handle.createDomBase('single');
-    expect(wrapper).toBeDefined();
+    parentElement = await handle.createDomElementBase('double');
+    expect(parentElement).toBeFalsy();
+    await delElement(wrapperElement);
+    handle = await new Handle(wrapperElement, rangeSliderName);
+    parentElement = await handle.createDomElementBase('single');
+    expect(parentElement).toBeDefined();
 
-    if (typeof wrapper !== 'boolean') { child = wrapper.children; }
+    if (typeof parentElement !== 'boolean') { child = parentElement.children; }
 
-    searchStr(child[0].className, `${jsRsName}__from`);
+    searchStr(child[0].className, `${jsRangeSliderName}__from`);
     expect(child[1]).toBeUndefined();
-    wrapper = handle.createDomBase('single');
-    expect(wrapper).toBeFalsy();
+    parentElement = handle.createDomElementBase('single');
+    expect(parentElement).toBeFalsy();
   });
 
   // setFrom & setTo
@@ -79,15 +79,15 @@ describe('------- Test Handle API -------', () => {
   // setOrientation
   test(' Check if orientation is changed ', async () => {
     await createFromTo();
-    let flag = handle.setOrientation('vertical');
-    expect(flag).toBeTruthy();
-    flag = handle.setOrientation('horizontal');
-    expect(flag).toBeTruthy();
+    let isVertical = handle.setOrientation('vertical');
+    expect(isVertical).toBeTruthy();
+    isVertical = handle.setOrientation('horizontal');
+    expect(isVertical).toBeTruthy();
   });
 
   const testName = ' Check if an event of dots'
     + ' movement along the track is triggered ';
-  // setActions
+  // bindEvent
   test(testName, async () => {
     const wrapper: HTMLElement = document.createElement('div');
     const input: HTMLInputElement = document.createElement('input');
@@ -95,7 +95,7 @@ describe('------- Test Handle API -------', () => {
 
     await createFromTo();
     handle.setOrientation('horizontal');
-    expect(handle.setActions('double')).toBeTruthy();
+    expect(handle.bindEvent('double')).toBeTruthy();
 
     const model = new Model({
       type: 'double',
@@ -104,7 +104,7 @@ describe('------- Test Handle API -------', () => {
 
         const eventDot = async (name: string, down: number, move: number) => {
           const dot = await wrapper.getElementsByClassName(
-            `${jsRsName}__${name}`,
+            `${jsRangeSliderName}__${name}`,
           );
 
           const pointer = await mockPointerEvent(dot[0]);
@@ -121,7 +121,7 @@ describe('------- Test Handle API -------', () => {
               position: 0,
               shiftXY: down,
               type: name === 'from' ? 'From' : 'To',
-              wrapWH: 0,
+              wrapperWidthHeight: 0,
             },
           );
           expect(spy).toBeCalledTimes(1);

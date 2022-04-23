@@ -2,8 +2,8 @@ import { _$ as $ } from '../range-slider-fox';
 
 // Добавление JQuery плагина - Range Slider Fox
 describe('------- Range Slider Fox - JQuery Objects -------', () => {
-  let wrap: HTMLElement;
-  let dom: HTMLInputElement;
+  let wrapper: HTMLElement;
+  let inputElement: HTMLInputElement;
 
   function delay(time: number) {
     return new Promise((resolve, reject) => {
@@ -16,50 +16,50 @@ describe('------- Range Slider Fox - JQuery Objects -------', () => {
   }
 
   beforeEach(() => {
-    wrap = document.createElement('div');
-    dom = document.createElement('input');
-    wrap.appendChild(dom);
+    wrapper = document.createElement('div');
+    inputElement = document.createElement('input');
+    wrapper.appendChild(inputElement);
   });
 
   // RangeSliderFox Function
   test(' Adding plugim to JQuery library ', () => {
-    let propertyFlag = false;
+    let isProperty = false;
 
     // eslint-disable-next-line no-restricted-syntax
-    for (const prop in $(dom)) {
-      if (prop === 'RangeSliderFox') {
-        propertyFlag = true;
+    for (const property in $(inputElement)) {
+      if (property === 'RangeSliderFox') {
+        isProperty = true;
         break;
       }
     }
 
-    expect(propertyFlag).toBeTruthy();
+    expect(isProperty).toBeTruthy();
   });
 
   const testName = ' Initialize plugin on a DOM-element '
     + 'and check the obtained object ';
   // initialization
   test(testName, () => {
-    const objRangeSliderFox = $(dom).RangeSliderFox({}).data('RangeSliderFox');
-    expect(objRangeSliderFox).toBeDefined();
+    const rangeSliderOne = $(inputElement).RangeSliderFox({}).data('RangeSliderFox');
+    expect(rangeSliderOne).toBeDefined();
 
-    const objRangeSliderFox2 = $(dom).RangeSliderFox({}).data('RangeSliderFox');
-    expect(objRangeSliderFox2).toEqual(objRangeSliderFox);
+    const rangeSliderTwo = $(inputElement).RangeSliderFox({}).data('RangeSliderFox');
+    expect(rangeSliderTwo).toEqual(rangeSliderOne);
   });
 
   test(' destroy - plugin removal ', async () => {
-    const objRangeSliderFox = await $(dom).RangeSliderFox({})
+    const rangeSlider = await $(inputElement).RangeSliderFox({})
       .data('RangeSliderFox');
 
-    expect(objRangeSliderFox).toBeDefined();
+    expect(rangeSlider).toBeDefined();
 
-    let rsData = await $.data(dom, 'RangeSliderFox');
-    expect(rsData).toBeDefined();
+    let rangeSliderData = await $.data(inputElement, 'RangeSliderFox');
+    expect(rangeSliderData).toBeDefined();
 
     await delay(100);
-    await objRangeSliderFox.destroy();
+    await rangeSlider.destroy();
     await delay(100);
-    rsData = await $.data(dom, 'RangeSliderFox');
-    expect(rsData).toBeNull();
+    rangeSliderData = await $.data(inputElement, 'RangeSliderFox');
+    expect(rangeSliderData).toBeNull();
   });
 });

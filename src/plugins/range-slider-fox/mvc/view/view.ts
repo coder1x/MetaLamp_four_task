@@ -8,19 +8,19 @@ import { Observer, ObserverOptions } from '../../Observer';
 import RangeSliderOptions from '../../glob-interface';
 
 class View extends Observer {
-  private rsName: string = '';
+  private rangeSliderName: string = '';
 
-  private wrapSlider: Element | null = null;
+  private wrapperSlider: Element | null = null;
 
   private rangeSlider: Element | null = null;
 
-  private rsTop: Element | null = null;
+  private rangeSliderTop: Element | null = null;
 
-  private rsCenter: HTMLElement | null = null;
+  private rangeSliderCenter: HTMLElement | null = null;
 
-  private rsBottom: Element | null = null;
+  private rangeSliderBottom: Element | null = null;
 
-  private rsLine: HTMLElement | null = null;
+  private rangeSliderLine: HTMLElement | null = null;
 
   private prevTheme: string = '';
 
@@ -34,7 +34,7 @@ class View extends Observer {
 
   private grid: Grid | null = null;
 
-  private objData: ObserverOptions | null = null;
+  private dataAttributes: ObserverOptions | null = null;
 
   onHandle: Function | null = null;
 
@@ -43,21 +43,21 @@ class View extends Observer {
   constructor(element: Element) {
     super();
     this.element = element;
-    this.rsName = 'range-slider-fox';
-    this.wrapSlider = this.element.parentElement;
+    this.rangeSliderName = 'range-slider-fox';
+    this.wrapperSlider = this.element.parentElement;
 
     this.init();
   }
 
   async destroy() {
-    if (!this.element || !this.wrapSlider) return false;
+    if (!this.element || !this.wrapperSlider) return false;
 
     const typeElem = await this.element.constructor.name;
     if (typeElem === 'HTMLInputElement') {
       const input = this.element as HTMLInputElement;
       input.value = ' ';
     }
-    const element = await this.wrapSlider.querySelector(`.js-${this.rsName}`);
+    const element = await this.wrapperSlider.querySelector(`.js-${this.rangeSliderName}`);
     if (element) { await element.remove(); }
 
     this.handle = null;
@@ -71,53 +71,53 @@ class View extends Observer {
   setValueInput(from: number, to: number, type: string) {
     if (!this.element) return false;
 
-    let str = '';
+    let string = '';
     if (this.element.constructor.name === 'HTMLInputElement') {
       const input = this.element as HTMLInputElement;
 
-      input.value = str;
-      str += from;
+      input.value = string;
+      string += from;
       if (type === 'double') {
-        str += `,${to}`;
+        string += `,${to}`;
       }
-      input.value = str;
+      input.value = string;
     } else {
       return false;
     }
 
-    return str;
+    return string;
   }
 
-  outDataAttr() {
-    if (this.objData) {
-      if (Object.keys(this.objData).length !== 0) {
+  outputDataAttribute() {
+    if (this.dataAttributes) {
+      if (Object.keys(this.dataAttributes).length !== 0) {
         this.notifyOB({
           key: 'DataAttributes',
-          ...this.objData,
+          ...this.dataAttributes,
         });
-        return this.objData;
+        return this.dataAttributes;
       }
     }
     return false;
   }
 
-  disabledRangeSlider(flag: boolean) {
-    const element = this.wrapSlider as HTMLElement;
+  disabledRangeSlider(isVisible: boolean) {
+    const element = this.wrapperSlider as HTMLElement;
     const style = element.style as CSSStyleDeclaration;
-    const opacity = flag ? style.opacity = '0.5' : style.opacity = '1';
+    const opacity = isVisible ? style.opacity = '0.5' : style.opacity = '1';
     return opacity;
   }
 
-  getWrapWH() {
-    if (!this.rsCenter) return 0;
+  getWrapWidthHeight() {
+    if (!this.rangeSliderCenter) return 0;
 
     const size = (this.vertical
-      ? this.rsCenter.offsetHeight
-      : this.rsCenter.offsetWidth);
+      ? this.rangeSliderCenter.offsetHeight
+      : this.rangeSliderCenter.offsetWidth);
     return size;
   }
 
-  static createElem(teg: string, className: string[]) {
+  static createElement(teg: string, className: string[]) {
     const element = document.createElement(teg);
 
     className.forEach((item) => {
@@ -127,42 +127,42 @@ class View extends Observer {
     return element;
   }
 
-  createDomBase() {
-    this.rangeSlider = View.createElem(
+  createDomElementBase() {
+    this.rangeSlider = View.createElement(
       'div',
-      [this.rsName, `js-${this.rsName}`],
+      [this.rangeSliderName, `js-${this.rangeSliderName}`],
     );
-    this.rsTop = View.createElem('div', [
-      `${this.rsName}__top`,
-      `js-${this.rsName}__top`,
+    this.rangeSliderTop = View.createElement('div', [
+      `${this.rangeSliderName}__top`,
+      `js-${this.rangeSliderName}__top`,
     ]);
-    this.rsCenter = View.createElem('div', [
-      `${this.rsName}__center`,
-      `js-${this.rsName}__center`,
+    this.rangeSliderCenter = View.createElement('div', [
+      `${this.rangeSliderName}__center`,
+      `js-${this.rangeSliderName}__center`,
     ]);
-    this.rsBottom = View.createElem('div', [
-      `${this.rsName}__bottom`,
-      `js-${this.rsName}__bottom`,
+    this.rangeSliderBottom = View.createElement('div', [
+      `${this.rangeSliderName}__bottom`,
+      `js-${this.rangeSliderName}__bottom`,
     ]);
-    this.rsLine = View.createElem('span', [
-      `${this.rsName}__line`,
-      `js-${this.rsName}__line`,
+    this.rangeSliderLine = View.createElement('span', [
+      `${this.rangeSliderName}__line`,
+      `js-${this.rangeSliderName}__line`,
     ]);
 
-    this.rsCenter.appendChild(this.rsLine);
-    this.rangeSlider.appendChild(this.rsTop);
-    this.rangeSlider.appendChild(this.rsCenter);
-    this.rangeSlider.appendChild(this.rsBottom);
+    this.rangeSliderCenter.appendChild(this.rangeSliderLine);
+    this.rangeSlider.appendChild(this.rangeSliderTop);
+    this.rangeSlider.appendChild(this.rangeSliderCenter);
+    this.rangeSlider.appendChild(this.rangeSliderBottom);
 
-    if (!this.wrapSlider) return null;
+    if (!this.wrapperSlider) return null;
 
-    return this.wrapSlider.appendChild(this.rangeSlider);
+    return this.wrapperSlider.appendChild(this.rangeSlider);
   }
 
-  async setOrientation(str: string) {
-    const modifier = `${this.rsName}_vertical`;
+  async setOrientation(type: string) {
+    const modifier = `${this.rangeSliderName}_vertical`;
     const { classList } = this.rangeSlider as Element;
-    this.vertical = str === 'vertical';
+    this.vertical = type === 'vertical';
 
     if (this.vertical) {
       classList.add(modifier);
@@ -172,22 +172,22 @@ class View extends Observer {
 
     if (!this.handle || !this.hints) return false;
 
-    await this.handle.setOrientation(str);
-    await this.hints.setOrientation(str);
+    await this.handle.setOrientation(type);
+    await this.hints.setOrientation(type);
 
     if (!this.bar || !this.grid) return false;
 
-    await this.bar.setOrientation(str);
-    await this.grid.setOrientation(str);
+    await this.bar.setOrientation(type);
+    await this.grid.setOrientation(type);
 
-    await this.sizeWrap();
+    await this.sizeWrapper();
 
     return true;
   }
 
-  setActions() {
-    if (this.rsLine) {
-      this.rsLine.addEventListener('click', this.handleRsLineClick);
+  bindEvent() {
+    if (this.rangeSliderLine) {
+      this.rangeSliderLine.addEventListener('click', this.handleRsLineClick);
     }
   }
 
@@ -205,24 +205,24 @@ class View extends Observer {
   }
 
   // --------------------------------- handle
-  createDotElem(type: string) {
+  createDotElement(type: string) {
     if (!this.handle) return null;
-    return this.handle.createDomBase(type);
+    return this.handle.createDomElementBase(type);
   }
 
-  setDotFrom(fromP: number) {
+  setDotFrom(fromPercent: number) {
     if (!this.handle) return null;
-    return this.handle.setFrom(fromP);
+    return this.handle.setFrom(fromPercent);
   }
 
-  setDotTo(toP: number) {
+  setDotTo(toPercent: number) {
     if (!this.handle) return null;
-    return this.handle.setTo(toP);
+    return this.handle.setTo(toPercent);
   }
 
   setDotActions(type: string) {
     if (!this.handle) return null;
-    return this.handle.setActions(type);
+    return this.handle.bindEvent(type);
   }
 
   // --------------------------------- hints
@@ -230,63 +230,63 @@ class View extends Observer {
   setHintsData(options: ObserverOptions) {
     if (!this.hints) return [];
 
-    const masFlag: boolean[] = [];
+    const areHintsExist: boolean[] = [];
     this.hints.setAdditionalText(
       options.tipPrefix ?? '',
       options.tipPostfix ?? '',
     );
 
-    this.hints.setTipFlag(
+    this.hints.setTipVisible(
       options.tipFromTo ?? false,
       options.tipMinMax ?? false,
     );
 
     if (options.tipMinMax) {
-      masFlag.push(this.hints.createTipMinMax());
+      areHintsExist.push(this.hints.createTipMinMax());
 
-      this.hints.setValTipMinMax(
+      this.hints.setValueTipMinMax(
         options.min ?? 0,
         options.max ?? 0,
       );
     } else {
-      masFlag.push(this.hints.deleteTipMinMax());
+      areHintsExist.push(this.hints.deleteTipMinMax());
     }
 
     if (options.tipFromTo) {
-      masFlag.push(this.hints.createTipFrom());
+      areHintsExist.push(this.hints.createTipFrom());
       if (options.type === 'double') {
-        masFlag.push(this.hints.createTipTo());
-        masFlag.push(this.hints.createTipSingle());
+        areHintsExist.push(this.hints.createTipTo());
+        areHintsExist.push(this.hints.createTipSingle());
       }
     } else {
-      masFlag.push(this.hints.deleteTipFrom());
+      areHintsExist.push(this.hints.deleteTipFrom());
       if (options.type === 'double') {
-        masFlag.push(this.hints.deleteTipTo());
-        masFlag.push(this.hints.deleteTipSingle());
+        areHintsExist.push(this.hints.deleteTipTo());
+        areHintsExist.push(this.hints.deleteTipSingle());
       }
     }
-    return masFlag;
+    return areHintsExist;
   }
 
   toggleTipTo(to: number) {
     if (!this.hints) return false;
 
-    let flag = false;
+    let isToggled = false;
     if (!this.hints.checkTipTo()) {
-      flag = this.hints.createTipTo();
-      flag = Boolean(this.hints.setValTipTo(to));
+      isToggled = this.hints.createTipTo();
+      isToggled = Boolean(this.hints.setValueTipTo(to));
     }
-    return flag;
+    return isToggled;
   }
 
   updateTipMinMax(min: number, max: number) {
     if (!this.hints) return null;
-    return this.hints.setValTipMinMax(min, max);
+    return this.hints.setValueTipMinMax(min, max);
   }
 
-  getWidthTip(startFlag: boolean, resetFlag: boolean) {
+  getWidthTip(isStart: boolean, isReset: boolean) {
     if (!this.hints) return null;
-    if (startFlag && !resetFlag) { this.sizeWrap(); }
+    if (isStart && !isReset) { this.sizeWrapper(); }
     return this.hints.getWidthTip();
   }
 
@@ -297,52 +297,52 @@ class View extends Observer {
 
   checkVisibleTip() {
     if (!this.hints) return false;
-    return this.hints.checkVisibleTip();
+    return this.hints.checkTipIsVisible();
   }
 
   updateTipValue(from: number, to: number, type: string) {
     if (!this.hints) return [];
-    const masFlag: boolean[] = [];
-    masFlag.push(Boolean(this.hints.setValTipFrom(from)));
+    const isUpdated: boolean[] = [];
+    isUpdated.push(Boolean(this.hints.setValueTipFrom(from)));
     if (type === 'double') {
-      masFlag.push(Boolean(this.hints.setValTipTo(to)));
-      masFlag.push(Boolean(this.hints.setValTipSingle()));
+      isUpdated.push(Boolean(this.hints.setValueTipTo(to)));
+      isUpdated.push(Boolean(this.hints.setValueTipSingle()));
     }
-    return masFlag;
+    return isUpdated;
   }
 
   updateTipPosition(coordinates: UpdateTip) {
     if (!this.hints) return [];
-    const masFlag: boolean[] = [];
+    const isUpdated: boolean[] = [];
 
-    masFlag.push(Boolean(this.hints.setPositionFrom(coordinates.fromXY ?? 0)));
+    isUpdated.push(Boolean(this.hints.setPositionFrom(coordinates.fromXY ?? 0)));
     if (coordinates.toXY && coordinates.singleXY) {
-      masFlag.push(Boolean(this.hints.setPositionTo(coordinates.toXY)));
-      masFlag.push(Boolean(this.hints.setPositionSingle(coordinates.singleXY)));
+      isUpdated.push(Boolean(this.hints.setPositionTo(coordinates.toXY)));
+      isUpdated.push(Boolean(this.hints.setPositionSingle(coordinates.singleXY)));
     }
-    return masFlag;
+    return isUpdated;
   }
 
   // --------------------------------- bar
 
   setVisibleBar(bar: boolean) {
-    if (!this.bar || !this.rsLine) return [];
-    const masFlag: boolean[] = [];
+    if (!this.bar || !this.rangeSliderLine) return [];
+    const isVisible: boolean[] = [];
 
-    masFlag.push(this.bar.setVisibleBar(bar));
-    masFlag.push(this.bar.createDomBar());
+    isVisible.push(this.bar.setVisibleBar(bar));
+    isVisible.push(this.bar.createDomElementBar());
 
-    masFlag.push(this.bar.setSizeWH(
+    isVisible.push(this.bar.setSizeWidthHeight(
       this.vertical
-        ? this.rsLine.offsetWidth : this.rsLine.offsetHeight,
+        ? this.rangeSliderLine.offsetWidth : this.rangeSliderLine.offsetHeight,
     ));
 
-    return masFlag;
+    return isVisible;
   }
 
-  setBar(barX: number, widthBar: number) {
+  setBar(barXY: number, widthBar: number) {
     if (!this.bar) return false;
-    return this.bar.setBar(barX, widthBar);
+    return this.bar.setBar(barXY, widthBar);
   }
 
   // --------------------------------- Grid
@@ -352,17 +352,17 @@ class View extends Observer {
     return this.grid.deleteGrid();
   }
 
-  createDomGrid() {
+  createDomElementGrid() {
     if (!this.grid) return null;
-    return this.grid.createDomGrid();
+    return this.grid.createDomElementGrid();
   }
 
-  createMark(valMark: {
-    val: number,
+  createMark(valueMark: {
+    value: number,
     position: number,
   }[]) {
     if (!this.grid) return null;
-    return this.grid.createMark(valMark);
+    return this.grid.createMark(valueMark);
   }
 
   @boundMethod
@@ -373,7 +373,7 @@ class View extends Observer {
     });
   }
 
-  private attributesChange() {
+  private changeAttributes() {
     const options = new Map([
       ['type', 'type'],
       ['disabled', 'disabled'],
@@ -398,9 +398,9 @@ class View extends Observer {
       ['tip-postfix', 'tipPostfix'],
     ]);
 
-    const mapOptions = new Map();
+    const attributes = new Map();
 
-    const getDataAttr = (item: string) => {
+    const getDataAttribute = (item: string) => {
       if (!this.element) return false;
 
       const attribute = `data-${item}`;
@@ -420,40 +420,40 @@ class View extends Observer {
       return false;
     };
 
-    const masDataAttr: string[] = [];
+    const nameAttributes: string[] = [];
 
     options.forEach((value, key) => {
-      const data = getDataAttr(key);
+      const data = getDataAttribute(key);
       if (data) {
-        const [dataAttr] = data;
-        const [, valueAttr] = data;
-        mapOptions.set(dataAttr, valueAttr);
+        const [nameAttribute] = data;
+        const [, valueAttribute] = data;
+        attributes.set(nameAttribute, valueAttribute);
       }
-      masDataAttr.push(`data-${key}`);
+      nameAttributes.push(`data-${key}`);
     });
 
-    this.objData = Object.fromEntries(mapOptions);
+    this.dataAttributes = Object.fromEntries(attributes);
     const observer = new MutationObserver((mutation) => {
-      const obj: RangeSliderOptions = {};
+      const rangeSlider: RangeSliderOptions = {};
 
       mutation.forEach((item) => {
-        const data = getDataAttr(
+        const data = getDataAttribute(
           (item.attributeName ?? '').replace('data-', ''),
         );
 
         if (data) {
           const key = String(data[0]);
-          const val = data[1];
+          const value = data[1];
           // использую type assertions так как не нашёл возможности передавать нужный тип
           // не могу отказаться от данной конструкции кода, так как это сильно уменьшает копипаст
-          View.setProperty(obj, key as keyof RangeSliderOptions, val);
+          View.setProperty(rangeSlider, key as keyof RangeSliderOptions, value);
         }
       });
 
-      if (obj) {
+      if (rangeSlider) {
         this.notifyOB({
           key: 'DataAttributes',
-          ...obj,
+          ...rangeSlider,
         });
       }
     });
@@ -461,51 +461,51 @@ class View extends Observer {
     observer.observe(
       (this.element as Element),
       {
-        attributeFilter: masDataAttr,
+        attributeFilter: nameAttributes,
       },
     );
   }
 
   private static setProperty<T, K extends keyof T>(
-    obj: T,
+    object: T,
     key: K,
     value: T[K],
   ) {
     // eslint-disable-next-line no-param-reassign
-    obj[key] = value;
+    object[key] = value;
   }
 
   private init() {
     this.onHandle = async () => {
-      await this.createDomBase(); // create basic DOM elements
-      await this.setActions(); // add event listeners
+      await this.createDomElementBase(); // create basic DOM elements
+      await this.bindEvent(); // add event listeners
 
       this.handle = await new Handle(
-        (this.rsCenter as HTMLElement),
-        this.rsName,
+        (this.rangeSliderCenter as HTMLElement),
+        this.rangeSliderName,
       );
       this.hints = await new Hints(
-        this.rsTop as Element,
-        this.rsName,
+        this.rangeSliderTop as Element,
+        this.rangeSliderName,
       );
       this.bar = await new Bar(
-        this.rsCenter as HTMLElement,
-        this.rsName,
+        this.rangeSliderCenter as HTMLElement,
+        this.rangeSliderName,
       );
-      this.grid = await new Grid(this.rsBottom as Element, this.rsName);
+      this.grid = await new Grid(this.rangeSliderBottom as Element, this.rangeSliderName);
 
       await this.createListeners();
-      await this.attributesChange();
+      await this.changeAttributes();
     };
   }
 
   private createListeners() {
     if (!this.handle || !this.bar) return false;
 
-    this.handle.subscribeOB(this.handleForwarding);
-    this.bar.subscribeOB(this.handleForwarding);
+    this.handle.subscribeObserver(this.handleForwarding);
+    this.bar.subscribeObserver(this.handleForwarding);
 
-    if (this.grid) { this.grid.subscribeOB(this.handleForwarding); }
+    if (this.grid) { this.grid.subscribeObserver(this.handleForwarding); }
 
     return true;
   }
@@ -516,19 +516,19 @@ class View extends Observer {
     return true;
   }
 
-  private sizeWrap() {
-    if (!this.rsCenter) return false;
+  private sizeWrapper() {
+    if (!this.rangeSliderCenter) return false;
 
-    let wrapWH = 0;
+    let wrapperWidthHeight = 0;
     if (this.vertical) {
-      wrapWH = this.rsCenter.offsetHeight;
+      wrapperWidthHeight = this.rangeSliderCenter.offsetHeight;
     } else {
-      wrapWH = this.rsCenter.offsetWidth;
+      wrapperWidthHeight = this.rangeSliderCenter.offsetWidth;
     }
 
     this.notifyOB({
-      key: 'SizeWrap',
-      wrapWH,
+      key: 'SizeWrapper',
+      wrapperWidthHeight,
     });
 
     return true;

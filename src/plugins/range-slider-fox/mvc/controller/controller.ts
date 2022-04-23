@@ -5,13 +5,13 @@ import RangeSliderOptions from '../../glob-interface';
 import { ObserverOptions } from '../../Observer';
 
 class Controller {
-  private startFlag = false;
+  private isStarted = false;
 
-  private resetFlag = false;
+  private isReset = false;
 
   private lock = false;
 
-  private funAttributes: Function = () => { };
+  private functionAttributes: Function = () => { };
 
   private model: Model | null;
 
@@ -25,10 +25,10 @@ class Controller {
 
   async reset() {
     if (this.lock) return false;
-    this.resetFlag = await true;
+    this.isReset = await true;
 
     if (this.model) { await this.model.reset(); }
-    this.resetFlag = false;
+    this.isReset = false;
     return true;
   }
 
@@ -68,14 +68,14 @@ class Controller {
 
   private static subscribe(talking: Model | View, items: Function[]) {
     return items.forEach((item) => {
-      talking.subscribeOB(item);
+      talking.subscribeObserver(item);
     });
   }
 
   private createListeners() {
     if (!this.model || !this.view) return false;
 
-    const SModel = [
+    const handlesModel = [
       this.handleStart,
       this.handleRangeData,
       this.handleDotData,
@@ -90,20 +90,20 @@ class Controller {
       this.handleStep,
     ];
 
-    Controller.subscribe(this.model, SModel);
+    Controller.subscribe(this.model, handlesModel);
 
-    const SView = [
+    const handlesView = [
       this.handleDotMove,
       this.handleClickLine,
-      this.handleSizeWrap,
+      this.handleSizeWrapper,
       this.handleClickBar,
       this.handleClickMark,
-      this.handleSnapNum,
+      this.handleSnapNumber,
       this.handleDotKeyDown,
       this.handleDataAttributes,
     ];
 
-    Controller.subscribe(this.view, SView);
+    Controller.subscribe(this.view, handlesView);
 
     return true;
   }
@@ -113,9 +113,9 @@ class Controller {
     const { key } = options;
     if (key !== 'Start' || !this.view) return false;
 
-    await this.view.outDataAttr();
-    await this.funAttributes();
-    this.startFlag = true;
+    await this.view.outputDataAttribute();
+    await this.functionAttributes();
+    this.isStarted = true;
     return true;
   }
 
@@ -124,11 +124,11 @@ class Controller {
     const { key } = options;
     if (key !== 'DataAttributes') return false;
 
-    this.funAttributes = () => {
+    this.functionAttributes = () => {
       this.update(options);
     };
 
-    if (this.startFlag) { this.funAttributes(); }
+    if (this.isStarted) { this.functionAttributes(); }
 
     return true;
   }
@@ -141,19 +141,19 @@ class Controller {
     if (!this.model || !this.view) return false;
 
     this.model.calcOnePercent();
-    const lockFlag = this.startFlag && !this.resetFlag;
+    const lock = this.isStarted && !this.isReset;
 
-    if (lockFlag) {
+    if (lock) {
       this.view.updateTipMinMax(
         options.min ?? 0,
         options.max ?? 0,
       );
     }
 
-    if (this.model.getOptions().grid && lockFlag) {
+    if (this.model.getOptions().grid && lock) {
       this.view.deleteGrid();
       this.model.createMark();
-      this.view.createDomGrid();
+      this.view.createDomElementGrid();
     }
 
     this.model.calcStep();
@@ -191,8 +191,8 @@ class Controller {
 
     if (!this.view || !this.model) return false;
 
-    const lockFlag = this.startFlag && !this.resetFlag;
-    this.view.createDotElem(type); // create dot
+    const lock = this.isStarted && !this.isReset;
+    this.view.createDotElement(type); // create dot
     this.view.setDotFrom(this.model.calcPositionDotFrom());
 
     if (type === 'double') {
@@ -203,18 +203,18 @@ class Controller {
 
     const to = options.to ?? 0;
     // ----------  Hints
-    if (type === 'double' && lockFlag) { this.view.toggleTipTo(to); }
+    if (type === 'double' && lock) { this.view.toggleTipTo(to); }
 
     const from = options.from ?? 0;
 
-    if (lockFlag) {
+    if (lock) {
       this.updateHints(type, from, to);
     }
 
     // ----------  Bar
-    if (lockFlag) {
+    if (lock) {
       const position = this.model.calcPositionBar();
-      this.view.setBar(position.barX, position.widthBar);
+      this.view.setBar(position.barXY, position.widthBar);
     }
 
     // ----------  Input
@@ -230,7 +230,7 @@ class Controller {
 
     this.model.calcDotPosition({
       type: options.type ?? '',
-      wrapWH: options.wrapWH ?? 0,
+      wrapperWidthHeight: options.wrapperWidthHeight ?? 0,
       position: options.position ?? 0,
       clientXY: options.clientXY ?? 0,
       shiftXY: options.shiftXY ?? 0,
@@ -254,11 +254,11 @@ class Controller {
 
     if (!this.view || !this.model) return false;
 
-    if (this.startFlag && !this.resetFlag) {
+    if (this.isStarted && !this.isReset) {
       this.view.deleteGrid();
       if (options.grid) {
         this.model.createMark();
-        this.view.createDomGrid();
+        this.view.createDomElementGrid();
       }
     }
     return true;
@@ -272,15 +272,15 @@ class Controller {
     if (!this.view || !this.model) return false;
 
     await this.view.setOrientation(options.orientation ?? '');
-    const obj = await this.model.getOptions();
-    this.updateHints(obj.type ?? '', obj.from ?? 0, obj.to ?? 0);
+    const modelOptions = await this.model.getOptions();
+    this.updateHints(modelOptions.type ?? '', modelOptions.from ?? 0, modelOptions.to ?? 0);
 
     // -------- grid
 
-    if (obj.grid) {
+    if (modelOptions.grid) {
       this.view.deleteGrid();
       this.model.createMark();
-      this.view.createDomGrid();
+      this.view.createDomElementGrid();
     }
     return true;
   }
@@ -301,10 +301,10 @@ class Controller {
 
     if (!this.view || !this.model) return false;
 
-    this.model.setWrapWH(this.view.getWrapWH());
+    this.model.setWrapperWidthHeight(this.view.getWrapWidthHeight());
     this.view.setHintsData(options);
 
-    if (this.startFlag && !this.resetFlag) {
+    if (this.isStarted && !this.isReset) {
       this.updateHints(
         options.type ?? '',
         options.from ?? 0,
@@ -318,17 +318,17 @@ class Controller {
     if (!this.view || !this.model) return false;
 
     await this.view.updateTipValue(from, to, type);
-    const objTip = await this.view.getWidthTip(this.startFlag, this.resetFlag);
+    const sizeTip = await this.view.getWidthTip(this.isStarted, this.isReset);
 
-    if (!objTip) return false;
+    if (!sizeTip) return false;
 
-    if (objTip.fromWH || objTip.toWH) {
-      const fromXY = await this.model.calcPositionTipFrom(objTip.fromWH);
+    if (sizeTip.fromWidthHeight || sizeTip.toWidthHeight) {
+      const fromXY = await this.model.calcPositionTipFrom(sizeTip.fromWidthHeight);
       let toXY = 0;
       let singleXY = 0;
       if (type === 'double') {
-        toXY = await this.model.calcPositionTipTo(objTip.toWH);
-        singleXY = await this.model.calcPositionTipSingle(objTip.singleWH);
+        toXY = await this.model.calcPositionTipTo(sizeTip.toWidthHeight);
+        singleXY = await this.model.calcPositionTipSingle(sizeTip.singleWidthHeight);
       } else {
         await this.view.deleteTipTo();
       }
@@ -366,13 +366,13 @@ class Controller {
   }
 
   @boundMethod
-  private handleSizeWrap(options: ObserverOptions) {
+  private handleSizeWrapper(options: ObserverOptions) {
     const { key } = options;
-    if (key !== 'SizeWrap' || !this.startFlag) return false;
+    if (key !== 'SizeWrapper' || !this.isStarted) return false;
 
     if (!this.model) return false;
 
-    this.model.setWrapWH(options.wrapWH ?? 0);
+    this.model.setWrapperWidthHeight(options.wrapperWidthHeight ?? 0);
 
     return true;
   }
@@ -386,7 +386,7 @@ class Controller {
 
     this.view.setVisibleBar(options.bar ?? false);
     const position = this.model.calcPositionBar();
-    this.view.setBar(position.barX, position.widthBar);
+    this.view.setBar(position.barXY, position.widthBar);
     return true;
   }
 
@@ -406,7 +406,7 @@ class Controller {
     const { key } = options;
     if (key !== 'CreateGrid' || !this.view) return false;
 
-    this.view.createMark(options.valMark ?? []);
+    this.view.createMark(options.valueMark ?? []);
     return true;
   }
 
@@ -416,14 +416,14 @@ class Controller {
     if (key !== 'ClickMark' || !this.model) return false;
     if (this.lock) return false;
 
-    this.model.clickMark(options.valueG ?? 0);
+    this.model.clickMark(options.valueGrid ?? 0);
     return true;
   }
 
   @boundMethod
-  private handleSnapNum(options: ObserverOptions) {
+  private handleSnapNumber(options: ObserverOptions) {
     const { key } = options;
-    if (key !== 'snapNumber' || !this.model) return false;
+    if (key !== 'SnapNumber' || !this.model) return false;
 
     this.model.calcSnap(options.snapNumber ?? []);
     return true;

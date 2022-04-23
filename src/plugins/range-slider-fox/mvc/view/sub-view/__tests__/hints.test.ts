@@ -1,38 +1,38 @@
 import Hints from '../Hints';
 
 describe('------- Test Hints API -------', () => {
-  let rsName: string;
-  let wrap: HTMLElement;
+  let rangeSliderName: string;
+  let wrapper: HTMLElement;
   let hints: Hints;
-  let jsRsName: string;
+  let jsRangeSliderName: string;
 
   beforeEach(() => {
-    rsName = 'range-slider-fox';
-    jsRsName = `js-${rsName}`;
-    wrap = document.createElement('div');
-    wrap.classList.add(`${rsName}__top`);
-    wrap.classList.add(`${jsRsName}__top`);
-    hints = new Hints(wrap, rsName);
+    rangeSliderName = 'range-slider-fox';
+    jsRangeSliderName = `js-${rangeSliderName}`;
+    wrapper = document.createElement('div');
+    wrapper.classList.add(`${rangeSliderName}__top`);
+    wrapper.classList.add(`${jsRangeSliderName}__top`);
+    hints = new Hints(wrapper, rangeSliderName);
   });
 
-  function searchStr(text: string, str: string) {
-    return new RegExp(str, 'g').test(text);
+  function searchString(text: string, string: string) {
+    return new RegExp(string, 'g').test(text);
   }
 
-  const checkDom = async (name: string) => {
-    expect(searchStr(
-      (await wrap.firstChild as HTMLElement).className,
-      `${jsRsName}__tip-${name}`,
+  const checkDomElement = async (name: string) => {
+    expect(searchString(
+      (await wrapper.firstChild as HTMLElement).className,
+      `${jsRangeSliderName}__tip-${name}`,
     )).toBeTruthy();
   };
 
   const checkStyle = async (value: string) => {
-    expect((await wrap.firstChild as HTMLElement).style.left).toBe(value);
+    expect((await wrapper.firstChild as HTMLElement).style.left).toBe(value);
   };
 
   // setTipFlag
   test(' Check toggles for hints are working ', async () => {
-    const { tipFromTo, tipMinMax } = hints.setTipFlag(true, true);
+    const { tipFromTo, tipMinMax } = hints.setTipVisible(true, true);
     expect(tipFromTo).toBeTruthy();
     expect(tipMinMax).toBeTruthy();
   });
@@ -47,83 +47,83 @@ describe('------- Test Hints API -------', () => {
   // createTipMinMax
   test(' Create Min and Max hints DOM-elements ', async () => {
     expect(await hints.createTipMinMax()).toBeTruthy();
-    const tips = await wrap.children;
+    const tips = await wrapper.children;
 
-    let classNameF = searchStr(tips[0].className, `${jsRsName}__tip-min`);
-    expect(classNameF).toBeTruthy();
-    classNameF = searchStr(tips[1].className, `${jsRsName}__tip-max`);
-    expect(classNameF).toBeTruthy();
+    let isValid = searchString(tips[0].className, `${jsRangeSliderName}__tip-min`);
+    expect(isValid).toBeTruthy();
+    isValid = searchString(tips[1].className, `${jsRangeSliderName}__tip-max`);
+    expect(isValid).toBeTruthy();
     expect(hints.createTipMinMax()).toBeFalsy();
   });
 
   // createTipFrom
   test(' Create From hint DOM-element ', async () => {
     expect(await hints.createTipFrom()).toBeTruthy();
-    checkDom('from');
+    checkDomElement('from');
     expect(hints.createTipFrom()).toBeFalsy();
   });
 
   // createTipTo
   test(' Create To hint DOM-element ', async () => {
     expect(await hints.createTipTo()).toBeTruthy();
-    checkDom('to');
+    checkDomElement('to');
     expect(hints.createTipTo()).toBeFalsy();
   });
 
   // createTipSingle
   test(' Create Single hint DOM-element ', async () => {
     expect(await hints.createTipSingle()).toBeTruthy();
-    checkDom('single');
+    checkDomElement('single');
     expect(hints.createTipSingle()).toBeFalsy();
   });
 
   //  deleteTipMinMax
   test(' Delete Min and Max hints DOM-elements ', async () => {
-    let flag = await hints.createTipMinMax();
-    expect(flag).toBeTruthy();
-    flag = await hints.deleteTipMinMax();
-    expect(flag).toBeTruthy();
-    expect(wrap.children).toHaveLength(0);
+    let isMinMax = await hints.createTipMinMax();
+    expect(isMinMax).toBeTruthy();
+    isMinMax = await hints.deleteTipMinMax();
+    expect(isMinMax).toBeTruthy();
+    expect(wrapper.children).toHaveLength(0);
     expect(hints.deleteTipMinMax()).toBeFalsy();
   });
 
   // deleteTipFrom
   test(' Delete From hint DOM-element ', async () => {
-    let flag = await hints.createTipFrom();
-    expect(flag).toBeTruthy();
-    flag = await hints.deleteTipFrom();
-    expect(flag).toBeTruthy();
-    expect(wrap.children).toHaveLength(0);
+    let isFrom = await hints.createTipFrom();
+    expect(isFrom).toBeTruthy();
+    isFrom = await hints.deleteTipFrom();
+    expect(isFrom).toBeTruthy();
+    expect(wrapper.children).toHaveLength(0);
     expect(hints.deleteTipFrom()).toBeFalsy();
   });
 
   //  deleteTipTo
   test(' Delete To hint DOM-element ', async () => {
-    let flag = await hints.createTipTo();
-    expect(flag).toBeTruthy();
-    flag = await hints.deleteTipTo();
-    expect(flag).toBeTruthy();
-    expect(wrap.children).toHaveLength(0);
+    let isTo = await hints.createTipTo();
+    expect(isTo).toBeTruthy();
+    isTo = await hints.deleteTipTo();
+    expect(isTo).toBeTruthy();
+    expect(wrapper.children).toHaveLength(0);
     expect(hints.deleteTipTo()).toBeFalsy();
   });
 
   //  deleteTipSingle
   test(' Delete Single hint DOM-element ', async () => {
-    let flag = await hints.createTipSingle();
-    expect(flag).toBeTruthy();
-    flag = await hints.deleteTipSingle();
-    expect(flag).toBeTruthy();
-    expect(wrap.children).toHaveLength(0);
+    let isSingle = await hints.createTipSingle();
+    expect(isSingle).toBeTruthy();
+    isSingle = await hints.deleteTipSingle();
+    expect(isSingle).toBeTruthy();
+    expect(wrapper.children).toHaveLength(0);
     expect(hints.deleteTipSingle()).toBeFalsy();
   });
 
   //  checkTipTo
   test(' Check if both From and TO hints are displayed ', async () => {
-    let flag = await hints.checkTipTo();
-    expect(flag).toBeTruthy();
-    await hints.setTipFlag(true, false);
-    flag = await hints.checkTipTo();
-    expect(flag).toBeFalsy();
+    let isCheckTipTo = await hints.checkTipTo();
+    expect(isCheckTipTo).toBeTruthy();
+    await hints.setTipVisible(true, false);
+    isCheckTipTo = await hints.checkTipTo();
+    expect(isCheckTipTo).toBeFalsy();
     await hints.createTipTo();
     expect(hints.checkTipTo()).toBeTruthy();
   });
@@ -151,22 +151,22 @@ describe('------- Test Hints API -------', () => {
 
   // setOrientation
   test(' Set hints orientation ', async () => {
-    let flag = await hints.createTipFrom();
-    expect(flag).toBeTruthy();
-    flag = await hints.createTipTo();
-    expect(flag).toBeTruthy();
-    flag = await hints.createTipSingle();
-    expect(flag).toBeTruthy();
+    let isCreateFrom = await hints.createTipFrom();
+    expect(isCreateFrom).toBeTruthy();
+    isCreateFrom = await hints.createTipTo();
+    expect(isCreateFrom).toBeTruthy();
+    isCreateFrom = await hints.createTipSingle();
+    expect(isCreateFrom).toBeTruthy();
 
     await hints.setPositionFrom(20);
     await hints.setPositionTo(34);
     await hints.setPositionSingle(27);
 
-    flag = await hints.setOrientation('vertical');
-    expect(flag).toBeTruthy();
+    isCreateFrom = await hints.setOrientation('vertical');
+    expect(isCreateFrom).toBeTruthy();
 
-    expect((await wrap.children[0] as HTMLElement).style.bottom).toBe('20%');
-    expect((await wrap.children[1] as HTMLElement).style.bottom).toBe('34%');
-    expect((await wrap.children[2] as HTMLElement).style.bottom).toBe('27%');
+    expect((await wrapper.children[0] as HTMLElement).style.bottom).toBe('20%');
+    expect((await wrapper.children[1] as HTMLElement).style.bottom).toBe('34%');
+    expect((await wrapper.children[2] as HTMLElement).style.bottom).toBe('27%');
   });
 });

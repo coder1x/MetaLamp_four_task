@@ -63,8 +63,8 @@ describe('------- Test Resize API -------', () => {
 
   test(testName, async () => {
     let change = false;
-    const wrap = await document.createElement('div');
-    await mockElementDimensions(wrap)({
+    const wrapperOne = await document.createElement('div');
+    await mockElementDimensions(wrapperOne)({
       width: 300,
       height: 100,
     });
@@ -72,16 +72,16 @@ describe('------- Test Resize API -------', () => {
     jest.useFakeTimers();
     jest.spyOn(global, 'setTimeout');
 
-    const resize = await new Resize(wrap, 100, () => {
+    const resize = await new Resize(wrapperOne, 100, () => {
       change = true;
     });
 
-    const wrap2 = await document.createElement('div');
-    await mockElementDimensions(wrap2)({
+    const wrapperTwo = await document.createElement('div');
+    await mockElementDimensions(wrapperTwo)({
       width: 250,
       height: 100,
     });
-    resize.wrapper = await wrap2;
+    resize.wrapper = await wrapperTwo;
 
     await mockCustomEvent(window, { eventType: 'resize' });
     await jest.runOnlyPendingTimers();

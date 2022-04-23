@@ -2,20 +2,20 @@ import { boundMethod } from 'autobind-decorator';
 import { Observer } from '../../../Observer';
 
 class Bar extends Observer {
-  private rsCenter: Element;
+  private rangeSliderCenter: Element;
 
-  private rsName: string;
+  private rangeSliderName: string;
 
-  private elemBar: HTMLElement | null = null;
+  private elementBar: HTMLElement | null = null;
 
   private bar: boolean = false;
 
   private vertical: boolean = false;
 
-  constructor(element: HTMLElement | Element, rsName: string) {
+  constructor(element: HTMLElement | Element, rangeSliderName: string) {
     super();
-    this.rsName = rsName;
-    this.rsCenter = element;
+    this.rangeSliderName = rangeSliderName;
+    this.rangeSliderCenter = element;
   }
 
   setVisibleBar(bar: boolean) {
@@ -23,92 +23,92 @@ class Bar extends Observer {
     return this.bar;
   }
 
-  setOrientation(str: string) {
-    this.vertical = str === 'vertical';
+  setOrientation(type: string) {
+    this.vertical = type === 'vertical';
 
     const convertStyle = (style: CSSStyleDeclaration) => {
-      let sizeW = '';
-      let sizeH = '';
-      const styleDom = style;
+      let sizeWidth = '';
+      let sizeHeight = '';
+      const styleDomElement = style;
 
       const toggleBar = (
         from: keyof CSSStyleDeclaration,
         to: keyof CSSStyleDeclaration,
       ) => {
-        const value = Bar.getProperty(styleDom, from);
+        const value = Bar.getProperty(styleDomElement, from);
         if (value === '') return false;
-        sizeW = styleDom.width;
-        sizeH = styleDom.height;
-        styleDom.removeProperty(String(from));
-        Bar.setProperty(styleDom, to, value);
+        sizeWidth = styleDomElement.width;
+        sizeHeight = styleDomElement.height;
+        styleDomElement.removeProperty(String(from));
+        Bar.setProperty(styleDomElement, to, value);
         return true;
       };
 
       if (this.vertical) {
         if (!toggleBar('left', 'bottom')) return false;
       } else if (!toggleBar('bottom', 'left')) return false;
-      styleDom.width = sizeH;
-      styleDom.height = sizeW;
+      styleDomElement.width = sizeHeight;
+      styleDomElement.height = sizeWidth;
 
       return true;
     };
 
-    if (this.elemBar) { return convertStyle(this.elemBar.style); }
+    if (this.elementBar) { return convertStyle(this.elementBar.style); }
 
     return false;
   }
 
-  createDomBar() {
-    if (!this.bar && this.elemBar) {
-      this.elemBar.remove();
-      this.elemBar = null;
+  createDomElementBar() {
+    if (!this.bar && this.elementBar) {
+      this.elementBar.remove();
+      this.elementBar = null;
       return false;
     }
-    if (this.bar && this.elemBar) return false;
-    if (!this.bar && !this.elemBar) return false;
+    if (this.bar && this.elementBar) return false;
+    if (!this.bar && !this.elementBar) return false;
 
-    const barName = `${this.rsName}__bar`;
-    this.elemBar = Bar.createElem('span', [barName, `js-${barName}`]);
-    this.rsCenter.appendChild(this.elemBar);
+    const barName = `${this.rangeSliderName}__bar`;
+    this.elementBar = Bar.createElement('span', [barName, `js-${barName}`]);
+    this.rangeSliderCenter.appendChild(this.elementBar);
 
-    this.setActions();
+    this.bindEvent();
     return true;
   }
 
-  setSizeWH(size: number) {
-    if (!this.elemBar) return false;
+  setSizeWidthHeight(size: number) {
+    if (!this.elementBar) return false;
 
-    const sizePX = `${size}px`;
-    const { style } = this.elemBar;
+    const pixels = `${size}px`;
+    const { style } = this.elementBar;
 
     if (this.vertical) {
-      style.width = sizePX;
+      style.width = pixels;
     } else {
-      style.height = sizePX;
+      style.height = pixels;
     }
 
     return true;
   }
 
-  setBar(barX: number, widthBar: number) {
-    if (!this.elemBar) return false;
+  setBar(barXY: number, widthBar: number) {
+    if (!this.elementBar) return false;
 
-    const { style } = this.elemBar;
+    const { style } = this.elementBar;
 
     if (this.vertical) {
-      style.bottom = `${barX}%`;
+      style.bottom = `${barXY}%`;
       style.height = `${widthBar}%`;
     } else {
-      style.left = `${barX}%`;
+      style.left = `${barXY}%`;
       style.width = `${widthBar}%`;
     }
     return true;
   }
 
-  private setActions() {
-    if (!this.elemBar) return false;
+  private bindEvent() {
+    if (!this.elementBar) return false;
 
-    this.elemBar.addEventListener('click', this.handleBarClick);
+    this.elementBar.addEventListener('click', this.handleBarClick);
 
     return true;
   }
@@ -121,20 +121,20 @@ class Bar extends Observer {
     });
   }
 
-  private static getProperty<T, K extends keyof T>(obj: T, key: K) {
-    return obj[key];
+  private static getProperty<T, K extends keyof T>(object: T, key: K) {
+    return object[key];
   }
 
   private static setProperty<T, K extends keyof T>(
-    obj: T,
+    object: T,
     key: K,
     value: T[K],
   ) {
     // eslint-disable-next-line no-param-reassign
-    obj[key] = value;
+    object[key] = value;
   }
 
-  private static createElem(teg: string, className: string[]) {
+  private static createElement(teg: string, className: string[]) {
     const element = document.createElement(teg);
     className.forEach((item) => {
       element.classList.add(item);

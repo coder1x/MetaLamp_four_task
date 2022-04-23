@@ -35,7 +35,7 @@ class CopyCode {
       const text = `${key[i]}: ${value},`;
 
       if (!isChildNodes) {
-        const item = CopyCode.createElem(
+        const item = CopyCode.createElement(
           'li',
           [`${this.className.replace('.', '')}__item`],
         );
@@ -53,10 +53,10 @@ class CopyCode {
   private init() {
     this.list = this.element.querySelector(`${this.className}__options`);
     this.button = this.element.querySelector(`${this.className}__copy`);
-    this.setActions();
+    this.bindEvent();
   }
 
-  private static createElem(teg: string, className: string[]) {
+  private static createElement(teg: string, className: string[]) {
     const element = document.createElement(teg);
 
     className.forEach((item) => {
@@ -89,7 +89,7 @@ class CopyCode {
     return true;
   }
 
-  private setActions() {
+  private bindEvent() {
     if (this.button) {
       this.button.addEventListener('click', this.handleButtonClick);
     }

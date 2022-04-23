@@ -36,7 +36,7 @@ class Values {
 
   private objRangeSlider: any;
 
-  private mapInput: Map<string, string> | null = null;
+  private fieldValues: Map<string, string> | null = null;
 
   constructor(nameClass: string, element: Element) {
     this.nameClass = nameClass;
@@ -78,13 +78,13 @@ class Values {
   // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
   bindEvent(rangeSlider: any) {
     this.objRangeSlider = rangeSlider;
-    this.mapInput = new Map();
+    this.fieldValues = new Map();
 
-    this.mapInput.set('min', (this.min && this.min.value) ?? '');
-    this.mapInput.set('max', (this.max && this.max.value) ?? '');
-    this.mapInput.set('from', (this.from && this.from.value) ?? '');
-    this.mapInput.set('to', (this.to && this.to.value) ?? '');
-    this.mapInput.set('step', (this.step && this.step.value) ?? '');
+    this.fieldValues.set('min', (this.min && this.min.value) ?? '');
+    this.fieldValues.set('max', (this.max && this.max.value) ?? '');
+    this.fieldValues.set('from', (this.from && this.from.value) ?? '');
+    this.fieldValues.set('to', (this.to && this.to.value) ?? '');
+    this.fieldValues.set('step', (this.step && this.step.value) ?? '');
 
     [this.min, this.max, this.from, this.to, this.step].forEach((item) => {
       if (item) {
@@ -100,13 +100,13 @@ class Values {
     const value = element.value.replace(/[^-.\d]/g, '');
     const regexp = /^-?\d*?[.]?\d*$/;
 
-    if (!this.mapInput) return false;
+    if (!this.fieldValues) return false;
 
     if (regexp.test(value)) {
-      this.mapInput.set(element.name, value);
+      this.fieldValues.set(element.name, value);
       element.value = value;
     } else {
-      element.value = this.mapInput.get(element.name) ?? '';
+      element.value = this.fieldValues.get(element.name) ?? '';
     }
 
     return true;
@@ -114,10 +114,10 @@ class Values {
 
   @boundMethod
   private handleInputChange(event: Event) {
-    if (!this.mapInput) return false;
+    if (!this.fieldValues) return false;
     const element = event.currentTarget as HTMLInputElement;
     this.objRangeSlider.update({
-      [element.name]: Number(this.mapInput.get(element.name)),
+      [element.name]: Number(this.fieldValues.get(element.name)),
     });
     return true;
   }

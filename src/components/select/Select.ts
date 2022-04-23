@@ -57,7 +57,7 @@ class Select {
 
   private init() {
     this.setDomElem();
-    this.setActions();
+    this.bindEvent();
     this.isStarted = false;
   }
 
@@ -197,7 +197,7 @@ class Select {
     if (!isLink && !isList) { this.toggle(true); }
   }
 
-  private setActions() {
+  private bindEvent() {
     if (!this.displayedWrap || !this.button) return false;
 
     this.displayedWrap.addEventListener('click', this.handleDisplayedWrap);

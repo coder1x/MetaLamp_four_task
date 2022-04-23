@@ -41,7 +41,7 @@ $color-focus: #1f2041;
     position: relative;
   }
 
-  &__grid-pol {
+  &__grid-line {
     position: absolute;
     width: 1px;
     height: 5px;
@@ -115,7 +115,7 @@ $color-focus: #1f2041;
       height: 100%;
     }
 
-    &__grid-pol {
+    &__grid-line {
       position: absolute;
       width: 5px;
       height: 1px;

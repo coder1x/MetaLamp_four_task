@@ -3,19 +3,19 @@ import RangeSliderOptions from './glob-interface';
 interface insideOptions extends RangeSliderOptions {
   readonly fromX?: number,
   readonly toX?: number,
-  readonly valP?: number,
-  readonly fromP?: number,
-  readonly toP?: number,
+  readonly valuePercent?: number,
+  readonly fromPercent?: number,
+  readonly toPercent?: number,
   readonly limitFrom?: number,
   readonly limitTo?: number,
   readonly fromTo?: number,
-  readonly valueG?: number,
-  readonly valMark?: {
-    val: number,
+  readonly valueGrid?: number,
+  readonly valueMark?: {
+    value: number,
     position: number,
   }[],
   readonly snapNumber?: number[],
-  readonly wrapWH?: number,
+  readonly wrapperWidthHeight?: number,
   readonly position?: number,
   readonly clientXY?: number,
   readonly shiftXY?: number,
@@ -31,7 +31,7 @@ interface ObserverOptions extends insideOptions {
 abstract class Observer {
   private observers: Function[] = [];
 
-  subscribeOB(observer: Function) {
+  subscribeObserver(observer: Function) {
     if (!this.observers.includes(observer)) {
       this.observers.push(observer);
       return this.observers.length;
