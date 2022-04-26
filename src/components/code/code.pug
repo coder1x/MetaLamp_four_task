@@ -1,12 +1,15 @@
 
-mixin code(options)
+mixin code(options = {})
   -
-    const label = options.label ?? ''
-    const modifier = options.modifier ?? ''
-    const addClass = options.class ?? ''
-    const isLabeled = options.isLabeled
-    const classComponent = 'code'
-    let className = classComponent
+    const {
+      label = '',
+      modifier = '',
+      addClass = '',
+      isLabeled,
+    } = options;
+
+    const classComponent = 'code';
+    let className = classComponent;
     const codeTop = '$(\'.demo\').RangeSliderFox({';
     const codeBottom = '})';
     if(modifier){

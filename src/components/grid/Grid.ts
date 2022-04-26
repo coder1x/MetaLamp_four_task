@@ -1,5 +1,4 @@
 import { boundMethod } from 'autobind-decorator';
-import './grid.scss';
 
 interface Options {
   grid?: boolean | null;

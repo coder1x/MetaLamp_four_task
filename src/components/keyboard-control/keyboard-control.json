@@ -2,12 +2,12 @@
   "textField": {
     "one": {
       "label": "key Step One",
-      "type": "text",
+      "typeField": "text",
       "name": "keyStepOne"
     },
     "hold": {
       "label": "key Step Hold",
-      "type": "text",
+      "typeField": "text",
       "name": "keyStepHold"
     }
   }

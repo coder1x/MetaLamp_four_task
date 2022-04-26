@@ -1,11 +1,14 @@
 include ../text-field/text-field.pug
 
-mixin input-data(options)
+mixin input-data(options = {})
   -
-    const label = options.label ?? ''
-    const modifier = options.modifier ?? ''
-    const addClass = options.class ?? ''
-    const isLabeled = options.isLabeled
+    const {
+      label = '',
+      modifier = '',
+      addClass = '',
+      isLabeled
+    } = options;
+
     const classComponent = 'input-data'
     let className = classComponent
     

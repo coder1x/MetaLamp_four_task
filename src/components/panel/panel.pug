@@ -6,11 +6,14 @@ include ../different/different.pug
 include ../code/code.pug
 include ../keyboard-control/keyboard-control.pug
 
-mixin panel(options)
+mixin panel(options = {})
   -
-    const modifier = options.modifier ?? ''
-    const addClass = options.class ?? ''
-    const theme = options.theme ?? 'base'
+    const {
+      modifier = '',
+      addClass = '',
+      theme = 'base',
+    } = options;
+
     const classComponent = 'panel'
     let className = classComponent
     

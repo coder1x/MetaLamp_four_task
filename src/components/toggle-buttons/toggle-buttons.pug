@@ -1,10 +1,13 @@
-mixin toggle-buttons(options)
+mixin toggle-buttons(options = {})
   -
-    const header = options.header ?? ''
-    const label = options.label ?? ''
-    const modifier = options.modifier ?? ''
-    const addClass = options.class ?? ''
-    const isLabeled = options.isLabeled
+    const {
+      header = '',
+      label = '',
+      modifier = '',
+      addClass = '',
+      isLabeled,
+    } = options;
+
     const classComponent = 'toggle-buttons'
     let className = classComponent
     

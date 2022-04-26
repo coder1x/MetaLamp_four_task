@@ -2,12 +2,12 @@
   "textField": {
     "prefix": {
       "label": "Prefix",
-      "type": "text",
+      "typeField": "text",
       "name": "tipPrefix"
     },
     "postfix": {
       "label": "Postfix",
-      "type": "text",
+      "typeField": "text",
       "name": "tipPostfix"
     }
   }

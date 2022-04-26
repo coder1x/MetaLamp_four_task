@@ -1,11 +1,14 @@
 include ../text-field/text-field.pug
 
-mixin values(options)
+mixin values(options = {})
   -
-    const label = options.label ?? ''
-    const modifier = options.modifier ?? ''
-    const addClass = options.class ?? ''
-    const isLabeled = options.isLabeled
+    const {
+      label = '',
+      modifier = '',
+      addClass = '',
+      isLabeled,
+    } = options;
+
     const classComponent = 'values'
     let className = classComponent
     
@@ -14,10 +17,7 @@ mixin values(options)
     if(addClass){
     className += ` ${addClass}`}
 
-    const path = require('path').resolve(
-    'src/components/values/','values.json'
-    )
-    const data = JSON.parse(require('fs').readFileSync(path)); 
+    const data = require('./values.json');
 
     const textField = data.textField
     

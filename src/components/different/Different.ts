@@ -1,5 +1,4 @@
 import { boundMethod } from 'autobind-decorator';
-import './different.scss';
 import Select from '@com/select/Select';
 
 interface Options {

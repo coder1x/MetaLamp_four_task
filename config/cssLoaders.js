@@ -1,4 +1,6 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
+const paths = require('./paths');
 
 module.exports = {
   cssLoaders: (extra) => {
@@ -43,7 +45,14 @@ module.exports = {
 
     if (extra) {
       loaders.push(extra);
+      loaders.push({
+        loader: 'sass-resources-loader',
+        options: {
+          resources: path.join(paths.src, 'assets/styles/glob.scss'),
+        },
+      });
     }
+
     return loaders;
   },
 };

@@ -1,12 +1,15 @@
 include ../toggle-buttons/toggle-buttons.pug
 include ../text-field/text-field.pug
 
-mixin hints(options)
+mixin hints(options = {})
   -
-    const label = options.label ?? ''
-    const modifier = options.modifier ?? ''
-    const addClass = options.class ?? ''
-    const isLabeled = options.isLabeled
+    const {
+      label = '',
+      modifier = '',
+      addClass = '',
+      isLabeled,
+    } = options;
+
     const classComponent = 'hints'
     let className = classComponent
     
@@ -15,11 +18,7 @@ mixin hints(options)
     if(addClass){
     className += ` ${addClass}`}
 
-    const path = require('path').resolve(
-    'src/components/hints/','hints.json'
-    )
-    const data = JSON.parse(require('fs').readFileSync(path)); 
-
+    const data = require('./hints.json'); 
     const textField = data.textField
 
   fieldset(class=`${className} js-${classComponent}`)

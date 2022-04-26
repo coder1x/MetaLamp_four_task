@@ -48,6 +48,7 @@ module.exports = merge(devServer, {
     filename: FL.filename('js'),
     path: paths.dist, // каталог в который будет выгружаться сборка.
     publicPath: pubPath,
+    clean: true,
   },
 
   resolve: {

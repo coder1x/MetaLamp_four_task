@@ -1,5 +1,4 @@
 import { boundMethod } from 'autobind-decorator';
-import './values.scss';
 
 interface Options {
   min?: number | null;

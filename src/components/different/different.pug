@@ -1,13 +1,17 @@
 include ../toggle-buttons/toggle-buttons.pug
 include ../select/select.pug
 
-mixin different(options)
+mixin different(options = {})
   -
-    const label = options.label ?? ''
-    const modifier = options.modifier ?? ''
-    const addClass = options.class ?? ''
-    const isLabeled = options.isLabeled
     const classComponent = 'different'
+
+    const {
+      label = '',
+      modifier = '',
+      addClass = '',
+      isLabeled,
+    } = options;
+
     let className = classComponent
     
     if(modifier){
@@ -15,11 +19,7 @@ mixin different(options)
     if(addClass){
     className += ` ${addClass}`}
 
-    const path = require('path').resolve(
-    'src/components/different/','different.json'
-    )
-    const data = JSON.parse(require('fs').readFileSync(path)); 
-
+    const data = require('./different.json'); 
     const selectData = data.select
 
   fieldset(class=`${className} js-${classComponent}`)

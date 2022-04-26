@@ -1,7 +1,7 @@
 const HTMLWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack');
 
+const ESLintPlugin = require('eslint-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const fs = require('fs');
 
@@ -26,9 +26,11 @@ const keywords = 'range slider, diapason, interval, price range, price slider';
 
 const pluginsArr = [];
 
-pluginsArr.push(
-  new CleanWebpackPlugin(),
-);
+if (env.isDev) {
+  new ESLintPlugin({
+    extensions: ['js', 'ts'],
+  });
+}
 
 if (!env.isPlugin) {
   pluginsArr.push(
@@ -179,10 +181,6 @@ if (!env.isPlugin) {
     }),
   );
 }
-
-pluginsArr.push(
-  new webpack.HotModuleReplacementPlugin({ multiStep: true }),
-);
 
 module.exports = {
   plugins: pluginsArr,

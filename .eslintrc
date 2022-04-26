@@ -46,9 +46,6 @@
   "extends": [
     "airbnb-base"
   ],
-  "globals": {
-    "jestPuppeteer": true
-  },
   "env": {
     "es2021": true,
     "browser": true,

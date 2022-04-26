@@ -2,17 +2,17 @@
   "textField": {
     "interval": {
       "label": "Interval",
-      "type": "text",
+      "typeField": "text",
       "name": "gridNumber"
     },
     "step": {
       "label": "Step",
-      "type": "text",
+      "typeField": "text",
       "name": "gridStep"
     },
     "round": {
       "label": "round up to",
-      "type": "text",
+      "typeField": "text",
       "name": "gridRound"
     }
   }

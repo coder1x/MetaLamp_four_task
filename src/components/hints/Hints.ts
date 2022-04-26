@@ -1,5 +1,4 @@
 import { boundMethod } from 'autobind-decorator';
-import './hints.scss';
 
 interface Options {
   tipMinMax?: boolean | null;

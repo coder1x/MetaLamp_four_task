@@ -1,5 +1,3 @@
-import './input-data.scss';
-
 class InputData {
   private value: HTMLInputElement | null = null;
 

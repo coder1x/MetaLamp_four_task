@@ -1,5 +1,4 @@
 import { boundMethod } from 'autobind-decorator';
-import './keyboard-control.scss';
 
 interface Options {
   keyStepOne?: number | null;

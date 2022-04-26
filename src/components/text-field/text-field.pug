@@ -1,12 +1,14 @@
 mixin text-field(options)
   -
-    const label = options.label ?? ''
-    const placeholder = options.placeholder ?? ''
-    const typeField = options.type ?? ''
-    const name = options.name ?? ''
-    const modifier = options.modifier ?? ''
-    const addClass = options.class ?? ''
-    const isLabeled = options.isLabeled
+    const {
+      label = '',
+      placeholder = '',
+      typeField = '',
+      name = '',
+      modifier = '',
+      addClass = '',
+      isLabeled,
+    } = options;
     const classComponent = 'text-field'
     let className = classComponent
     

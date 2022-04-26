@@ -1,4 +1,3 @@
-import './panel.scss';
 import RangeSliderOptions from '@com/interface/glob-interface.d';
 import Values from '@com/values/Values';
 import InputData from '@com/input-data/InputData';

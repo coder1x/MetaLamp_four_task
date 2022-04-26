@@ -1,5 +1,4 @@
 import { boundMethod } from 'autobind-decorator';
-import './select.scss';
 
 class Select {
   private className: string;

@@ -1,7 +1,10 @@
-mixin header(options)
+mixin header(options = {})
   -
-    const modifier = options.modifier ?? ''
-    const addClass = options.class ?? ''
+    const {
+      modifier = '',
+      addClass = '',
+    } = options;
+
     const classComponent = 'header'
     let className = classComponent
     

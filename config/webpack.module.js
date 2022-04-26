@@ -1,7 +1,5 @@
 const path = require('path');
-const env = require('./isDev');
 const cssLoaders = require('./cssLoaders');
-const jsLoaders = require('./jsLoaders');
 const paths = require('./paths');
 
 module.exports = {
@@ -12,20 +10,14 @@ module.exports = {
         test: /\.css$/,
         use: cssLoaders.cssLoaders(),
       },
-
       {
         test: /\.pug$/,
-        loader: 'pug-loader',
-        options: {
-          pretty: env.isDev,
-        },
+        loader: '@webdiscus/pug-loader',
       },
-
       {
         test: /\.s[ac]ss$/,
         use: cssLoaders.cssLoaders('sass-loader'),
       },
-
       {
         test: /\.(ttf|woff|woff2|eot)$/,
         loader: 'file-loader',
@@ -34,18 +26,18 @@ module.exports = {
           publicPath: '/assets/fonts/',
         },
       },
-
       {
-        test: /\.(js)$/,
+        test: /\.(ts|tsx|js)$/,
         exclude: /node_modules/,
-        use: jsLoaders.jsLoaders('js'),
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              configFile: 'tsconfig.web.json',
+            },
+          },
+        ],
       },
-      {
-        test: /\.(ts|tsx)$/,
-        exclude: /node_modules/,
-        use: jsLoaders.jsLoaders(),
-      },
-
       {
         test: /\.(png|jpg|svg|gif|webp|avif)$/,
         loader: 'file-loader',
@@ -53,15 +45,6 @@ module.exports = {
           outputPath: path.join('.', paths.assets, 'images/'),
           publicPath: '/assets/images/',
         },
-      },
-
-      {
-        test: /\.xml$/,
-        use: ['xml-loader'],
-      },
-      {
-        test: /\.csv$/,
-        use: ['csv-loader'],
       },
     ],
   },

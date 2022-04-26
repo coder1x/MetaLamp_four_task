@@ -1,11 +1,14 @@
 include ../text-field/text-field.pug
 
-mixin keyboard-control(options)
+mixin keyboard-control(options = {})
   -
-    const label = options.label ?? ''
-    const modifier = options.modifier ?? ''
-    const addClass = options.class ?? ''
-    const isLabeled = options.isLabeled
+    const {
+      label = '',
+      modifier = '',
+      addClass = '',
+      isLabeled
+    } = options;
+
     const classComponent = 'keyboard-control'
     let className = classComponent
     
@@ -14,11 +17,7 @@ mixin keyboard-control(options)
     if(addClass){
     className += ` ${addClass}`}
 
-    const path = require('path').resolve(
-    'src/components/keyboard-control/','keyboard-control.json'
-    )
-    const data = JSON.parse(require('fs').readFileSync(path)); 
-
+    const data = require('./keyboard-control.json'); 
     const textField = data.textField
 
   fieldset(class=`${className} js-${classComponent}`)

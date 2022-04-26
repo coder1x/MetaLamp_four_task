@@ -1,12 +1,15 @@
 include ../toggle-buttons/toggle-buttons.pug
 include ../text-field/text-field.pug
 
-mixin grid(options)
+mixin grid(options = {})
   -
-    const label = options.label ?? ''
-    const modifier = options.modifier ?? ''
-    const addClass = options.class ?? ''
-    const isLabeled = options.isLabeled
+    const {
+      label = '',
+      modifier = '',
+      addClass = '',
+      isLabeled,
+    } = options;
+
     const classComponent = 'grid'
     let className = classComponent
     
@@ -15,11 +18,7 @@ mixin grid(options)
     if(addClass){
     className += ` ${addClass}`}
 
-    const path = require('path').resolve(
-    'src/components/grid/','grid.json'
-    )
-    const data = JSON.parse(require('fs').readFileSync(path)); 
-
+    const data = require('./grid.json'); 
     const textField = data.textField
 
   fieldset(class=`${className} js-${classComponent}`)

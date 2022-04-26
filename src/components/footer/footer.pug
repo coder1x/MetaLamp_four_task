@@ -1,7 +1,10 @@
-mixin footer(options)
+mixin footer(options = {})
   -
-    const modifier = options.modifier ?? []
-    const addClass = options.class ?? ''
+    const {
+      modifier = [],
+      addClass = '',
+    } = options;
+
     const classComponent = 'footer'
     let className = classComponent
     
@@ -13,4 +16,4 @@ mixin footer(options)
     className += ` ${addClass}`}
     
   footer(class=className role='contentinfo')
-    p Клюшин А. © 2021
+    p Клюшин А. © 2022
