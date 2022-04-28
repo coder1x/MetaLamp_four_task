@@ -22,10 +22,6 @@ module.exports = {
                 {
                   // Options
                 },
-                'css-mqpacker',
-                {
-                  // Options
-                },
                 'cssnano',
                 {
                   preset: [

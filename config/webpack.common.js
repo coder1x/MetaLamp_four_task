@@ -31,9 +31,6 @@ if (env.isPlugin) {
   };
 }
 
-let pubPath;
-if (env.isAbsPath) pubPath = paths.public;
-
 module.exports = merge(devServer, {
 
   // target: DP.isDev ? 'web' : 'browserslist',
@@ -47,8 +44,7 @@ module.exports = merge(devServer, {
   output: {
     filename: FL.filename('js'),
     path: paths.dist, // каталог в который будет выгружаться сборка.
-    publicPath: pubPath,
-    clean: true,
+    publicPath: 'auto',
   },
 
   resolve: {

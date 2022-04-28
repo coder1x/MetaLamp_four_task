@@ -25,7 +25,7 @@ mixin select(options = {})
 
     div(class=`${classComponent}__displayed-wrap js-${classComponent}__displayed-wrap`)
       button(class=`${classComponent}__displayed js-${classComponent}__displayed`)
-      img(class=`${classComponent}__tip js-${classComponent}__tip` src=require('./img/tip.svg').default alt='угалок')
+      img(class=`${classComponent}__tip js-${classComponent}__tip` src=require('./img/tip.svg') alt='угалок')
       
     ul(class=`${classComponent}__options js-${classComponent}__options`)
       -for(const item of list){

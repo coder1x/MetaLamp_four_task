@@ -20,10 +20,9 @@ module.exports = {
       },
       {
         test: /\.(ttf|woff|woff2|eot)$/,
-        loader: 'file-loader',
-        options: {
-          outputPath: path.join('.', paths.assets, 'fonts/'),
-          publicPath: '/assets/fonts/',
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/fonts/[name].[hash][ext]',
         },
       },
       {
@@ -40,10 +39,9 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|svg|gif|webp|avif)$/,
-        loader: 'file-loader',
-        options: {
-          outputPath: path.join('.', paths.assets, 'images/'),
-          publicPath: '/assets/images/',
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/images/[name].[hash][ext]',
         },
       },
     ],

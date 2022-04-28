@@ -1,6 +1,8 @@
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
 const ESLintPlugin = require('eslint-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const fs = require('fs');
@@ -24,7 +26,7 @@ const description = 'Узнайте, как использовать Range Slide
   + ' на нескольких практических демонстрациях';
 const keywords = 'range slider, diapason, interval, price range, price slider';
 
-const pluginsArr = [];
+const plugins = [];
 
 if (env.isDev) {
   new ESLintPlugin({
@@ -32,8 +34,12 @@ if (env.isDev) {
   });
 }
 
+plugins.push(
+  new CleanWebpackPlugin()
+);
+
 if (!env.isPlugin) {
-  pluginsArr.push(
+  plugins.push(
     ...pages.map((fileName) => new HTMLWebpackPlugin({
       filename: `./${fileName}.html`,
       template: `./pages/${fileName}/${fileName}.pug`,
@@ -106,7 +112,7 @@ if (!env.isPlugin) {
 }
 
 if (!env.isPlugin) {
-  pluginsArr.push(
+  plugins.push(
     new FoxUrlConvertor({
       URLchange: '%5C',
       URLto: '/',
@@ -114,7 +120,7 @@ if (!env.isPlugin) {
   );
 }
 
-pluginsArr.push(
+plugins.push(
   new FoxFavicon({
     src: path.join(paths.src, paths.assets, 'images/icon/favicon.png'),
     path: 'assets/favicons/',
@@ -166,14 +172,14 @@ pluginsArr.push(
   }),
 );
 
-pluginsArr.push(
+plugins.push(
   new MiniCssExtractPlugin({
     filename: FL.filename('css'),
   }),
 );
 
 if (!env.isPlugin) {
-  pluginsArr.push(
+  plugins.push(
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
@@ -183,5 +189,5 @@ if (!env.isPlugin) {
 }
 
 module.exports = {
-  plugins: pluginsArr,
+  plugins: plugins,
 };
