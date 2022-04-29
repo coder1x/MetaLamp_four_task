@@ -44,7 +44,10 @@ module.exports = {
       loaders.push({
         loader: 'sass-resources-loader',
         options: {
-          resources: path.join(paths.src, 'assets/styles/glob.scss'),
+          resources: [
+            path.join(paths.src, 'assets/styles/variables.scss'),
+            path.join(paths.src, 'assets/styles/mixins.scss'),
+          ]
         },
       });
     }
