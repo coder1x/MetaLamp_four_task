@@ -996,14 +996,12 @@ class Model extends Observer {
     this.gridNumber = Number(gridNumber);
     this.gridStep = Number(gridStep);
 
-    if (!this.grid) {
-      if (this.gridSnap) {
-        this.gridSnap = false;
-        this.notifyOB({
-          key: 'GridSnapData',
-          gridSnap: this.gridSnap,
-        });
-      }
+    if (this.gridSnap && !this.grid) {
+      this.gridSnap = false;
+      this.notifyOB({
+        key: 'GridSnapData',
+        gridSnap: this.gridSnap,
+      });
     }
 
     this.notifyOB({
@@ -1078,28 +1076,20 @@ class Model extends Observer {
     }
     if (!isCallback) return false;
 
-    if (options.onChange !== this.onChange) {
-      if (options.onChange !== undefined) {
-        this.onChange = Model.checkFunction(options.onChange);
-      }
+    if (options.onChange !== undefined && options.onChange !== this.onChange) {
+      this.onChange = Model.checkFunction(options.onChange);
     }
 
-    if (options.onUpdate !== this.onUpdate) {
-      if (options.onUpdate !== undefined) {
-        this.onUpdate = Model.checkFunction(options.onUpdate);
-      }
+    if (options.onUpdate !== undefined && options.onUpdate !== this.onUpdate) {
+      this.onUpdate = Model.checkFunction(options.onUpdate);
     }
 
-    if (options.onStart !== this.onStart) {
-      if (options.onStart !== undefined) {
-        this.onStart = Model.checkFunction(options.onStart);
-      }
+    if (options.onStart !== undefined && options.onStart !== this.onStart) {
+      this.onStart = Model.checkFunction(options.onStart);
     }
 
-    if (options.onReset !== this.onReset) {
-      if (options.onReset !== undefined) {
-        this.onReset = Model.checkFunction(options.onReset);
-      }
+    if (options.onReset !== undefined && options.onReset !== this.onReset) {
+      this.onReset = Model.checkFunction(options.onReset);
     }
 
     return true;

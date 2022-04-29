@@ -169,14 +169,14 @@ describe('------- Test Model API -------', () => {
         shiftXY: options.shiftXY,
       });
 
-      if (data) {
-        if (options.type) {
-          expect(data.from).toBeCloseTo(options.value);
-          expect(data.to).toBeNull();
-        } else {
-          expect(data.to).toBeCloseTo(options.value);
-          expect(data.from).toBeNull();
-        }
+      if (!data) return;
+
+      if (options.type) {
+        expect(data.from).toBeCloseTo(options.value);
+        expect(data.to).toBeNull();
+      } else {
+        expect(data.to).toBeCloseTo(options.value);
+        expect(data.from).toBeNull();
       }
     };
 

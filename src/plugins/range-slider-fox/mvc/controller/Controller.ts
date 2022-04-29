@@ -37,7 +37,7 @@ class Controller {
     const lock = options.disabled !== false;
     const orientation = typeof options.orientation !== 'string';
 
-    if (lock && orientation) { if (this.lock) return false; }
+    if (lock && orientation && this.lock) { return false; }
 
     if (this.model) { this.model.update(options); }
     return true;

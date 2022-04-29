@@ -166,13 +166,11 @@ class Handle extends Observer {
       this.elementTo.addEventListener('keydown', this.handleToKeydown);
     }
 
-    if (type === 'double') {
-      if (!this.isToEvent && this.elementTo) {
-        this.elementTo.addEventListener('pointerdown', this.handleToPointerdown);
+    if (!this.isToEvent && this.elementTo && type === 'double') {
+      this.elementTo.addEventListener('pointerdown', this.handleToPointerdown);
 
-        Handle.cancellation(this.elementTo);
-        this.isToEvent = true;
-      }
+      Handle.cancellation(this.elementTo);
+      this.isToEvent = true;
     }
 
     if (!this.isFromEvent && this.elementFrom) {

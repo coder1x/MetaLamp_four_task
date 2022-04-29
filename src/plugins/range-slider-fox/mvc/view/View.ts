@@ -90,14 +90,12 @@ class View extends Observer {
   }
 
   outputDataAttribute() {
-    if (this.dataAttributes) {
-      if (Object.keys(this.dataAttributes).length !== 0) {
-        this.notifyOB({
-          key: 'DataAttributes',
-          ...this.dataAttributes,
-        });
-        return this.dataAttributes;
-      }
+    if (this.dataAttributes && Object.keys(this.dataAttributes).length !== 0) {
+      this.notifyOB({
+        key: 'DataAttributes',
+        ...this.dataAttributes,
+      });
+      return this.dataAttributes;
     }
     return false;
   }
