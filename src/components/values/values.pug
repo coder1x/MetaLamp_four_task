@@ -13,9 +13,11 @@ mixin values(options = {})
     let className = classComponent
     
     if(modifier){
-    className += ` ${classComponent}_${modifier}`}
+      className += ` ${classComponent}_${modifier}`
+    }
     if(addClass){
-    className += ` ${addClass}`}
+      className += ` ${addClass}`
+    }
 
     const data = require('./values.json');
 
@@ -23,7 +25,7 @@ mixin values(options = {})
     
   fieldset(class=`${className} js-${classComponent}`)
     - if(!isLabeled){
-    legend(class=`${classComponent}__label`)= label
+        legend(class=`${classComponent}__label`)= label
     -}
 
     div(class=`${classComponent}__min-wrap js-${classComponent}__min-wrap`)

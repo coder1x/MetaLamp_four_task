@@ -15,16 +15,18 @@ mixin different(options = {})
     let className = classComponent
     
     if(modifier){
-    className += ` ${classComponent}_${modifier}`}
+      className += ` ${classComponent}_${modifier}`
+    }
     if(addClass){
-    className += ` ${addClass}`}
+      className += ` ${addClass}`
+    }
 
     const data = require('./different.json'); 
     const selectData = data.select
 
   fieldset(class=`${className} js-${classComponent}`)
     - if(!isLabeled){
-    legend(class=`${classComponent}__label`)= label
+        legend(class=`${classComponent}__label`)= label
     -}
 
     div(class=`${classComponent}__double-wrap js-${classComponent}__double-wrap`)

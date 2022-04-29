@@ -13,13 +13,15 @@ mixin input-data(options = {})
     let className = classComponent
     
     if(modifier){
-    className += ` ${classComponent}_${modifier}`}
+      className += ` ${classComponent}_${modifier}`
+    }
     if(addClass){
-    className += ` ${addClass}`}
+      className += ` ${addClass}`
+    }
 
   fieldset(class=`${className} js-${classComponent}`)
     - if(!isLabeled){
-    legend(class=`${classComponent}__label`)= label
+        legend(class=`${classComponent}__label`)= label
     -}
     
     div(class=`${classComponent}__value-wrap`)

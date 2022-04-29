@@ -13,14 +13,17 @@ mixin text-field(options)
     let className = classComponent
     
     if(modifier){
-    className += ` ${classComponent}_${modifier}`}
+      className += ` ${classComponent}_${modifier}`
+    }
+
     if(addClass){
-    className += ` ${addClass}`}
+      className += ` ${addClass}`
+    }
     
   div(class=className)
     label(class=`${classComponent}__label`)
       - if(!isLabeled){
-      p(class=`${classComponent}__label-text`)= label
+          p(class=`${classComponent}__label-text`)= label
       -}
       input(class=`${classComponent}__input` type=typeField placeholder=placeholder value='' name=name)
       

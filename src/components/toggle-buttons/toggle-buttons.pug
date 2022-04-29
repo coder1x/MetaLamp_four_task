@@ -12,13 +12,15 @@ mixin toggle-buttons(options = {})
     let className = classComponent
     
     if(modifier){
-    className += ` ${classComponent}_${modifier}`}
+      className += ` ${classComponent}_${modifier}`
+    }
     if(addClass){
-    className += ` ${addClass}`}
+      className += ` ${addClass}`
+    }
 
   div(class=className)
     - if(!isLabeled){
-    p(class=`${classComponent}__header`)= header
+        p(class=`${classComponent}__header`)= header
     -}
     
     div(class=`${classComponent}__tog`)

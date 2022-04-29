@@ -10,10 +10,11 @@ mixin footer(options = {})
     
     if(modifier){
       for(const item of modifier)
-    className += ` ${classComponent}_${item}`
+        className += ` ${classComponent}_${item}`
     }
     if(addClass){
-    className += ` ${addClass}`}
+      className += ` ${addClass}`
+    }
     
   footer(class=className role='contentinfo')
     p Клюшин А. © 2022

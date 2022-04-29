@@ -14,13 +14,15 @@ mixin select(options = {})
     let className = classComponent
     
     if(modifier){
-    className += ` ${classComponent}_${modifier}`}
+        className += ` ${classComponent}_${modifier}`
+    }
     if(addClass){
-    className += ` ${addClass}`}
+        className += ` ${addClass}`
+    }
 
   div(class=`${className} js-${classComponent}`)
     - if(!isLabeled){
-    p(class=`${classComponent}__label-text`)= label
+          p(class=`${classComponent}__label-text`)= label
     -}
 
     div(class=`${classComponent}__displayed-wrap js-${classComponent}__displayed-wrap`)
@@ -31,7 +33,7 @@ mixin select(options = {})
       -for(const item of list){
         - let selector=`${classComponent}__item js-${classComponent}__item`;
         -if(item.selected){
-        -selector += ' '+item.selected;
+          -selector += ' '+item.selected;
         -}
         li(class=selector tabindex='0' data-value=item.value)=item.text
       -}
