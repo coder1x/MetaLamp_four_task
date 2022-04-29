@@ -1,6 +1,6 @@
-import Bar from '../Bar';
-import { Controller, Model, View } from '../../../controller/Controller';
 import { mockPointerEvent } from '../../../../__tests__/jestUtils';
+import { Controller, Model, View } from '../../../controller/Controller';
+import Bar from '../Bar';
 
 // диапазон между ползунками
 describe('------- Test Bar API -------', () => {

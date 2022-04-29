@@ -1,11 +1,12 @@
 import { boundMethod } from 'autobind-decorator';
-import UpdateTip from './view.d';
+
+import { Observer, ObserverOptions } from '../../Observer';
+import RangeSliderOptions from '../../glob-interface';
 import Handle from './sub-view/Handle';
 import Hints from './sub-view/Hints';
 import Bar from './sub-view/Bar';
 import Grid from './sub-view/Grid';
-import { Observer, ObserverOptions } from '../../Observer';
-import RangeSliderOptions from '../../glob-interface';
+import UpdateTip from './view.d';
 
 class View extends Observer {
   private rangeSliderName: string = '';

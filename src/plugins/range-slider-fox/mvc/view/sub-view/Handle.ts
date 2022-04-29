@@ -1,4 +1,5 @@
 import { boundMethod } from 'autobind-decorator';
+
 import { Observer } from '../../../Observer';
 
 interface Pointer {

@@ -1,8 +1,9 @@
 import { boundMethod } from 'autobind-decorator';
-import Model from '../model/Model';
-import View from '../view/View';
+
 import RangeSliderOptions from '../../glob-interface';
 import { ObserverOptions } from '../../Observer';
+import Model from '../model/Model';
+import View from '../view/View';
 
 class Controller {
   private isStarted = false;

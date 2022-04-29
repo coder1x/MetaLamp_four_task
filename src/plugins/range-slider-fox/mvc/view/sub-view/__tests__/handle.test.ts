@@ -1,9 +1,9 @@
-import Handle from '../Handle';
-import { Controller, Model, View } from '../../../controller/Controller';
 import {
   mockPointerEvent,
   mockKeyboardEvent,
 } from '../../../../__tests__/jestUtils';
+import { Controller, Model, View } from '../../../controller/Controller';
+import Handle from '../Handle';
 
 describe('------- Test Handle API -------', () => {
   let rangeSliderName: string;

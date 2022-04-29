@@ -1,4 +1,5 @@
 import { boundMethod } from 'autobind-decorator';
+
 import Select from '@com/select/Select';
 
 interface Options {

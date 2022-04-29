@@ -1,6 +1,6 @@
-import Grid from '../Grid';
-import { Controller, Model, View } from '../../../controller/Controller';
 import { mockPointerEvent } from '../../../../__tests__/jestUtils';
+import { Controller, Model, View } from '../../../controller/Controller';
+import Grid from '../Grid';
 
 describe('------- Test Grid API -------', () => {
   let rangeSliderName: string;
