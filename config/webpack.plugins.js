@@ -29,9 +29,10 @@ const keywords = 'range slider, diapason, interval, price range, price slider';
 const plugins = [];
 
 if (env.isDev) {
-  new ESLintPlugin({
-    extensions: ['js', 'ts'],
-  });
+  plugins.push(
+    new ESLintPlugin({
+      extensions: ['js', 'ts'],
+    }));
 }
 
 plugins.push(
