@@ -48,6 +48,7 @@ class Bar extends Observer {
       if (this.vertical) {
         if (!toggleBar('left', 'bottom')) return false;
       } else if (!toggleBar('bottom', 'left')) return false;
+
       styleDomElement.width = sizeHeight;
       styleDomElement.height = sizeWidth;
 

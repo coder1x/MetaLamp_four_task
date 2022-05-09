@@ -149,7 +149,10 @@ class Select {
 
   @boundMethod
   private handleButtonKeydown(event: KeyboardEvent) {
-    if (event.key === 'Enter' || event.key === ' ') {
+    const isEnter = event.key === 'Enter';
+    const isSpace = event.key === ' ';
+
+    if (isEnter || isSpace) {
       event.preventDefault();
       this.toggle();
     }
@@ -168,7 +171,10 @@ class Select {
       key = event.key;
     }
 
-    if (key === 'Enter' || key === ' ') {
+    const isEnter = key === 'Enter';
+    const isSpace = key === ' ';
+
+    if (isEnter || isSpace) {
       event.preventDefault();
       isSelected = true;
     } else if (mouse === 'click') { isSelected = true; }

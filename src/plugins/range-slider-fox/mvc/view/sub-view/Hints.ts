@@ -295,19 +295,26 @@ class Hints {
   @boundMethod
   private convertStyle(element: CSSStyleDeclaration) {
     const domElement = element;
-    let value = '';
-    if (this.isVertical) {
-      if (domElement.left === '') return false;
-      value = domElement.left;
-      domElement.removeProperty('left');
-      domElement.bottom = value;
-    } else {
-      if (domElement.bottom === '') return false;
-      value = domElement.bottom;
-      domElement.removeProperty('bottom');
-      domElement.left = value;
+
+    function setOrientation(
+      from: keyof CSSStyleDeclaration,
+      to: keyof CSSStyleDeclaration,
+    ) {
+      const data = Hints.getProperty(domElement, from);
+      if (String(data) === '') return false;
+      domElement.removeProperty(String(from));
+      Hints.setProperty(
+        domElement,
+        to,
+        data,
+      );
+      return true;
     }
-    return true;
+
+    if (this.isVertical) {
+      return setOrientation('left', 'bottom');
+    }
+    return setOrientation('bottom', 'left');
   }
 
   private getElementSize(element: HTMLElement) {
@@ -334,17 +341,20 @@ class Hints {
     let tipMinXY = 0;
     let tipMinWidthHeight = 0;
     let tipMaxXY = 0;
-    if (this.tipMin) {
-      const tip = this.tipMin;
-      const minRect = tip.getBoundingClientRect();
 
-      tipMinXY = this.isVertical ? minRect.bottom : minRect.left;
-      tipMinWidthHeight = this.isVertical ? tip.offsetHeight : tip.offsetWidth;
-      if (this.tipMax) {
-        const maxRect = this.tipMax.getBoundingClientRect();
-        tipMaxXY = this.isVertical ? maxRect.bottom : maxRect.left;
-      }
+    if (!this.tipMin) return { tipMinXY, tipMinWidthHeight, tipMaxXY };
+
+    const tip = this.tipMin;
+    const minRect = tip.getBoundingClientRect();
+
+    tipMinXY = this.isVertical ? minRect.bottom : minRect.left;
+    tipMinWidthHeight = this.isVertical ? tip.offsetHeight : tip.offsetWidth;
+
+    if (this.tipMax) {
+      const maxRect = this.tipMax.getBoundingClientRect();
+      tipMaxXY = this.isVertical ? maxRect.bottom : maxRect.left;
     }
+
     return { tipMinXY, tipMinWidthHeight, tipMaxXY };
   }
 
@@ -360,11 +370,13 @@ class Hints {
         ? this.tipSingle.offsetHeight
         : this.tipSingle.offsetWidth;
     }
+
     if (this.isVertical) {
       tipSingleSize = tipSingleXY - tipSingleWidthHeight;
     } else {
       tipSingleSize = tipSingleXY + tipSingleWidthHeight;
     }
+
     return { tipSingleXY, tipSingleB: tipSingleSize };
   }
 
@@ -373,6 +385,19 @@ class Hints {
       const domElement = element;
       domElement.style.visibility = isVisible ? 'visible' : 'hidden';
     }
+  }
+
+  private static setProperty<T, K extends keyof T>(
+    object: T,
+    key: K,
+    value: T[K],
+  ) {
+    // eslint-disable-next-line no-param-reassign
+    object[key] = value;
+  }
+
+  private static getProperty<T, K extends keyof T>(object: T, key: K) {
+    return object[key];
   }
 
   private toggleVisibility(options: CheckTip) {

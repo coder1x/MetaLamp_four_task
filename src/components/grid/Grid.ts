@@ -48,23 +48,37 @@ class Grid {
       grid, gridSnap, gridNumber, gridStep, gridRound,
     } = options;
 
-    if (this.gridCache !== grid && this.grid) {
+    let isNewData = this.gridCache !== grid;
+
+    if (isNewData && this.grid) {
       this.grid.checked = grid ?? false;
       this.gridCache = grid ?? false;
     }
-    if (this.gridSnapCache !== gridSnap && this.snap) {
+
+    isNewData = this.gridSnapCache !== gridSnap;
+
+    if (isNewData && this.snap) {
       this.snap.checked = gridSnap ?? false;
       this.gridSnapCache = gridSnap ?? false;
     }
-    if (this.gridNumCache !== gridNumber && this.interval) {
+
+    isNewData = this.gridNumCache !== gridNumber;
+
+    if (isNewData && this.interval) {
       this.interval.value = String(gridNumber);
       this.gridNumCache = gridNumber ?? 0;
     }
-    if (this.gridStepCache !== gridStep && this.step) {
+
+    isNewData = this.gridStepCache !== gridStep;
+
+    if (isNewData && this.step) {
       this.step.value = String(gridStep);
       this.gridStepCache = gridStep ?? 0;
     }
-    if (this.gridRoundCache !== gridRound && this.gridRound) {
+
+    isNewData = this.gridRoundCache !== gridRound;
+
+    if (isNewData && this.gridRound) {
       this.gridRound.value = String(gridRound);
       this.gridRoundCache = gridRound ?? 0;
     }

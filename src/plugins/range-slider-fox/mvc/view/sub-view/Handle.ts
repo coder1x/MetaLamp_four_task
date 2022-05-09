@@ -23,7 +23,7 @@ class Handle extends Observer {
 
   private isToEvent: boolean;
 
-  private vertical: boolean = false;;
+  private isVertical: boolean = false;
 
   private directions: Map<string, string> | null = null;
 
@@ -41,8 +41,12 @@ class Handle extends Observer {
 
   createDomElementBase(type: string) {
     const double = type === 'double';
-    if (double && this.elementFrom && this.elementTo) return false;
-    if (!double && this.elementFrom && !this.elementTo) return false;
+
+    const isFromTo = this.elementFrom && this.elementTo;
+    const isFrom = this.elementFrom && !this.elementTo;
+
+    if (double && isFromTo) return false;
+    if (!double && isFrom) return false;
 
     const fromClassName = `${this.rangeSliderName}__from`;
     const toClassName = `${this.rangeSliderName}__to`;
@@ -62,15 +66,13 @@ class Handle extends Observer {
       this.wrapperElement.appendChild(this.elementFrom);
     }
 
-    if (double) {
+    if (double && !toElement) {
       // don't create the element if it is already exist
-      if (!toElement) {
-        this.elementTo = Handle.createElement(
-          'span',
-          [toClassName, `js-${toClassName}`],
-        );
-        this.wrapperElement.appendChild(this.elementTo);
-      }
+      this.elementTo = Handle.createElement(
+        'span',
+        [toClassName, `js-${toClassName}`],
+      );
+      this.wrapperElement.appendChild(this.elementTo);
     } else if (toElement) { // remove the dot if it exists
       toElement.remove();
       this.elementTo = null;
@@ -80,75 +82,58 @@ class Handle extends Observer {
   }
 
   setOrientation(str: string) {
-    this.vertical = str === 'vertical';
-
-    const convertStyle = (style: CSSStyleDeclaration) => {
-      let value = '';
-      const styleDom = style;
-      if (this.vertical) {
-        if (styleDom.left === '') return false;
-        value = styleDom.left;
-        styleDom.removeProperty('left');
-        styleDom.bottom = value;
-      } else {
-        if (styleDom.bottom === '') return false;
-        value = styleDom.bottom;
-        styleDom.removeProperty('bottom');
-        styleDom.left = value;
-      }
-      return true;
-    };
-
-    let flag = false;
+    this.isVertical = str === 'vertical';
+    let isConverted = false;
 
     if (this.elementFrom) {
-      flag = convertStyle(this.elementFrom.style);
+      isConverted = this.convertStyle(this.elementFrom.style);
     }
 
     if (this.elementTo) {
-      flag = convertStyle(this.elementTo.style);
+      isConverted = this.convertStyle(this.elementTo.style);
     }
 
-    return flag;
+    return isConverted;
   }
 
   setFrom(fromPosition: number) {
-    if (this.elementFrom) {
-      const value = `${fromPosition}%`;
-      const from = this.elementFrom.style;
+    if (!this.elementFrom) return false;
 
-      if (this.vertical) {
-        from.bottom = value;
-      } else {
-        from.left = value;
-      }
+    const value = `${fromPosition}%`;
+    const from = this.elementFrom.style;
 
-      return from;
+    if (this.isVertical) {
+      from.bottom = value;
+    } else {
+      from.left = value;
     }
-    return false;
+
+    return from;
   }
 
   setTo(toPosition: number) {
-    if (this.elementTo) {
-      const value = `${toPosition}%`;
-      const { style } = this.elementTo;
+    if (!this.elementTo) return false;
 
-      if (this.vertical) {
-        style.bottom = value;
-      } else {
-        style.left = value;
-      }
+    const value = `${toPosition}%`;
+    const { style } = this.elementTo;
 
-      return style;
+    if (this.isVertical) {
+      style.bottom = value;
+    } else {
+      style.left = value;
     }
-    return false;
+
+    return style;
   }
 
   bindEvent(type: string) {
     this.orientation = type;
     const eventFromTo = this.isFromEvent && this.isToEvent;
-    if (type === 'double' && eventFromTo) return false;
-    if (type === 'single' && eventFromTo) {
+    const isDouble = type === 'double';
+    const isSingle = type === 'single';
+
+    if (isDouble && eventFromTo) return false;
+    if (isSingle && eventFromTo) {
       this.isToEvent = false;
     }
 
@@ -166,7 +151,9 @@ class Handle extends Observer {
       this.elementTo.addEventListener('keydown', this.handleToKeydown);
     }
 
-    if (!this.isToEvent && this.elementTo && type === 'double') {
+    const isToEvent = !this.isToEvent && isDouble;
+
+    if (isToEvent && this.elementTo) {
       this.elementTo.addEventListener('pointerdown', this.handleToPointerdown);
 
       Handle.cancellation(this.elementTo);
@@ -277,15 +264,52 @@ class Handle extends Observer {
     return element.getElementsByClassName(string)[0];
   }
 
+  private convertStyle(element: CSSStyleDeclaration) {
+    const domElement = element;
+
+    function setOrientation(
+      from: keyof CSSStyleDeclaration,
+      to: keyof CSSStyleDeclaration,
+    ) {
+      const data = Handle.getProperty(domElement, from);
+      if (String(data) === '') return false;
+      domElement.removeProperty(String(from));
+      Handle.setProperty(
+        domElement,
+        to,
+        data,
+      );
+      return true;
+    }
+
+    if (this.isVertical) {
+      return setOrientation('left', 'bottom');
+    }
+    return setOrientation('bottom', 'left');
+  }
+
+  private static setProperty<T, K extends keyof T>(
+    object: T,
+    key: K,
+    value: T[K],
+  ) {
+    // eslint-disable-next-line no-param-reassign
+    object[key] = value;
+  }
+
+  private static getProperty<T, K extends keyof T>(object: T, key: K) {
+    return object[key];
+  }
+
   @boundMethod
   private moveDot(options: Pointer) {
     const { event, type, shiftXY } = options;
     const rect = this.wrapperElement.getBoundingClientRect();
     const wrapper = this.wrapperElement;
 
-    const wrapperWidthHeight = this.vertical ? wrapper.offsetHeight : wrapper.offsetWidth;
-    const position = this.vertical ? rect.bottom : rect.left;
-    const clientXY = this.vertical ? event.clientY : event.clientX;
+    const wrapperWidthHeight = this.isVertical ? wrapper.offsetHeight : wrapper.offsetWidth;
+    const position = this.isVertical ? rect.bottom : rect.left;
+    const clientXY = this.isVertical ? event.clientY : event.clientX;
 
     this.notifyOB({
       key: 'DotMove',
@@ -300,8 +324,8 @@ class Handle extends Observer {
   @boundMethod
   private keyDown(event: KeyboardEvent, directions: mapKey, dot: string) {
     const isHorizontalMovement = (event.key === 'ArrowRight' || event.key === 'ArrowLeft');
-    const isVertical = this.vertical && isHorizontalMovement;
-    const isHorizontal = (!this.vertical && !isHorizontalMovement);
+    const isVertical = this.isVertical && isHorizontalMovement;
+    const isHorizontal = (!this.isVertical && !isHorizontalMovement);
     if (isVertical || isHorizontal) {
       return false;
     }
@@ -327,7 +351,7 @@ class Handle extends Observer {
     event.preventDefault();
     let shiftXY = 0;
     const rect = element.getBoundingClientRect();
-    if (this.vertical) {
+    if (this.isVertical) {
       shiftXY = event.clientY - rect.bottom;
     } else {
       shiftXY = event.clientX - rect.left;

@@ -48,27 +48,37 @@ class Values {
       min, max, from, to, step,
     } = options;
 
-    if (this.minCache !== min && this.min) {
+    let isNewData = this.minCache !== min;
+
+    if (isNewData && this.min) {
       this.min.value = String(min);
       this.minCache = min ?? 0;
     }
 
-    if (this.maxCache !== max && this.max) {
+    isNewData = this.maxCache !== max;
+
+    if (isNewData && this.max) {
       this.max.value = String(max);
       this.maxCache = max ?? 0;
     }
 
-    if (this.fromCache !== from && this.from) {
+    isNewData = this.fromCache !== from;
+
+    if (isNewData && this.from) {
       this.from.value = String(from);
       this.fromCache = from ?? 0;
     }
 
-    if (this.toCache !== to && this.to) {
+    isNewData = this.toCache !== to;
+
+    if (isNewData && this.to) {
       this.to.value = String(to);
       this.toCache = to ?? 0;
     }
 
-    if (this.stepCache !== step && this.step) {
+    isNewData = this.stepCache !== step;
+
+    if (isNewData && this.step) {
       this.step.value = String(step);
       this.stepCache = step ?? 0;
     }

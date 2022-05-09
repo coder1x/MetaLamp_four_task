@@ -41,19 +41,30 @@ class Hints {
       tipMinMax, tipFromTo, tipPrefix, tipPostfix,
     } = options;
 
-    if (this.tipMinMaxCache !== tipMinMax && this.tipMinMax) {
+    let isNewData = this.tipMinMaxCache !== tipMinMax;
+
+    if (isNewData && this.tipMinMax) {
       this.tipMinMax.checked = tipMinMax ?? false;
       this.tipMinMaxCache = tipMinMax ?? false;
     }
-    if (this.tipFromToCache !== tipFromTo && this.tipFromTo) {
+
+    isNewData = this.tipFromToCache !== tipFromTo;
+
+    if (isNewData && this.tipFromTo) {
       this.tipFromTo.checked = tipFromTo ?? false;
       this.tipFromToCache = tipFromTo ?? false;
     }
-    if (this.tipPrefixCache !== tipPrefix && this.tipPrefix) {
+
+    isNewData = this.tipPrefixCache !== tipPrefix;
+
+    if (isNewData && this.tipPrefix) {
       this.tipPrefix.value = String(tipPrefix);
       this.tipPrefixCache = tipPrefix ?? '';
     }
-    if (this.tipPostfixCache !== tipPostfix && this.tipPostfix) {
+
+    isNewData = this.tipPostfixCache !== tipPostfix;
+
+    if (isNewData && this.tipPostfix) {
       this.tipPostfix.value = String(tipPostfix);
       this.tipPostfixCache = tipPostfix ?? '';
     }

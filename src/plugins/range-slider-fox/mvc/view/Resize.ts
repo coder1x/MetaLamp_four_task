@@ -33,16 +33,22 @@ class Resize {
 
   @boundMethod
   private resizeEnd() {
-    if (Number(new Date()) - Number(this.currentTime) < this.sleep) {
+    const timeInterval = Number(new Date()) - Number(this.currentTime);
+
+    if (timeInterval < this.sleep) {
       setTimeout(this.resizeEnd, this.sleep);
-    } else {
-      this.timeout = false;
-      const totalWidth = this.wrapper.offsetWidth;
-      if (totalWidth !== this.startWidth) {
-        this.onChange();
-        this.startWidth = totalWidth;
-      }
+      return null;
     }
+
+    this.timeout = false;
+    const totalWidth = this.wrapper.offsetWidth;
+    if (totalWidth !== this.startWidth) {
+      this.onChange();
+      this.startWidth = totalWidth;
+      return true;
+    }
+
+    return false;
   }
 
   private resize() {

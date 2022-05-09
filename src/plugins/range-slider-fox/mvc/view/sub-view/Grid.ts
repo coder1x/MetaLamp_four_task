@@ -226,14 +226,14 @@ class Grid extends Observer {
     this.evenElements.shift();
     this.visibleMark();
 
-    if (!this.isResized) {
-      this.isResized = true;
-      new Resize(this.elementGrid, 200, () => {
-        if (this.offOn && !this.vertical) {
-          this.visibleMark();
-        }
-      });
-    }
+    if (this.isResized) return false;
+
+    this.isResized = true;
+    new Resize(this.elementGrid, 200, () => {
+      if (this.offOn && !this.vertical) {
+        this.visibleMark();
+      }
+    });
 
     return true;
   }

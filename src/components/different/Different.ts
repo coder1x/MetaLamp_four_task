@@ -59,22 +59,30 @@ class Different {
       disabled, bar, type, orientation, theme,
     } = options;
 
-    if (this.disabledCache !== disabled && this.disabled) {
+    let isNewData = this.disabledCache !== disabled;
+
+    if (isNewData && this.disabled) {
       this.disabled.checked = disabled ?? false;
       this.disabledCache = disabled ?? false;
     }
 
-    if (this.barCache !== bar && this.bar) {
+    isNewData = this.barCache !== bar;
+
+    if (isNewData && this.bar) {
       this.bar.checked = bar ?? false;
       this.barCache = bar ?? false;
     }
 
-    if (this.typeCache !== type && this.type) {
+    isNewData = this.typeCache !== type;
+
+    if (isNewData && this.type) {
       this.type.checked = type === 'double';
       this.typeCache = type ?? '';
     }
 
-    if (this.orientationCache !== orientation && this.orientation) {
+    isNewData = this.orientationCache !== orientation;
+
+    if (isNewData && this.orientation) {
       const orientFlag = orientation !== 'horizontal';
       this.orientation.checked = orientFlag;
       this.orientationCache = orientation ?? '';
@@ -88,7 +96,9 @@ class Different {
       }
     }
 
-    if (this.themeCache !== theme && this.select) {
+    isNewData = this.themeCache !== theme;
+
+    if (isNewData && this.select) {
       this.select.update(String(theme));
       this.themeCache = theme ?? '';
     }

@@ -69,9 +69,13 @@ describe('------- Test Handle API -------', () => {
   test(' Check if dots got their positioning proprties ', async () => {
     const { from, to } = await createFromTo();
     let leftFrom: string = '';
+
     if (typeof from !== 'boolean') { leftFrom = from.left; }
+
     let leftTo: string = '';
+
     if (typeof to !== 'boolean') { leftTo = to.left; }
+
     expect(leftFrom).toBe('34%');
     expect(leftTo).toBe('56%');
   });

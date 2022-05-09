@@ -36,8 +36,9 @@ class Controller {
   update(options: RangeSliderOptions) {
     const lock = options.disabled !== false;
     const orientation = typeof options.orientation !== 'string';
+    const isLock = this.lock && lock;
 
-    if (lock && orientation && this.lock) { return false; }
+    if (isLock && orientation) { return false; }
 
     if (this.model) { this.model.update(options); }
     return true;
@@ -112,7 +113,9 @@ class Controller {
   @boundMethod
   private async handleStart(options: ObserverOptions) {
     const { key } = options;
-    if (key !== 'Start' || !this.view) return false;
+    const isStarted = key !== 'Start';
+
+    if (isStarted || !this.view) return false;
 
     await this.view.outputDataAttribute();
     await this.functionAttributes();
@@ -164,7 +167,9 @@ class Controller {
   @boundMethod
   private handleStep(options: ObserverOptions) {
     const { key } = options;
-    if (key !== 'Step' || !this.model) return false;
+    const isStep = key !== 'Step';
+
+    if (isStep || !this.model) return false;
 
     this.model.calcStep();
     return true;
@@ -173,7 +178,9 @@ class Controller {
   @boundMethod
   private handleDotKeyDown(options: ObserverOptions) {
     const { key } = options;
-    if (key !== 'DotKeyDown' || !this.model) return false;
+    const isDotKeyDown = key !== 'DotKeyDown';
+
+    if (isDotKeyDown || !this.model) return false;
     if (this.lock) return false;
 
     this.model.calcKeyDown(
@@ -204,7 +211,8 @@ class Controller {
 
     const to = options.to ?? 0;
     // ----------  Hints
-    if (type === 'double' && lock) { this.view.toggleTipTo(to); }
+    const isDouble = type === 'double';
+    if (isDouble && lock) { this.view.toggleTipTo(to); }
 
     const from = options.from ?? 0;
 
@@ -226,7 +234,9 @@ class Controller {
   @boundMethod
   private handleDotMove(options: ObserverOptions) {
     const { key } = options;
-    if (key !== 'DotMove' || !this.model) return false;
+    const isDotMove = key !== 'DotMove';
+
+    if (isDotMove || !this.model) return false;
     if (this.lock) return false;
 
     this.model.calcDotPosition({
@@ -242,7 +252,9 @@ class Controller {
   @boundMethod
   private handleGridSnapData(options: ObserverOptions) {
     const { key } = options;
-    if (key !== 'GridSnapData' || !this.model) return false;
+    const isGridSnapData = key !== 'GridSnapData';
+
+    if (isGridSnapData || !this.model) return false;
 
     this.model.snapDot();
     return true;
@@ -251,17 +263,19 @@ class Controller {
   @boundMethod
   private handleGridData(options: ObserverOptions) {
     const { key } = options;
+
     if (key !== 'GridData') return false;
 
     if (!this.view || !this.model) return false;
 
-    if (this.isStarted && !this.isReset) {
-      this.view.deleteGrid();
-      if (options.grid) {
-        this.model.createMark();
-        this.view.createDomElementGrid();
-      }
+    if (!this.isStarted && this.isReset) return false;
+
+    this.view.deleteGrid();
+    if (options.grid) {
+      this.model.createMark();
+      this.view.createDomElementGrid();
     }
+
     return true;
   }
 
@@ -289,7 +303,9 @@ class Controller {
   @boundMethod
   private handleThemeData(options: ObserverOptions) {
     const { key } = options;
-    if (key !== 'ThemeData' || !this.view) return false;
+    const isThemeData = key !== 'ThemeData';
+
+    if (isThemeData || !this.view) return false;
 
     this.view.setTheme(options.theme ?? '');
     return true;
@@ -327,6 +343,7 @@ class Controller {
       const fromXY = await this.model.calcPositionTipFrom(sizeTip.fromWidthHeight);
       let toXY = 0;
       let singleXY = 0;
+
       if (type === 'double') {
         toXY = await this.model.calcPositionTipTo(sizeTip.toWidthHeight);
         singleXY = await this.model.calcPositionTipSingle(sizeTip.singleWidthHeight);
@@ -348,7 +365,9 @@ class Controller {
   @boundMethod
   private handleDisabledData(options: ObserverOptions) {
     const { key } = options;
-    if (key !== 'DisabledData' || !this.view) return false;
+    const isDisabledData = key !== 'DisabledData';
+
+    if (isDisabledData || !this.view) return false;
 
     const disabled = options.disabled ?? false;
     this.lock = disabled;
@@ -359,7 +378,9 @@ class Controller {
   @boundMethod
   private handleClickLine(options: ObserverOptions) {
     const { key } = options;
-    if (key !== 'ClickLine' || !this.model) return false;
+    const isClickLine = key !== 'ClickLine';
+
+    if (isClickLine || !this.model) return false;
     if (this.lock) return false;
 
     this.model.clickLine(options.clientXY ?? 0);
@@ -369,7 +390,9 @@ class Controller {
   @boundMethod
   private handleSizeWrapper(options: ObserverOptions) {
     const { key } = options;
-    if (key !== 'SizeWrapper' || !this.isStarted) return false;
+    const isSizeWrapper = key !== 'SizeWrapper';
+
+    if (isSizeWrapper || !this.isStarted) return false;
 
     if (!this.model) return false;
 
@@ -394,7 +417,9 @@ class Controller {
   @boundMethod
   private handleClickBar(options: ObserverOptions) {
     const { key } = options;
-    if (key !== 'ClickBar' || !this.model) return false;
+    const isClickBar = key !== 'ClickBar';
+
+    if (isClickBar || !this.model) return false;
 
     if (this.lock) return false;
 
@@ -405,7 +430,9 @@ class Controller {
   @boundMethod
   private handleCreateGrid(options: ObserverOptions) {
     const { key } = options;
-    if (key !== 'CreateGrid' || !this.view) return false;
+    const isCreateGrid = key !== 'CreateGrid';
+
+    if (isCreateGrid || !this.view) return false;
 
     this.view.createMark(options.valueMark ?? []);
     return true;
@@ -414,7 +441,9 @@ class Controller {
   @boundMethod
   private handleClickMark(options: ObserverOptions) {
     const { key } = options;
-    if (key !== 'ClickMark' || !this.model) return false;
+    const isClickMark = key !== 'ClickMark';
+
+    if (isClickMark || !this.model) return false;
     if (this.lock) return false;
 
     this.model.clickMark(options.valueGrid ?? 0);
@@ -424,7 +453,9 @@ class Controller {
   @boundMethod
   private handleSnapNumber(options: ObserverOptions) {
     const { key } = options;
-    if (key !== 'SnapNumber' || !this.model) return false;
+    const isSnapNumber = key !== 'SnapNumber';
+
+    if (isSnapNumber || !this.model) return false;
 
     this.model.calcSnap(options.snapNumber ?? []);
     return true;

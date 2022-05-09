@@ -90,7 +90,9 @@ class View extends Observer {
   }
 
   outputDataAttribute() {
-    if (this.dataAttributes && Object.keys(this.dataAttributes).length !== 0) {
+    const isKeys = this.dataAttributes && Object.keys(this.dataAttributes).length !== 0;
+
+    if (isKeys) {
       this.notifyOB({
         key: 'DataAttributes',
         ...this.dataAttributes,

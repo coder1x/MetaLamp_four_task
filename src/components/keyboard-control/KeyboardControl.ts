@@ -31,12 +31,16 @@ class KeyboardControl {
   setData(options: Options) {
     const { keyStepOne, keyStepHold } = options;
 
-    if (this.keyStepOneCache !== keyStepOne && this.keyStepOne) {
+    let isNewData = this.keyStepOneCache !== keyStepOne;
+
+    if (isNewData && this.keyStepOne) {
       this.keyStepOne.value = String(keyStepOne);
       this.keyStepOneCache = keyStepOne ?? 0;
     }
 
-    if (this.keyStepHoldCache !== keyStepHold && this.keyStepHold) {
+    isNewData = this.keyStepHoldCache !== keyStepHold;
+
+    if (isNewData && this.keyStepHold) {
       this.keyStepHold.value = String(keyStepHold);
       this.keyStepHoldCache = keyStepHold ?? 0;
     }

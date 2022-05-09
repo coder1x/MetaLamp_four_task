@@ -303,7 +303,10 @@ class Model extends Observer {
     stepNumber.push(min);
     for (let i = min; i <= max;) {
       i = +(i += this.step).toFixed(length);
-      if (step === i && i < max) {
+      const isStep = step === i;
+      const isMax = i < max;
+
+      if (isStep && isMax) {
         stepNumber.push(step);
         step = +(step += this.step).toFixed(length);
       } else break;
@@ -522,8 +525,9 @@ class Model extends Observer {
     const isDot = dot === 'from';
     const type = this.type === 'double';
     const isKey = !this.keyStepOne && !this.keyStepHold;
+    const isStep = !this.step && isKey;
 
-    if (this.gridSnap && !this.step && isKey) {
+    if (this.gridSnap && isStep) {
       const prev = this.snapNumber[this.snapNumber.length - 2];
 
       const value = (i: number) => {
@@ -588,8 +592,9 @@ class Model extends Observer {
           to = +num.toFixed(length);
         }
         if (this.type === 'double') {
-          if (fromValue > toValue && isDot) from = to;
-          if (fromValue > toValue && !isDot) to = from;
+          const isValue = fromValue > toValue;
+          if (isValue && isDot) from = to;
+          if (isValue && !isDot) to = from;
         }
       };
 
@@ -726,11 +731,13 @@ class Model extends Observer {
     let isValid = false;
     for (let i = 0; i < properties.length; i += 1) {
       const dataT = object[properties[i]] ?? null;
+
       if (dataT !== null) {
         isValid = true;
         break;
       }
     }
+
     if (!isValid) return false;
     return true;
   }
@@ -766,7 +773,10 @@ class Model extends Observer {
     max = Number(this.checkValue(max, 'max'));
     if (max == null) return false;
 
-    if (min < this.minValue || max > this.maxValue) return false;
+    const isMin = min < this.minValue;
+    const isMax = max > this.maxValue;
+
+    if (isMin || isMax) return false;
 
     if (min > max) {
       const temp = min;
@@ -774,8 +784,10 @@ class Model extends Observer {
       max = temp;
     }
 
+    const isNotMin = min !== this.min;
+    const isNotMax = max !== this.max;
     // need to check if new data is differ from the existing data in model
-    if (min !== this.min || max !== this.max) {
+    if (isNotMin || isNotMax) {
       this.min = +min;
       this.max = +max;
 
@@ -873,7 +885,10 @@ class Model extends Observer {
     const min = this.min ?? 0;
     const max = this.max ?? 0;
 
-    if (from >= min && from <= max) {
+    const isAboveMin = from >= min;
+    const isBelowMax = from <= max;
+
+    if (isAboveMin && isBelowMax) {
       this.from = +from;
     } else {
       if (from < min) { this.from = this.min; }
@@ -1019,8 +1034,10 @@ class Model extends Observer {
     if (!Model.propertiesValidation(['orientation'], options)) return false;
 
     const orientation = options.orientation ?? ''.replace(/\s/g, '');
+    const isHorizontal = orientation === 'horizontal';
+    const isVertical = orientation === 'vertical';
 
-    if (orientation === 'horizontal' || orientation === 'vertical') {
+    if (isHorizontal || isVertical) {
       this.orientation = orientation;
     } else return false;
 
@@ -1076,19 +1093,31 @@ class Model extends Observer {
     }
     if (!isCallback) return false;
 
-    if (options.onChange !== undefined && options.onChange !== this.onChange) {
+    const isChange = options.onChange !== undefined;
+    let isEqual = options.onChange !== this.onChange;
+
+    if (isChange && isEqual) {
       this.onChange = Model.checkFunction(options.onChange);
     }
 
-    if (options.onUpdate !== undefined && options.onUpdate !== this.onUpdate) {
+    const isUpdate = options.onUpdate !== undefined;
+    isEqual = options.onUpdate !== this.onUpdate;
+
+    if (isUpdate && isEqual) {
       this.onUpdate = Model.checkFunction(options.onUpdate);
     }
 
-    if (options.onStart !== undefined && options.onStart !== this.onStart) {
+    const isStart = options.onStart !== undefined;
+    isEqual = options.onStart !== this.onStart;
+
+    if (isStart && isEqual) {
       this.onStart = Model.checkFunction(options.onStart);
     }
 
-    if (options.onReset !== undefined && options.onReset !== this.onReset) {
+    const isReset = options.onReset !== undefined;
+    isEqual = options.onReset !== this.onReset;
+
+    if (isReset && isEqual) {
       this.onReset = Model.checkFunction(options.onReset);
     }
 
