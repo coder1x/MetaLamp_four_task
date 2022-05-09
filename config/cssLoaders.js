@@ -45,8 +45,8 @@ module.exports = {
         loader: 'sass-resources-loader',
         options: {
           resources: [
-            path.join(paths.src, 'assets/styles/variables.scss'),
-            path.join(paths.src, 'assets/styles/mixins.scss'),
+            path.join(paths.src, 'shared/styles/variables.scss'),
+            path.join(paths.src, 'shared/styles/mixins.scss'),
           ]
         },
       });

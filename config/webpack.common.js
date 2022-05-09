@@ -51,7 +51,7 @@ module.exports = merge(devServer, {
     extensions: ['.ts', '.tsx', '.js', '.css', '.scss'],
     alias: {
       '@plugins': path.join(paths.src, 'plugins'),
-      '@styles': path.join(paths.src, paths.assets, 'styles'),
+      '@styles': path.join(paths.src, 'shared', 'styles'),
       '@typescript': path.join(paths.src, paths.assets, 'ts'),
       '@img': path.join(paths.src, 'images'),
       '@pag': path.join(paths.src, 'pages'),
