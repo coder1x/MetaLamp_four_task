@@ -3,6 +3,10 @@
 }
 //  @include font-rem(32);
 
+@mixin font-family(){
+  font-family: Helvetica, Arial, sans-serif;
+}
+
 @mixin max-row($row) {
   display: -webkit-box;
   -webkit-line-clamp: $row;

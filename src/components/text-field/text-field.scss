@@ -1,12 +1,10 @@
-$font: Helvetica, Arial, sans-serif;
-
 .text-field {
   display: flex;
   flex-direction: column;
 
   &__label-text {
     margin-bottom: 5px;
-    font-family: $font;
+    @include font-family();
     font-weight: bold;
     font-size: 12px;
     line-height: 15px;
@@ -33,7 +31,7 @@ $font: Helvetica, Arial, sans-serif;
     border: 1px solid $color-border;
     border-radius: 4px;
     color: $color-input;
-    font-family: $font;
+    @include font-family();
     font-weight: normal;
     font-size: 14px;
     line-height: 24px;

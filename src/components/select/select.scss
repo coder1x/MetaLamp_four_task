@@ -1,4 +1,3 @@
-$font: Helvetica, Arial, sans-serif;
 $color-focus: $Dark-Shade-100;
 $color-border-show: $Dark-Shade-50;
 $color-border: rgba(31, 32, 65, 0.5);
@@ -9,7 +8,7 @@ $background-color-item: rgb(244, 249, 255);
   position: relative;
 
   &__label-text {
-    font-family: $font;
+    @include font-family();
     font-weight: bold;
     font-size: 12px;
     line-height: 15px;
@@ -27,7 +26,7 @@ $background-color-item: rgb(244, 249, 255);
     border: 1px solid $color-border;
     border-radius: 4px;
     color: $color-input;
-    font-family: $font;
+    @include font-family();
     font-weight: normal;
     font-size: 14px;
     line-height: 24px;

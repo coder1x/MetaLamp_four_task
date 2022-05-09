@@ -1,4 +1,3 @@
-$font: Helvetica, Arial, sans-serif;
 $color-background: #edeef0;
 $color-body: #555;
 $color-h: #555;
@@ -7,7 +6,7 @@ html {
   height: 100%; /* растягиваем страницу на весь экран */
   width: 100%; /* растягиваем страницу на весь экран */
   font-size: #{$font-size}px;
-  font-family: $font;
+  @include font-family();
   font-weight: normal;
   min-width: $min-wraper;
 }
@@ -28,7 +27,7 @@ body {
 h1,
 h2,
 h3 {
-  font-family: $font;
+  @include font-family();
   font-weight: bold;
   color: $color-h;
 }

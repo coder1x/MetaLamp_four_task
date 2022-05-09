@@ -1,6 +1,4 @@
-$font: Helvetica, Arial, sans-serif;
 $color-toggle-label: $Dark-Shade-75;
-
 $color-focus: $Dark-Shade-100;
 $before-shadow: rgba(0, 0, 0, 0.129);
 $before-background: #cdd1da;
@@ -8,7 +6,7 @@ $before-background-checked: #b5cf9a;
 
 .toggle {
   &__header {
-    font-family: $font;
+    @include font-family();
     font-weight: bold;
     font-size: 12px;
     line-height: 15px;
@@ -18,7 +16,7 @@ $before-background-checked: #b5cf9a;
   }
 
   &__label {
-    font-family: $font;
+    @include font-family();
     font-weight: normal;
     font-size: 14px;
     line-height: 24px;
