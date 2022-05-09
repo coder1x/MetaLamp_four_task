@@ -2,27 +2,27 @@
   "textField": {
     "min": {
       "label": "Min",
-      "type": "text",
+      "typeField": "text",
       "name": "min"
     },
     "max": {
       "label": "Max",
-      "type": "text",
+      "typeField": "text",
       "name": "max"
     },
     "from": {
       "label": "From",
-      "type": "text",
+      "typeField": "text",
       "name": "from"
     },
     "to": {
       "label": "To",
-      "type": "text",
+      "typeField": "text",
       "name": "to"
     },
     "step": {
       "label": "step",
-      "type": "text",
+      "typeField": "text",
       "name": "step"
     }
   }
