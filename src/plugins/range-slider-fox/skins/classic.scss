@@ -2,12 +2,12 @@ $color-min-max: #3a3a3a;
 $background-min-max: #c5d9ea;
 $color-from-to: #3a3a3a;
 $background-from-to: #a6d7ff;
-$background-pol: #222;
+$background-grid-line: #222;
 $background-bar: #cdd7e0;
 $color-single: #3a3a3a;
 $background-single: #a6d7ff;
 $background-line: #7596b1;
-$background-befori-dot: #bababa;
+$background-before-dot: #bababa;
 $background-dot-hover: #2c2c2b;
 
 .rs-classic.range-slider-fox {
@@ -42,7 +42,7 @@ $background-dot-hover: #2c2c2b;
     }
 
     &__grid-line {
-      background: $background-pol;
+      background: $background-grid-line;
     }
 
     &__bar {
@@ -86,7 +86,7 @@ $background-dot-hover: #2c2c2b;
       content: "";
       width: 12px;
       height: 19px;
-      background-color: $background-befori-dot;
+      background-color: $background-before-dot;
       box-sizing: border-box;
     }
 

@@ -28,17 +28,17 @@ mixin values(options = {})
         legend(class=`${classComponent}__label`)= label
     -}
 
-    div(class=`${classComponent}__min-wrap js-${classComponent}__min-wrap`)
+    div(class=`${classComponent}__min-wrapper js-${classComponent}__min-wrapper`)
       +text-field(textField.min)
 
-    div(class=`${classComponent}__max-wrap js-${classComponent}__max-wrap`)
+    div(class=`${classComponent}__max-wrapper js-${classComponent}__max-wrapper`)
       +text-field(textField.max)
 
-    div(class=`${classComponent}__from-wrap js-${classComponent}__from-wrap`)
+    div(class=`${classComponent}__from-wrapper js-${classComponent}__from-wrapper`)
       +text-field(textField.from)
 
-    div(class=`${classComponent}__to-wrap js-${classComponent}__to-wrap`)
+    div(class=`${classComponent}__to-wrapper js-${classComponent}__to-wrapper`)
       +text-field(textField.to)
 
-    div(class=`${classComponent}__step-wrap js-${classComponent}__step-wrap`)
+    div(class=`${classComponent}__step-wrapper js-${classComponent}__step-wrapper`)
       +text-field(textField.step)

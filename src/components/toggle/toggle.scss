@@ -1,14 +1,12 @@
 $font: Helvetica, Arial, sans-serif;
 $color-toggle-label: $Dark-Shade-75;
-$color-toggle-bk: $Dark-Shade-25;
-$color-toggle-border: #b5cf9a;
-$color-border-focus: $Dark-Shade-100;
-$color-focus: $Dark-Shade-100;
-$bef-shadow: rgba(0, 0, 0, 0.129);
-$bef-background: #cdd1da;
-$bef-background-checked: #b5cf9a;
 
-.toggle-buttons {
+$color-focus: $Dark-Shade-100;
+$before-shadow: rgba(0, 0, 0, 0.129);
+$before-background: #cdd1da;
+$before-background-checked: #b5cf9a;
+
+.toggle {
   &__header {
     font-family: $font;
     font-weight: bold;
@@ -52,20 +50,20 @@ $bef-background-checked: #b5cf9a;
     cursor: pointer;
   }
 
-  &__bef {
+  &__before {
     position: absolute;
     top: 1px;
     left: 0;
     width: 40px;
     height: 20px;
-    background: $bef-background;
-    box-shadow: inset 0 2px 3px $bef-shadow;
+    background: $before-background;
+    box-shadow: inset 0 2px 3px $before-shadow;
     border-radius: 10px;
     transition: 0.2s;
     box-sizing: border-box;
   }
 
-  &__bef:after {
+  &__before:after {
     content: "";
     position: absolute;
     top: 4px;
@@ -78,10 +76,10 @@ $bef-background-checked: #b5cf9a;
     transition: 0.2s;
   }
 
-  &__input:checked + &__bef {
-    background-color: $bef-background-checked;
+  &__input:checked + &__before {
+    background-color: $before-background-checked;
   }
-  &__input:checked + &__bef:after {
+  &__input:checked + &__before:after {
     left: 22px;
   }
 }

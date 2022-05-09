@@ -1,4 +1,4 @@
-include ../toggle-buttons/toggle-buttons.pug
+include ../toggle/toggle.pug
 include ../text-field/text-field.pug
 
 mixin grid(options = {})
@@ -28,21 +28,21 @@ mixin grid(options = {})
         legend(class=`${classComponent}__label`)= label
     -}
 
-    div(class=`${classComponent}__grid-wrap js-${classComponent}__grid-wrap`)
-      +toggle-buttons({
+    div(class=`${classComponent}__grid-wrapper js-${classComponent}__grid-wrapper`)
+      +toggle({
         header: 'Grid',
       })
 
-    div(class=`${classComponent}__snap-wrap js-${classComponent}__snap-wrap`)
-      +toggle-buttons({
+    div(class=`${classComponent}__snap-wrapper js-${classComponent}__snap-wrapper`)
+      +toggle({
         header: 'Snap',
       })
 
-    div(class=`${classComponent}__interval-wrap js-${classComponent}__interval-wrap`)
+    div(class=`${classComponent}__interval-wrapper js-${classComponent}__interval-wrapper`)
       +text-field(textField.interval)
 
-    div(class=`${classComponent}__step-wrap js-${classComponent}__step-wrap`)
+    div(class=`${classComponent}__step-wrapper js-${classComponent}__step-wrapper`)
       +text-field(textField.step)
       
-    div(class=`${classComponent}__round-wrap js-${classComponent}__round-wrap`)
+    div(class=`${classComponent}__round-wrapper js-${classComponent}__round-wrapper`)
       +text-field(textField.round)

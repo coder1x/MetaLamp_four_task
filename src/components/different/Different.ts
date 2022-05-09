@@ -182,7 +182,7 @@ class Different {
 
   private getDomElement(str: string) {
     return this.element.querySelector(
-      `${this.nameClass}__${str}-wrap input`,
+      `${this.nameClass}__${str}-wrapper input`,
     ) as HTMLInputElement;
   }
 

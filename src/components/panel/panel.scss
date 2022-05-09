@@ -2,7 +2,7 @@
   display: grid;
   grid-gap: 15px;
 
-  &__slider-wrap {
+  &__slider-wrapper {
     width: 100%;
     min-width: 80px;
     grid-row-start: 1;
@@ -21,7 +21,7 @@
     }
   }
 
-  &__values-wrap {
+  &__values-wrapper {
     width: 100%;
     max-width: 400px;
     grid-row-start: 2;
@@ -29,7 +29,7 @@
     margin: 0 auto;
   }
 
-  &__input-data-wrap {
+  &__input-data-wrapper {
     width: 100%;
     max-width: 400px;
     grid-row-start: 3;
@@ -37,7 +37,7 @@
     margin: 0 auto;
   }
 
-  &__keyboard-control-wrap {
+  &__keyboard-control-wrapper {
     width: 100%;
     max-width: 400px;
     grid-row-start: 4;
@@ -56,7 +56,7 @@
     }
   }
 
-  &__hints-wrap {
+  &__hints-wrapper {
     width: 100%;
     max-width: 400px;
     grid-row-start: 2;
@@ -69,7 +69,7 @@
     }
   }
 
-  &__grid-wrap {
+  &__grid-wrapper {
     width: 100%;
     max-width: 400px;
     grid-row-start: 2;
@@ -82,7 +82,7 @@
     }
   }
 
-  &__different-wrap {
+  &__different-wrapper {
     width: 100%;
     max-width: 400px;
     grid-row-start: 3;
@@ -97,7 +97,7 @@
     }
   }
 
-  &__code-wrap {
+  &__code-wrapper {
     width: 100%;
     max-width: 400px;
     grid-row-start: 3;
@@ -122,7 +122,7 @@
   grid-gap: 10px;
 
   .panel {
-    &__slider-wrap {
+    &__slider-wrapper {
       grid-row-start: 1;
       grid-row-end: 3;
       grid-column-start: 1;
@@ -140,7 +140,7 @@
       }
     }
 
-    &__values-wrap {
+    &__values-wrapper {
       grid-row-start: 1;
       grid-row-end: 2;
       grid-column-start: 2;
@@ -157,7 +157,7 @@
       }
     }
 
-    &__grid-wrap {
+    &__grid-wrapper {
       grid-row-start: 1;
       grid-row-end: 2;
       grid-column-start: 3;
@@ -178,7 +178,7 @@
       }
     }
 
-    &__different-wrap {
+    &__different-wrapper {
       grid-row-start: 2;
       grid-row-end: 3;
       grid-column-start: 2;
@@ -197,7 +197,7 @@
       }
     }
 
-    &__hints-wrap {
+    &__hints-wrapper {
       grid-row-start: 2;
       grid-row-end: 3;
       grid-column-start: 3;
@@ -218,7 +218,7 @@
       }
     }
 
-    &__keyboard-control-wrap {
+    &__keyboard-control-wrapper {
       grid-row-start: 3;
       grid-row-end: 4;
       grid-column-start: 1;
@@ -237,7 +237,7 @@
       }
     }
 
-    &__input-data-wrap {
+    &__input-data-wrapper {
       grid-row-start: 3;
       grid-row-end: 4;
       grid-column-start: 2;
@@ -256,7 +256,7 @@
       }
     }
 
-    &__code-wrap {
+    &__code-wrapper {
       grid-row-start: 3;
       grid-row-end: 4;
       grid-column-start: 3;

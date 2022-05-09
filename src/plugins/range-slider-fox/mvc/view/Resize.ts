@@ -7,7 +7,7 @@ class Resize {
 
   onChange: Function;
 
-  private currentTime: Date = new Date();;
+  private currentTime: Date = new Date();
 
   private timeout: boolean = false;
 

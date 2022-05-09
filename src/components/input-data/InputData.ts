@@ -15,7 +15,7 @@ class InputData {
 
   private setDomElement() {
     this.input = this.element.querySelector(
-      `${this.className}__slider-wrap input`,
+      `${this.className}__slider-wrapper input`,
     );
 
     this.value = this.element.querySelector(

@@ -75,7 +75,7 @@ class Select {
     this.input = this.getElement('__input') as HTMLInputElement;
     this.items = this.getElements('__item');
     this.options = this.getElement('__options') as HTMLElement;
-    this.displayedWrap = this.getElement('__displayed-wrap') as HTMLElement;
+    this.displayedWrap = this.getElement('__displayed-wrapper') as HTMLElement;
     this.setDisplayed();
   }
 

@@ -13,47 +13,47 @@ $color-button-active: #868686;
   align-content: flex-start;
   height: 100%;
 
-  &__double-wrap {
+  &__double-wrapper {
     grid-row-start: 1;
     grid-column-start: 1;
   }
 
-  &__disabled-wrap {
+  &__disabled-wrapper {
     grid-row-start: 1;
     grid-column-start: 2;
   }
 
-  &__vertical-wrap {
+  &__vertical-wrapper {
     grid-row-start: 1;
     grid-column-start: 3;
   }
 
-  &__bar-wrap {
+  &__bar-wrapper {
     margin-top: 10px;
     grid-row-start: 2;
     grid-column-start: 1;
   }
 
-  &__unsubscribtion-wrap {
+  &__unsubscribtion-wrapper {
     margin-top: 10px;
     grid-row-start: 2;
     grid-column-start: 2;
   }
 
-  &__select-wrap {
+  &__select-wrapper {
     margin-top: 10px;
     grid-row-start: 3;
     grid-column-start: 1;
     grid-column-end: 4;
   }
 
-  &__reset-wrap {
+  &__reset-wrapper {
     grid-row-start: 4;
     grid-column-start: 1;
     margin-top: 20px;
   }
 
-  &__apply-wrap {
+  &__apply-wrapper {
     grid-row-start: 4;
     grid-column-start: 2;
     margin-top: 20px;

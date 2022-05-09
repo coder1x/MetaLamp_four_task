@@ -1,4 +1,4 @@
-include ../toggle-buttons/toggle-buttons.pug
+include ../toggle/toggle.pug
 include ../text-field/text-field.pug
 
 mixin hints(options = {})
@@ -28,18 +28,18 @@ mixin hints(options = {})
         legend(class=`${classComponent}__label`)= label
     -}
 
-    div(class=`${classComponent}__minmax-wrap js-${classComponent}__minmax-wrap`)
-      +toggle-buttons({
+    div(class=`${classComponent}__minmax-wrapper js-${classComponent}__minmax-wrapper`)
+      +toggle({
         header: 'min - max',
       })
 
-    div(class=`${classComponent}__fromto-wrap js-${classComponent}__fromto-wrap`)
-      +toggle-buttons({
+    div(class=`${classComponent}__fromto-wrapper js-${classComponent}__fromto-wrapper`)
+      +toggle({
         header: 'from - to',
       })
 
-    div(class=`${classComponent}__prefix-wrap js-${classComponent}__prefix-wrap`)
+    div(class=`${classComponent}__prefix-wrapper js-${classComponent}__prefix-wrapper`)
       +text-field(textField.prefix)
       
-    div(class=`${classComponent}__postfix-wrap js-${classComponent}__postfix-wrap`)
+    div(class=`${classComponent}__postfix-wrapper js-${classComponent}__postfix-wrapper`)
       +text-field(textField.postfix)

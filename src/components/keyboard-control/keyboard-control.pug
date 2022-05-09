@@ -27,8 +27,8 @@ mixin keyboard-control(options = {})
         legend(class=`${classComponent}__label`)= label
     -}
 
-    div(class=`${classComponent}__one-wrap js-${classComponent}__one-wrap`)
+    div(class=`${classComponent}__one-wrapper js-${classComponent}__one-wrapper`)
       +text-field(textField.one)
       
-    div(class=`${classComponent}__hold-wrap js-${classComponent}__hold-wrap`)
+    div(class=`${classComponent}__hold-wrapper js-${classComponent}__hold-wrapper`)
       +text-field(textField.hold)

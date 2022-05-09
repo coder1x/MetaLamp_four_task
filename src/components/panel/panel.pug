@@ -25,7 +25,7 @@ mixin panel(options = {})
     }
 
   div(class=`${className} js-${classComponent}`)
-    div(class=`${classComponent}__slider-wrap js-${classComponent}__slider-wrap`)
+    div(class=`${classComponent}__slider-wrapper js-${classComponent}__slider-wrapper`)
       input(class=`rslider__${theme} visually-hidden` 
       type='text' 
       name='DATA' 
@@ -34,23 +34,23 @@ mixin panel(options = {})
       readonly=''
       )
 
-    div(class=`${classComponent}__values-wrap`)
+    div(class=`${classComponent}__values-wrapper`)
       +values({label: 'Values',})
 
-    div(class=`${classComponent}__input-data-wrap`)
+    div(class=`${classComponent}__input-data-wrapper`)
       +input-data({label: 'Input data',})
 
-    div(class=`${classComponent}__keyboard-control-wrap`)
+    div(class=`${classComponent}__keyboard-control-wrapper`)
       +keyboard-control({label: 'keyboard control',})
 
-    div(class=`${classComponent}__grid-wrap`)
+    div(class=`${classComponent}__grid-wrapper`)
       +grid({label: 'Grid',})
 
-    div(class=`${classComponent}__different-wrap`)
+    div(class=`${classComponent}__different-wrapper`)
       +different({label: 'Different',})
 
-    div(class=`${classComponent}__hints-wrap`)
+    div(class=`${classComponent}__hints-wrapper`)
       +hints({label: 'Hints',})
       
-    div(class=`${classComponent}__code-wrap`)
+    div(class=`${classComponent}__code-wrapper`)
       +code({label: 'Config code',})

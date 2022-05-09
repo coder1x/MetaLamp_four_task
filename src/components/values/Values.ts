@@ -125,7 +125,7 @@ class Values {
     return this.element.querySelector(
       `${this.nameClass
       }__${string
-      }-wrap input`,
+      }-wrapper input`,
     ) as HTMLInputElement;
   }
 

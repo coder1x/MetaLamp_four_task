@@ -9,24 +9,24 @@ $border-hints: rgba(31, 32, 65, 0.25);
   align-content: flex-start;
   height: 100%;
 
-  &__minmax-wrap {
+  &__minmax-wrapper {
     grid-row-start: 1;
     grid-column-start: 1;
   }
 
-  &__fromto-wrap {
+  &__fromto-wrapper {
     grid-row-start: 1;
     grid-column-start: 2;
   }
 
-  &__prefix-wrap {
+  &__prefix-wrapper {
     grid-row-start: 2;
     grid-column-start: 1;
     grid-column-end: 3;
     margin-top: 10px;
   }
 
-  &__postfix-wrap {
+  &__postfix-wrapper {
     grid-row-start: 3;
     grid-column-start: 1;
     grid-column-end: 3;

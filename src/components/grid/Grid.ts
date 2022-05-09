@@ -185,7 +185,7 @@ class Grid {
 
   private getDomElement(string: string) {
     return this.element.querySelector(
-      `${this.nameClass}__${string}-wrap input`,
+      `${this.nameClass}__${string}-wrapper input`,
     ) as HTMLInputElement;
   }
 

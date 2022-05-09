@@ -1,4 +1,4 @@
-mixin toggle-buttons(options = {})
+mixin toggle(options = {})
   -
     const {
       header = '',
@@ -8,7 +8,7 @@ mixin toggle-buttons(options = {})
       isLabeled,
     } = options;
 
-    const classComponent = 'toggle-buttons'
+    const classComponent = 'toggle'
     let className = classComponent
     
     if(modifier){
@@ -26,5 +26,5 @@ mixin toggle-buttons(options = {})
     div(class=`${classComponent}__tog`)
       label(class=`${classComponent}__label`)= label
         input(class=`${classComponent}__input` type='checkbox' name='toggle')
-        span(class=`${classComponent}__bef`)
+        span(class=`${classComponent}__before`)
 

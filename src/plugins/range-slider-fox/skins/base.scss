@@ -3,14 +3,14 @@ $color-min-max: #fff;
 $background-min-max: #9f9f9f;
 $color-from-to: #fff;
 $background-from-to: linear-gradient(to bottom, #428bca 0%, #3071a9 100%);
-$background-pol: #222;
+$background-grid-line: #222;
 $background-bar: linear-gradient(to bottom, #49769d 0%, #5d92c0 100%);
 $color-single: #fff;
 $background-single: linear-gradient(to bottom, #428bca 0%, #3071a9 100%);
 $background-line: linear-gradient(to bottom, #ddd -50%, white 150%);
 $border-line: #ccc;
-$background-befori-dot: #939ba7;
-$border-befori-dot: rgba(0, 0, 0, 0.45);
+$background-before-dot: #939ba7;
+$border-before-dot: rgba(0, 0, 0, 0.45);
 $background-dot-hover: #bec3c9;
 
 .rs-base.range-slider-fox {
@@ -46,7 +46,7 @@ $background-dot-hover: #bec3c9;
     }
 
     &__grid-line {
-      background: $background-pol;
+      background: $background-grid-line;
     }
 
     &__bar {
@@ -89,8 +89,8 @@ $background-dot-hover: #bec3c9;
       content: "";
       width: 15px;
       height: 20px;
-      border-color: $border-befori-dot;
-      background-color: $background-befori-dot;
+      border-color: $border-before-dot;
+      background-color: $background-before-dot;
       border-radius: 10px;
       box-sizing: border-box;
     }

@@ -40,7 +40,7 @@ class Panel {
     if (!this.element) return false;
 
     const element = this.element.querySelector(
-      `${this.className}__slider-wrap`,
+      `${this.className}__slider-wrapper`,
     );
 
     const onStart = (data: RangeSliderOptions) => {

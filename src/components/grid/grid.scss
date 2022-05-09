@@ -9,17 +9,17 @@ $border-grid: rgba(31, 32, 65, 0.25);
   align-content: flex-start;
   height: 100%;
 
-  &__grid-wrap {
+  &__grid-wrapper {
     grid-row-start: 1;
     grid-column-start: 1;
   }
 
-  &__snap-wrap {
+  &__snap-wrapper {
     grid-row-start: 1;
     grid-column-start: 2;
   }
 
-  &__interval-wrap {
+  &__interval-wrapper {
     margin-top: 10px;
     grid-row-start: 2;
     grid-column-start: 1;
@@ -27,14 +27,14 @@ $border-grid: rgba(31, 32, 65, 0.25);
     margin-bottom: 10px;
   }
 
-  &__step-wrap {
+  &__step-wrapper {
     grid-row-start: 3;
     grid-column-start: 1;
     grid-column-end: 3;
     margin-bottom: 10px;
   }
 
-  &__round-wrap {
+  &__round-wrapper {
     grid-row-start: 4;
     grid-column-start: 1;
     grid-column-end: 3;
