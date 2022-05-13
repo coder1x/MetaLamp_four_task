@@ -33,10 +33,8 @@ if (env.isPlugin) {
 
 module.exports = merge(devServer, {
 
-  // target: DP.isDev ? 'web' : 'browserslist',
   target: 'web',
-  // devtool: DP.isDev ? 'eval-cheap-module-source-map' : 'source-map', //  (карта для браузеров)
-  devtool: false,
+  devtool: env.isDev ? 'source-map' : false, //  (карта для браузеров)
 
   entry: config,
   context: paths.src, // корень исходников

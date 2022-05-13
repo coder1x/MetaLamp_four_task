@@ -7,9 +7,9 @@ module.exports = {
     let dir = '';
 
     if (ext === 'css') {
-      dir = path.join('.', paths.assets, 'css/');
+      dir = 'assets/css/';
     } else if (ext === 'js') {
-      dir = path.join('.', paths.assets, 'js/');
+      dir = 'assets/js/';
     }
 
     if (env.isDev || env.isPlugin) {

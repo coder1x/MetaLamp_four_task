@@ -1,6 +1,7 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 const paths = require('./paths');
+const env = require('./isDev');
 
 module.exports = {
   cssLoaders: (extra) => {
@@ -9,7 +10,7 @@ module.exports = {
       {
         loader: 'css-loader',
         options: {
-          sourceMap: false,
+          sourceMap: env.isDev ? true : false,
         },
       },
       {

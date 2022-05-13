@@ -8,7 +8,7 @@ html {
   font-size: #{$font-size}px;
   @include font-family();
   font-weight: normal;
-  min-width: $min-wraper;
+  min-width: $min-wrapper;
 }
 
 body {
