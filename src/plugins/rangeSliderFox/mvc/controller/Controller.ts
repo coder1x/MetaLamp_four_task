@@ -1,6 +1,6 @@
 import { boundMethod } from 'autobind-decorator';
 
-import RangeSliderOptions from '../../glob-interface';
+import RangeSliderOptions from '../../globInterface';
 import { ObserverOptions } from '../../Observer';
 import Model from '../model/Model';
 import View from '../view/View';

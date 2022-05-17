@@ -1,4 +1,4 @@
-import RangeSliderOptions from '../../../glob-interface';
+import RangeSliderOptions from '../../../globInterface';
 import { Controller, Model, View } from '../Controller';
 
 function delay(time: number) {

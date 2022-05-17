@@ -1,4 +1,4 @@
-import { mockPointerEvent } from '../../../../__tests__/jestUtils';
+import { mockPointerEvent } from '../../../../tests/jestUtils';
 import { Controller, Model, View } from '../../../controller/Controller';
 import Grid from '../Grid';
 

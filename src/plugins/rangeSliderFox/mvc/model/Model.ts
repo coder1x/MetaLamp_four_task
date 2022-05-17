@@ -1,6 +1,6 @@
 import { boundMethod } from 'autobind-decorator';
 
-import RangeSliderOptions from '../../glob-interface';
+import RangeSliderOptions from '../../globInterface';
 import { Observer } from '../../Observer';
 import { CalcDotPositionOptions, Prop, PositionData } from './model.d';
 

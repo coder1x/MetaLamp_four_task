@@ -1,4 +1,4 @@
-import RangeSliderOptions from './glob-interface';
+import RangeSliderOptions from './globInterface';
 
 interface insideOptions extends RangeSliderOptions {
   readonly fromX?: number,

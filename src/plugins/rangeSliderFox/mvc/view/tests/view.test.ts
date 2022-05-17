@@ -1,5 +1,5 @@
 import { Controller, Model, View } from '../../controller/Controller';
-import { mockPointerEvent } from '../../../__tests__/jestUtils';
+import { mockPointerEvent } from '../../../tests/jestUtils';
 
 describe('------- Test View API -------', () => {
   let wrapper: HTMLElement;

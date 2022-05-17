@@ -1,7 +1,7 @@
 import {
   mockPointerEvent,
   mockKeyboardEvent,
-} from '../../../../__tests__/jestUtils';
+} from '../../../../tests/jestUtils';
 import { Controller, Model, View } from '../../../controller/Controller';
 import Handle from '../Handle';
 

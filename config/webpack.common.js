@@ -10,7 +10,7 @@ const devServer = require('./webpack.devServer.js');
 
 let config = null;
 
-const pluginM = ['@plugins/java-import.ts'];
+const pluginM = ['@plugins/importPlugin.ts'];
 const points = [];
 
 if (env.isProd) {
