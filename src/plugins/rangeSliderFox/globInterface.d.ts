@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: off */
 interface RangeSliderOptions {
   readonly type?: string | null;
   readonly orientation?: string | null;
@@ -20,10 +21,10 @@ interface RangeSliderOptions {
   readonly gridStep?: number | null;
   readonly gridRound?: number | null;
   readonly disabled?: boolean | null;
-  readonly onStart?: Function | null;
-  readonly onChange?: Function | null;
-  readonly onUpdate?: Function | null;
-  readonly onReset?: Function | null;
+  readonly onStart?: ((data: RangeSliderOptions) => void) | null;
+  readonly onChange?: ((data: RangeSliderOptions) => void) | null;
+  readonly onUpdate?: ((data: RangeSliderOptions) => void) | null;
+  readonly onReset?: ((data: RangeSliderOptions) => void) | null;
 }
 
 export default RangeSliderOptions;

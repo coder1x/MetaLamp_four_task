@@ -45,7 +45,7 @@ class Different {
 
   private objRangeSlider: any;
 
-  onUnsubscribtion: Function | null = null;
+  onUnsubscribtion: (() => void) | null = null;
 
   constructor(nameClass: string, element: Element, panel: Element) {
     this.nameClass = nameClass;
@@ -112,7 +112,7 @@ class Different {
 
     this.reset.addEventListener('click', this.handleResetClick);
 
-    this.select.onChange = (value: string) => {
+    this.select.onChange = (value: string | null) => {
       rangeSlider.update({
         theme: value,
       });

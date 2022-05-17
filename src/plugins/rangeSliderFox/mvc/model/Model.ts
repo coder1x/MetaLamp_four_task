@@ -77,15 +77,19 @@ class Model extends Observer {
 
   private isUpdatedConfig: boolean = false;
 
-  onHandle: Function | null = null;
+  onHandle: (() => void) | null = null;
 
-  onChange: Function | null = null;
+  // eslint-disable-next-line no-unused-vars
+  onChange: ((data: RangeSliderOptions) => void) | null = null;
 
-  onUpdate: Function | null = null;
+  // eslint-disable-next-line no-unused-vars
+  onUpdate: ((data: RangeSliderOptions) => void) | null = null;
 
-  onStart: Function | null = null;
+  // eslint-disable-next-line no-unused-vars
+  onStart: ((data: RangeSliderOptions) => void) | null = null;
 
-  onReset: Function | null = null;
+  // eslint-disable-next-line no-unused-vars
+  onReset: ((data: RangeSliderOptions) => void) | null = null;
 
   constructor(options: RangeSliderOptions) {
     super();
@@ -120,6 +124,7 @@ class Model extends Observer {
 
   reset() {
     const options = this.defaultData ?? {};
+    if (!this.defaultData) return false;
 
     Object.keys(options).forEach((key) => {
       // использую type assertions так как не нашёл возможности передавать нужный тип
@@ -152,6 +157,7 @@ class Model extends Observer {
     if (this.isStartedConfig && typeof this.onReset === 'function') {
       this.onReset(this.defaultData);
     }
+    return true;
   }
 
   async update(options: RangeSliderOptions) {
@@ -1068,7 +1074,8 @@ class Model extends Observer {
     return true;
   }
 
-  private static checkFunction(data: Function | null) {
+  // eslint-disable-next-line no-unused-vars
+  private static checkFunction(data: ((options: RangeSliderOptions) => void) | null) {
     if (data === null) {
       return null;
     }

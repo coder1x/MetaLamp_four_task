@@ -15,9 +15,11 @@ class Select {
 
   private options: HTMLElement | null = null;
 
-  onChange: Function = (value: string) => value;
+  // eslint-disable-next-line no-unused-vars
+  onChange: ((value: string | null) => void) | null = null;
 
-  onUpdate: Function = (value: string) => value;
+  // eslint-disable-next-line no-unused-vars
+  onUpdate: ((value: string | null) => void) | null = null;
 
   private isUpdated = false;
 
@@ -49,7 +51,7 @@ class Select {
     }
 
     this.isUpdated = false;
-    if (isData) {
+    if (isData && this.onUpdate) {
       this.onUpdate(value);
     }
   }
@@ -86,7 +88,9 @@ class Select {
     const value = element.getAttribute('data-value');
     this.input.value = value ?? '';
 
-    if (!this.isUpdated && !this.isStarted) { this.onChange(value); }
+    const isNotChanged = !this.isUpdated && !this.isStarted;
+
+    if (isNotChanged && this.onChange) { this.onChange(value); }
 
     return true;
   }

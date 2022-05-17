@@ -1,4 +1,4 @@
-import { _$ as $ } from '../rangeSliderFox';
+import $ from '../rangeSliderFox';
 
 // Добавление JQuery плагина - Range Slider Fox
 describe('------- Range Slider Fox - JQuery Objects -------', () => {

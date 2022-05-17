@@ -13,7 +13,4 @@ $.fn.RangeSliderFox = function (options) {
   });
 };
 
-// eslint-disable-next-line no-underscore-dangle
-const _$ = $;
-// eslint-disable-next-line import/prefer-default-export
-export { _$ };
+export default $;

@@ -28,10 +28,13 @@ interface ObserverOptions extends insideOptions {
   key?: string,
 }
 
-abstract class Observer {
-  private observers: Function[] = [];
+// eslint-disable-next-line no-unused-vars
+type ObserverFunctions<T> = (options: T) => boolean | Promise<boolean>;
 
-  subscribeObserver(observer: Function) {
+abstract class Observer<T = ObserverOptions> {
+  private observers: ObserverFunctions<T>[] = [];
+
+  subscribeObserver(observer: ObserverFunctions<T>) {
     if (!this.observers.includes(observer)) {
       this.observers.push(observer);
       return this.observers.length;
@@ -39,12 +42,12 @@ abstract class Observer {
     return false;
   }
 
-  unsubscribeOB(observer: Function) {
+  unsubscribeOB(observer: ObserverFunctions<T>) {
     this.observers = this.observers.filter((item) => item !== observer);
     return this.observers.length;
   }
 
-  protected notifyOB(options: ObserverOptions) {
+  protected notifyOB(options: T) {
     this.observers.forEach((item) => {
       item(options);
     });

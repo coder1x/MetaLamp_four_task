@@ -12,7 +12,7 @@ class Controller {
 
   private lock = false;
 
-  private functionAttributes: Function = () => { };
+  private functionAttributes = () => { };
 
   private model: Model | null;
 
@@ -68,7 +68,11 @@ class Controller {
     return true;
   }
 
-  private static subscribe(talking: Model | View, items: Function[]) {
+  private static subscribe(
+    talking: Model | View,
+    // eslint-disable-next-line no-unused-vars
+    items: ((options: ObserverOptions) => boolean | Promise<boolean>)[],
+  ) {
     return items.forEach((item) => {
       talking.subscribeObserver(item);
     });

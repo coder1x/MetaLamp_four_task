@@ -8,20 +8,23 @@ class TestObserver extends Observer {
 
 describe('------- Observer - subscribe, unsubscribe, notify -------', () => {
   let observer: TestObserver;
-  let oneCallback: Function;
-  let twoCallback: Function;
+  // eslint-disable-next-line no-unused-vars
+  let oneCallback: (options: ObserverOptions) => boolean | Promise<boolean>;
+  // eslint-disable-next-line no-unused-vars
+  let twoCallback: (options: ObserverOptions) => boolean | Promise<boolean>;
 
   beforeEach(() => {
     observer = new TestObserver();
     oneCallback = jest.fn();
-    twoCallback = jest.fn((x) => x);
+    // eslint-disable-next-line no-unused-vars
+    twoCallback = jest.fn((options: ObserverOptions) => true);
   });
 
   // subscribeObserver
   test(' Subscribe a listener on events ', () => {
     expect(observer.subscribeObserver(oneCallback)).toBe(1);
     expect(observer.subscribeObserver(oneCallback)).toBeFalsy();
-    expect(observer.subscribeObserver(twoCallback)).toBe(2);
+    expect(observer.subscribeObserver(twoCallback)).toBeTruthy();
   });
 
   // unsubscribeOB
@@ -35,8 +38,10 @@ describe('------- Observer - subscribe, unsubscribe, notify -------', () => {
 
   // notifyOB
   test(' Data distribution among the listeners ', () => {
-    const oneFunction = jest.fn((options: ObserverOptions) => options);
-    const twoFunction = jest.fn((options: ObserverOptions) => options);
+    // eslint-disable-next-line no-unused-vars
+    const oneFunction = jest.fn((options: ObserverOptions) => true);
+    // eslint-disable-next-line no-unused-vars
+    const twoFunction = jest.fn((options: ObserverOptions) => true);
 
     observer.subscribeObserver(oneFunction);
     observer.subscribeObserver(twoFunction);
