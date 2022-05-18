@@ -37,7 +37,7 @@ class View extends Observer {
 
   private dataAttributes: ObserverOptions | null = null;
 
-  onHandle: Function | null = null;
+  onHandle: (() => void) | null = null;
 
   element: Element | null = null;
 

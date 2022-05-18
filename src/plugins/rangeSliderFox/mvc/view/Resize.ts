@@ -5,7 +5,7 @@ class Resize {
 
   sleep: number;
 
-  onChange: Function;
+  onChange: () => void;
 
   private currentTime: Date = new Date();
 
@@ -22,7 +22,7 @@ class Resize {
   constructor(
     wrapper: HTMLElement,
     sleep: number,
-    onChange: Function,
+    onChange: () => void,
   ) {
     this.wrapper = wrapper ?? document.body;
     this.sleep = sleep ?? 200;
