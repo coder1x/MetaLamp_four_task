@@ -117,7 +117,7 @@ describe('------- Test Grid API -------', () => {
         await pointer('click', 0, 0);
 
         expect(spy).toBeCalledTimes(1);
-        expect(spy).toBeCalledWith(+(element.innerText));
+        expect(spy).toBeCalledWith(Number(element.innerText));
 
         await spy.mockClear();
       },

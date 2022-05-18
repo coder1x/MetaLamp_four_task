@@ -305,16 +305,16 @@ class Model extends Observer {
     const min = this.min ?? 0;
     const max = this.max ?? 0;
 
-    let step = +(min + this.step).toFixed(length);
+    let step = Number((min + this.step).toFixed(length));
     stepNumber.push(min);
     for (let i = min; i <= max;) {
-      i = +(i += this.step).toFixed(length);
+      i = Number((i += this.step).toFixed(length));
       const isStep = step === i;
       const isMax = i < max;
 
       if (isStep && isMax) {
         stepNumber.push(step);
-        step = +(step += this.step).toFixed(length);
+        step = Number((step += this.step).toFixed(length));
       } else break;
     }
     stepNumber.push(max);
@@ -654,11 +654,11 @@ class Model extends Observer {
   }
 
   private getDataDotFrom() {
-    return +((this.min ?? 0) + (this.fromPercent * this.valuePercent)).toFixed(0);
+    return Number(((this.min ?? 0) + (this.fromPercent * this.valuePercent)).toFixed(0));
   }
 
   private getDataDotTo() {
-    return +((this.min ?? 0) + (this.toPercent * this.valuePercent)).toFixed(0);
+    return Number(((this.min ?? 0) + (this.toPercent * this.valuePercent)).toFixed(0));
   }
 
   private static trimFraction(num: number) {
