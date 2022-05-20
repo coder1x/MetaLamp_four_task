@@ -40,7 +40,9 @@ class Controller {
 
     if (isLock && orientation) { return false; }
 
-    if (this.model) { this.model.update(options); }
+    if (this.model) {
+      this.model.update(options);
+    }
     return true;
   }
 

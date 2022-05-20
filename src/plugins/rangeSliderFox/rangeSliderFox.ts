@@ -13,4 +13,17 @@ $.fn.RangeSliderFox = function (options) {
   });
 };
 
+document.addEventListener('DOMContentLoaded', (event: Event) => {
+  const documentLoaded = event.target as Document;
+  let elements = documentLoaded.querySelectorAll("[data-plugin = 'rangeSliderFox']");
+
+  if (!elements.length) {
+    elements = documentLoaded.querySelectorAll('.rangeSliderFox');
+  }
+
+  elements.forEach((element) => {
+    $(element).RangeSliderFox({});
+  });
+});
+
 export default $;

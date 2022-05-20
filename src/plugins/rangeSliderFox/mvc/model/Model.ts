@@ -1,7 +1,7 @@
 import { boundMethod } from 'autobind-decorator';
 
 import RangeSliderOptions from '../../globInterface';
-import { Observer } from '../../Observer';
+import { Observer, ObserverOptions } from '../../Observer';
 import { CalcDotPositionOptions, Prop, PositionData } from './model.d';
 
 class Model extends Observer {
@@ -202,7 +202,8 @@ class Model extends Observer {
   }
 
   setWrapperWidthHeight(value: number) {
-    this.wrapperWidthHeight = value || 319;
+    const defaultSize = 319;
+    this.wrapperWidthHeight = value || defaultSize;
     return this.wrapperWidthHeight;
   }
 
@@ -1131,13 +1132,17 @@ class Model extends Observer {
     return true;
   }
 
-  private setHintsData(options: RangeSliderOptions): boolean {
-    if (!Model.propertiesValidation([
+  private setHintsData(options: ObserverOptions): boolean {
+    const isParameters = !Model.propertiesValidation([
       'tipPrefix',
       'tipPostfix',
       'tipMinMax',
       'tipFromTo',
-    ], options)) return false;
+    ], options);
+
+    const isAttributes = options.key !== 'DataAttributes';
+
+    if (isParameters && isAttributes) return false;
 
     let { tipPrefix } = options;
     let { tipPostfix } = options;
