@@ -125,7 +125,7 @@ describe('------- Test Handle API -------', () => {
               position: 0,
               shiftXY: down,
               type: name === 'from' ? 'From' : 'To',
-              wrapperWidthHeight: 0,
+              dimensions: 0,
             },
           );
           expect(spy).toBeCalledTimes(1);

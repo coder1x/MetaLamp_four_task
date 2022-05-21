@@ -58,10 +58,17 @@ describe('------- Range Slider Fox - JQuery Objects -------', () => {
   });
 
   test('Plugin initialization with data attribute', async () => {
-    inputElement = await document.createElement('input');
-    await inputElement.setAttribute('data-plugin', 'rangeSliderFox');
+    const element = await document.createElement('div');
+    await element.setAttribute('data-plugin', 'rangeSliderFox');
+    document.body.appendChild(element);
     await mockCustomEvent(document, { eventType: 'DOMContentLoaded' });
-    await jest.runOnlyPendingTimers();
+    await delay(100);
+
+    const sibling = element.nextElementSibling;
+    let rangeSliderFox = '';
+    if (sibling) { rangeSliderFox = sibling.className; }
+
+    expect(rangeSliderFox).toBe('range-slider-fox js-range-slider-fox rs-base');
   });
 
   test(' destroy - plugin removal ', async () => {
