@@ -162,7 +162,7 @@ class Controller {
 
     if (this.model.getOptions().grid && lock) {
       this.view.deleteGrid();
-      this.model.createMark();
+      this.model.calcMark();
       this.view.createDomElementGrid();
     }
 
@@ -189,7 +189,7 @@ class Controller {
     if (isDotKeyDown || !this.model) return false;
     if (this.lock) return false;
 
-    this.model.calcKeyDown(
+    this.model.calcFromToOnKeyDown(
       options.keyRepeat ?? false,
       options.keySign ?? '',
       options.dot ?? '',
@@ -207,10 +207,10 @@ class Controller {
 
     const lock = this.isStarted && !this.isReset;
     this.view.createDotElement(type); // create dot
-    this.view.setDotFrom(this.model.calcPositionDotFrom());
+    this.view.setDotFrom(this.model.calcPercentFrom());
 
     if (type === 'double') {
-      this.view.setDotTo(this.model.calcPositionDotTo());
+      this.view.setDotTo(this.model.calcPercentTo());
     }
 
     this.view.setDotActions(type);
@@ -228,7 +228,7 @@ class Controller {
 
     // ----------  Bar
     if (lock) {
-      const position = this.model.calcPositionBar();
+      const position = this.model.calcBarDimensions();
       this.view.setBar(position.barXY, position.widthBar);
     }
 
@@ -245,7 +245,7 @@ class Controller {
     if (isDotMove || !this.model) return false;
     if (this.lock) return false;
 
-    this.model.calcDotPosition({
+    this.model.calcFromTo({
       type: options.type ?? '',
       wrapperWidthHeight: options.wrapperWidthHeight ?? 0,
       position: options.position ?? 0,
@@ -262,7 +262,7 @@ class Controller {
 
     if (isGridSnapData || !this.model) return false;
 
-    this.model.snapDot();
+    this.model.toggleSnapMode();
     return true;
   }
 
@@ -278,7 +278,7 @@ class Controller {
 
     this.view.deleteGrid();
     if (options.grid) {
-      this.model.createMark();
+      this.model.calcMark();
       this.view.createDomElementGrid();
     }
 
@@ -300,7 +300,7 @@ class Controller {
 
     if (modelOptions.grid) {
       this.view.deleteGrid();
-      this.model.createMark();
+      this.model.calcMark();
       this.view.createDomElementGrid();
     }
     return true;
@@ -346,13 +346,13 @@ class Controller {
     if (!sizeTip) return false;
 
     if (sizeTip.fromWidthHeight || sizeTip.toWidthHeight) {
-      const fromXY = await this.model.calcPositionTipFrom(sizeTip.fromWidthHeight);
+      const fromXY = await this.model.calcHintFrom(sizeTip.fromWidthHeight);
       let toXY = 0;
       let singleXY = 0;
 
       if (type === 'double') {
-        toXY = await this.model.calcPositionTipTo(sizeTip.toWidthHeight);
-        singleXY = await this.model.calcPositionTipSingle(sizeTip.singleWidthHeight);
+        toXY = await this.model.calcHintTo(sizeTip.toWidthHeight);
+        singleXY = await this.model.calcHintSingle(sizeTip.singleWidthHeight);
       } else {
         await this.view.deleteTipTo();
       }
@@ -389,7 +389,7 @@ class Controller {
     if (isClickLine || !this.model) return false;
     if (this.lock) return false;
 
-    this.model.clickLine(options.clientXY ?? 0);
+    this.model.calcLineCoordinates(options.clientXY ?? 0);
     return true;
   }
 
@@ -415,7 +415,7 @@ class Controller {
     if (!this.view || !this.model) return false;
 
     this.view.setVisibleBar(options.bar ?? false);
-    const position = this.model.calcPositionBar();
+    const position = this.model.calcBarDimensions();
     this.view.setBar(position.barXY, position.widthBar);
     return true;
   }
@@ -429,7 +429,7 @@ class Controller {
 
     if (this.lock) return false;
 
-    this.model.clickBar(options.clientXY ?? 0);
+    this.model.calcBarCoordinates(options.clientXY ?? 0);
     return true;
   }
 
@@ -452,7 +452,7 @@ class Controller {
     if (isClickMark || !this.model) return false;
     if (this.lock) return false;
 
-    this.model.clickMark(options.valueGrid ?? 0);
+    this.model.calcMarkCoordinates(options.valueGrid ?? 0);
     return true;
   }
 
@@ -463,7 +463,7 @@ class Controller {
 
     if (isSnapNumber || !this.model) return false;
 
-    this.model.calcSnap(options.snapNumber ?? []);
+    this.model.setSnapFromTo(options.snapNumber ?? []);
     return true;
   }
 }

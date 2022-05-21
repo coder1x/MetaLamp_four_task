@@ -47,7 +47,7 @@ abstract class Observer<T = ObserverOptions> {
     return this.observers.length;
   }
 
-  protected notifyOB(options: T) {
+  protected notifyObserver(options: T) {
     this.observers.forEach((item) => {
       item(options);
     });

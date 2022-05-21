@@ -134,7 +134,7 @@ describe('------- Test View API -------', () => {
         controller.update({ tipMinMax: false });
       },
       onUpdate: async () => {
-        const spy = await jest.spyOn(model, 'clickLine');
+        const spy = await jest.spyOn(model, 'calcLineCoordinates');
         const dot = await parentElement.getElementsByClassName(`${jsRangeSliderName}__line`);
         const pointer = await mockPointerEvent(dot[0]);
         await pointer('click', 34, 45);

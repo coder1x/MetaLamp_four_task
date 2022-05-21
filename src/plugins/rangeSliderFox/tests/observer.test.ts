@@ -2,7 +2,7 @@ import { Observer, ObserverOptions } from '../Observer';
 
 class TestObserver extends Observer {
   notifyTest(options: ObserverOptions) {
-    this.notifyOB(options);
+    this.notifyObserver(options);
   }
 }
 

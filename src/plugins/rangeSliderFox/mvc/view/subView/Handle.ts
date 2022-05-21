@@ -311,7 +311,7 @@ class Handle extends Observer {
     const position = this.isVertical ? rect.bottom : rect.left;
     const clientXY = this.isVertical ? event.clientY : event.clientX;
 
-    this.notifyOB({
+    this.notifyObserver({
       key: 'DotMove',
       type, // dot type
       wrapperWidthHeight, // wrapper width or height
@@ -336,7 +336,7 @@ class Handle extends Observer {
     const sign = directions.get(event.key);
 
     if (sign) {
-      this.notifyOB({
+      this.notifyObserver({
         key: 'DotKeyDown',
         keyRepeat: repeat,
         keySign: sign,

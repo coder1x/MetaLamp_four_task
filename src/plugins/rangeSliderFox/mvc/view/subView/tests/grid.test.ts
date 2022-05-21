@@ -27,7 +27,7 @@ describe('------- Test Grid API -------', () => {
   });
 
   const getLengthMark = async (model: Model) => {
-    const gridMark = await model.createMark();
+    const gridMark = await model.calcMark();
     const elements = await grid.createMark(gridMark) as HTMLElement;
     const { length } = elements.childNodes;
     expect(length).toBe(gridMark.length);
@@ -107,7 +107,7 @@ describe('------- Test Grid API -------', () => {
         controller.update({ bar: false });
       },
       onUpdate: async () => {
-        const spy = await jest.spyOn(model, 'clickMark');
+        const spy = await jest.spyOn(model, 'calcMarkCoordinates');
 
         const dot = await parentElement.getElementsByClassName(
           `${jsRangeSliderName}__grid-mark`,

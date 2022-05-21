@@ -104,7 +104,7 @@ describe('------- Test Handle API -------', () => {
     const model = new Model({
       type: 'double',
       onStart: async () => {
-        const spy = await jest.spyOn(model, 'calcDotPosition');
+        const spy = await jest.spyOn(model, 'calcFromTo');
 
         const eventDot = async (name: string, down: number, move: number) => {
           const dot = await wrapper.getElementsByClassName(

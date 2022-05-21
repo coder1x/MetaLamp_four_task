@@ -2,7 +2,12 @@ import { boundMethod } from 'autobind-decorator';
 
 import RangeSliderOptions from '../../globInterface';
 import { Observer, ObserverOptions } from '../../Observer';
-import { CalcDotPositionOptions, Prop, PositionData } from './model.d';
+import {
+  CalcFromToOptions,
+  Prop,
+  PositionData,
+  DirectionData,
+} from './model.d';
 
 class Model extends Observer {
   // --- data config
@@ -61,7 +66,7 @@ class Model extends Observer {
 
   private limitTo: number = 0;
 
-  private wrapperWidthHeight: number = 0;
+  private dimensions: number = 0;
 
   private snapNumber: number[] = [];
 
@@ -73,9 +78,9 @@ class Model extends Observer {
 
   private minValue = -999999999999999;
 
-  private isStartedConfig: boolean = false;
+  private isStartedConfiguration: boolean = false;
 
-  private isUpdatedConfig: boolean = false;
+  private isUpdatedConfiguration: boolean = false;
 
   onHandle: (() => void) | null = null;
 
@@ -93,7 +98,7 @@ class Model extends Observer {
 
   constructor(options: RangeSliderOptions) {
     super();
-    this.createProperties(this.defaultConfig(options));
+    this.createProperties(this.setDefaultConfiguration(options));
   }
 
   getOptions() {
@@ -148,25 +153,25 @@ class Model extends Observer {
     ];
 
     keys.forEach((key) => {
-      this.notifyOB({
+      this.notifyObserver({
         key,
         ...options,
       });
     });
 
-    if (this.isStartedConfig && typeof this.onReset === 'function') {
+    if (this.isStartedConfiguration && typeof this.onReset === 'function') {
       this.onReset(this.defaultData);
     }
     return true;
   }
 
   async update(options: RangeSliderOptions) {
-    this.isUpdatedConfig = true;
+    this.isUpdatedConfiguration = true;
 
     await this.setCallbacks(options);
     await this.setRangeData(options);
     await this.setStep(options);
-    await this.setDotData(options);
+    await this.setFromTo(options);
     await this.setGridData(options);
     await this.setGridSnapData(options);
     await this.setThemeData(options);
@@ -175,11 +180,11 @@ class Model extends Observer {
     await this.setHintsData(options);
     await this.setOrientationData(options);
 
-    if (this.isStartedConfig && typeof this.onUpdate === 'function') {
+    if (this.isStartedConfiguration && typeof this.onUpdate === 'function') {
       this.onUpdate(this.getOptions());
     }
-    this.isStartedConfig = true;
-    this.isUpdatedConfig = false;
+    this.isStartedConfiguration = true;
+    this.isUpdatedConfiguration = false;
   }
 
   calcOnePercent() {
@@ -189,25 +194,27 @@ class Model extends Observer {
 
   // ---------------------------------- Handle
 
-  calcPositionDotFrom() {
+  calcPercentFrom() {
     this.fromPercent = ((this.from ?? 0) - (this.min ?? 0)) / this.valuePercent; // left dot position (in %)
     this.limitFrom = this.fromPercent;
     return this.fromPercent;
   }
 
-  calcPositionDotTo() {
+  calcPercentTo() {
     this.toPercent = ((this.to ?? 0) - (this.min ?? 0)) / this.valuePercent; // right dot position (in %)
     this.limitTo = this.toPercent;
     return this.toPercent;
   }
 
+  //= =============================================
   setWrapperWidthHeight(value: number) {
     const defaultSize = 319;
-    this.wrapperWidthHeight = value || defaultSize;
-    return this.wrapperWidthHeight;
+    this.dimensions = value || defaultSize;
+    return this.dimensions;
   }
+  //= =============================================
 
-  calcDotPosition(options: CalcDotPositionOptions) {
+  calcFromTo(options: CalcFromToOptions) {
     let isFrom = false;
     let isTo = false;
     const typeFrom = options.type === 'From';
@@ -226,6 +233,7 @@ class Model extends Observer {
 
     const isSingle = this.type === 'single';
 
+    //-----------------------------------------
     if (isSingle) { // if single dot
       this.fromPercent = percent;
       isFrom = true;
@@ -249,18 +257,20 @@ class Model extends Observer {
       isFrom = true;
       isTo = true;
     }
+    //-----------------------------------------
 
     let from: number | null = null;
     let to: number | null = null;
 
     if (isFrom) {
-      from = this.getDataDotFrom(); // get FROM value
+      from = this.getValueFrom(); // get FROM value
     }
 
     if (isTo) {
-      to = this.getDataDotTo(); //  get TO value
+      to = this.getValueTo(); //  get TO value
     }
 
+    //-----------------------------------------
     if (this.gridSnap && !this.step) {
       if (isFrom) {
         from = Model.getValueStep(from ?? 0, this.stepGrid, this.snapNumber);
@@ -269,18 +279,16 @@ class Model extends Observer {
         to = Model.getValueStep(to ?? 0, this.stepGrid, this.snapNumber);
       }
     }
+    //-----------------------------------------
 
-    let signDirection = '';
+    if (!this.defineDirection({
+      from,
+      to,
+      isFrom,
+      isTo,
+    })) return false;
 
-    const formPosition = this.from ?? 0;
-    const toPosition = this.to ?? 0;
-
-    if (formPosition < (from ?? 0) && isFrom) signDirection = 'right';
-    if (toPosition < (to ?? 0) && isTo) signDirection = 'right';
-    if (formPosition > (from ?? 0) && isFrom) signDirection = 'left';
-    if (toPosition > (to ?? 0) && isTo) signDirection = 'left';
-    if (signDirection === '') return false;
-
+    //-----------------------------------------
     if (this.step) {
       if (isFrom) {
         from = Model.getValueStep(from ?? 0, this.step, this.stepNumber);
@@ -289,8 +297,9 @@ class Model extends Observer {
         to = Model.getValueStep(to ?? 0, this.step, this.stepNumber);
       }
     }
+    //-----------------------------------------
 
-    this.setDotData({
+    this.setFromTo({
       from,
       to,
     });
@@ -324,17 +333,17 @@ class Model extends Observer {
   }
 
   @boundMethod
-  calcPositionTipFrom(tipFrom: number) {
+  calcHintFrom(tipFrom: number) {
     return this.fromPercent - this.calcWidthPercent(tipFrom - 4);
   }
 
   @boundMethod
-  calcPositionTipTo(tipTo: number) {
+  calcHintTo(tipTo: number) {
     return this.toPercent - this.calcWidthPercent(tipTo - 4);
   }
 
   @boundMethod
-  calcPositionTipSingle(singleWidthHeight: number) {
+  calcHintSingle(singleWidthHeight: number) {
     return (
       this.fromPercent
       + ((this.toPercent - this.fromPercent) / 2)
@@ -342,7 +351,7 @@ class Model extends Observer {
     );
   }
 
-  createMark() {
+  calcMark() {
     const marks: {
       value: number,
       position: number,
@@ -356,17 +365,17 @@ class Model extends Observer {
     };
 
     notify(this.min ?? 0, 0);
-    const { interval, step } = this.calcGridNumStep();
-    let dataGrid = this.calcPositionGrid(this.min ?? 0, step);
+    const { interval, step } = this.calcGridNumberStep();
+    let dataGrid = this.calcGridDimensions(this.min ?? 0, step);
     notify(dataGrid.value, dataGrid.position);
 
     for (let i = 1; i < interval - 1; i += 1) {
-      dataGrid = this.calcPositionGrid(dataGrid.value, step);
+      dataGrid = this.calcGridDimensions(dataGrid.value, step);
       notify(dataGrid.value, dataGrid.position);
     }
     notify(this.max ?? 0, 100);
 
-    this.notifyOB({
+    this.notifyObserver({
       key: 'CreateGrid',
       valueMark: marks,
     });
@@ -375,7 +384,7 @@ class Model extends Observer {
   }
 
   // ---------------------------------- Bar
-  calcPositionBar() {
+  calcBarDimensions() {
     let barXY = 0;
     let widthBar = 0;
     if (this.type === 'double') {
@@ -388,24 +397,24 @@ class Model extends Observer {
   }
 
   @boundMethod
-  clickBar(pointXY: number) {
+  calcBarCoordinates(pointXY: number) {
     const vertical = this.orientation === 'vertical';
-    const onePercent = this.wrapperWidthHeight / 100; // one percent of the entire scale
+    const onePercent = this.dimensions / 100; // one percent of the entire scale
 
-    const calcXY = (valuePercent: number) => this.clickLine(
+    const calcXY = (valuePercent: number) => this.calcLineCoordinates(
       ((100 - valuePercent) * onePercent) + pointXY,
     );
 
     if (this.type === 'single') {
       if (vertical) return calcXY(this.fromPercent);
-      return this.clickLine(pointXY);
+      return this.calcLineCoordinates(pointXY);
     }
     if (vertical) return calcXY(this.toPercent);
-    return this.clickLine(this.fromPercent * onePercent + pointXY);
+    return this.calcLineCoordinates(this.fromPercent * onePercent + pointXY);
   }
 
   @boundMethod
-  clickMark(value: number) {
+  calcMarkCoordinates(value: number) {
     let { from } = this;
     let { to } = this;
 
@@ -426,7 +435,7 @@ class Model extends Observer {
       from = value;
     }
 
-    this.setDotData({
+    this.setFromTo({
       type: this.type,
       from,
       to,
@@ -436,13 +445,13 @@ class Model extends Observer {
 
   // ---------------------------------- Line
   @boundMethod
-  clickLine(pointXY: number) {
+  calcLineCoordinates(pointXY: number) {
     let { from } = this;
     let { to } = this;
     let isFrom = false;
     let isTo = false;
 
-    const onePercent = this.wrapperWidthHeight / 100; // one percent of the entire scale
+    const onePercent = this.dimensions / 100; // one percent of the entire scale
     let pointPercent = 0;
 
     if (this.orientation === 'vertical') {
@@ -478,14 +487,14 @@ class Model extends Observer {
     }
 
     if (isFrom) {
-      from = this.getDataDotFrom(); // get value FROM
+      from = this.getValueFrom();
     }
 
     if (isTo) {
-      to = this.getDataDotTo(); // get value TO
+      to = this.getValueTo();
     }
 
-    this.setDotData({
+    this.setFromTo({
       type: this.type,
       from,
       to,
@@ -494,7 +503,7 @@ class Model extends Observer {
     return { from, to };
   }
 
-  snapDot() {
+  toggleSnapMode() {
     if (!this.gridSnap) return false;
 
     this.from = Model.getValueStep(this.from ?? 0, this.stepGrid, this.snapNumber);
@@ -503,7 +512,7 @@ class Model extends Observer {
       this.to = Model.getValueStep(this.to ?? 0, this.stepGrid, this.snapNumber);
     }
 
-    this.notifyOB({
+    this.notifyObserver({
       key: 'DotData',
       type: this.type,
       from: this.from,
@@ -517,15 +526,15 @@ class Model extends Observer {
   }
 
   @boundMethod
-  calcSnap(snapNumber: number[]) {
+  setSnapFromTo(snapNumber: number[]) {
     this.snapNumber = [];
     this.snapNumber.push(this.min ?? 0, ...snapNumber, this.max ?? 0);
     this.stepGrid = this.snapNumber[1] - this.snapNumber[0];
 
-    return this.snapDot();
+    return this.toggleSnapMode();
   }
 
-  calcKeyDown(repeat: boolean, sign: string, dot: string) {
+  calcFromToOnKeyDown(repeat: boolean, sign: string, dot: string) {
     let { from } = this;
     let { to } = this;
     const isSign = sign === '+';
@@ -627,7 +636,7 @@ class Model extends Observer {
       }
     }
 
-    this.setDotData({
+    this.setFromTo({
       from,
       to,
     });
@@ -635,7 +644,29 @@ class Model extends Observer {
     return { from, to };
   }
 
-  private calcPositionGrid(value: number, step: number) {
+  private defineDirection(options: DirectionData) {
+    const {
+      from = 0,
+      to = 0,
+      isFrom = false,
+      isTo = false,
+    } = options;
+
+    let signDirection = '';
+
+    const formPosition = this.from ?? 0;
+    const toPosition = this.to ?? 0;
+
+    if (formPosition < (from ?? 0) && isFrom) signDirection = 'right';
+    if (toPosition < (to ?? 0) && isTo) signDirection = 'right';
+    if (formPosition > (from ?? 0) && isFrom) signDirection = 'left';
+    if (toPosition > (to ?? 0) && isTo) signDirection = 'left';
+    if (signDirection === '') return false;
+
+    return true;
+  }
+
+  private calcGridDimensions(value: number, step: number) {
     const shift = value + step;
     return {
       value: shift,
@@ -654,11 +685,11 @@ class Model extends Observer {
     return value;
   }
 
-  private getDataDotFrom() {
+  private getValueFrom() {
     return Number(((this.min ?? 0) + (this.fromPercent * this.valuePercent)).toFixed(0));
   }
 
-  private getDataDotTo() {
+  private getValueTo() {
     return Number(((this.min ?? 0) + (this.toPercent * this.valuePercent)).toFixed(0));
   }
 
@@ -666,9 +697,9 @@ class Model extends Observer {
     return String(num).replace(`${Math.trunc(num)}.`, '').length;
   }
 
-  private defaultConfig(options: RangeSliderOptions) {
-    this.isStartedConfig = false;
-    this.isUpdatedConfig = false;
+  private setDefaultConfiguration(options: RangeSliderOptions) {
+    this.isStartedConfiguration = false;
+    this.isUpdatedConfiguration = false;
 
     return {
       type: 'single', // type - single or double dot
@@ -706,7 +737,7 @@ class Model extends Observer {
       await this.update(options);
 
       this.defaultData = await this.getOptions();
-      await this.notifyOB({
+      await this.notifyObserver({
         key: 'Start',
         ...this.defaultData,
       });
@@ -730,16 +761,16 @@ class Model extends Observer {
     object[key] = value;
   }
 
-  private static propertiesValidation(
+  private static validateProperties(
     // eslint-disable-next-line no-use-before-define
     properties: Array<keyof typeof object>,
     object: RangeSliderOptions,
   ) {
     let isValid = false;
     for (let i = 0; i < properties.length; i += 1) {
-      const dataT = object[properties[i]] ?? null;
+      const data = object[properties[i]] ?? null;
 
-      if (dataT !== null) {
+      if (data !== null) {
         isValid = true;
         break;
       }
@@ -749,35 +780,35 @@ class Model extends Observer {
     return true;
   }
 
-  private static isEmpty(data: Prop) {
+  private static checkIsEmpty(data: Prop) {
     return (data ?? null) != null;
   }
 
-  private checkValue(data: Prop, str: string) {
+  private checkProperty(data: Prop, string: string) {
     // eslint-disable-next-line no-underscore-dangle
     const _this = this;
     // использую type assertions так как не нашёл возможности передавать нужный тип
     // не могу отказаться от данной конструкции кода, так как это сильно уменьшает копипаст
-    const key = str as keyof typeof _this;
+    const key = string as keyof typeof _this;
     const value = this[key];
     const isValue = (value ?? null) != null;
 
-    if (!Model.isEmpty(data)) {
+    if (!Model.checkIsEmpty(data)) {
       return isValue ? value : null;
     }
     return data;
   }
 
   private setRangeData(options: RangeSliderOptions): boolean {
-    if (!Model.propertiesValidation(['min', 'max'], options)) return false;
+    if (!Model.validateProperties(['min', 'max'], options)) return false;
 
     let { min } = options;
     let { max } = options;
 
-    min = Number(this.checkValue(min, 'min'));
+    min = Number(this.checkProperty(min, 'min'));
     if (min == null) return false;
 
-    max = Number(this.checkValue(max, 'max'));
+    max = Number(this.checkProperty(max, 'max'));
     if (max == null) return false;
 
     const isMin = min < this.minValue;
@@ -809,15 +840,15 @@ class Model extends Observer {
 
       if (this.min > from) { this.from = this.min; }
 
-      this.notifyOB({
+      this.notifyObserver({
         key: 'RangeData',
         min: this.min,
         max: this.max,
       });
 
       // if range is renewed, then recalculate all related data
-      if (this.isUpdatedConfig) {
-        this.setDotData({
+      if (this.isUpdatedConfiguration) {
+        this.setFromTo({
           from: this.from,
           to: this.to,
         });
@@ -827,13 +858,13 @@ class Model extends Observer {
     return false;
   }
 
-  private validValue(value: number) {
+  private checkIsValueInRange(value: number) {
     if (value <= this.getRange()) return value;
     return this.getRange();
   }
 
   private setStep(options: RangeSliderOptions): boolean {
-    if (!Model.propertiesValidation([
+    if (!Model.validateProperties([
       'step',
       'keyStepOne',
       'keyStepHold',
@@ -843,20 +874,20 @@ class Model extends Observer {
     let { keyStepOne } = options;
     let { keyStepHold } = options;
 
-    step = Number(this.checkValue(step, 'step'));
+    step = Number(this.checkProperty(step, 'step'));
     if (step == null) { step = 0; }
 
-    keyStepOne = Number(this.checkValue(keyStepOne, 'keyStepOne'));
+    keyStepOne = Number(this.checkProperty(keyStepOne, 'keyStepOne'));
     if (keyStepOne == null) { keyStepOne = 0; }
 
-    keyStepHold = Number(this.checkValue(keyStepHold, 'keyStepHold'));
+    keyStepHold = Number(this.checkProperty(keyStepHold, 'keyStepHold'));
     if (keyStepHold == null) { keyStepHold = 0; }
 
-    this.step = this.validValue(+step);
-    this.keyStepOne = this.validValue(+keyStepOne);
-    this.keyStepHold = this.validValue(+keyStepHold);
+    this.step = this.checkIsValueInRange(+step);
+    this.keyStepOne = this.checkIsValueInRange(+keyStepOne);
+    this.keyStepHold = this.checkIsValueInRange(+keyStepHold);
 
-    this.notifyOB({
+    this.notifyObserver({
       key: 'Step',
       step: this.step,
       keyStepOne: this.keyStepOne,
@@ -866,8 +897,8 @@ class Model extends Observer {
     return false;
   }
 
-  private setDotData(options: RangeSliderOptions): boolean {
-    if (!Model.propertiesValidation(
+  private setFromTo(options: RangeSliderOptions): boolean {
+    if (!Model.validateProperties(
       ['type', 'from', 'to'],
       options,
     )) return false;
@@ -877,16 +908,16 @@ class Model extends Observer {
     let { to } = options;
 
     // check if all necessary data exists
-    if (!Model.isEmpty(this.min)) return false;
-    if (!Model.isEmpty(this.max)) return false;
+    if (!Model.checkIsEmpty(this.min)) return false;
+    if (!Model.checkIsEmpty(this.max)) return false;
 
     if (type === 'single' || type === 'double') {
       this.type = type;
-    } else if (Model.isEmpty(this.type)) {
+    } else if (Model.checkIsEmpty(this.type)) {
       type = this.type;
     } else return false;
 
-    from = Number(this.checkValue(from, 'from'));
+    from = Number(this.checkProperty(from, 'from'));
     if (from == null) return false;
 
     const min = this.min ?? 0;
@@ -904,7 +935,7 @@ class Model extends Observer {
     }
 
     if (type === 'double') { // check FROM and TO
-      to = Number(this.checkValue(to, 'to'));
+      to = Number(this.checkProperty(to, 'to'));
       if (to == null) return false;
 
       if (from > to) {
@@ -924,7 +955,7 @@ class Model extends Observer {
       this.to = this.to ?? this.from;
     }
 
-    if (!this.isStartedConfig && !this.isUpdatedConfig) {
+    if (!this.isStartedConfiguration && !this.isUpdatedConfiguration) {
       if (this.gridSnap && !this.step) {
         this.from = Model.getValueStep(
           this.from ?? 0,
@@ -941,14 +972,14 @@ class Model extends Observer {
       }
     }
 
-    this.notifyOB({
+    this.notifyObserver({
       key: 'DotData',
       type: this.type,
       from: this.from,
       to: this.to,
     });
 
-    if (this.isStartedConfig && !this.isUpdatedConfig) {
+    if (this.isStartedConfiguration && !this.isUpdatedConfiguration) {
       if (typeof this.onChange === 'function') this.onChange(this.getOptions());
     }
 
@@ -956,7 +987,7 @@ class Model extends Observer {
   }
 
   private setGridSnapData(options: RangeSliderOptions): boolean {
-    if (!Model.propertiesValidation(['gridSnap'], options)) {
+    if (!Model.validateProperties(['gridSnap'], options)) {
       if (this.gridSnap === undefined) { this.gridSnap = false; }
       return false;
     }
@@ -967,7 +998,7 @@ class Model extends Observer {
       this.gridSnap = options.gridSnap ?? false;
     }
 
-    this.notifyOB({
+    this.notifyObserver({
       key: 'GridSnapData',
       gridSnap: this.gridSnap,
     });
@@ -975,7 +1006,7 @@ class Model extends Observer {
   }
 
   private setGridData(options: RangeSliderOptions): boolean {
-    if (!Model.propertiesValidation([
+    if (!Model.validateProperties([
       'grid',
       'gridNumber',
       'gridStep',
@@ -989,14 +1020,14 @@ class Model extends Observer {
 
     if (Number.isNaN(gridRound)) gridRound = null;
 
-    grid = Boolean(this.checkValue(grid, 'grid') ?? false);
+    grid = Boolean(this.checkProperty(grid, 'grid') ?? false);
     this.grid = Boolean(grid);
 
-    if (!Model.isEmpty(this.min) || !Model.isEmpty(this.max)) return false;
+    if (!Model.checkIsEmpty(this.min) || !Model.checkIsEmpty(this.max)) return false;
 
-    gridNumber = Number(this.checkValue(gridNumber, 'gridNumber') ?? 0);
-    gridStep = Number(this.checkValue(gridStep, 'gridStep') ?? 0);
-    gridRound = Number(this.checkValue(gridRound, 'gridRound') ?? 0);
+    gridNumber = Number(this.checkProperty(gridNumber, 'gridNumber') ?? 0);
+    gridStep = Number(this.checkProperty(gridStep, 'gridStep') ?? 0);
+    gridRound = Number(this.checkProperty(gridRound, 'gridRound') ?? 0);
 
     const long = (this.max ?? 0) - (this.min ?? 0);
 
@@ -1020,13 +1051,13 @@ class Model extends Observer {
 
     if (this.gridSnap && !this.grid) {
       this.gridSnap = false;
-      this.notifyOB({
+      this.notifyObserver({
         key: 'GridSnapData',
         gridSnap: this.gridSnap,
       });
     }
 
-    this.notifyOB({
+    this.notifyObserver({
       key: 'GridData',
       grid: this.grid,
       gridNumber: this.gridNumber,
@@ -1038,7 +1069,7 @@ class Model extends Observer {
   }
 
   private setOrientationData(options: RangeSliderOptions): boolean {
-    if (!Model.propertiesValidation(['orientation'], options)) return false;
+    if (!Model.validateProperties(['orientation'], options)) return false;
 
     const orientation = options.orientation ?? ''.replace(/\s/g, '');
     const isHorizontal = orientation === 'horizontal';
@@ -1048,7 +1079,7 @@ class Model extends Observer {
       this.orientation = orientation;
     } else return false;
 
-    this.notifyOB({
+    this.notifyObserver({
       key: 'OrientationData',
       orientation: this.orientation,
     });
@@ -1057,7 +1088,7 @@ class Model extends Observer {
   }
 
   private setThemeData(options: RangeSliderOptions): boolean {
-    if (!Model.propertiesValidation(['theme'], options)) return false;
+    if (!Model.validateProperties(['theme'], options)) return false;
 
     const theme = options.theme ?? ''.replace(/\s/g, '');
 
@@ -1068,7 +1099,7 @@ class Model extends Observer {
         + 'количество символов (макс - 20)');
     }
 
-    this.notifyOB({
+    this.notifyObserver({
       key: 'ThemeData',
       theme: this.theme,
     });
@@ -1133,7 +1164,7 @@ class Model extends Observer {
   }
 
   private setHintsData(options: ObserverOptions): boolean {
-    const isParameters = !Model.propertiesValidation([
+    const isParameters = !Model.validateProperties([
       'tipPrefix',
       'tipPostfix',
       'tipMinMax',
@@ -1149,35 +1180,35 @@ class Model extends Observer {
     let { tipMinMax } = options;
     let { tipFromTo } = options;
 
-    tipPostfix = String(this.checkValue(tipPostfix, 'tipPostfix'));
+    tipPostfix = String(this.checkProperty(tipPostfix, 'tipPostfix'));
     if (tipPostfix != null) {
       this.tipPostfix = String(tipPostfix).replace(/\s/g, '').substring(0, 15);
     } else {
       this.tipPostfix = '';
     }
 
-    tipPrefix = String(this.checkValue(tipPrefix, 'tipPrefix'));
+    tipPrefix = String(this.checkProperty(tipPrefix, 'tipPrefix'));
     if (tipPrefix != null) {
       this.tipPrefix = String(tipPrefix).replace(/\s/g, '').substring(0, 15);
     } else {
       this.tipPrefix = '';
     }
 
-    tipMinMax = Boolean(this.checkValue(tipMinMax, 'tipMinMax'));
+    tipMinMax = Boolean(this.checkProperty(tipMinMax, 'tipMinMax'));
     if (tipMinMax != null) {
       this.tipMinMax = tipMinMax;
     } else {
       this.tipMinMax = true;
     }
 
-    tipFromTo = Boolean(this.checkValue(tipFromTo, 'tipFromTo'));
+    tipFromTo = Boolean(this.checkProperty(tipFromTo, 'tipFromTo'));
     if (tipFromTo != null) {
       this.tipFromTo = tipFromTo;
     } else {
       this.tipFromTo = true;
     }
 
-    this.notifyOB({
+    this.notifyObserver({
       key: 'HintsData',
       tipPrefix: this.tipPrefix,
       tipPostfix: this.tipPostfix,
@@ -1193,14 +1224,14 @@ class Model extends Observer {
   }
 
   private setDisabledData(options: RangeSliderOptions): boolean {
-    if (!Model.propertiesValidation(['disabled'], options)) {
+    if (!Model.validateProperties(['disabled'], options)) {
       if (this.disabled === undefined) { this.disabled = false; }
       return false;
     }
 
     this.disabled = options.disabled ?? false;
 
-    this.notifyOB({
+    this.notifyObserver({
       key: 'DisabledData',
       disabled: this.disabled,
     });
@@ -1209,14 +1240,14 @@ class Model extends Observer {
   }
 
   private setBarData(options: RangeSliderOptions): boolean {
-    if (!Model.propertiesValidation(['bar'], options)) {
+    if (!Model.validateProperties(['bar'], options)) {
       if (this.bar === undefined) { this.bar = false; }
       return false;
     }
 
     this.bar = options.bar ?? false;
 
-    this.notifyOB({
+    this.notifyObserver({
       key: 'BarData',
       bar: this.bar,
     });
@@ -1239,7 +1270,7 @@ class Model extends Observer {
     } else {
       number = dotXY - position;
     }
-    const percent = (number * 100) / this.wrapperWidthHeight;
+    const percent = (number * 100) / this.dimensions;
 
     if (typeFrom) {
       this.limitFrom = percent;
@@ -1250,10 +1281,10 @@ class Model extends Observer {
   }
 
   private calcWidthPercent(width: number) {
-    return ((width * 100) / this.wrapperWidthHeight) / 2;
+    return ((width * 100) / this.dimensions) / 2;
   }
 
-  private calcGridNumStep() {
+  private calcGridNumberStep() {
     let interval = 0;
     let step = 0;
 

@@ -112,8 +112,8 @@ describe('------- Test Model API -------', () => {
 
     const position = async (from: number, to: number) => {
       await model.calcOnePercent();
-      const fromPosition = await model.calcPositionDotFrom();
-      const toPosition = await model.calcPositionDotTo();
+      const fromPosition = await model.calcPercentFrom();
+      const toPosition = await model.calcPercentTo();
       expect(+fromPosition.toFixed(2)).toBeCloseTo(from);
       expect(+toPosition.toFixed(2)).toBeCloseTo(to);
     };
@@ -154,14 +154,14 @@ describe('------- Test Model API -------', () => {
 
   const testName1 = ' Check dots mooving along '
     + 'the grid and interaction with each other ';
-  //  calcDotPosition
+  //  calcFromTo
   test(testName1, async () => {
     let model: Model;
     let wrapperWidthHeight = 1120;
     let position = 533.7142944335938;
 
     const positionData = async (options: PositionData) => {
-      const data = await model.calcDotPosition({
+      const data = await model.calcFromTo({
         type: options.type ? 'From' : 'To',
         wrapperWidthHeight,
         position,
@@ -188,8 +188,8 @@ describe('------- Test Model API -------', () => {
       from: 80,
       onStart: async () => {
         await model.calcOnePercent();
-        await model.calcPositionDotFrom();
-        await model.calcPositionDotTo();
+        await model.calcPercentFrom();
+        await model.calcPercentTo();
 
         positionData({
           clientXY: 929.7144165039062,
@@ -205,7 +205,7 @@ describe('------- Test Model API -------', () => {
           type: true,
         });
 
-        let data = await model.calcDotPosition({
+        let data = await model.calcFromTo({
           type: 'From',
           wrapperWidthHeight,
           position,
@@ -231,7 +231,7 @@ describe('------- Test Model API -------', () => {
           type: false,
         });
 
-        data = await model.calcDotPosition({
+        data = await model.calcFromTo({
           type: 'To',
           wrapperWidthHeight,
           position,
@@ -258,8 +258,8 @@ describe('------- Test Model API -------', () => {
       step: 5,
       onStart: async () => {
         await model.calcOnePercent();
-        await model.calcPositionDotFrom();
-        await model.calcPositionDotTo();
+        await model.calcPercentFrom();
+        await model.calcPercentTo();
         wrapperWidthHeight = 522;
         position = 721.1786041259766;
 
@@ -293,8 +293,8 @@ describe('------- Test Model API -------', () => {
       gridNumber: 40,
       onStart: async () => {
         await model.calcOnePercent();
-        await model.calcPositionDotFrom();
-        await model.calcPositionDotTo();
+        await model.calcPercentFrom();
+        await model.calcPercentTo();
         wrapperWidthHeight = 522;
         position = 721.1786041259766;
 
@@ -318,8 +318,8 @@ describe('------- Test Model API -------', () => {
       from: 80,
       onStart: async () => {
         await model.calcOnePercent();
-        await model.calcPositionDotFrom();
-        await model.calcPositionDotTo();
+        await model.calcPercentFrom();
+        await model.calcPercentTo();
         wrapperWidthHeight = 522;
         position = 721.1786041259766;
 
@@ -381,16 +381,16 @@ describe('------- Test Model API -------', () => {
       onStart: async () => {
         await model.setWrapperWidthHeight(1120);
         await model.calcOnePercent();
-        await model.calcPositionDotFrom();
-        await model.calcPositionDotTo();
+        await model.calcPercentFrom();
+        await model.calcPercentTo();
 
-        const from = await model.calcPositionTipFrom(32.03);
+        const from = await model.calcHintFrom(32.03);
         expect(+from.toFixed(2)).toBeCloseTo(33.53);
 
-        const to = await model.calcPositionTipTo(32.03);
+        const to = await model.calcHintTo(32.03);
         expect(+to.toFixed(2)).toBeCloseTo(66.14);
 
-        const single = await model.calcPositionTipSingle(72.87);
+        const single = await model.calcHintSingle(72.87);
         expect(+single.toFixed(2)).toBeCloseTo(47.83);
       },
     });
@@ -415,7 +415,7 @@ describe('------- Test Model API -------', () => {
           { value: 780, position: 97.5 },
         ];
 
-        const grid = model.createMark();
+        const grid = model.calcMark();
         expect(grid[4]).toEqual(values[0]);
         expect(grid[33]).toEqual(values[1]);
         expect(grid[39]).toEqual(values[2]);
@@ -437,7 +437,7 @@ describe('------- Test Model API -------', () => {
           { value: 574.4, position: 72.10294081396209 },
         ];
 
-        const grid = model.createMark();
+        const grid = model.calcMark();
         expect(grid[5]).toEqual(valuesGrid[0]);
         expect(grid[35]).toEqual(valuesGrid[1]);
         expect(grid[39]).toEqual(valuesGrid[2]);
@@ -458,10 +458,10 @@ describe('------- Test Model API -------', () => {
       onStart: async () => {
         await model.setWrapperWidthHeight(1120);
         await model.calcOnePercent();
-        await model.calcPositionDotFrom();
-        await model.calcPositionDotTo();
+        await model.calcPercentFrom();
+        await model.calcPercentTo();
         const positionBar = { barXY: 23.91304347826087, widthBar: 54.347826086956516 };
-        expect(model.calcPositionBar()).toEqual(positionBar);
+        expect(model.calcBarDimensions()).toEqual(positionBar);
       },
     });
 
@@ -476,9 +476,9 @@ describe('------- Test Model API -------', () => {
       onStart: async () => {
         await model.setWrapperWidthHeight(1120);
         await model.calcOnePercent();
-        await model.calcPositionDotFrom();
+        await model.calcPercentFrom();
         const positionBar = { barXY: 0, widthBar: 23.91304347826087 };
-        expect(model.calcPositionBar()).toEqual(positionBar);
+        expect(model.calcBarDimensions()).toEqual(positionBar);
       },
     });
 
@@ -497,17 +497,17 @@ describe('------- Test Model API -------', () => {
       onStart: async () => {
         await model.setWrapperWidthHeight(1120);
         await model.calcOnePercent();
-        await model.calcPositionDotFrom();
-        await model.calcPositionDotTo();
+        await model.calcPercentFrom();
+        await model.calcPercentTo();
 
         let pointerLine = { from: 126, to: 600 };
-        expect(model.clickLine(300)).toEqual(pointerLine);
+        expect(model.calcLineCoordinates(300)).toEqual(pointerLine);
         pointerLine = { from: 250, to: 600 };
-        expect(model.clickLine(450)).toEqual(pointerLine);
+        expect(model.calcLineCoordinates(450)).toEqual(pointerLine);
         pointerLine = { from: 250, to: 537 };
-        expect(model.clickLine(800)).toEqual(pointerLine);
+        expect(model.calcLineCoordinates(800)).toEqual(pointerLine);
         pointerLine = { from: 250, to: 784 };
-        expect(model.clickLine(1100)).toEqual(pointerLine);
+        expect(model.calcLineCoordinates(1100)).toEqual(pointerLine);
       },
     });
 
@@ -523,9 +523,9 @@ describe('------- Test Model API -------', () => {
       onStart: async () => {
         await model.setWrapperWidthHeight(1120);
         await model.calcOnePercent();
-        await model.calcPositionDotFrom();
+        await model.calcPercentFrom();
 
-        expect(model.clickLine(300).from).toBeCloseTo(554);
+        expect(model.calcLineCoordinates(300).from).toBeCloseTo(554);
       },
     });
 
@@ -541,12 +541,12 @@ describe('------- Test Model API -------', () => {
       onStart: async () => {
         await model.setWrapperWidthHeight(600);
         await model.calcOnePercent();
-        await model.calcPositionDotFrom();
-        await model.calcPositionDotTo();
+        await model.calcPercentFrom();
+        await model.calcPercentTo();
 
-        const { to } = model.clickLine(601);
+        const { to } = model.calcLineCoordinates(601);
         expect(to).toBeCloseTo(501);
-        const { from } = model.clickLine(-1);
+        const { from } = model.calcLineCoordinates(-1);
         expect(from).toBeCloseTo(-121);
       },
     });
@@ -567,12 +567,12 @@ describe('------- Test Model API -------', () => {
       onStart: async () => {
         await model.setWrapperWidthHeight(1120);
         await model.calcOnePercent();
-        await model.calcPositionDotFrom();
-        await model.calcPositionDotTo();
+        await model.calcPercentFrom();
+        await model.calcPercentTo();
         let pointerBar = { from: 344, to: 600 };
-        expect(model.clickBar(297)).toEqual(pointerBar);
+        expect(model.calcBarCoordinates(297)).toEqual(pointerBar);
         pointerBar = { from: 344, to: 582 };
-        expect(model.clickBar(290)).toEqual(pointerBar);
+        expect(model.calcBarCoordinates(290)).toEqual(pointerBar);
       },
     });
 
@@ -588,9 +588,9 @@ describe('------- Test Model API -------', () => {
       onStart: async () => {
         await model.setWrapperWidthHeight(1120);
         await model.calcOnePercent();
-        await model.calcPositionDotFrom();
+        await model.calcPercentFrom();
         const pointerBar = { from: 92, to: 100 };
-        expect(model.clickBar(10)).toEqual(pointerBar);
+        expect(model.calcBarCoordinates(10)).toEqual(pointerBar);
       },
     });
 
@@ -605,9 +605,9 @@ describe('------- Test Model API -------', () => {
       onStart: async () => {
         await model.setWrapperWidthHeight(1120);
         await model.calcOnePercent();
-        await model.calcPositionDotFrom();
+        await model.calcPercentFrom();
         const pointerBar = { from: -79, to: 100 };
-        expect(model.clickBar(50)).toEqual(pointerBar);
+        expect(model.calcBarCoordinates(50)).toEqual(pointerBar);
       },
     });
 
@@ -627,13 +627,13 @@ describe('------- Test Model API -------', () => {
 
       onStart: async () => {
         let pointerGrid = { from: 150, to: 600 };
-        expect(model.clickMark(150)).toEqual(pointerGrid);
+        expect(model.calcMarkCoordinates(150)).toEqual(pointerGrid);
 
         pointerGrid = { from: 150, to: 700 };
-        expect(model.clickMark(700)).toEqual(pointerGrid);
+        expect(model.calcMarkCoordinates(700)).toEqual(pointerGrid);
 
         pointerGrid = { from: 10, to: 700 };
-        expect(model.clickMark(10)).toEqual(pointerGrid);
+        expect(model.calcMarkCoordinates(10)).toEqual(pointerGrid);
       },
     });
 
@@ -648,13 +648,13 @@ describe('------- Test Model API -------', () => {
 
       onStart: async () => {
         let pointerGrid = { from: 150, to: 100 };
-        expect(model.clickMark(150)).toEqual(pointerGrid);
+        expect(model.calcMarkCoordinates(150)).toEqual(pointerGrid);
 
         pointerGrid = { from: 700, to: 100 };
-        expect(model.clickMark(700)).toEqual(pointerGrid);
+        expect(model.calcMarkCoordinates(700)).toEqual(pointerGrid);
 
         pointerGrid = { from: 10, to: 100 };
-        expect(model.clickMark(10)).toEqual(pointerGrid);
+        expect(model.calcMarkCoordinates(10)).toEqual(pointerGrid);
       },
     });
 
@@ -678,7 +678,7 @@ describe('------- Test Model API -------', () => {
       onStart: async () => {
         const snap: number[] = [];
 
-        model.createMark().forEach((item) => {
+        model.calcMark().forEach((item) => {
           snap.push(item.value);
         });
 
@@ -686,8 +686,8 @@ describe('------- Test Model API -------', () => {
         snap.pop();
 
         const data = { from: 110, to: 616 };
-        expect(model.calcSnap(snap)).toEqual(data);
-        expect(model.snapDot()).toEqual(data);
+        expect(model.setSnapFromTo(snap)).toEqual(data);
+        expect(model.toggleSnapMode()).toEqual(data);
       },
     });
 
@@ -708,21 +708,21 @@ describe('------- Test Model API -------', () => {
       keyStepHold: 10,
       onStart: async () => {
         let data = { from: 105, to: 600 };
-        expect(model.calcKeyDown(false, '+', 'from')).toEqual(data);
+        expect(model.calcFromToOnKeyDown(false, '+', 'from')).toEqual(data);
         data = { from: 100, to: 600 };
-        expect(model.calcKeyDown(false, '-', 'from')).toEqual(data);
+        expect(model.calcFromToOnKeyDown(false, '-', 'from')).toEqual(data);
         data = { from: 100, to: 605 };
-        expect(model.calcKeyDown(false, '+', 'to')).toEqual(data);
+        expect(model.calcFromToOnKeyDown(false, '+', 'to')).toEqual(data);
         data = { from: 100, to: 600 };
-        expect(model.calcKeyDown(false, '-', 'to')).toEqual(data);
+        expect(model.calcFromToOnKeyDown(false, '-', 'to')).toEqual(data);
         data = { from: 110, to: 600 };
-        expect(model.calcKeyDown(true, '+', 'from')).toEqual(data);
+        expect(model.calcFromToOnKeyDown(true, '+', 'from')).toEqual(data);
         data = { from: 100, to: 600 };
-        expect(model.calcKeyDown(true, '-', 'from')).toEqual(data);
+        expect(model.calcFromToOnKeyDown(true, '-', 'from')).toEqual(data);
         data = { from: 100, to: 610 };
-        expect(model.calcKeyDown(true, '+', 'to')).toEqual(data);
+        expect(model.calcFromToOnKeyDown(true, '+', 'to')).toEqual(data);
         data = { from: 100, to: 600 };
-        expect(model.calcKeyDown(true, '-', 'to')).toEqual(data);
+        expect(model.calcFromToOnKeyDown(true, '-', 'to')).toEqual(data);
       },
     });
 
@@ -742,7 +742,7 @@ describe('------- Test Model API -------', () => {
       onStart: async () => {
         const snap: number[] = [];
 
-        model.createMark().forEach((item) => {
+        model.calcMark().forEach((item) => {
           snap.push(item.value);
         });
 
@@ -750,15 +750,15 @@ describe('------- Test Model API -------', () => {
         snap.pop();
 
         let data = { from: 110, to: 593 };
-        expect(model.calcSnap(snap)).toEqual(data);
-        expect(model.snapDot()).toEqual(data);
+        expect(model.setSnapFromTo(snap)).toEqual(data);
+        expect(model.toggleSnapMode()).toEqual(data);
 
         data = { from: 133, to: 593 };
-        expect(model.calcKeyDown(false, '+', 'from')).toEqual(data);
+        expect(model.calcFromToOnKeyDown(false, '+', 'from')).toEqual(data);
         data = { from: 110, to: 593 };
-        expect(model.calcKeyDown(false, '-', 'from')).toEqual(data);
+        expect(model.calcFromToOnKeyDown(false, '-', 'from')).toEqual(data);
         data = { from: 110, to: 616 };
-        expect(model.calcKeyDown(false, '+', 'to')).toEqual(data);
+        expect(model.calcFromToOnKeyDown(false, '+', 'to')).toEqual(data);
       },
     });
 

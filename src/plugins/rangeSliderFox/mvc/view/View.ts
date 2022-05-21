@@ -93,7 +93,7 @@ class View extends Observer {
     const isKeys = this.dataAttributes && Object.keys(this.dataAttributes).length !== 0;
 
     if (isKeys) {
-      this.notifyOB({
+      this.notifyObserver({
         key: 'DataAttributes',
         ...this.dataAttributes,
       });
@@ -368,7 +368,7 @@ class View extends Observer {
 
   @boundMethod
   private handleRsLineClick(event: MouseEvent) {
-    this.notifyOB({
+    this.notifyObserver({
       key: 'ClickLine',
       clientXY: this.vertical ? event.offsetY : event.offsetX,
     });
@@ -452,7 +452,7 @@ class View extends Observer {
       });
 
       if (rangeSlider) {
-        this.notifyOB({
+        this.notifyObserver({
           key: 'DataAttributes',
           ...rangeSlider,
         });
@@ -513,7 +513,7 @@ class View extends Observer {
 
   @boundMethod
   private handleForwarding(options: ObserverOptions) {
-    this.notifyOB({ ...options });
+    this.notifyObserver({ ...options });
     return true;
   }
 
@@ -527,7 +527,7 @@ class View extends Observer {
       wrapperWidthHeight = this.rangeSliderCenter.offsetWidth;
     }
 
-    this.notifyOB({
+    this.notifyObserver({
       key: 'SizeWrapper',
       wrapperWidthHeight,
     });

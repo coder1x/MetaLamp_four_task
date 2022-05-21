@@ -1,4 +1,4 @@
-interface CalcDotPositionOptions {
+interface CalcFromToOptions {
   readonly type: string,
   readonly wrapperWidthHeight: number,
   readonly position: number,
@@ -13,6 +13,18 @@ interface PositionData {
   readonly position: number,
 }
 
+interface DirectionData {
+  from: number | null,
+  to: number | null,
+  isFrom: boolean,
+  isTo: boolean,
+}
+
 type Prop = number | string | boolean | undefined | null;
 
-export { CalcDotPositionOptions, Prop, PositionData };
+export {
+  CalcFromToOptions,
+  Prop,
+  PositionData,
+  DirectionData,
+};

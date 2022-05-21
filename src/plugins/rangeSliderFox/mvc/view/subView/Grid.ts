@@ -107,7 +107,7 @@ class Grid extends Observer {
   private handleMarkClick(event: Event) {
     const mark = event.target as HTMLElement;
     if (Grid.searchString(mark.className, `js-${this.rangeSliderName}__grid-mark`)) {
-      this.notifyOB({
+      this.notifyObserver({
         key: 'ClickMark',
         valueGrid: Number(mark.innerText),
       });
@@ -297,7 +297,7 @@ class Grid extends Observer {
       if (snap[length] !== number) { snap.push(number); }
     }
 
-    this.notifyOB({
+    this.notifyObserver({
       key: 'SnapNumber',
       snapNumber: snap,
     });

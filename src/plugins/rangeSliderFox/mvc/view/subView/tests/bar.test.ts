@@ -88,7 +88,7 @@ describe('------- Test Bar API -------', () => {
         controller.update({ tipMinMax: false });
       },
       onUpdate: async () => {
-        const spy = await jest.spyOn(model, 'clickBar');
+        const spy = await jest.spyOn(model, 'calcBarCoordinates');
         const dot = await parentElement.getElementsByClassName(`${jsRangeSliderName}__bar`);
         const pointer = await mockPointerEvent(dot[0]);
         await pointer('click', 34, 45);
