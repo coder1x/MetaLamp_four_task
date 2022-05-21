@@ -7,23 +7,6 @@ block content
   main.demo-slider
     h1.demo-slider__header Range Slider Fox
 
-
-    section.slider
-        .slider__panel-wrapper
-          h2(class = 'text-initialization-plugin') Инициализация плагина с помощью data attribute
-          div(
-            class = 'initialization-plugin' 
-            data-plugin = 'rangeSliderFox' 
-            data-type = 'double'
-            data-min = '0'
-            data-max = '100'
-            data-from = '30'
-            data-to = '50'
-            data-bar = 'true'
-            data-grid = 'true'
-            data-grid-num = '40'
-            )
-
     section.slider
         .slider__panel-wrapper 
           +panel({
@@ -41,3 +24,32 @@ block content
           +panel({
             theme:'base'
           })
+
+    section.slider
+        .initialization-plugin
+          h2(class = 'initialization-plugin__header') Инициализация плагина с помощью data attribute
+          
+          div(
+            class = 'initialization-plugin__rangeSliderFox' 
+            data-plugin = 'rangeSliderFox' 
+            data-type = 'double'
+            data-min = '0'
+            data-max = '100'
+            data-from = '30'
+            data-to = '50'
+            data-bar = 'true'
+            data-grid = 'true'
+            data-grid-num = '20'
+            )
+
+          ul(class = 'initialization-plugin__dataAttributes')    
+            li data-plugin = 'rangeSliderFox' 
+            li data-type = 'double'
+            li data-min = '0'
+            li data-max = '100'
+            li data-from = '30'
+            li data-to = '50'
+            li data-bar = 'true'
+            li data-grid = 'true'
+            li data-grid-num = '20'
+

@@ -1,9 +1,9 @@
 interface CalcFromToOptions {
   readonly type: string,
-  readonly wrapperWidthHeight: number,
   readonly position: number,
   readonly clientXY: number,
   readonly shiftXY: number
+  readonly dimensions: number,
 }
 
 interface PositionData {
@@ -11,6 +11,7 @@ interface PositionData {
   readonly clientXY: number,
   readonly shiftXY: number,
   readonly position: number,
+  readonly dimensions: number,
 }
 
 interface DirectionData {

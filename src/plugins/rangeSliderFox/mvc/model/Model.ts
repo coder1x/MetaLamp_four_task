@@ -66,8 +66,6 @@ class Model extends Observer {
 
   private limitTo: number = 0;
 
-  private dimensions: number = 0;
-
   private snapNumber: number[] = [];
 
   private stepNumber: number[] = [];
@@ -206,26 +204,17 @@ class Model extends Observer {
     return this.toPercent;
   }
 
-  //= =============================================
-  setWrapperWidthHeight(value: number) {
-    const defaultSize = 319;
-    this.dimensions = value || defaultSize;
-    return this.dimensions;
-  }
-  //= =============================================
-
   calcFromTo(options: CalcFromToOptions) {
     let isFrom = false;
     let isTo = false;
     const typeFrom = options.type === 'From';
-
-    this.setWrapperWidthHeight(options.wrapperWidthHeight);
 
     let percent = this.convertToPercent({
       typeFrom,
       clientXY: options.clientXY,
       shiftXY: options.shiftXY,
       position: options.position,
+      dimensions: options.dimensions,
     });
 
     if (percent < 0) percent = 0;
@@ -270,7 +259,6 @@ class Model extends Observer {
       to = this.getValueTo(); //  get TO value
     }
 
-    //-----------------------------------------
     if (this.gridSnap && !this.step) {
       if (isFrom) {
         from = Model.getValueStep(from ?? 0, this.stepGrid, this.snapNumber);
@@ -279,7 +267,6 @@ class Model extends Observer {
         to = Model.getValueStep(to ?? 0, this.stepGrid, this.snapNumber);
       }
     }
-    //-----------------------------------------
 
     if (!this.defineDirection({
       from,
@@ -288,16 +275,13 @@ class Model extends Observer {
       isTo,
     })) return false;
 
-    //-----------------------------------------
     if (this.step) {
-      if (isFrom) {
-        from = Model.getValueStep(from ?? 0, this.step, this.stepNumber);
-      }
+      if (isFrom) { from = Model.getValueStep(from ?? 0, this.step, this.stepNumber); }
+
       if (!isSingle && isTo) {
         to = Model.getValueStep(to ?? 0, this.step, this.stepNumber);
       }
     }
-    //-----------------------------------------
 
     this.setFromTo({
       from,
@@ -333,21 +317,21 @@ class Model extends Observer {
   }
 
   @boundMethod
-  calcHintFrom(tipFrom: number) {
-    return this.fromPercent - this.calcWidthPercent(tipFrom - 4);
+  calcHintFrom(tipFrom: number, dimensions: number) {
+    return this.fromPercent - Model.calcWidthPercent(tipFrom - 4, dimensions);
   }
 
   @boundMethod
-  calcHintTo(tipTo: number) {
-    return this.toPercent - this.calcWidthPercent(tipTo - 4);
+  calcHintTo(tipTo: number, dimensions: number) {
+    return this.toPercent - Model.calcWidthPercent(tipTo - 4, dimensions);
   }
 
   @boundMethod
-  calcHintSingle(singleWidthHeight: number) {
+  calcHintSingle(singleWidthHeight: number, dimensions: number) {
     return (
       this.fromPercent
       + ((this.toPercent - this.fromPercent) / 2)
-      - this.calcWidthPercent(singleWidthHeight)
+      - Model.calcWidthPercent(singleWidthHeight, dimensions)
     );
   }
 
@@ -397,20 +381,24 @@ class Model extends Observer {
   }
 
   @boundMethod
-  calcBarCoordinates(pointXY: number) {
+  calcBarCoordinates(pointXY: number, dimensions: number) {
     const vertical = this.orientation === 'vertical';
-    const onePercent = this.dimensions / 100; // one percent of the entire scale
+    const onePercent = dimensions / 100; // one percent of the entire scale
 
     const calcXY = (valuePercent: number) => this.calcLineCoordinates(
       ((100 - valuePercent) * onePercent) + pointXY,
+      dimensions,
     );
 
     if (this.type === 'single') {
       if (vertical) return calcXY(this.fromPercent);
-      return this.calcLineCoordinates(pointXY);
+      return this.calcLineCoordinates(pointXY, dimensions);
     }
     if (vertical) return calcXY(this.toPercent);
-    return this.calcLineCoordinates(this.fromPercent * onePercent + pointXY);
+    return this.calcLineCoordinates(
+      this.fromPercent * onePercent + pointXY,
+      dimensions,
+    );
   }
 
   @boundMethod
@@ -445,13 +433,13 @@ class Model extends Observer {
 
   // ---------------------------------- Line
   @boundMethod
-  calcLineCoordinates(pointXY: number) {
+  calcLineCoordinates(pointXY: number, dimensions: number) {
     let { from } = this;
     let { to } = this;
     let isFrom = false;
     let isTo = false;
 
-    const onePercent = this.dimensions / 100; // one percent of the entire scale
+    const onePercent = dimensions / 100; // one percent of the entire scale
     let pointPercent = 0;
 
     if (this.orientation === 'vertical') {
@@ -460,6 +448,7 @@ class Model extends Observer {
       pointPercent = pointXY / onePercent; // total percentage in the clicked area
     }
 
+    // -----------------------------------------------------
     if (this.type === 'single') {
       this.fromPercent = pointPercent;
       isFrom = true;
@@ -485,6 +474,7 @@ class Model extends Observer {
       this.fromPercent = pointPercent;
       isFrom = true;
     }
+    //-----------------------------------------------------
 
     if (isFrom) {
       from = this.getValueFrom();
@@ -1260,7 +1250,11 @@ class Model extends Observer {
 
   private convertToPercent(options: PositionData) {
     const {
-      typeFrom, clientXY, shiftXY, position,
+      typeFrom,
+      clientXY,
+      shiftXY,
+      position,
+      dimensions,
     } = options;
     const dotXY = clientXY - shiftXY;
     let number = 0;
@@ -1270,7 +1264,7 @@ class Model extends Observer {
     } else {
       number = dotXY - position;
     }
-    const percent = (number * 100) / this.dimensions;
+    const percent = (number * 100) / dimensions;
 
     if (typeFrom) {
       this.limitFrom = percent;
@@ -1280,8 +1274,8 @@ class Model extends Observer {
     return percent;
   }
 
-  private calcWidthPercent(width: number) {
-    return ((width * 100) / this.dimensions) / 2;
+  private static calcWidthPercent(width: number, dimensions: number) {
+    return ((width * 100) / dimensions) / 2;
   }
 
   private calcGridNumberStep() {

@@ -243,14 +243,14 @@ class Controller {
     const isDotMove = key !== 'DotMove';
 
     if (isDotMove || !this.model) return false;
-    if (this.lock) return false;
+    if (this.lock || !this.view) return false;
 
     this.model.calcFromTo({
       type: options.type ?? '',
-      wrapperWidthHeight: options.wrapperWidthHeight ?? 0,
       position: options.position ?? 0,
       clientXY: options.clientXY ?? 0,
       shiftXY: options.shiftXY ?? 0,
+      dimensions: Number(this.view.getWrapWidthHeight()),
     });
     return true;
   }
@@ -324,7 +324,6 @@ class Controller {
 
     if (!this.view || !this.model) return false;
 
-    this.model.setWrapperWidthHeight(this.view.getWrapWidthHeight());
     this.view.setHintsData(options);
 
     if (this.isStarted && !this.isReset) {
@@ -346,13 +345,22 @@ class Controller {
     if (!sizeTip) return false;
 
     if (sizeTip.fromWidthHeight || sizeTip.toWidthHeight) {
-      const fromXY = await this.model.calcHintFrom(sizeTip.fromWidthHeight);
+      const fromXY = await this.model.calcHintFrom(
+        sizeTip.fromWidthHeight,
+        this.view.getWrapWidthHeight(),
+      );
       let toXY = 0;
       let singleXY = 0;
 
       if (type === 'double') {
-        toXY = await this.model.calcHintTo(sizeTip.toWidthHeight);
-        singleXY = await this.model.calcHintSingle(sizeTip.singleWidthHeight);
+        toXY = await this.model.calcHintTo(
+          sizeTip.toWidthHeight,
+          this.view.getWrapWidthHeight(),
+        );
+        singleXY = await this.model.calcHintSingle(
+          sizeTip.singleWidthHeight,
+          this.view.getWrapWidthHeight(),
+        );
       } else {
         await this.view.deleteTipTo();
       }
@@ -387,9 +395,12 @@ class Controller {
     const isClickLine = key !== 'ClickLine';
 
     if (isClickLine || !this.model) return false;
-    if (this.lock) return false;
+    if (this.lock || !this.view) return false;
 
-    this.model.calcLineCoordinates(options.clientXY ?? 0);
+    this.model.calcLineCoordinates(
+      options.clientXY ?? 0,
+      this.view.getWrapWidthHeight(),
+    );
     return true;
   }
 
@@ -401,8 +412,6 @@ class Controller {
     if (isSizeWrapper || !this.isStarted) return false;
 
     if (!this.model) return false;
-
-    this.model.setWrapperWidthHeight(options.wrapperWidthHeight ?? 0);
 
     return true;
   }
@@ -427,9 +436,12 @@ class Controller {
 
     if (isClickBar || !this.model) return false;
 
-    if (this.lock) return false;
+    if (this.lock || !this.view) return false;
 
-    this.model.calcBarCoordinates(options.clientXY ?? 0);
+    this.model.calcBarCoordinates(
+      options.clientXY ?? 0,
+      this.view.getWrapWidthHeight(),
+    );
     return true;
   }
 
