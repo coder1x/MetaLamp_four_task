@@ -103,7 +103,6 @@ class Controller {
     const handlesView = [
       this.handleDotMove,
       this.handleClickLine,
-      this.handleSizeWrapper,
       this.handleClickBar,
       this.handleClickMark,
       this.handleSnapNumber,
@@ -340,7 +339,7 @@ class Controller {
     if (!this.view || !this.model) return false;
 
     await this.view.updateTipValue(from, to, type);
-    const sizeTip = await this.view.getWidthTip(this.isStarted, this.isReset);
+    const sizeTip = await this.view.getWidthTip();
 
     if (!sizeTip) return false;
 
@@ -401,18 +400,6 @@ class Controller {
       options.clientXY ?? 0,
       this.view.getWrapWidthHeight(),
     );
-    return true;
-  }
-
-  @boundMethod
-  private handleSizeWrapper(options: ObserverOptions) {
-    const { key } = options;
-    const isSizeWrapper = key !== 'SizeWrapper';
-
-    if (isSizeWrapper || !this.isStarted) return false;
-
-    if (!this.model) return false;
-
     return true;
   }
 

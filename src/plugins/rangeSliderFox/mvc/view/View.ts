@@ -181,8 +181,6 @@ class View extends Observer {
     await this.bar.setOrientation(type);
     await this.grid.setOrientation(type);
 
-    await this.sizeWrapper();
-
     return true;
   }
 
@@ -285,9 +283,8 @@ class View extends Observer {
     return this.hints.setValueTipMinMax(min, max);
   }
 
-  getWidthTip(isStart: boolean, isReset: boolean) {
+  getWidthTip() {
     if (!this.hints) return null;
-    if (isStart && !isReset) { this.sizeWrapper(); }
     return this.hints.getWidthTip();
   }
 
@@ -514,24 +511,6 @@ class View extends Observer {
   @boundMethod
   private handleForwarding(options: ObserverOptions) {
     this.notifyObserver({ ...options });
-    return true;
-  }
-
-  private sizeWrapper() {
-    if (!this.rangeSliderCenter) return false;
-
-    let wrapperWidthHeight = 0;
-    if (this.vertical) {
-      wrapperWidthHeight = this.rangeSliderCenter.offsetHeight;
-    } else {
-      wrapperWidthHeight = this.rangeSliderCenter.offsetWidth;
-    }
-
-    this.notifyObserver({
-      key: 'SizeWrapper',
-      wrapperWidthHeight,
-    });
-
     return true;
   }
 }

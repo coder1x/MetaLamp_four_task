@@ -314,7 +314,7 @@ class Handle extends Observer {
     this.notifyObserver({
       key: 'DotMove',
       type, // dot type
-      wrapperWidthHeight, // wrapper width or height
+      dimensions: wrapperWidthHeight, // wrapper width or height
       position, // left or bottom coordinates of the wrapper
       clientXY, // coordinates of the dot
       shiftXY, // shift = coordinates of the dot minus coordinates of the dot border

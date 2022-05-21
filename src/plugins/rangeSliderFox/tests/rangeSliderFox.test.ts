@@ -15,6 +15,16 @@ describe('------- Range Slider Fox - JQuery Objects -------', () => {
     });
   }
 
+  function mockCustomEvent(
+    element: Document,
+    { eventType }: { eventType: string },
+  ): void {
+    element.dispatchEvent(new CustomEvent(
+      eventType,
+      { bubbles: true },
+    ));
+  }
+
   beforeEach(() => {
     wrapper = document.createElement('div');
     inputElement = document.createElement('input');
@@ -45,6 +55,13 @@ describe('------- Range Slider Fox - JQuery Objects -------', () => {
 
     const rangeSliderTwo = $(inputElement).RangeSliderFox({}).data('RangeSliderFox');
     expect(rangeSliderTwo).toEqual(rangeSliderOne);
+  });
+
+  test('Plugin initialization with data attribute', async () => {
+    inputElement = await document.createElement('input');
+    await inputElement.setAttribute('data-plugin', 'rangeSliderFox');
+    await mockCustomEvent(document, { eventType: 'DOMContentLoaded' });
+    await jest.runOnlyPendingTimers();
   });
 
   test(' destroy - plugin removal ', async () => {

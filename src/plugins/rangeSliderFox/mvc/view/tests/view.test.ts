@@ -197,7 +197,7 @@ describe('------- Test View API -------', () => {
 
         expect(view.updateTipMinMax(10, 50)).toBeFalsy();
 
-        expect(view.getWidthTip(true, false)).toEqual({
+        expect(view.getWidthTip()).toEqual({
           fromWidthHeight: 0,
           toWidthHeight: 0,
           singleWidthHeight: 0,
