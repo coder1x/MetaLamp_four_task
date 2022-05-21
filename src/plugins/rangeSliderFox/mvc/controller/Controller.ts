@@ -462,6 +462,11 @@ class Controller {
 
     if (isSnapNumber || !this.model) return false;
 
+    if (options.isResized) {
+      const modelOptions = this.model.getOptions();
+      this.updateHints(modelOptions.type ?? '', modelOptions.from ?? 0, modelOptions.to ?? 0);
+    }
+
     this.model.setSnapFromTo(options.snapNumber ?? []);
     return true;
   }

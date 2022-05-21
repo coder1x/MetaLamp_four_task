@@ -231,7 +231,7 @@ class Grid extends Observer {
     this.isResized = true;
     new Resize(this.elementGrid, 200, () => {
       if (this.offOn && !this.vertical) {
-        this.visibleMark();
+        this.visibleMark(true);
       }
     });
 
@@ -239,7 +239,7 @@ class Grid extends Observer {
   }
 
   // hide or show values on the scale
-  private visibleMark() {
+  private visibleMark(isResized = false) {
     if (!this.elementGrid) return false;
     // define element index: show odd values and hide honest ones
     const wrapperWidthHeight = this.vertical
@@ -268,12 +268,12 @@ class Grid extends Observer {
 
     this.previousElement = this.oddElements[i][this.oddElements[i].length - 1];
 
-    this.visibleLastElement(snapNumber);
+    this.visibleLastElement(snapNumber, isResized);
 
     return true;
   }
 
-  private visibleLastElement(snapNumber: number[]) {
+  private visibleLastElement(snapNumber: number[], isResized = false) {
     if (!this.lastElement || !this.previousElement) return false;
 
     let snap = snapNumber;
@@ -300,6 +300,7 @@ class Grid extends Observer {
     this.notifyObserver({
       key: 'SnapNumber',
       snapNumber: snap,
+      isResized,
     });
     return true;
   }

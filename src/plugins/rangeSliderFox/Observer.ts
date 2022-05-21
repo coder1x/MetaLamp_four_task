@@ -15,6 +15,7 @@ interface insideOptions extends RangeSliderOptions {
     position: number,
   }[],
   readonly snapNumber?: number[],
+  readonly isResized?: boolean,
   readonly dimensions?: number,
   readonly position?: number,
   readonly clientXY?: number,
