@@ -251,12 +251,14 @@ class Model extends Observer {
     let from: number | null = null;
     let to: number | null = null;
 
+    const accuracy = Model.trimFraction(this.step ?? 0);
+
     if (isFrom) {
-      from = this.getValueFrom(); // get FROM value
+      from = this.getValueFrom(accuracy); // get FROM value
     }
 
     if (isTo) {
-      to = this.getValueTo(); //  get TO value
+      to = this.getValueTo(accuracy); //  get TO value
     }
 
     if (this.gridSnap && !this.step) {
@@ -268,15 +270,19 @@ class Model extends Observer {
       }
     }
 
-    if (!this.defineDirection({
+    const direction = this.defineDirection({
       from,
       to,
       isFrom,
       isTo,
-    })) return false;
+    });
+
+    if (!direction) return false;
 
     if (this.step) {
-      if (isFrom) { from = Model.getValueStep(from ?? 0, this.step, this.stepNumber); }
+      if (isFrom) {
+        from = Model.getValueStep(from ?? 0, this.step, this.stepNumber);
+      }
 
       if (!isSingle && isTo) {
         to = Model.getValueStep(to ?? 0, this.step, this.stepNumber);
@@ -313,6 +319,7 @@ class Model extends Observer {
     }
     stepNumber.push(max);
     this.stepNumber = stepNumber;
+
     return stepNumber;
   }
 
@@ -595,7 +602,7 @@ class Model extends Observer {
           from = +num.toFixed(length);
         } else {
           const num = !isSign ? toValue - step : toValue + step;
-          to = +num.toFixed(length);
+          to = Number(num.toFixed(length));
         }
         if (this.type === 'double') {
           const isValue = fromValue > toValue;
@@ -653,7 +660,7 @@ class Model extends Observer {
     if (toPosition > (to ?? 0) && isTo) signDirection = 'left';
     if (signDirection === '') return false;
 
-    return true;
+    return signDirection;
   }
 
   private calcGridDimensions(value: number, step: number) {
@@ -667,6 +674,7 @@ class Model extends Observer {
   private static getValueStep(value: number, step: number, items: number[]) {
     for (let i = 0; i < items.length; i += 1) {
       const item = items[i];
+
       if (value < item) {
         return (step - (item - value)) < step / 2
           ? items[i ? i - 1 : i] : item;
@@ -675,16 +683,20 @@ class Model extends Observer {
     return value;
   }
 
-  private getValueFrom() {
-    return Number(((this.min ?? 0) + (this.fromPercent * this.valuePercent)).toFixed(0));
+  private getValueFrom(accuracy = 0) {
+    return Number(((this.min ?? 0) + (this.fromPercent * this.valuePercent)).toFixed(accuracy));
   }
 
-  private getValueTo() {
-    return Number(((this.min ?? 0) + (this.toPercent * this.valuePercent)).toFixed(0));
+  private getValueTo(accuracy = 0) {
+    return Number(((this.min ?? 0) + (this.toPercent * this.valuePercent)).toFixed(accuracy));
   }
 
-  private static trimFraction(num: number) {
-    return String(num).replace(`${Math.trunc(num)}.`, '').length;
+  private static trimFraction(number = 0) {
+    if (!number) return 0;
+
+    if (!/\./gi.test(String(number))) return 0;
+
+    return String(number).replace(`${Math.trunc(number)}.`, '').length;
   }
 
   private setDefaultConfiguration(options: RangeSliderOptions | void) {
