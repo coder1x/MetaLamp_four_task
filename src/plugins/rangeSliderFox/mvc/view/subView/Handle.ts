@@ -111,6 +111,33 @@ class Handle extends Observer {
     return from;
   }
 
+  setIndexFromTo(direction: keyof CSSStyleDeclaration) {
+    if (!this.elementFrom || !this.elementTo) return false;
+
+    const from = Handle.getProperty(this.elementFrom.style, direction);
+    const to = Handle.getProperty(this.elementTo.style, direction);
+
+    const isMaxTo = to === '100%';
+    const isMaxFrom = from === '100%';
+
+    if (isMaxTo && isMaxFrom) {
+      this.elementTo.style.zIndex = '1';
+      this.elementFrom.style.zIndex = '2';
+      return true;
+    }
+
+    const isMinTo = to === '0%';
+    const isMinFrom = from === '0%';
+
+    if (isMinTo && isMinFrom) {
+      this.elementTo.style.zIndex = '2';
+      this.elementFrom.style.zIndex = '1';
+      return true;
+    }
+
+    return false;
+  }
+
   setTo(toPosition: number) {
     if (!this.elementTo) return false;
 
@@ -119,8 +146,10 @@ class Handle extends Observer {
 
     if (this.isVertical) {
       style.bottom = value;
+      this.setIndexFromTo('bottom');
     } else {
       style.left = value;
+      this.setIndexFromTo('left');
     }
 
     return style;
