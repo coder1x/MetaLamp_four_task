@@ -94,7 +94,7 @@ class Model extends Observer {
   // eslint-disable-next-line no-unused-vars
   onReset: ((data: RangeSliderOptions) => void) | null = null;
 
-  constructor(options: RangeSliderOptions) {
+  constructor(options: RangeSliderOptions | void = {}) {
     super();
     this.createProperties(this.setDefaultConfiguration(options));
   }
@@ -687,7 +687,7 @@ class Model extends Observer {
     return String(num).replace(`${Math.trunc(num)}.`, '').length;
   }
 
-  private setDefaultConfiguration(options: RangeSliderOptions) {
+  private setDefaultConfiguration(options: RangeSliderOptions | void) {
     this.isStartedConfiguration = false;
     this.isUpdatedConfiguration = false;
 

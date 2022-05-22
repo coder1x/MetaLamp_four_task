@@ -1,7 +1,7 @@
 import { Controller, Model, View } from './mvc/controller/Controller';
 
 // eslint-disable-next-line func-names
-$.fn.RangeSliderFox = function (options) {
+$.fn.RangeSliderFox = function (options = {}) {
   return this.each((i: number, element: Element) => {
     if (!$.data(element, 'RangeSliderFox')) {
       $.data(
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', (event: Event) => {
   }
 
   elements.forEach((element) => {
-    $(element).RangeSliderFox({});
+    $(element).RangeSliderFox();
   });
 });
 
