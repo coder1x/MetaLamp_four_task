@@ -341,9 +341,12 @@ describe('------- Test Model API -------', () => {
     if (model.onHandle) { await model.onHandle(); }
 
     values = await [
-      -1.45, 1.6,
-      4.6, 7.6,
-      10.6, 13.6,
+      -1.45,
+      2,
+      5,
+      8,
+      11,
+      14,
       15.234,
     ];
 
@@ -487,13 +490,13 @@ describe('------- Test Model API -------', () => {
         await model.calcPercentTo();
 
         let pointerLine = { from: 126, to: 600 };
-        expect(model.calcLineCoordinates(300, 1120)).toEqual(pointerLine);
+        expect(model.takeFromOrToOnLineClick(300, 1120)).toEqual(pointerLine);
         pointerLine = { from: 250, to: 600 };
-        expect(model.calcLineCoordinates(450, 1120)).toEqual(pointerLine);
+        expect(model.takeFromOrToOnLineClick(450, 1120)).toEqual(pointerLine);
         pointerLine = { from: 250, to: 537 };
-        expect(model.calcLineCoordinates(800, 1120)).toEqual(pointerLine);
+        expect(model.takeFromOrToOnLineClick(800, 1120)).toEqual(pointerLine);
         pointerLine = { from: 250, to: 784 };
-        expect(model.calcLineCoordinates(1100, 1120)).toEqual(pointerLine);
+        expect(model.takeFromOrToOnLineClick(1100, 1120)).toEqual(pointerLine);
       },
     });
 
@@ -510,7 +513,7 @@ describe('------- Test Model API -------', () => {
         await model.calcOnePercent();
         await model.calcPercentFrom();
 
-        expect(model.calcLineCoordinates(300, 1120).from).toBeCloseTo(554);
+        expect(model.takeFromOrToOnLineClick(300, 1120).from).toBeCloseTo(554);
       },
     });
 
@@ -528,9 +531,9 @@ describe('------- Test Model API -------', () => {
         await model.calcPercentFrom();
         await model.calcPercentTo();
 
-        const { to } = model.calcLineCoordinates(601, 600);
+        const { to } = model.takeFromOrToOnLineClick(601, 600);
         expect(to).toBeCloseTo(501);
-        const { from } = model.calcLineCoordinates(-1, 600);
+        const { from } = model.takeFromOrToOnLineClick(-1, 600);
         expect(from).toBeCloseTo(-121);
       },
     });
@@ -608,13 +611,13 @@ describe('------- Test Model API -------', () => {
 
       onStart: async () => {
         let pointerGrid = { from: 150, to: 600 };
-        expect(model.calcMarkCoordinates(150)).toEqual(pointerGrid);
+        expect(model.takeFromOrToOnMarkClick(150)).toEqual(pointerGrid);
 
         pointerGrid = { from: 150, to: 700 };
-        expect(model.calcMarkCoordinates(700)).toEqual(pointerGrid);
+        expect(model.takeFromOrToOnMarkClick(700)).toEqual(pointerGrid);
 
         pointerGrid = { from: 10, to: 700 };
-        expect(model.calcMarkCoordinates(10)).toEqual(pointerGrid);
+        expect(model.takeFromOrToOnMarkClick(10)).toEqual(pointerGrid);
       },
     });
 
@@ -629,13 +632,13 @@ describe('------- Test Model API -------', () => {
 
       onStart: async () => {
         let pointerGrid = { from: 150, to: 100 };
-        expect(model.calcMarkCoordinates(150)).toEqual(pointerGrid);
+        expect(model.takeFromOrToOnMarkClick(150)).toEqual(pointerGrid);
 
         pointerGrid = { from: 700, to: 100 };
-        expect(model.calcMarkCoordinates(700)).toEqual(pointerGrid);
+        expect(model.takeFromOrToOnMarkClick(700)).toEqual(pointerGrid);
 
         pointerGrid = { from: 10, to: 100 };
-        expect(model.calcMarkCoordinates(10)).toEqual(pointerGrid);
+        expect(model.takeFromOrToOnMarkClick(10)).toEqual(pointerGrid);
       },
     });
 

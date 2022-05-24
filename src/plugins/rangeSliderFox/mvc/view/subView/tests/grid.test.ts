@@ -107,7 +107,7 @@ describe('------- Test Grid API -------', () => {
         controller.update({ bar: false });
       },
       onUpdate: async () => {
-        const spy = await jest.spyOn(model, 'calcMarkCoordinates');
+        const spy = await jest.spyOn(model, 'takeFromOrToOnMarkClick');
 
         const dot = await parentElement.getElementsByClassName(
           `${jsRangeSliderName}__grid-mark`,

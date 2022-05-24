@@ -396,7 +396,7 @@ class Controller {
     if (isClickLine || !this.model) return false;
     if (this.lock || !this.view) return false;
 
-    this.model.calcLineCoordinates(
+    this.model.takeFromOrToOnLineClick(
       options.clientXY ?? 0,
       this.view.getWrapWidthHeight(),
     );
@@ -451,7 +451,7 @@ class Controller {
     if (isClickMark || !this.model) return false;
     if (this.lock) return false;
 
-    this.model.calcMarkCoordinates(options.valueGrid ?? 0);
+    this.model.takeFromOrToOnMarkClick(options.valueGrid ?? 0);
     return true;
   }
 

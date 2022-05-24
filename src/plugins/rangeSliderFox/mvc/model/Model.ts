@@ -7,6 +7,8 @@ import {
   Prop,
   PositionData,
   DirectionData,
+  KeyDownSnap,
+  KeyDownStep,
 } from './model.d';
 
 class Model extends Observer {
@@ -205,8 +207,6 @@ class Model extends Observer {
   }
 
   calcFromTo(options: CalcFromToOptions) {
-    let isFrom = false;
-    let isTo = false;
     const typeFrom = options.type === 'From';
 
     let percent = this.convertToPercent({
@@ -220,33 +220,11 @@ class Model extends Observer {
     if (percent < 0) percent = 0;
     if (percent > 100) percent = 100;
 
-    const isSingle = this.type === 'single';
-
-    //-----------------------------------------
-    if (isSingle) { // if single dot
-      this.fromPercent = percent;
-      isFrom = true;
-    } else if (!(this.limitFrom > this.limitTo)) { // if double dot and FROM is less than TO
-      // depending on which dot is mooving
-      if (typeFrom) {
-        this.fromPercent = percent;
-        isFrom = true;
-      } else {
-        this.toPercent = percent;
-        isTo = true;
-      }
-    } else { // if FROM is greater than TO
-      // take value of another dot (which the mooving dot is approaching closely)
-      if (typeFrom) {
-        this.fromPercent = this.toPercent;
-      } else {
-        this.toPercent = this.fromPercent;
-      }
-
-      isFrom = true;
-      isTo = true;
-    }
-    //-----------------------------------------
+    const {
+      isFrom,
+      isTo,
+      isSingle,
+    } = this.checkIsFromToValid(typeFrom, percent);
 
     let from: number | null = null;
     let to: number | null = null;
@@ -261,14 +239,22 @@ class Model extends Observer {
       to = this.getValueTo(accuracy); //  get TO value
     }
 
-    if (this.gridSnap && !this.step) {
+    const applySnapForFromTo = () => {
+      if (!(this.gridSnap && !this.step)) return { from, to };
+
       if (isFrom) {
         from = Model.getValueStep(from ?? 0, this.stepGrid, this.snapNumber);
       }
       if (!isSingle && isTo) {
         to = Model.getValueStep(to ?? 0, this.stepGrid, this.snapNumber);
       }
-    }
+
+      return { from, to };
+    };
+
+    const dataSnap = applySnapForFromTo();
+    from = dataSnap.from;
+    to = dataSnap.to;
 
     const direction = this.defineDirection({
       from,
@@ -279,7 +265,9 @@ class Model extends Observer {
 
     if (!direction) return false;
 
-    if (this.step) {
+    const applyStepForFromTo = () => {
+      if (!this.step) return { from, to };
+
       if (isFrom) {
         from = Model.getValueStep(from ?? 0, this.step, this.stepNumber);
       }
@@ -287,13 +275,15 @@ class Model extends Observer {
       if (!isSingle && isTo) {
         to = Model.getValueStep(to ?? 0, this.step, this.stepNumber);
       }
-    }
 
-    this.setFromTo({
-      from,
-      to,
-    });
-    return { from, to };
+      return { from, to };
+    };
+
+    const dataStep = applyStepForFromTo();
+
+    this.setFromTo(dataStep);
+
+    return dataStep;
   }
 
   calcStep() {
@@ -378,12 +368,14 @@ class Model extends Observer {
   calcBarDimensions() {
     let barXY = 0;
     let widthBar = 0;
+
     if (this.type === 'double') {
       barXY = this.fromPercent;
       widthBar = this.toPercent - this.fromPercent;
     } else {
       widthBar = this.fromPercent;
     }
+
     return { barXY, widthBar };
   }
 
@@ -392,57 +384,76 @@ class Model extends Observer {
     const vertical = this.orientation === 'vertical';
     const onePercent = dimensions / 100; // one percent of the entire scale
 
-    const calcXY = (valuePercent: number) => this.calcLineCoordinates(
+    const calcXY = (valuePercent: number) => this.takeFromOrToOnLineClick(
       ((100 - valuePercent) * onePercent) + pointXY,
       dimensions,
     );
 
     if (this.type === 'single') {
       if (vertical) return calcXY(this.fromPercent);
-      return this.calcLineCoordinates(pointXY, dimensions);
+
+      return this.takeFromOrToOnLineClick(pointXY, dimensions);
     }
+
     if (vertical) return calcXY(this.toPercent);
-    return this.calcLineCoordinates(
+
+    return this.takeFromOrToOnLineClick(
       this.fromPercent * onePercent + pointXY,
       dimensions,
     );
   }
 
   @boundMethod
-  calcMarkCoordinates(value: number) {
-    let { from } = this;
-    let { to } = this;
+  takeFromOrToOnMarkClick(value: number) {
+    let {
+      from,
+      to,
+    } = this;
 
-    if (this.type === 'single') {
-      from = value;
-    } else if (value > (to ?? 0)) { // if the value is greater than TO
-      to = value; // set on this dot
-    } else if (value > (from ?? 0)) { // if the value is greater than FROM
-      const To = (to ?? 0) - value; // extract Val from TO
-      const From = value - (from ?? 0); // extract FROM from VAL
+    const chooseAmongFromAndTo = () => {
+      if (this.type === 'single') {
+        from = value;
+        return { from, to };
+      }
 
-      if (From > To) {
-        to = value;
-      } else {
+      if (value > (to ?? 0)) { // if the value is greater than TO
+        to = value; // set on this dot
+        return { from, to };
+      }
+
+      if (value > (from ?? 0)) { // if the value is greater than FROM
+        const To = (to ?? 0) - value; // extract Val from TO
+        const From = value - (from ?? 0); // extract FROM from VAL
+
+        if (From > To) {
+          to = value;
+        } else {
+          from = value;
+        }
+      } else { // if VAL is smaller than FROM, then move FROM
         from = value;
       }
-    } else { // if VAL is smaller than FROM, then move FROM
-      from = value;
-    }
+
+      return { from, to };
+    };
+
+    const data = chooseAmongFromAndTo();
 
     this.setFromTo({
       type: this.type,
-      from,
-      to,
+      ...data,
     });
-    return { from, to };
+    return data;
   }
 
   // ---------------------------------- Line
   @boundMethod
-  calcLineCoordinates(pointXY: number, dimensions: number) {
-    let { from } = this;
-    let { to } = this;
+  takeFromOrToOnLineClick(pointXY: number, dimensions: number) {
+    let {
+      from,
+      to,
+    } = this;
+
     let isFrom = false;
     let isTo = false;
 
@@ -455,33 +466,41 @@ class Model extends Observer {
       pointPercent = pointXY / onePercent; // total percentage in the clicked area
     }
 
-    // -----------------------------------------------------
-    if (this.type === 'single') {
-      this.fromPercent = pointPercent;
-      isFrom = true;
-    } else if (pointPercent > this.toPercent) { // if the value is greater than TO
-      this.toPercent = pointPercent; // set on this dot
-      isTo = true;
-    } else if (pointPercent > this.fromPercent) { // if TO is smaller then FROM is greater
-      const toPercent = this.toPercent - pointPercent; // extract VAL from TO
-      const fromPercent = pointPercent - this.fromPercent; // extract FROM from VAL
-
-      if (fromPercent > toPercent) { // that dot is closer which value is smaller
-        this.toPercent = pointPercent;
-      } else {
+    const chooseBetweenFromTo = () => {
+      if (this.type === 'single') {
         this.fromPercent = pointPercent;
+        isFrom = true;
+        return { isFrom, isTo };
       }
 
-      if (fromPercent > toPercent) {
+      if (pointPercent > this.toPercent) { // if the value is greater than TO
+        this.toPercent = pointPercent; // set on this dot
         isTo = true;
-      } else {
+        return { isFrom, isTo };
+      }
+
+      if (pointPercent > this.fromPercent) { // if TO is smaller then FROM is greater
+        const toPercent = this.toPercent - pointPercent; // extract VAL from TO
+        const fromPercent = pointPercent - this.fromPercent; // extract FROM from VAL
+
+        if (fromPercent > toPercent) { // that dot is closer which value is smaller
+          this.toPercent = pointPercent;
+          isTo = true;
+        } else {
+          this.fromPercent = pointPercent;
+          isFrom = true;
+        }
+      } else { //  if VAL is smaller than FROM, then move FROM
+        this.fromPercent = pointPercent;
         isFrom = true;
       }
-    } else { //  if VAL is smaller than FROM, then move FROM
-      this.fromPercent = pointPercent;
-      isFrom = true;
-    }
-    //-----------------------------------------------------
+
+      return { isFrom, isTo };
+    };
+
+    const data = chooseBetweenFromTo();
+    isFrom = data.isFrom;
+    isTo = data.isTo;
 
     if (isFrom) {
       from = this.getValueFrom();
@@ -532,113 +551,202 @@ class Model extends Observer {
   }
 
   calcFromToOnKeyDown(repeat: boolean, sign: string, dot: string) {
-    let { from } = this;
-    let { to } = this;
+    const {
+      from,
+      to,
+    } = this;
+
     const isSign = sign === '+';
     const isDot = dot === 'from';
     const type = this.type === 'double';
     const isKey = !this.keyStepOne && !this.keyStepHold;
     const isStep = !this.step && isKey;
 
+    let data = { from, to };
     if (this.gridSnap && isStep) {
-      const prev = this.snapNumber[this.snapNumber.length - 2];
-
-      const value = (i: number) => {
-        const number = this.snapNumber[!isSign ? i - 2 : i];
-
-        if (isDot) {
-          from = number;
-        } else {
-          to = number;
-        }
-      };
-
-      const moveFrom = (item: number, i: number) => {
-        if ((from ?? 0) < item && isDot) {
-          if (from === to && isSign && type) return false;
-          value(i);
-          return false;
-        }
-        if (from === this.min) {
-          if (isSign) {
-            [, from] = this.snapNumber;
-            return false;
-          }
-        } else if (from === this.max) {
-          if (!isSign) {
-            from = prev;
-            return false;
-          }
-        }
-        return true;
-      };
-
-      const moveTo = (item: number, i: number) => {
-        if ((to ?? 0) < item && !isDot) {
-          value(i);
-          return false;
-        } if (to === this.max) {
-          if (!isSign) {
-            to = prev;
-            return false;
-          }
-        }
-        return true;
-      };
-
-      for (let i = 0; i < this.snapNumber.length; i += 1) {
-        const item = this.snapNumber[i];
-        if (!moveFrom(item, i)) break;
-        if (!moveTo(item, i)) break;
-      }
+      data = this.moveFromToOnKeyDownSnap({
+        type,
+        isSign,
+        isDot,
+        from,
+        to,
+      });
     } else {
-      const value = (step: number) => {
-        const length = Model.trimFraction(step);
-        const fromValue = from ?? 0;
-        const toValue = to ?? 0;
-
-        if (isDot) {
-          const num = !isSign ? fromValue - step : fromValue + step;
-          from = +num.toFixed(length);
-        } else {
-          const num = !isSign ? toValue - step : toValue + step;
-          to = Number(num.toFixed(length));
-        }
-        if (this.type === 'double') {
-          const isValue = fromValue > toValue;
-          if (isValue && isDot) from = to;
-          if (isValue && !isDot) to = from;
-        }
-      };
-
-      if (!isKey) {
-        if (!this.keyStepOne && this.keyStepHold) {
-          this.keyStepOne = 1;
-        }
-        if (!this.keyStepHold && this.keyStepOne) {
-          this.keyStepHold = +this.keyStepOne.toFixed(
-            Model.trimFraction(this.keyStepOne),
-          );
-        }
-
-        if (repeat) {
-          value(this.keyStepHold ?? 0);
-        } else {
-          value(this.keyStepOne ?? 0);
-        }
-      } else if (this.step) {
-        value(this.step);
-      } else {
-        value(1);
-      }
+      data = this.moveFromToOnKeyDownStep({
+        isSign,
+        isDot,
+        isKey,
+        repeat,
+        from,
+        to,
+      });
     }
 
-    this.setFromTo({
-      from,
-      to,
-    });
+    this.setFromTo(data);
+
+    return data;
+  }
+
+  private moveFromToOnKeyDownStep(options: KeyDownStep) {
+    const {
+      isDot = false,
+      isSign = false,
+      isKey = false,
+      repeat = false,
+    } = options;
+
+    let {
+      from = 0,
+      to = 0,
+    } = options;
+
+    const value = (step: number) => {
+      const length = Model.trimFraction(step);
+      const fromValue = from ?? 0;
+      const toValue = to ?? 0;
+
+      if (isDot) {
+        const num = !isSign ? fromValue - step : fromValue + step;
+        from = Number(num.toFixed(length));
+      } else {
+        const num = !isSign ? toValue - step : toValue + step;
+        to = Number(num.toFixed(length));
+      }
+
+      if (this.type === 'double') {
+        const isValue = (from ?? 0) > (to ?? 0);
+        if (isValue && isDot) from = to;
+        if (isValue && !isDot) to = from;
+      }
+    };
+
+    if (!isKey) {
+      if (!this.keyStepOne && this.keyStepHold) {
+        this.keyStepOne = 1;
+      }
+
+      if (!this.keyStepHold && this.keyStepOne) {
+        this.keyStepHold = Number(this.keyStepOne.toFixed(
+          Model.trimFraction(this.keyStepOne),
+        ));
+      }
+
+      if (repeat) {
+        value(this.keyStepHold ?? 0);
+      } else {
+        value(this.keyStepOne ?? 0);
+      }
+    } else if (this.step) {
+      value(this.step);
+    } else {
+      value(1);
+    }
 
     return { from, to };
+  }
+
+  private moveFromToOnKeyDownSnap(options: KeyDownSnap) {
+    const {
+      type = false,
+      isSign = false,
+      isDot = false,
+    } = options;
+
+    let {
+      from = 0,
+      to = 0,
+    } = options;
+
+    const prev = this.snapNumber[this.snapNumber.length - 2];
+
+    const value = (i: number) => {
+      const number = this.snapNumber[!isSign ? i - 2 : i];
+
+      if (isDot) {
+        from = number;
+      } else {
+        to = number;
+      }
+    };
+
+    const moveFrom = (item: number, i: number) => {
+      if ((from ?? 0) < item && isDot) {
+        const isEqual = from === to;
+
+        if (isEqual && isSign && type) return false;
+        value(i);
+        return false;
+      }
+
+      const isFromMin = from === this.min;
+      if (isFromMin && isSign) {
+        [, from] = this.snapNumber;
+        return false;
+      }
+
+      const isFromMax = from === this.max;
+      if (isFromMax && !isSign) {
+        from = prev;
+        return false;
+      }
+      return true;
+    };
+
+    const moveTo = (item: number, i: number) => {
+      if ((to ?? 0) < item && !isDot) {
+        value(i);
+        return false;
+      }
+
+      if (to === this.max && !isSign) {
+        to = prev;
+        return false;
+      }
+      return true;
+    };
+
+    for (let i = 0; i < this.snapNumber.length; i += 1) {
+      const item = this.snapNumber[i];
+      if (!moveFrom(item, i)) break;
+      if (!moveTo(item, i)) break;
+    }
+
+    return { from, to };
+  }
+
+  private checkIsFromToValid(typeFrom = false, percent = 0) {
+    let isFrom = false;
+    let isTo = false;
+
+    const isSingle = this.type === 'single';
+
+    if (isSingle) { // if single dot
+      this.fromPercent = percent;
+      return { isFrom: true, isTo, isSingle };
+    }
+
+    if (!(this.limitFrom > this.limitTo)) { // if double dot and FROM is less than TO
+      // depending on which dot is mooving
+      if (typeFrom) {
+        this.fromPercent = percent;
+        isFrom = true;
+      } else {
+        this.toPercent = percent;
+        isTo = true;
+      }
+    } else { // if FROM is greater than TO
+      // take value of another dot (which the mooving dot is approaching closely)
+      if (typeFrom) {
+        this.fromPercent = this.toPercent;
+      } else {
+        this.toPercent = this.fromPercent;
+      }
+
+      isFrom = true;
+      isTo = true;
+    }
+
+    return { isFrom, isTo, isSingle };
   }
 
   private defineDirection(options: DirectionData) {
@@ -654,10 +762,16 @@ class Model extends Observer {
     const formPosition = this.from ?? 0;
     const toPosition = this.to ?? 0;
 
-    if (formPosition < (from ?? 0) && isFrom) signDirection = 'right';
-    if (toPosition < (to ?? 0) && isTo) signDirection = 'right';
-    if (formPosition > (from ?? 0) && isFrom) signDirection = 'left';
-    if (toPosition > (to ?? 0) && isTo) signDirection = 'left';
+    const isRightFrom = formPosition < (from ?? 0) && isFrom;
+    const isRightTo = toPosition < (to ?? 0) && isTo;
+
+    if (isRightFrom || isRightTo) signDirection = 'right';
+
+    const isLeftFrom = formPosition > (from ?? 0) && isFrom;
+    const isLeftTo = toPosition > (to ?? 0) && isTo;
+
+    if (isLeftFrom || isLeftTo) signDirection = 'left';
+
     if (signDirection === '') return false;
 
     return signDirection;
@@ -804,8 +918,10 @@ class Model extends Observer {
   private setRangeData(options: RangeSliderOptions): boolean {
     if (!Model.validateProperties(['min', 'max'], options)) return false;
 
-    let { min } = options;
-    let { max } = options;
+    let {
+      min,
+      max,
+    } = options;
 
     min = Number(this.checkProperty(min, 'min'));
     if (min == null) return false;
@@ -872,9 +988,11 @@ class Model extends Observer {
       'keyStepHold',
     ], options)) return false;
 
-    let { step } = options;
-    let { keyStepOne } = options;
-    let { keyStepHold } = options;
+    let {
+      step,
+      keyStepOne,
+      keyStepHold,
+    } = options;
 
     step = Number(this.checkProperty(step, 'step'));
     if (step == null) { step = 0; }
@@ -905,72 +1023,105 @@ class Model extends Observer {
       options,
     )) return false;
 
-    let { type } = options;
-    let { from } = options;
-    let { to } = options;
+    let {
+      type,
+      from,
+      to,
+    } = options;
 
     // check if all necessary data exists
     if (!Model.checkIsEmpty(this.min)) return false;
     if (!Model.checkIsEmpty(this.max)) return false;
 
-    if (type === 'single' || type === 'double') {
-      this.type = type;
-    } else if (Model.checkIsEmpty(this.type)) {
-      type = this.type;
-    } else return false;
+    const getType = () => {
+      const isSingle = type === 'single';
+      const isDouble = type === 'double';
+
+      if (isSingle || isDouble) {
+        this.type = String(type);
+        return this.type;
+      }
+
+      if (Model.checkIsEmpty(this.type)) {
+        return this.type;
+      }
+
+      return false;
+    };
+
+    const dataType = getType();
+    if (!dataType) return false;
+
+    type = dataType;
 
     from = Number(this.checkProperty(from, 'from'));
-    if (from == null) return false;
 
     const min = this.min ?? 0;
     const max = this.max ?? 0;
 
-    const isAboveMin = from >= min;
-    const isBelowMax = from <= max;
+    const setFrom = () => {
+      if (from == null) return false;
+      const isAboveMin = from >= min;
+      const isBelowMax = from <= max;
 
-    if (isAboveMin && isBelowMax) {
-      this.from = +from;
-    } else {
-      if (from < min) { this.from = this.min; }
+      if (isAboveMin && isBelowMax) {
+        this.from = from;
+        return null;
+      }
+
+      if (from < min) { this.from = min; }
 
       if (from > max) { this.from = max; }
-    }
 
-    if (type === 'double') { // check FROM and TO
-      to = Number(this.checkProperty(to, 'to'));
-      if (to == null) return false;
+      return null;
+    };
 
-      if (from > to) {
-        const temp = from;
-        from = to;
-        to = temp;
+    setFrom();
+
+    const setTo = () => {
+      if (from == null) return false;
+
+      if (type === 'double') { // check FROM and TO
+        to = Number(this.checkProperty(to, 'to'));
+        if (to == null) return false;
+
+        if (from > to) {
+          const temp = from;
+          from = to;
+          to = temp;
+        }
+
+        this.to = to <= max ? to : max;
+
+        return null;
       }
 
-      if (to <= max) {
-        this.to = to;
-      } else {
-        this.to = max;
-      }
-    } else if (max >= 2 && (this.from ?? 0) <= 2) {
-      this.to = this.to ?? 2;
-    } else {
-      this.to = this.to ?? this.from;
-    }
+      const isValidMax = max >= 2;
+      const isValidFrom = (this.from ?? 0) <= 2;
 
-    if (!this.isStartedConfiguration && !this.isUpdatedConfiguration) {
-      if (this.gridSnap && !this.step) {
-        this.from = Model.getValueStep(
-          this.from ?? 0,
+      this.to = isValidMax && isValidFrom ? this.to ?? 2 : this.to ?? this.from;
+
+      return null;
+    };
+
+    setTo();
+
+    const isConfigurationNotExist = !this.isStartedConfiguration && !this.isUpdatedConfiguration;
+    const isSnap = this.gridSnap && !this.step;
+
+    if (isConfigurationNotExist && isSnap) {
+      this.from = Model.getValueStep(
+        this.from ?? 0,
+        this.stepGrid,
+        this.snapNumber,
+      );
+
+      if (type === 'double') {
+        this.to = Model.getValueStep(
+          this.to ?? 0,
           this.stepGrid,
           this.snapNumber,
         );
-        if (type === 'double') {
-          this.to = Model.getValueStep(
-            this.to ?? 0,
-            this.stepGrid,
-            this.snapNumber,
-          );
-        }
       }
     }
 
@@ -1015,9 +1166,12 @@ class Model extends Observer {
       'gridRound',
     ], options)) return false;
 
-    let { grid } = options;
-    let { gridNumber } = options;
-    let { gridStep } = options;
+    let {
+      grid,
+      gridNumber,
+      gridStep,
+    } = options;
+
     let gridRound: number | null = Math.trunc(options.gridRound ?? 0);
 
     if (Number.isNaN(gridRound)) gridRound = null;
@@ -1043,7 +1197,9 @@ class Model extends Observer {
       gridNumber = 4;
     }
 
-    if (gridRound < 0 || gridRound > 100) {
+    const isGridRoundBelowLimit = gridRound < 0;
+    const isGridRoundAboveLimit = gridRound > 100;
+    if (isGridRoundBelowLimit || isGridRoundAboveLimit) {
       gridRound = 0;
     }
 
@@ -1177,10 +1333,12 @@ class Model extends Observer {
 
     if (isParameters && isAttributes) return false;
 
-    let { tipPrefix } = options;
-    let { tipPostfix } = options;
-    let { tipMinMax } = options;
-    let { tipFromTo } = options;
+    let {
+      tipPrefix,
+      tipPostfix,
+      tipMinMax,
+      tipFromTo,
+    } = options;
 
     tipPostfix = String(this.checkProperty(tipPostfix, 'tipPostfix'));
     if (tipPostfix != null) {
@@ -1268,6 +1426,7 @@ class Model extends Observer {
       position,
       dimensions,
     } = options;
+
     const dotXY = clientXY - shiftXY;
     let number = 0;
 

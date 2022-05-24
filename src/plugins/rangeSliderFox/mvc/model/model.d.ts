@@ -21,6 +21,23 @@ interface DirectionData {
   isTo: boolean,
 }
 
+interface KeyDownSnap {
+  type: boolean,
+  isSign: boolean,
+  isDot: boolean,
+  from: number | null,
+  to: number | null,
+}
+
+interface KeyDownStep {
+  isDot: boolean,
+  isSign: boolean,
+  isKey: boolean,
+  from: number | null,
+  to: number | null,
+  repeat: boolean,
+}
+
 type Prop = number | string | boolean | undefined | null;
 
 export {
@@ -28,4 +45,6 @@ export {
   Prop,
   PositionData,
   DirectionData,
+  KeyDownSnap,
+  KeyDownStep,
 };
