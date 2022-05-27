@@ -76,9 +76,11 @@ class Grid extends Observer {
 
   createDomElementGrid() {
     if (!this.elementGrid) return null;
+
     this.rangeSliderBottom.appendChild(this.elementGrid);
     this.offOn = true;
     this.bindEvent(this.elementGrid);
+
     return this.rangeSliderBottom;
   }
 
@@ -90,6 +92,7 @@ class Grid extends Observer {
       while (this.elementGrid.firstChild) {
         this.elementGrid.firstChild.remove();
       }
+
       return true;
     }
     return false;
@@ -106,6 +109,7 @@ class Grid extends Observer {
   @boundMethod
   private handleMarkClick(event: Event) {
     const mark = event.target as HTMLElement;
+
     if (Grid.searchString(mark.className, `js-${this.rangeSliderName}__grid-mark`)) {
       this.notifyObserver({
         key: 'ClickMark',

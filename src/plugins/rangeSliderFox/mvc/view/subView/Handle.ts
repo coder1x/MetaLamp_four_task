@@ -162,6 +162,7 @@ class Handle extends Observer {
     const isSingle = type === 'single';
 
     if (isDouble && eventFromTo) return false;
+
     if (isSingle && eventFromTo) {
       this.isToEvent = false;
     }
@@ -380,11 +381,13 @@ class Handle extends Observer {
     event.preventDefault();
     let shiftXY = 0;
     const rect = element.getBoundingClientRect();
+
     if (this.isVertical) {
       shiftXY = event.clientY - rect.bottom;
     } else {
       shiftXY = event.clientX - rect.left;
     }
+
     element.setPointerCapture(event.pointerId);
     return shiftXY;
   }

@@ -9,7 +9,7 @@ import {
   DirectionData,
   KeyDownSnap,
   KeyDownStep,
-} from './model.d';
+} from './modelInterface';
 
 class Model extends Observer {
   // --- data config
