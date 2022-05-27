@@ -1,9 +1,8 @@
 /* eslint no-unused-vars: off */
 import $ from 'jquery';
-// eslint-disable-next-line import/extensions
+
 import 'focus-visible/dist/focus-visible.min.js';
 
-// eslint-disable-next-line import/no-unresolved
 import '@styles/styles';
 
 interface RequireContext {

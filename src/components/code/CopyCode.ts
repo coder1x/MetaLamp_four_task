@@ -1,6 +1,6 @@
 import { boundMethod } from 'autobind-decorator';
 
-import RangeSliderOptions from '@com/interface/globInterface';
+import RangeSliderOptions from '@shared/interface/globInterface';
 
 class CopyCode {
   private className: string;

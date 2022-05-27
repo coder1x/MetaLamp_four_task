@@ -15,10 +15,8 @@ class Select {
 
   private options: HTMLElement | null = null;
 
-  // eslint-disable-next-line no-unused-vars
   onChange: ((value: string | null) => void) | null = null;
 
-  // eslint-disable-next-line no-unused-vars
   onUpdate: ((value: string | null) => void) | null = null;
 
   private isUpdated = false;

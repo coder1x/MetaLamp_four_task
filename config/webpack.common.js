@@ -54,6 +54,7 @@ module.exports = merge(devServer, {
       '@img': path.join(paths.src, 'images'),
       '@pag': path.join(paths.src, 'pages'),
       '@com': path.join(paths.src, 'components'),
+      '@shared': path.join(paths.src, 'shared'),
       '@': paths.src,
       comp: paths.components,
     },

@@ -1,7 +1,6 @@
 import { Controller, Model, View } from './mvc/controller/Controller';
 
-// eslint-disable-next-line func-names
-$.fn.RangeSliderFox = function (options = {}) {
+$.fn.RangeSliderFox = function plugin(options = {}) {
   return this.each((i: number, element: Element) => {
     if (!$.data(element, 'RangeSliderFox')) {
       $.data(

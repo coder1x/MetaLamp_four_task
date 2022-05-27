@@ -1,4 +1,4 @@
-import RangeSliderOptions from '@com/interface/globInterface';
+import RangeSliderOptions from '@shared/interface/globInterface';
 import Values from '@com/values/Values';
 import InputData from '@com/input-data/InputData';
 import Grid from '@com/grid/Grid';

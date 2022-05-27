@@ -29,7 +29,6 @@ interface ObserverOptions extends insideOptions {
   key?: string,
 }
 
-// eslint-disable-next-line no-unused-vars
 type ObserverFunctions<T> = (options: T) => boolean | Promise<boolean>;
 
 abstract class Observer<T = ObserverOptions> {

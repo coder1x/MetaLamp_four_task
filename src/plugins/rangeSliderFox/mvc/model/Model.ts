@@ -84,16 +84,12 @@ class Model extends Observer {
 
   onHandle: (() => void) | null = null;
 
-  // eslint-disable-next-line no-unused-vars
   onChange: ((data: RangeSliderOptions) => void) | null = null;
 
-  // eslint-disable-next-line no-unused-vars
   onUpdate: ((data: RangeSliderOptions) => void) | null = null;
 
-  // eslint-disable-next-line no-unused-vars
   onStart: ((data: RangeSliderOptions) => void) | null = null;
 
-  // eslint-disable-next-line no-unused-vars
   onReset: ((data: RangeSliderOptions) => void) | null = null;
 
   constructor(options: RangeSliderOptions | void = {}) {
@@ -901,11 +897,11 @@ class Model extends Observer {
   }
 
   private checkProperty(data: Prop, string: string) {
-    // eslint-disable-next-line no-underscore-dangle
-    const _this = this;
+    // использую objectThis так как в участке keyof typeof this теряет область видимости
+    const objectThis = this;
     // использую type assertions так как не нашёл возможности передавать нужный тип
     // не могу отказаться от данной конструкции кода, так как это сильно уменьшает копипаст
-    const key = string as keyof typeof _this;
+    const key = string as keyof typeof objectThis;
     const value = this[key];
     const isValue = (value ?? null) != null;
 
