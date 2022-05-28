@@ -72,7 +72,7 @@ class Controller {
 
   private static subscribe(
     talking: Model | View,
-    // eslint-disable-next-line no-unused-vars
+
     items: ((options: ObserverOptions) => boolean | Promise<boolean>)[],
   ) {
     return items.forEach((item) => {

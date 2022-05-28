@@ -1,5 +1,3 @@
-/* eslint no-unused-vars: off */
-
 interface RangeSliderOptions {
   readonly type?: string | null;
   readonly orientation?: string | null;
@@ -29,7 +27,6 @@ interface RangeSliderOptions {
 }
 
 interface RangeSliderFoxFunction {
-
   // eslint-disable-next-line no-use-before-define
   (options: RangeSliderOptions | void): JQuery;
 }

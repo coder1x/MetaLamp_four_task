@@ -12,9 +12,15 @@
     "jest"
   ],
   "rules": {
-    "no-unused-vars": "warn",
+    "no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^data$|^value$|^id$|^object$|^options$"
+      }
+    ],
     "no-debugger": "off",
     "no-console": "off",
+    "no-param-reassign": "off",
     "no-var": 1,
     "camelcase": 1,
     "no-nested-ternary": 1,

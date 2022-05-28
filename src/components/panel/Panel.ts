@@ -8,7 +8,6 @@ import CopyCode from '@com/code/CopyCode';
 import KeyboardControl from '@com/keyboard-control/KeyboardControl';
 
 interface Actions {
-  // eslint-disable-next-line no-unused-vars
   bindEvent: (object: any) => boolean | void;
 }
 

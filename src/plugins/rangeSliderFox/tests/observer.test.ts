@@ -8,15 +8,15 @@ class TestObserver extends Observer {
 
 describe('------- Observer - subscribe, unsubscribe, notify -------', () => {
   let observer: TestObserver;
-  // eslint-disable-next-line no-unused-vars
+
   let oneCallback: (options: ObserverOptions) => boolean | Promise<boolean>;
-  // eslint-disable-next-line no-unused-vars
+
   let twoCallback: (options: ObserverOptions) => boolean | Promise<boolean>;
 
   beforeEach(() => {
     observer = new TestObserver();
     oneCallback = jest.fn();
-    // eslint-disable-next-line no-unused-vars
+
     twoCallback = jest.fn((options: ObserverOptions) => true);
   });
 
@@ -38,9 +38,8 @@ describe('------- Observer - subscribe, unsubscribe, notify -------', () => {
 
   // notifyOB
   test(' Data distribution among the listeners ', () => {
-    // eslint-disable-next-line no-unused-vars
     const oneFunction = jest.fn((options: ObserverOptions) => true);
-    // eslint-disable-next-line no-unused-vars
+
     const twoFunction = jest.fn((options: ObserverOptions) => true);
 
     observer.subscribeObserver(oneFunction);

@@ -869,7 +869,6 @@ class Model extends Observer {
     key: K,
     value: T[K],
   ) {
-    // eslint-disable-next-line no-param-reassign
     object[key] = value;
   }
 
@@ -1260,7 +1259,6 @@ class Model extends Observer {
     return true;
   }
 
-  // eslint-disable-next-line no-unused-vars
   private static checkFunction(data: ((options: RangeSliderOptions) => void) | null) {
     if (data === null) {
       return null;

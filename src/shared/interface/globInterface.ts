@@ -1,4 +1,3 @@
-/* eslint no-unused-vars: off */
 interface RangeSliderOptions {
   readonly type?: string | null;
   readonly orientation?: string | null;

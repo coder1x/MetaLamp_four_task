@@ -132,7 +132,6 @@ class Bar extends Observer {
     key: K,
     value: T[K],
   ) {
-    // eslint-disable-next-line no-param-reassign
     object[key] = value;
   }
 
