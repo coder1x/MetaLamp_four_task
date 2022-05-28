@@ -3,7 +3,7 @@ import Values from '@com/values/Values';
 import InputData from '@com/input-data/InputData';
 import Grid from '@com/grid/Grid';
 import Hints from '@com/hints/Hints';
-import Different from '@com/different/Different';
+import Different from '@com/miscellaneous/Miscellaneous';
 import CopyCode from '@com/code/CopyCode';
 import KeyboardControl from '@com/keyboard-control/KeyboardControl';
 
@@ -131,8 +131,8 @@ class Panel {
 
     if (this.element) {
       this.objectDifferent = new Different(
-        '.js-different',
-        this.getDomElement('.js-different') as Element,
+        '.js-miscellaneous',
+        this.getDomElement('.js-miscellaneous') as Element,
         this.element,
       );
     }

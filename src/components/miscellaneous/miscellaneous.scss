@@ -1,11 +1,11 @@
-$border-different: rgba(31, 32, 65, 0.25);
+$border-miscellaneous: rgba(31, 32, 65, 0.25);
 $background-button: #cdd1da;
 $color-button: #fff;
 $shadow-button-active: inset -1px 4px 4px 0px rgba(0, 0, 0, 0.129);
 $color-button-active: #868686;
 
-.different {
-  border: 1px solid $border-different;
+.miscellaneous {
+  border: 1px solid $border-miscellaneous;
   border-radius: 4px;
   box-sizing: border-box;
   padding: 10px;

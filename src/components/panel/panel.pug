@@ -2,7 +2,7 @@ include ../values/values.pug
 include ../hints/hints.pug
 include ../grid/grid.pug
 include ../input-data/input-data.pug
-include ../different/different.pug
+include ../miscellaneous/miscellaneous.pug
 include ../code/code.pug
 include ../keyboard-control/keyboard-control.pug
 
@@ -47,7 +47,7 @@ mixin panel(options = {})
       +grid({label: 'Grid',})
 
     div(class=`${classComponent}__different-wrapper`)
-      +different({label: 'Different',})
+      +miscellaneous({label: 'Miscellaneous',})
 
     div(class=`${classComponent}__hints-wrapper`)
       +hints({label: 'Hints',})
