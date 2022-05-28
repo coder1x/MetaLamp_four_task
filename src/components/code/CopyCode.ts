@@ -67,7 +67,7 @@ class CopyCode {
   }
 
   @boundMethod
-  private handleButtonClick() {
+  private handleCopyClick() {
     if (!this.list) return false;
 
     let text = '$(\'.demo\').RangeSliderFox({\n';
@@ -91,7 +91,7 @@ class CopyCode {
 
   private bindEvent() {
     if (this.button) {
-      this.button.addEventListener('click', this.handleButtonClick);
+      this.button.addEventListener('click', this.handleCopyClick);
     }
   }
 }

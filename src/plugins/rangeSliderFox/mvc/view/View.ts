@@ -186,7 +186,7 @@ class View extends Observer {
 
   bindEvent() {
     if (this.rangeSliderLine) {
-      this.rangeSliderLine.addEventListener('click', this.handleRsLineClick);
+      this.rangeSliderLine.addEventListener('click', this.handleLineClick);
     }
   }
 
@@ -364,7 +364,7 @@ class View extends Observer {
   }
 
   @boundMethod
-  private handleRsLineClick(event: MouseEvent) {
+  private handleLineClick(event: MouseEvent) {
     this.notifyObserver({
       key: 'ClickLine',
       clientXY: this.vertical ? event.offsetY : event.offsetX,

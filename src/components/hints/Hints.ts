@@ -76,19 +76,19 @@ class Hints {
 
     [this.tipPrefix, this.tipPostfix].forEach((item) => {
       if (!item) return;
-      item.addEventListener('change', this.handleInputData);
+      item.addEventListener('change', this.handleInputChange);
     });
 
     if (!this.tipMinMax || !this.tipFromTo) return false;
 
-    this.tipMinMax.addEventListener('click', this.handleTipMinMax);
-    this.tipFromTo.addEventListener('click', this.handleTipFromTo);
+    this.tipMinMax.addEventListener('click', this.handleTipMinMaxClick);
+    this.tipFromTo.addEventListener('click', this.handleTipFromToClick);
 
     return true;
   }
 
   @boundMethod
-  private handleInputData(event: Event) {
+  private handleInputChange(event: Event) {
     const element = event.currentTarget as HTMLInputElement;
 
     this.objRangeSlider.update({
@@ -97,7 +97,7 @@ class Hints {
   }
 
   @boundMethod
-  private handleTipMinMax(event: Event) {
+  private handleTipMinMaxClick(event: Event) {
     const element = event.target as HTMLInputElement;
 
     this.objRangeSlider.update({
@@ -106,7 +106,7 @@ class Hints {
   }
 
   @boundMethod
-  private handleTipFromTo(event: Event) {
+  private handleTipFromToClick(event: Event) {
     const element = event.target as HTMLInputElement;
 
     this.objRangeSlider.update({

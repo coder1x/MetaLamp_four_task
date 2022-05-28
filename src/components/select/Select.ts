@@ -11,7 +11,7 @@ class Select {
 
   private items: Element[] = [];
 
-  private displayedWrap: HTMLElement | null = null;
+  private displayedWrapper: HTMLElement | null = null;
 
   private options: HTMLElement | null = null;
 
@@ -75,7 +75,7 @@ class Select {
     this.input = this.getElement('__input') as HTMLInputElement;
     this.items = this.getElements('__item');
     this.options = this.getElement('__options') as HTMLElement;
-    this.displayedWrap = this.getElement('__displayed-wrapper') as HTMLElement;
+    this.displayedWrapper = this.getElement('__displayed-wrapper') as HTMLElement;
     this.setDisplayed();
   }
 
@@ -137,20 +137,12 @@ class Select {
   }
 
   @boundMethod
-  private handleDisplayedWrap() {
+  private handleDisplayedWrapperClick() {
     this.toggle();
   }
 
   @boundMethod
-  private handleKeydown(event: KeyboardEvent) {
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      this.toggle(true);
-    }
-  }
-
-  @boundMethod
-  private handleButtonKeydown(event: KeyboardEvent) {
+  private handleDisplayedKeyDown(event: KeyboardEvent) {
     const isEnter = event.key === 'Enter';
     const isSpace = event.key === ' ';
 
@@ -158,10 +150,15 @@ class Select {
       event.preventDefault();
       this.toggle();
     }
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.toggle(true);
+    }
   }
 
   @boundMethod
-  private handleItemsSet(event: MouseEvent | KeyboardEvent) {
+  private handleItemClickKeyDown(event: MouseEvent | KeyboardEvent) {
     let isSelected = false;
     let mouse: string = '';
     let key: string = '';
@@ -197,7 +194,7 @@ class Select {
   }
 
   @boundMethod
-  private handleDocumentFocusin(event: FocusEvent) {
+  private handleDocumentFocusIn(event: FocusEvent) {
     const element = event.target as Element;
     const isLink = element.closest(`${this.className}__options`) ?? false;
     const isList = element.closest(`.${this.getModifier()}`) ?? false;
@@ -205,24 +202,23 @@ class Select {
   }
 
   private bindEvent() {
-    if (!this.displayedWrap || !this.button) return false;
+    if (!this.displayedWrapper || !this.button) return false;
 
-    this.displayedWrap.addEventListener('click', this.handleDisplayedWrap);
-    this.button.addEventListener('keydown', this.handleKeydown);
+    this.displayedWrapper.addEventListener('click', this.handleDisplayedWrapperClick);
+    this.button.addEventListener('keydown', this.handleDisplayedKeyDown);
 
     if (this.options) {
-      this.options.addEventListener('keydown', this.handleKeydown);
+      this.options.addEventListener('keydown', this.handleDisplayedKeyDown);
     }
-    this.button.addEventListener('keydown', this.handleButtonKeydown);
 
     this.items.forEach((item) => {
       if (item instanceof HTMLElement) {
-        item.addEventListener('click', this.handleItemsSet);
-        item.addEventListener('keydown', this.handleItemsSet);
+        item.addEventListener('click', this.handleItemClickKeyDown);
+        item.addEventListener('keydown', this.handleItemClickKeyDown);
       }
     });
     document.addEventListener('click', this.handleDocumentClick);
-    document.addEventListener('focusin', this.handleDocumentFocusin);
+    document.addEventListener('focusin', this.handleDocumentFocusIn);
 
     return true;
   }

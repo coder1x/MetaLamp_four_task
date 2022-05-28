@@ -56,11 +56,11 @@ class Resize {
 
     this.throttle('resize', 'optimizedResize');
 
-    window.addEventListener('optimizedResize', this.handleOptimizedResize);
+    window.addEventListener('optimizedResize', this.handleWindowOptimizedResize);
   }
 
   @boundMethod
-  private handleOptimizedResize() {
+  private handleWindowOptimizedResize() {
     this.currentTime = new Date();
     if (this.timeout === false) {
       this.timeout = true;
@@ -72,11 +72,11 @@ class Resize {
     this.eventName = name;
     this.objectResize = object;
 
-    object.addEventListener(type, this.handleThrottle);
+    object.addEventListener(type, this.handleWindowThrottle);
   }
 
   @boundMethod
-  private handleThrottle() {
+  private handleWindowThrottle() {
     if (this.running) { return false; }
     this.running = true;
     requestAnimationFrame(() => {

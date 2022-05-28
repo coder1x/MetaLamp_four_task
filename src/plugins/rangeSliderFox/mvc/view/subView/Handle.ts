@@ -174,24 +174,24 @@ class Handle extends Observer {
     this.directions.set('ArrowDown', '-');
 
     if (!this.isFromEvent && this.elementFrom) {
-      this.elementFrom.addEventListener('keydown', this.handleFromKeydown);
+      this.elementFrom.addEventListener('keydown', this.handleFromKeyDown);
     }
 
     if (this.elementTo && !this.isToEvent) {
-      this.elementTo.addEventListener('keydown', this.handleToKeydown);
+      this.elementTo.addEventListener('keydown', this.handleToKeyDown);
     }
 
     const isToEvent = !this.isToEvent && isDouble;
 
     if (isToEvent && this.elementTo) {
-      this.elementTo.addEventListener('pointerdown', this.handleToPointerdown);
+      this.elementTo.addEventListener('pointerdown', this.handleToPointerDown);
 
       Handle.cancellation(this.elementTo);
       this.isToEvent = true;
     }
 
     if (!this.isFromEvent && this.elementFrom) {
-      this.elementFrom.addEventListener('pointerdown', this.handleFromPointerdown);
+      this.elementFrom.addEventListener('pointerdown', this.handleFromPointerDown);
 
       Handle.cancellation(this.elementFrom);
       this.isFromEvent = true;
@@ -217,47 +217,47 @@ class Handle extends Observer {
   }
 
   @boundMethod
-  private handleMouseUpFrom() {
-    this.wrapperElement.removeEventListener('pointerup', this.handleMouseUpFrom);
-    this.wrapperElement.removeEventListener('pointermove', this.handleMouseMoveFrom);
+  private handleFromPointerUp() {
+    this.wrapperElement.removeEventListener('pointerup', this.handleFromPointerUp);
+    this.wrapperElement.removeEventListener('pointermove', this.handleFromPointerMove);
   }
 
   @boundMethod
-  private handleMouseUpTo() {
-    this.wrapperElement.removeEventListener('pointerup', this.handleMouseUpTo);
-    this.wrapperElement.removeEventListener('pointermove', this.handleMouseMoveTo);
+  private handleToPointerUp() {
+    this.wrapperElement.removeEventListener('pointerup', this.handleToPointerUp);
+    this.wrapperElement.removeEventListener('pointermove', this.handleToPointerMove);
   }
 
   @boundMethod
-  private handleFromPointerdown(event: PointerEvent) {
+  private handleFromPointerDown(event: PointerEvent) {
     if (!this.elementFrom) return false;
 
     if (this.elementTo) { this.elementTo.style.zIndex = '1'; }
     this.elementFrom.style.zIndex = '2';
 
     this.shiftXY = this.mouseDown(event, this.elementFrom);
-    this.wrapperElement.addEventListener('pointermove', this.handleMouseMoveFrom);
-    this.wrapperElement.addEventListener('pointerup', this.handleMouseUpFrom);
+    this.wrapperElement.addEventListener('pointermove', this.handleFromPointerMove);
+    this.wrapperElement.addEventListener('pointerup', this.handleFromPointerUp);
 
     return true;
   }
 
   @boundMethod
-  private handleToPointerdown(event: PointerEvent) {
+  private handleToPointerDown(event: PointerEvent) {
     if (!this.elementFrom || !this.elementTo) return false;
 
     this.elementTo.style.zIndex = '2';
     this.elementFrom.style.zIndex = '1';
 
     this.shiftXY = this.mouseDown(event, this.elementTo);
-    this.wrapperElement.addEventListener('pointermove', this.handleMouseMoveTo);
-    this.wrapperElement.addEventListener('pointerup', this.handleMouseUpTo);
+    this.wrapperElement.addEventListener('pointermove', this.handleToPointerMove);
+    this.wrapperElement.addEventListener('pointerup', this.handleToPointerUp);
 
     return true;
   }
 
   @boundMethod
-  private handleMouseMoveTo(event: PointerEvent) {
+  private handleToPointerMove(event: PointerEvent) {
     if (this.orientation === 'double') {
       this.moveDot({
         event,
@@ -268,7 +268,7 @@ class Handle extends Observer {
   }
 
   @boundMethod
-  private handleMouseMoveFrom(event: PointerEvent) {
+  private handleFromPointerMove(event: PointerEvent) {
     this.moveDot({
       event,
       type: 'From',
@@ -277,14 +277,14 @@ class Handle extends Observer {
   }
 
   @boundMethod
-  private handleFromKeydown(event: KeyboardEvent) {
+  private handleFromKeyDown(event: KeyboardEvent) {
     if (!this.directions) return false;
     this.keyDown(event, this.directions, 'from');
     return true;
   }
 
   @boundMethod
-  private handleToKeydown(event: KeyboardEvent) {
+  private handleToKeyDown(event: KeyboardEvent) {
     if (!this.directions) return false;
     this.keyDown(event, this.directions, 'to');
     return true;
