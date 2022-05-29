@@ -214,6 +214,6 @@ object.destroy()
 * Architecture is based on MVC using Observer pattern.
 
 * UML class diagram:
-![readme](src/plugins/range-slider-fox/uml/uml.png)
+![readme](src/shared/uml/uml.png)
 * <a href="https://plugins.su/UML.png">UML full-size image view </a>
 * <a href="https://github.com/coder1x/MetaLamp_four_task/tree/master/src/shared/uml/uml.drawio">UML class diagram (drawio)</a>
