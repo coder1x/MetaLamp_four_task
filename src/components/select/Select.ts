@@ -60,8 +60,8 @@ class Select {
     this.isStarted = false;
   }
 
-  private getElement(string: string, parentElement?: Element) {
-    return (parentElement ?? this.element).querySelector(this.className + string);
+  private getElement(nameElement: string, parentElement?: Element) {
+    return (parentElement ?? this.element).querySelector(this.className + nameElement);
   }
 
   private getElements(str: string, parentElement?: Element): Element[] {

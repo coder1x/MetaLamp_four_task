@@ -131,10 +131,10 @@ class Values {
     return true;
   }
 
-  private getDomElement(string: string) {
+  private getDomElement(nameElement: string) {
     return this.element.querySelector(
       `${this.nameClass
-      }__${string
+      }__${nameElement
       }-wrapper input`,
     ) as HTMLInputElement;
   }

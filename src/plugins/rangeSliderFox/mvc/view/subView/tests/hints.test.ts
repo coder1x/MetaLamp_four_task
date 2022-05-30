@@ -15,8 +15,8 @@ describe('------- Test Hints API -------', () => {
     hints = new Hints(wrapper, rangeSliderName);
   });
 
-  function searchString(text: string, string: string) {
-    return new RegExp(string, 'g').test(text);
+  function searchString(text: string, substring: string) {
+    return new RegExp(substring, 'g').test(text);
   }
 
   const checkDomElement = async (name: string) => {

@@ -320,11 +320,11 @@ class Model extends Observer {
   }
 
   @boundMethod
-  calcHintSingle(singleWidthHeight: number, dimensions: number) {
+  calcHintSingle(tipSingle: number, dimensions: number) {
     return (
       this.fromPercent
       + ((this.toPercent - this.fromPercent) / 2)
-      - Model.calcWidthPercent(singleWidthHeight, dimensions)
+      - Model.calcWidthPercent(tipSingle, dimensions)
     );
   }
 
@@ -895,13 +895,13 @@ class Model extends Observer {
     return (data ?? null) != null;
   }
 
-  private checkProperty(data: Prop, string: string) {
-    // использую objectThis так как в участке keyof typeof this теряет область видимости
-    const objectThis = this;
-    // использую type assertions так как не нашёл возможности передавать нужный тип
-    // не могу отказаться от данной конструкции кода, так как это сильно уменьшает копипаст
-    const key = string as keyof typeof objectThis;
-    const value = this[key];
+  private checkProperty(data: Prop, keyProperty: string) {
+    type keyType = 'min' | 'max' | 'step' | 'keyStepOne' |
+      'keyStepHold' | 'from' | 'to' | 'grid' | 'gridNumber' |
+      'gridStep' | 'gridRound' | 'tipPostfix' | 'tipPrefix' |
+      'tipMinMax' | 'tipFromTo';
+
+    const value = this[keyProperty as keyType];
     const isValue = (value ?? null) != null;
 
     if (!Model.checkIsEmpty(data)) {
@@ -1009,7 +1009,7 @@ class Model extends Observer {
       keyStepHold: this.keyStepHold,
     });
 
-    return false;
+    return true;
   }
 
   private setFromTo(options: RangeSliderOptions): boolean {

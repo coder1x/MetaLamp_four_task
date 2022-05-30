@@ -35,8 +35,8 @@ class Grid extends Observer {
     this.init();
   }
 
-  setOrientation(string: string) {
-    this.vertical = string === 'vertical';
+  setOrientation(orientation: string) {
+    this.vertical = orientation === 'vertical';
     return this.vertical;
   }
 

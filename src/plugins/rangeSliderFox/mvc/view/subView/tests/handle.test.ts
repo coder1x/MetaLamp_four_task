@@ -20,8 +20,8 @@ describe('------- Test Handle API -------', () => {
     handle = await new Handle(wrapperElement, rangeSliderName);
   });
 
-  function searchStr(text: string, string: string) {
-    expect(new RegExp(string, 'g').test(text)).toBeTruthy();
+  function searchString(text: string, substring: string) {
+    expect(new RegExp(substring, 'g').test(text)).toBeTruthy();
   }
 
   const delElement = (element: HTMLElement) => {
@@ -47,8 +47,8 @@ describe('------- Test Handle API -------', () => {
 
     if (!child) return;
 
-    searchStr(child[0].className, `${jsRangeSliderName}__from`);
-    searchStr(child[1].className, `${jsRangeSliderName}__to`);
+    searchString(child[0].className, `${jsRangeSliderName}__from`);
+    searchString(child[1].className, `${jsRangeSliderName}__to`);
 
     parentElement = await handle.createDomElementBase('double');
     expect(parentElement).toBeFalsy();
@@ -59,7 +59,7 @@ describe('------- Test Handle API -------', () => {
 
     if (typeof parentElement !== 'boolean') { child = parentElement.children; }
 
-    searchStr(child[0].className, `${jsRangeSliderName}__from`);
+    searchString(child[0].className, `${jsRangeSliderName}__from`);
     expect(child[1]).toBeUndefined();
     parentElement = handle.createDomElementBase('single');
     expect(parentElement).toBeFalsy();

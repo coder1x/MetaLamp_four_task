@@ -51,8 +51,8 @@ class Hints {
     return { tipPrefix, tipPostfix };
   }
 
-  setOrientation(string: string) {
-    this.isVertical = string === 'vertical';
+  setOrientation(orientation: string) {
+    this.isVertical = orientation === 'vertical';
     let isConverted: boolean = false;
     if (this.tipFrom) { isConverted = this.convertStyle(this.tipFrom.style); }
 

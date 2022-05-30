@@ -290,8 +290,8 @@ class Handle extends Observer {
     return true;
   }
 
-  private static getElement(element: Element, string: string) {
-    return element.getElementsByClassName(string)[0];
+  private static getElement(element: Element, nameElement: string) {
+    return element.getElementsByClassName(nameElement)[0];
   }
 
   private convertStyle(element: CSSStyleDeclaration) {

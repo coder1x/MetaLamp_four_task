@@ -147,9 +147,9 @@ class Panel {
     );
   }
 
-  private getDomElement(string: string) {
+  private getDomElement(nameElement: string) {
     if (!this.element) return null;
-    return this.element.querySelector(string);
+    return this.element.querySelector(nameElement);
   }
 
   private setDataStart(data: RangeSliderOptions) {
