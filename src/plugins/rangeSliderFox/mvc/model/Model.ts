@@ -1,10 +1,23 @@
 import { boundMethod } from 'autobind-decorator';
 
+import {
+  checkIsEmpty,
+  validateProperties,
+  checkProperty,
+  checkFunction,
+} from '@shared/helpers/checks';
+
+import {
+  getProperty,
+  setProperty,
+} from '@shared/helpers/readWriteProperties';
+
+import trimFraction from '@shared/helpers/trim';
+
 import RangeSliderOptions from '../../globInterface';
 import { Observer, ObserverOptions } from '../../Observer';
 import {
   CalcFromToOptions,
-  Prop,
   PositionData,
   DirectionData,
   KeyDownSnap,
@@ -130,8 +143,8 @@ class Model extends Observer {
     Object.keys(options).forEach((key) => {
       // использую type assertions так как не нашёл возможности передавать нужный тип
       // не могу отказаться от данной конструкции кода, так как это сильно уменьшает копипаст
-      const value = Model.getProperty(options, key as keyof RangeSliderOptions);
-      Model.setProperty(this, key as keyof Model, value as this[keyof Model]);
+      const value = getProperty(options, key as keyof RangeSliderOptions);
+      setProperty(this, key as keyof Model, value as this[keyof Model]);
     });
 
     const keys = [
@@ -225,7 +238,7 @@ class Model extends Observer {
     let from: number | null = null;
     let to: number | null = null;
 
-    const accuracy = Model.trimFraction(this.step ?? 0);
+    const accuracy = trimFraction(this.step ?? 0);
 
     if (isFrom) {
       from = this.getValueFrom(accuracy); // get FROM value
@@ -285,7 +298,7 @@ class Model extends Observer {
   calcStep() {
     if (!this.step) return false;
 
-    const length = Model.trimFraction(this.step);
+    const length = trimFraction(this.step);
     const stepNumber: number[] = [];
 
     const min = this.min ?? 0;
@@ -597,7 +610,7 @@ class Model extends Observer {
     } = options;
 
     const value = (step: number) => {
-      const length = Model.trimFraction(step);
+      const length = trimFraction(step);
       const fromValue = from ?? 0;
       const toValue = to ?? 0;
 
@@ -623,7 +636,7 @@ class Model extends Observer {
 
       if (!this.keyStepHold && this.keyStepOne) {
         this.keyStepHold = Number(this.keyStepOne.toFixed(
-          Model.trimFraction(this.keyStepOne),
+          trimFraction(this.keyStepOne),
         ));
       }
 
@@ -801,14 +814,6 @@ class Model extends Observer {
     return Number(((this.min ?? 0) + (this.toPercent * this.valuePercent)).toFixed(accuracy));
   }
 
-  private static trimFraction(number = 0) {
-    if (!number) return 0;
-
-    if (!/\./gi.test(String(number))) return 0;
-
-    return String(number).replace(`${Math.trunc(number)}.`, '').length;
-  }
-
   private setDefaultConfiguration(options: RangeSliderOptions | void) {
     this.isStartedConfiguration = false;
     this.isUpdatedConfiguration = false;
@@ -860,68 +865,18 @@ class Model extends Observer {
     };
   }
 
-  private static getProperty<T, K extends keyof T>(object: T, key: K) {
-    return object[key];
-  }
-
-  private static setProperty<T, K extends keyof T>(
-    object: T,
-    key: K,
-    value: T[K],
-  ) {
-    object[key] = value;
-  }
-
-  private static validateProperties(
-    // eslint-disable-next-line no-use-before-define
-    properties: Array<keyof typeof object>,
-    object: RangeSliderOptions,
-  ) {
-    let isValid = false;
-    for (let i = 0; i < properties.length; i += 1) {
-      const data = object[properties[i]] ?? null;
-
-      if (data !== null) {
-        isValid = true;
-        break;
-      }
-    }
-
-    if (!isValid) return false;
-    return true;
-  }
-
-  private static checkIsEmpty(data: Prop) {
-    return (data ?? null) != null;
-  }
-
-  private checkProperty(data: Prop, keyProperty: string) {
-    type keyType = 'min' | 'max' | 'step' | 'keyStepOne' |
-      'keyStepHold' | 'from' | 'to' | 'grid' | 'gridNumber' |
-      'gridStep' | 'gridRound' | 'tipPostfix' | 'tipPrefix' |
-      'tipMinMax' | 'tipFromTo';
-
-    const value = this[keyProperty as keyType];
-    const isValue = (value ?? null) != null;
-
-    if (!Model.checkIsEmpty(data)) {
-      return isValue ? value : null;
-    }
-    return data;
-  }
-
   private setRangeData(options: RangeSliderOptions): boolean {
-    if (!Model.validateProperties(['min', 'max'], options)) return false;
+    if (!validateProperties(options, ['min', 'max'])) return false;
 
     let {
       min,
       max,
     } = options;
 
-    min = Number(this.checkProperty(min, 'min'));
+    min = Number(checkProperty(this, min, 'min' as keyof Model));
     if (min == null) return false;
 
-    max = Number(this.checkProperty(max, 'max'));
+    max = Number(checkProperty(this, max, 'max' as keyof Model));
     if (max == null) return false;
 
     const isMin = min < this.minValue;
@@ -977,11 +932,14 @@ class Model extends Observer {
   }
 
   private setStep(options: RangeSliderOptions): boolean {
-    if (!Model.validateProperties([
-      'step',
-      'keyStepOne',
-      'keyStepHold',
-    ], options)) return false;
+    if (!validateProperties(
+      options,
+      [
+        'step',
+        'keyStepOne',
+        'keyStepHold',
+      ],
+    )) return false;
 
     let {
       step,
@@ -989,13 +947,13 @@ class Model extends Observer {
       keyStepHold,
     } = options;
 
-    step = Number(this.checkProperty(step, 'step'));
+    step = Number(checkProperty(this, step, 'step' as keyof Model));
     if (step == null) { step = 0; }
 
-    keyStepOne = Number(this.checkProperty(keyStepOne, 'keyStepOne'));
+    keyStepOne = Number(checkProperty(this, keyStepOne, 'keyStepOne' as keyof Model));
     if (keyStepOne == null) { keyStepOne = 0; }
 
-    keyStepHold = Number(this.checkProperty(keyStepHold, 'keyStepHold'));
+    keyStepHold = Number(checkProperty(this, keyStepHold, 'keyStepHold' as keyof Model));
     if (keyStepHold == null) { keyStepHold = 0; }
 
     this.step = this.checkIsValueInRange(+step);
@@ -1013,9 +971,9 @@ class Model extends Observer {
   }
 
   private setFromTo(options: RangeSliderOptions): boolean {
-    if (!Model.validateProperties(
-      ['type', 'from', 'to'],
+    if (!validateProperties(
       options,
+      ['type', 'from', 'to'],
     )) return false;
 
     let {
@@ -1025,8 +983,8 @@ class Model extends Observer {
     } = options;
 
     // check if all necessary data exists
-    if (!Model.checkIsEmpty(this.min)) return false;
-    if (!Model.checkIsEmpty(this.max)) return false;
+    if (!checkIsEmpty(this.min)) return false;
+    if (!checkIsEmpty(this.max)) return false;
 
     const getType = () => {
       const isSingle = type === 'single';
@@ -1037,7 +995,7 @@ class Model extends Observer {
         return this.type;
       }
 
-      if (Model.checkIsEmpty(this.type)) {
+      if (checkIsEmpty(this.type)) {
         return this.type;
       }
 
@@ -1049,7 +1007,7 @@ class Model extends Observer {
 
     type = dataType;
 
-    from = Number(this.checkProperty(from, 'from'));
+    from = Number(checkProperty(this, from, 'from' as keyof Model));
 
     const min = this.min ?? 0;
     const max = this.max ?? 0;
@@ -1077,7 +1035,7 @@ class Model extends Observer {
       if (from == null) return false;
 
       if (type === 'double') { // check FROM and TO
-        to = Number(this.checkProperty(to, 'to'));
+        to = Number(checkProperty(this, to, 'to' as keyof Model));
         if (to == null) return false;
 
         if (from > to) {
@@ -1135,7 +1093,7 @@ class Model extends Observer {
   }
 
   private setGridSnapData(options: RangeSliderOptions): boolean {
-    if (!Model.validateProperties(['gridSnap'], options)) {
+    if (!validateProperties(options, ['gridSnap'])) {
       if (this.gridSnap === undefined) { this.gridSnap = false; }
       return false;
     }
@@ -1154,12 +1112,15 @@ class Model extends Observer {
   }
 
   private setGridData(options: RangeSliderOptions): boolean {
-    if (!Model.validateProperties([
-      'grid',
-      'gridNumber',
-      'gridStep',
-      'gridRound',
-    ], options)) return false;
+    if (!validateProperties(
+      options,
+      [
+        'grid',
+        'gridNumber',
+        'gridStep',
+        'gridRound',
+      ],
+    )) return false;
 
     let {
       grid,
@@ -1171,14 +1132,14 @@ class Model extends Observer {
 
     if (Number.isNaN(gridRound)) gridRound = null;
 
-    grid = Boolean(this.checkProperty(grid, 'grid') ?? false);
+    grid = Boolean(checkProperty(this, grid, 'grid' as keyof Model) ?? false);
     this.grid = Boolean(grid);
 
-    if (!Model.checkIsEmpty(this.min) || !Model.checkIsEmpty(this.max)) return false;
+    if (!checkIsEmpty(this.min) || !checkIsEmpty(this.max)) return false;
 
-    gridNumber = Number(this.checkProperty(gridNumber, 'gridNumber') ?? 0);
-    gridStep = Number(this.checkProperty(gridStep, 'gridStep') ?? 0);
-    gridRound = Number(this.checkProperty(gridRound, 'gridRound') ?? 0);
+    gridNumber = Number(checkProperty(this, gridNumber, 'gridNumber' as keyof Model) ?? 0);
+    gridStep = Number(checkProperty(this, gridStep, 'gridStep' as keyof Model) ?? 0);
+    gridRound = Number(checkProperty(this, gridRound, 'gridRound' as keyof Model) ?? 0);
 
     const long = (this.max ?? 0) - (this.min ?? 0);
 
@@ -1222,7 +1183,7 @@ class Model extends Observer {
   }
 
   private setOrientationData(options: RangeSliderOptions): boolean {
-    if (!Model.validateProperties(['orientation'], options)) return false;
+    if (!validateProperties(options, ['orientation'])) return false;
 
     const orientation = options.orientation ?? ''.replace(/\s/g, '');
     const isHorizontal = orientation === 'horizontal';
@@ -1241,7 +1202,7 @@ class Model extends Observer {
   }
 
   private setThemeData(options: RangeSliderOptions): boolean {
-    if (!Model.validateProperties(['theme'], options)) return false;
+    if (!validateProperties(options, ['theme'])) return false;
 
     const theme = options.theme ?? ''.replace(/\s/g, '');
 
@@ -1257,15 +1218,6 @@ class Model extends Observer {
       theme: this.theme,
     });
     return true;
-  }
-
-  private static checkFunction(data: ((options: RangeSliderOptions) => void) | null) {
-    if (data === null) {
-      return null;
-    }
-    if (typeof data === 'function') return data;
-
-    return null;
   }
 
   private setCallbacks(options: RangeSliderOptions): boolean {
@@ -1288,76 +1240,80 @@ class Model extends Observer {
     let isEqual = options.onChange !== this.onChange;
 
     if (isChange && isEqual) {
-      this.onChange = Model.checkFunction(options.onChange);
+      this.onChange = checkFunction(options.onChange);
     }
 
     const isUpdate = options.onUpdate !== undefined;
     isEqual = options.onUpdate !== this.onUpdate;
 
     if (isUpdate && isEqual) {
-      this.onUpdate = Model.checkFunction(options.onUpdate);
+      this.onUpdate = checkFunction(options.onUpdate);
     }
 
     const isStart = options.onStart !== undefined;
     isEqual = options.onStart !== this.onStart;
 
     if (isStart && isEqual) {
-      this.onStart = Model.checkFunction(options.onStart);
+      this.onStart = checkFunction(options.onStart);
     }
 
     const isReset = options.onReset !== undefined;
     isEqual = options.onReset !== this.onReset;
 
     if (isReset && isEqual) {
-      this.onReset = Model.checkFunction(options.onReset);
+      this.onReset = checkFunction(options.onReset);
     }
 
     return true;
   }
 
   private setHintsData(options: ObserverOptions): boolean {
-    const isParameters = !Model.validateProperties([
-      'tipPrefix',
-      'tipPostfix',
-      'tipMinMax',
-      'tipFromTo',
-    ], options);
+    const isParameters = !validateProperties(
+      options,
+      [
+        'tipPrefix',
+        'tipPostfix',
+        'tipMinMax',
+        'tipFromTo',
+      ],
+    );
 
     const isAttributes = options.key !== 'DataAttributes';
 
     if (isParameters && isAttributes) return false;
 
-    let {
+    const {
       tipPrefix,
       tipPostfix,
       tipMinMax,
       tipFromTo,
     } = options;
 
-    tipPostfix = String(this.checkProperty(tipPostfix, 'tipPostfix'));
-    if (tipPostfix != null) {
-      this.tipPostfix = String(tipPostfix).replace(/\s/g, '').substring(0, 15);
+    const tipPostfixValue = checkProperty(this, tipPostfix, 'tipPostfix' as keyof Model);
+    if (typeof tipPostfixValue === 'string') {
+      this.tipPostfix = String(tipPostfixValue).replace(/\s/g, '').substring(0, 15);
     } else {
       this.tipPostfix = '';
     }
 
-    tipPrefix = String(this.checkProperty(tipPrefix, 'tipPrefix'));
-    if (tipPrefix != null) {
-      this.tipPrefix = String(tipPrefix).replace(/\s/g, '').substring(0, 15);
+    const tipPrefixValue = checkProperty(this, tipPrefix, 'tipPrefix' as keyof Model);
+    if (typeof tipPrefixValue === 'string') {
+      this.tipPrefix = String(tipPrefixValue).replace(/\s/g, '').substring(0, 15);
     } else {
       this.tipPrefix = '';
     }
 
-    tipMinMax = Boolean(this.checkProperty(tipMinMax, 'tipMinMax'));
-    if (tipMinMax != null) {
-      this.tipMinMax = tipMinMax;
+    const tipMinMaxValue = checkProperty(this, tipMinMax, 'tipMinMax' as keyof Model);
+    if (typeof tipMinMaxValue === 'boolean') {
+      this.tipMinMax = tipMinMaxValue;
     } else {
       this.tipMinMax = true;
     }
 
-    tipFromTo = Boolean(this.checkProperty(tipFromTo, 'tipFromTo'));
-    if (tipFromTo != null) {
-      this.tipFromTo = tipFromTo;
+    const tipFromToValue = checkProperty(this, tipFromTo, 'tipFromTo' as keyof Model);
+
+    if (typeof tipFromToValue === 'boolean') {
+      this.tipFromTo = tipFromToValue;
     } else {
       this.tipFromTo = true;
     }
@@ -1378,7 +1334,7 @@ class Model extends Observer {
   }
 
   private setDisabledData(options: RangeSliderOptions): boolean {
-    if (!Model.validateProperties(['disabled'], options)) {
+    if (!validateProperties(options, ['disabled'])) {
       if (this.disabled === undefined) { this.disabled = false; }
       return false;
     }
@@ -1394,7 +1350,7 @@ class Model extends Observer {
   }
 
   private setBarData(options: RangeSliderOptions): boolean {
-    if (!Model.validateProperties(['bar'], options)) {
+    if (!validateProperties(options, ['bar'])) {
       if (this.bar === undefined) { this.bar = false; }
       return false;
     }

@@ -38,11 +38,8 @@ interface KeyDownStep {
   repeat: boolean,
 }
 
-type Prop = number | string | boolean | undefined | null;
-
 export {
   CalcFromToOptions,
-  Prop,
   PositionData,
   DirectionData,
   KeyDownSnap,

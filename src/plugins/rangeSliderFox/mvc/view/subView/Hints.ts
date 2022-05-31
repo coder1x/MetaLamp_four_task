@@ -1,5 +1,10 @@
 import { boundMethod } from 'autobind-decorator';
 
+import {
+  getProperty,
+  setProperty,
+} from '@shared/helpers/readWriteProperties';
+
 interface CheckTip {
   tipMaxXY: number,
   visibilityTipSingle: boolean,
@@ -347,12 +352,12 @@ class Hints {
       from: keyof CSSStyleDeclaration,
       to: keyof CSSStyleDeclaration,
     ) {
-      const data = Hints.getProperty(domElement, from);
+      const data = getProperty(domElement, from);
 
       if (String(data) === '') return false;
 
       domElement.removeProperty(String(from));
-      Hints.setProperty(
+      setProperty(
         domElement,
         to,
         data,
@@ -436,18 +441,6 @@ class Hints {
       const domElement = element;
       domElement.style.visibility = isVisible ? 'visible' : 'hidden';
     }
-  }
-
-  private static setProperty<T, K extends keyof T>(
-    object: T,
-    key: K,
-    value: T[K],
-  ) {
-    object[key] = value;
-  }
-
-  private static getProperty<T, K extends keyof T>(object: T, key: K) {
-    return object[key];
   }
 
   private toggleVisibility(options: CheckTip) {

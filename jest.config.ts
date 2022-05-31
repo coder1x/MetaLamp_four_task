@@ -13,5 +13,8 @@ const config: Config.InitialOptions = {
   // collectCoverageFrom: ["src/**/{!(*.d.ts),}.{ts,js,.tsx,.jsx}"],
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   roots: ['<rootDir>/src'],
+  moduleNameMapper: {
+    '^@shared/(.+)$': '<rootDir>/src/shared/$1',
+  },
 };
 export default config;

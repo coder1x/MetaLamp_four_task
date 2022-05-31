@@ -1,5 +1,9 @@
 import { boundMethod } from 'autobind-decorator';
 
+import {
+  getProperty,
+  setProperty,
+} from '@shared/helpers/readWriteProperties';
 import { Observer } from '../../../Observer';
 
 interface Pointer {
@@ -114,8 +118,8 @@ class Handle extends Observer {
   setIndexFromTo(direction: keyof CSSStyleDeclaration) {
     if (!this.elementFrom || !this.elementTo) return false;
 
-    const from = Handle.getProperty(this.elementFrom.style, direction);
-    const to = Handle.getProperty(this.elementTo.style, direction);
+    const from = getProperty(this.elementFrom.style, direction);
+    const to = getProperty(this.elementTo.style, direction);
 
     const isMaxTo = to === '100%';
     const isMaxFrom = from === '100%';
@@ -301,10 +305,10 @@ class Handle extends Observer {
       from: keyof CSSStyleDeclaration,
       to: keyof CSSStyleDeclaration,
     ) {
-      const data = Handle.getProperty(domElement, from);
+      const data = getProperty(domElement, from);
       if (String(data) === '') return false;
       domElement.removeProperty(String(from));
-      Handle.setProperty(
+      setProperty(
         domElement,
         to,
         data,
@@ -316,18 +320,6 @@ class Handle extends Observer {
       return setOrientation('left', 'bottom');
     }
     return setOrientation('bottom', 'left');
-  }
-
-  private static setProperty<T, K extends keyof T>(
-    object: T,
-    key: K,
-    value: T[K],
-  ) {
-    object[key] = value;
-  }
-
-  private static getProperty<T, K extends keyof T>(object: T, key: K) {
-    return object[key];
   }
 
   @boundMethod

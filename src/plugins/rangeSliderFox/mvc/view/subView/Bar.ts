@@ -1,5 +1,9 @@
 import { boundMethod } from 'autobind-decorator';
 
+import {
+  getProperty,
+  setProperty,
+} from '@shared/helpers/readWriteProperties';
 import { Observer } from '../../../Observer';
 
 class Bar extends Observer {
@@ -36,12 +40,12 @@ class Bar extends Observer {
         from: keyof CSSStyleDeclaration,
         to: keyof CSSStyleDeclaration,
       ) => {
-        const value = Bar.getProperty(styleDomElement, from);
+        const value = getProperty(styleDomElement, from);
         if (value === '') return false;
         sizeWidth = styleDomElement.width;
         sizeHeight = styleDomElement.height;
         styleDomElement.removeProperty(String(from));
-        Bar.setProperty(styleDomElement, to, value);
+        setProperty(styleDomElement, to, value);
         return true;
       };
 
@@ -121,18 +125,6 @@ class Bar extends Observer {
       key: 'ClickBar',
       clientXY: this.vertical ? event.offsetY : event.offsetX,
     });
-  }
-
-  private static getProperty<T, K extends keyof T>(object: T, key: K) {
-    return object[key];
-  }
-
-  private static setProperty<T, K extends keyof T>(
-    object: T,
-    key: K,
-    value: T[K],
-  ) {
-    object[key] = value;
   }
 
   private static createElement(teg: string, className: string[]) {
