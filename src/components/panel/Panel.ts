@@ -8,7 +8,7 @@ import CopyCode from '@com/code/CopyCode';
 import KeyboardControl from '@com/keyboard-control/KeyboardControl';
 
 interface Actions {
-  bindEvent: (object: any) => boolean | void;
+  bindEvent: <T>(object: T) => boolean | void;
 }
 
 class Panel {

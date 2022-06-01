@@ -6,134 +6,24 @@ import {
   checkProperty,
   checkFunction,
 } from '@shared/helpers/checks';
-
 import {
   getProperty,
   setProperty,
 } from '@shared/helpers/readWriteProperties';
-
 import trimFraction from '@shared/helpers/trim';
 
 import RangeSliderOptions from '../../globInterface';
-import { Observer, ObserverOptions } from '../../Observer';
+import { ObserverOptions } from '../../Observer';
+
 import {
   CalcFromToOptions,
-  PositionData,
-  DirectionData,
-  KeyDownSnap,
-  KeyDownStep,
 } from './modelInterface';
+import ModelCalc from './ModelCalc';
 
-class Model extends Observer {
-  // --- data config
-  private type: string | null = null;
-
-  private orientation: string | null = null;
-
-  private theme: string | null = null;
-
-  private min: number | null = null;
-
-  private max: number | null = null;
-
-  private from: number | null = null;
-
-  private to: number | null = null;
-
-  private step: number | null = null;
-
-  private keyStepOne: number | null = null;
-
-  private keyStepHold: number | null = null;
-
-  private bar: boolean | null = null;
-
-  private tipPrefix: string | null = null;
-
-  private tipPostfix: string | null = null;
-
-  private tipMinMax: boolean | null = null;
-
-  private tipFromTo: boolean | null = null;
-
-  private gridSnap: boolean | null = null;
-
-  private gridNumber: number | null = null;
-
-  private gridStep: number | null = null;
-
-  private gridRound: number | null = null;
-
-  private grid: boolean | null = null;
-
-  private disabled: boolean | null = null;
-
-  private defaultData: RangeSliderOptions | null = null;
-
-  // --- internal data.
-  private valuePercent: number = 0;
-
-  private fromPercent: number = 0;
-
-  private toPercent: number = 0;
-
-  private limitFrom: number = 0;
-
-  private limitTo: number = 0;
-
-  private snapNumber: number[] = [];
-
-  private stepNumber: number[] = [];
-
-  private stepGrid: number = 0;
-
-  private maxValue = 999999999999999;
-
-  private minValue = -999999999999999;
-
-  private isStartedConfiguration: boolean = false;
-
-  private isUpdatedConfiguration: boolean = false;
-
-  onHandle: (() => void) | null = null;
-
-  onChange: ((data: RangeSliderOptions) => void) | null = null;
-
-  onUpdate: ((data: RangeSliderOptions) => void) | null = null;
-
-  onStart: ((data: RangeSliderOptions) => void) | null = null;
-
-  onReset: ((data: RangeSliderOptions) => void) | null = null;
-
+class Model extends ModelCalc {
   constructor(options: RangeSliderOptions | void = {}) {
     super();
     this.createProperties(this.setDefaultConfiguration(options));
-  }
-
-  getOptions() {
-    return {
-      type: this.type,
-      orientation: this.orientation,
-      theme: this.theme,
-      min: this.min,
-      max: this.max,
-      to: this.to,
-      from: this.from,
-      step: this.step,
-      keyStepOne: this.keyStepOne,
-      keyStepHold: this.keyStepHold,
-      bar: this.bar,
-      tipPrefix: this.tipPrefix,
-      tipPostfix: this.tipPostfix,
-      tipMinMax: this.tipMinMax,
-      tipFromTo: this.tipFromTo,
-      grid: this.grid,
-      gridSnap: this.gridSnap,
-      gridNumber: this.gridNumber,
-      gridStep: this.gridStep,
-      gridRound: this.gridRound,
-      disabled: this.disabled,
-    };
   }
 
   reset() {
@@ -196,24 +86,7 @@ class Model extends Observer {
     this.isUpdatedConfiguration = false;
   }
 
-  calcOnePercent() {
-    this.valuePercent = this.getRange() / 100;
-    return this.valuePercent;
-  }
-
   // ---------------------------------- Handle
-
-  calcPercentFrom() {
-    this.fromPercent = ((this.from ?? 0) - (this.min ?? 0)) / this.valuePercent; // left dot position (in %)
-    this.limitFrom = this.fromPercent;
-    return this.fromPercent;
-  }
-
-  calcPercentTo() {
-    this.toPercent = ((this.to ?? 0) - (this.min ?? 0)) / this.valuePercent; // right dot position (in %)
-    this.limitTo = this.toPercent;
-    return this.toPercent;
-  }
 
   calcFromTo(options: CalcFromToOptions) {
     const typeFrom = options.type === 'From';
@@ -295,98 +168,7 @@ class Model extends Observer {
     return dataStep;
   }
 
-  calcStep() {
-    if (!this.step) return false;
-
-    const length = trimFraction(this.step);
-    const stepNumber: number[] = [];
-
-    const min = this.min ?? 0;
-    const max = this.max ?? 0;
-
-    let step = Number((min + this.step).toFixed(length));
-    stepNumber.push(min);
-    for (let i = min; i <= max;) {
-      i = Number((i += this.step).toFixed(length));
-      const isStep = step === i;
-      const isMax = i < max;
-
-      if (isStep && isMax) {
-        stepNumber.push(step);
-        step = Number((step += this.step).toFixed(length));
-      } else break;
-    }
-    stepNumber.push(max);
-    this.stepNumber = stepNumber;
-
-    return stepNumber;
-  }
-
-  @boundMethod
-  calcHintFrom(tipFrom: number, dimensions: number) {
-    return this.fromPercent - Model.calcWidthPercent(tipFrom - 4, dimensions);
-  }
-
-  @boundMethod
-  calcHintTo(tipTo: number, dimensions: number) {
-    return this.toPercent - Model.calcWidthPercent(tipTo - 4, dimensions);
-  }
-
-  @boundMethod
-  calcHintSingle(tipSingle: number, dimensions: number) {
-    return (
-      this.fromPercent
-      + ((this.toPercent - this.fromPercent) / 2)
-      - Model.calcWidthPercent(tipSingle, dimensions)
-    );
-  }
-
-  calcMark() {
-    const marks: {
-      value: number,
-      position: number,
-    }[] = [];
-
-    const notify = (valueGrid: number, position: number) => {
-      marks.push({
-        value: +valueGrid.toFixed(this.gridRound ?? 0),
-        position,
-      });
-    };
-
-    notify(this.min ?? 0, 0);
-    const { interval, step } = this.calcGridNumberStep();
-    let dataGrid = this.calcGridDimensions(this.min ?? 0, step);
-    notify(dataGrid.value, dataGrid.position);
-
-    for (let i = 1; i < interval - 1; i += 1) {
-      dataGrid = this.calcGridDimensions(dataGrid.value, step);
-      notify(dataGrid.value, dataGrid.position);
-    }
-    notify(this.max ?? 0, 100);
-
-    this.notifyObserver({
-      key: 'CreateGrid',
-      valueMark: marks,
-    });
-
-    return marks;
-  }
-
   // ---------------------------------- Bar
-  calcBarDimensions() {
-    let barXY = 0;
-    let widthBar = 0;
-
-    if (this.type === 'double') {
-      barXY = this.fromPercent;
-      widthBar = this.toPercent - this.fromPercent;
-    } else {
-      widthBar = this.fromPercent;
-    }
-
-    return { barXY, widthBar };
-  }
 
   @boundMethod
   calcBarCoordinates(pointXY: number, dimensions: number) {
@@ -412,6 +194,45 @@ class Model extends Observer {
     );
   }
 
+  // ---------------------------------- KeyDown
+  calcFromToOnKeyDown(repeat: boolean, sign: string, dot: string) {
+    const {
+      from,
+      to,
+    } = this;
+
+    const isSign = sign === '+';
+    const isDot = dot === 'from';
+    const type = this.type === 'double';
+    const isKey = !this.keyStepOne && !this.keyStepHold;
+    const isStep = !this.step && isKey;
+
+    let data = { from, to };
+    if (this.gridSnap && isStep) {
+      data = this.moveFromToOnKeyDownSnap({
+        type,
+        isSign,
+        isDot,
+        from,
+        to,
+      });
+    } else {
+      data = this.moveFromToOnKeyDownStep({
+        isSign,
+        isDot,
+        isKey,
+        repeat,
+        from,
+        to,
+      });
+    }
+
+    this.setFromTo(data);
+
+    return data;
+  }
+
+  // ---------------------------------- Grid
   @boundMethod
   takeFromOrToOnMarkClick(value: number) {
     let {
@@ -528,28 +349,7 @@ class Model extends Observer {
     return { from, to };
   }
 
-  toggleSnapMode() {
-    if (!this.gridSnap) return false;
-
-    this.from = Model.getValueStep(this.from ?? 0, this.stepGrid, this.snapNumber);
-
-    if (this.type === 'double') {
-      this.to = Model.getValueStep(this.to ?? 0, this.stepGrid, this.snapNumber);
-    }
-
-    this.notifyObserver({
-      key: 'DotData',
-      type: this.type,
-      from: this.from,
-      to: this.to,
-    });
-
-    if (typeof this.onChange === 'function') {
-      this.onChange(this.getOptions());
-    }
-    return { from: this.from, to: this.to };
-  }
-
+  // ---------------------------------- Snap
   @boundMethod
   setSnapFromTo(snapNumber: number[]) {
     this.snapNumber = [];
@@ -559,291 +359,7 @@ class Model extends Observer {
     return this.toggleSnapMode();
   }
 
-  calcFromToOnKeyDown(repeat: boolean, sign: string, dot: string) {
-    const {
-      from,
-      to,
-    } = this;
-
-    const isSign = sign === '+';
-    const isDot = dot === 'from';
-    const type = this.type === 'double';
-    const isKey = !this.keyStepOne && !this.keyStepHold;
-    const isStep = !this.step && isKey;
-
-    let data = { from, to };
-    if (this.gridSnap && isStep) {
-      data = this.moveFromToOnKeyDownSnap({
-        type,
-        isSign,
-        isDot,
-        from,
-        to,
-      });
-    } else {
-      data = this.moveFromToOnKeyDownStep({
-        isSign,
-        isDot,
-        isKey,
-        repeat,
-        from,
-        to,
-      });
-    }
-
-    this.setFromTo(data);
-
-    return data;
-  }
-
-  private moveFromToOnKeyDownStep(options: KeyDownStep) {
-    const {
-      isDot = false,
-      isSign = false,
-      isKey = false,
-      repeat = false,
-    } = options;
-
-    let {
-      from = 0,
-      to = 0,
-    } = options;
-
-    const value = (step: number) => {
-      const length = trimFraction(step);
-      const fromValue = from ?? 0;
-      const toValue = to ?? 0;
-
-      if (isDot) {
-        const num = !isSign ? fromValue - step : fromValue + step;
-        from = Number(num.toFixed(length));
-      } else {
-        const num = !isSign ? toValue - step : toValue + step;
-        to = Number(num.toFixed(length));
-      }
-
-      if (this.type === 'double') {
-        const isValue = (from ?? 0) > (to ?? 0);
-        if (isValue && isDot) from = to;
-        if (isValue && !isDot) to = from;
-      }
-    };
-
-    if (!isKey) {
-      if (!this.keyStepOne && this.keyStepHold) {
-        this.keyStepOne = 1;
-      }
-
-      if (!this.keyStepHold && this.keyStepOne) {
-        this.keyStepHold = Number(this.keyStepOne.toFixed(
-          trimFraction(this.keyStepOne),
-        ));
-      }
-
-      if (repeat) {
-        value(this.keyStepHold ?? 0);
-      } else {
-        value(this.keyStepOne ?? 0);
-      }
-    } else if (this.step) {
-      value(this.step);
-    } else {
-      value(1);
-    }
-
-    return { from, to };
-  }
-
-  private moveFromToOnKeyDownSnap(options: KeyDownSnap) {
-    const {
-      type = false,
-      isSign = false,
-      isDot = false,
-    } = options;
-
-    let {
-      from = 0,
-      to = 0,
-    } = options;
-
-    const prev = this.snapNumber[this.snapNumber.length - 2];
-
-    const value = (i: number) => {
-      const number = this.snapNumber[!isSign ? i - 2 : i];
-
-      if (isDot) {
-        from = number;
-      } else {
-        to = number;
-      }
-    };
-
-    const moveFrom = (item: number, i: number) => {
-      if ((from ?? 0) < item && isDot) {
-        const isEqual = from === to;
-
-        if (isEqual && isSign && type) return false;
-        value(i);
-        return false;
-      }
-
-      const isFromMin = from === this.min;
-      if (isFromMin && isSign) {
-        [, from] = this.snapNumber;
-        return false;
-      }
-
-      const isFromMax = from === this.max;
-      if (isFromMax && !isSign) {
-        from = prev;
-        return false;
-      }
-      return true;
-    };
-
-    const moveTo = (item: number, i: number) => {
-      if ((to ?? 0) < item && !isDot) {
-        value(i);
-        return false;
-      }
-
-      if (to === this.max && !isSign) {
-        to = prev;
-        return false;
-      }
-      return true;
-    };
-
-    for (let i = 0; i < this.snapNumber.length; i += 1) {
-      const item = this.snapNumber[i];
-      if (!moveFrom(item, i)) break;
-      if (!moveTo(item, i)) break;
-    }
-
-    return { from, to };
-  }
-
-  private checkIsFromToValid(typeFrom = false, percent = 0) {
-    let isFrom = false;
-    let isTo = false;
-
-    const isSingle = this.type === 'single';
-
-    if (isSingle) { // if single dot
-      this.fromPercent = percent;
-      return { isFrom: true, isTo, isSingle };
-    }
-
-    if (!(this.limitFrom > this.limitTo)) { // if double dot and FROM is less than TO
-      // depending on which dot is mooving
-      if (typeFrom) {
-        this.fromPercent = percent;
-        isFrom = true;
-      } else {
-        this.toPercent = percent;
-        isTo = true;
-      }
-    } else { // if FROM is greater than TO
-      // take value of another dot (which the mooving dot is approaching closely)
-      if (typeFrom) {
-        this.fromPercent = this.toPercent;
-      } else {
-        this.toPercent = this.fromPercent;
-      }
-
-      isFrom = true;
-      isTo = true;
-    }
-
-    return { isFrom, isTo, isSingle };
-  }
-
-  private defineDirection(options: DirectionData) {
-    const {
-      from = 0,
-      to = 0,
-      isFrom = false,
-      isTo = false,
-    } = options;
-
-    let signDirection = '';
-
-    const formPosition = this.from ?? 0;
-    const toPosition = this.to ?? 0;
-
-    const isRightFrom = formPosition < (from ?? 0) && isFrom;
-    const isRightTo = toPosition < (to ?? 0) && isTo;
-
-    if (isRightFrom || isRightTo) signDirection = 'right';
-
-    const isLeftFrom = formPosition > (from ?? 0) && isFrom;
-    const isLeftTo = toPosition > (to ?? 0) && isTo;
-
-    if (isLeftFrom || isLeftTo) signDirection = 'left';
-
-    if (signDirection === '') return false;
-
-    return signDirection;
-  }
-
-  private calcGridDimensions(value: number, step: number) {
-    const shift = value + step;
-    return {
-      value: shift,
-      position: ((shift - (this.min ?? 0)) * 100) / this.getRange(),
-    };
-  }
-
-  private static getValueStep(value: number, step: number, items: number[]) {
-    for (let i = 0; i < items.length; i += 1) {
-      const item = items[i];
-
-      if (value < item) {
-        return (step - (item - value)) < step / 2
-          ? items[i ? i - 1 : i] : item;
-      }
-    }
-    return value;
-  }
-
-  private getValueFrom(accuracy = 0) {
-    return Number(((this.min ?? 0) + (this.fromPercent * this.valuePercent)).toFixed(accuracy));
-  }
-
-  private getValueTo(accuracy = 0) {
-    return Number(((this.min ?? 0) + (this.toPercent * this.valuePercent)).toFixed(accuracy));
-  }
-
-  private setDefaultConfiguration(options: RangeSliderOptions | void) {
-    this.isStartedConfiguration = false;
-    this.isUpdatedConfiguration = false;
-
-    return {
-      type: 'single', // type - single or double dot
-      orientation: 'horizontal', // slider orientation
-      theme: 'base', // slider theme
-      min: 0, // minimal value on the scale
-      max: 10, // maximal value on the scale
-      from: 1, // first dot position
-      to: 2, // second dot position
-      step: 0, // step of the dot mooving
-      keyStepOne: 0, // step of the dot mooving on keyboard key single pressing
-      keyStepHold: 0, // step of the dot mooving on keyboard key holding
-      bar: false, // show or hide a bar
-      tipPrefix: '', // prefix for hints (15 characters maximum)
-      tipPostfix: '', // postfix for hints (15 characters maximum)
-      tipMinMax: true, // hints are on
-      tipFromTo: true, // hints are off
-      grid: false, // scale is off
-      gridSnap: false, // dot can't stop between scale marks
-      gridNumber: 0, // amount of intervals the scale is split into
-      gridStep: 0, // amount of steps in the interval
-      gridRound: 0, // fractional rounding
-      disabled: false, // slider enabled or disabled
-      ...options,
-    };
-  }
-
+  // ---------------------------------- Start Model
   private createProperties(options: RangeSliderOptions) {
     this.onHandle = async () => {
       this.onChange = options.onChange ?? null;
@@ -924,11 +440,6 @@ class Model extends Observer {
       return true;
     }
     return false;
-  }
-
-  private checkIsValueInRange(value: number) {
-    if (value <= this.getRange()) return value;
-    return this.getRange();
   }
 
   private setStep(options: RangeSliderOptions): boolean {
@@ -1362,55 +873,6 @@ class Model extends Observer {
       bar: this.bar,
     });
     return true;
-  }
-
-  private getRange() {
-    return (this.max ?? 0) - (this.min ?? 0);
-  }
-
-  private convertToPercent(options: PositionData) {
-    const {
-      typeFrom,
-      clientXY,
-      shiftXY,
-      position,
-      dimensions,
-    } = options;
-
-    const dotXY = clientXY - shiftXY;
-    let number = 0;
-
-    if (this.orientation === 'vertical') {
-      number = position - dotXY;
-    } else {
-      number = dotXY - position;
-    }
-    const percent = (number * 100) / dimensions;
-
-    if (typeFrom) {
-      this.limitFrom = percent;
-    } else {
-      this.limitTo = percent;
-    }
-    return percent;
-  }
-
-  private static calcWidthPercent(width: number, dimensions: number) {
-    return ((width * 100) / dimensions) / 2;
-  }
-
-  private calcGridNumberStep() {
-    let interval = 0;
-    let step = 0;
-
-    if (this.gridStep && !this.gridNumber) { // if STEP is defined and interval is set by default
-      step = this.gridStep;
-      interval = this.getRange() / step; // define new interval
-    } else { // calculate in line with interval
-      interval = this.gridNumber ?? 0;
-      step = ((this.max ?? 0) - (this.min ?? 0)) / interval; // define step
-    }
-    return { interval, step };
   }
 }
 

@@ -84,8 +84,7 @@ class Values {
     }
   }
 
-  // тут тип any, потому что метод data из jQuery его возвращает. ( data(key: string): any; )
-  bindEvent(rangeSlider: any) {
+  bindEvent<T>(rangeSlider: T) {
     this.objRangeSlider = rangeSlider;
     this.fieldValues = new Map();
 
