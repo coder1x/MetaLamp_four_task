@@ -94,7 +94,7 @@ class Controller {
       this.handleHintsData,
       this.handleDisabledData,
       this.handleBarData,
-      this.handleCreateGrid,
+      this.handleGridCreation,
       this.handleStep,
     ];
 
@@ -102,9 +102,9 @@ class Controller {
 
     const handlesView = [
       this.handleDotMove,
-      this.handleClickLine,
-      this.handleClickBar,
-      this.handleClickMark,
+      this.handleLineClick,
+      this.handleBarClick,
+      this.handleMarkClick,
       this.handleSnapNumber,
       this.handleDotKeyDown,
       this.handleDataAttributes,
@@ -389,7 +389,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleClickLine(options: ObserverOptions) {
+  private handleLineClick(options: ObserverOptions) {
     const { key } = options;
     const isClickLine = key !== 'ClickLine';
 
@@ -417,7 +417,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleClickBar(options: ObserverOptions) {
+  private handleBarClick(options: ObserverOptions) {
     const { key } = options;
     const isClickBar = key !== 'ClickBar';
 
@@ -433,7 +433,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleCreateGrid(options: ObserverOptions) {
+  private handleGridCreation(options: ObserverOptions) {
     const { key } = options;
     const isCreateGrid = key !== 'CreateGrid';
 
@@ -444,7 +444,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleClickMark(options: ObserverOptions) {
+  private handleMarkClick(options: ObserverOptions) {
     const { key } = options;
     const isClickMark = key !== 'ClickMark';
 

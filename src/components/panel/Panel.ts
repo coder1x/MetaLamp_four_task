@@ -4,7 +4,7 @@ import InputData from '@com/input-data/InputData';
 import Grid from '@com/grid/Grid';
 import Hints from '@com/hints/Hints';
 import Different from '@com/miscellaneous/Miscellaneous';
-import CopyCode from '@com/code/CopyCode';
+import CopyCodeButton from '@com/code/CopyCodeButton';
 import KeyboardControl from '@com/keyboard-control/KeyboardControl';
 
 interface Actions {
@@ -24,7 +24,7 @@ class Panel {
 
   private objectDifferent: Different | null = null;
 
-  private objectCopyCode: CopyCode | null = null;
+  private objectCopyCode: CopyCodeButton | null = null;
 
   private className: string = '';
 
@@ -136,7 +136,7 @@ class Panel {
         this.element,
       );
     }
-    this.objectCopyCode = new CopyCode(
+    this.objectCopyCode = new CopyCodeButton(
       '.js-code',
       this.getDomElement('.js-code') as Element,
     );

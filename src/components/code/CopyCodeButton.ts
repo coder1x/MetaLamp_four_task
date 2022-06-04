@@ -2,7 +2,7 @@ import { boundMethod } from 'autobind-decorator';
 
 import RangeSliderOptions from '@shared/interface/globInterface';
 
-class CopyCode {
+class CopyCodeButton {
   private className: string;
 
   private element: Element;
@@ -35,7 +35,7 @@ class CopyCode {
       const text = `${key[i]}: ${value},`;
 
       if (!isChildNodes) {
-        const item = CopyCode.createElement(
+        const item = CopyCodeButton.createElement(
           'li',
           [`${this.className.replace('.', '')}__item`],
         );
@@ -96,4 +96,4 @@ class CopyCode {
   }
 }
 
-export default CopyCode;
+export default CopyCodeButton;
