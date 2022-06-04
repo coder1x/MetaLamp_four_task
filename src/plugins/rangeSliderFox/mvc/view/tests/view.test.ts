@@ -61,10 +61,10 @@ describe('------- Test View API -------', () => {
         let opacity = await view.disabledRangeSlider(true);
         const rangeSliderElement = inputElement.parentElement as HTMLElement;
         let numberOpacity = Number(rangeSliderElement.style.opacity);
-        expect(+opacity).toBeCloseTo(numberOpacity);
+        expect(Number(opacity)).toBeCloseTo(numberOpacity);
         opacity = await view.disabledRangeSlider(false);
         numberOpacity = Number(rangeSliderElement.style.opacity);
-        expect(+opacity).toBeCloseTo(numberOpacity);
+        expect(Number(opacity)).toBeCloseTo(numberOpacity);
       },
     });
     new Controller(model, view);

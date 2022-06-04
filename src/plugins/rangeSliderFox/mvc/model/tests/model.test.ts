@@ -114,8 +114,8 @@ describe('------- Test Model API -------', () => {
       await model.calcOnePercent();
       const fromPosition = await model.calcPercentFrom();
       const toPosition = await model.calcPercentTo();
-      expect(+fromPosition.toFixed(2)).toBeCloseTo(from);
-      expect(+toPosition.toFixed(2)).toBeCloseTo(to);
+      expect(Number(fromPosition.toFixed(2))).toBeCloseTo(from);
+      expect(Number(toPosition.toFixed(2))).toBeCloseTo(to);
     };
 
     model = await new Model({
@@ -377,13 +377,13 @@ describe('------- Test Model API -------', () => {
         await model.calcPercentTo();
 
         const from = await model.calcHintFrom(32.03, 1120);
-        expect(+from.toFixed(2)).toBeCloseTo(33.53);
+        expect(Number(from.toFixed(2))).toBeCloseTo(33.53);
 
         const to = await model.calcHintTo(32.03, 1120);
-        expect(+to.toFixed(2)).toBeCloseTo(66.14);
+        expect(Number(to.toFixed(2))).toBeCloseTo(66.14);
 
         const single = await model.calcHintSingle(72.87, 1120);
-        expect(+single.toFixed(2)).toBeCloseTo(47.83);
+        expect(Number(single.toFixed(2))).toBeCloseTo(47.83);
       },
     });
 

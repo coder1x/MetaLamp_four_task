@@ -184,13 +184,14 @@ class Grid extends Observer {
 
       const { style } = mark;
 
+      const indentGridLine = 2;
       if (this.vertical) {
         style.top = `-${mark.offsetHeight / 2}px`;
-        style.left = `${gridLine.offsetWidth + 2}px`;
+        style.left = `${gridLine.offsetWidth + indentGridLine}px`;
         markWidthHeight += mark.offsetHeight + this.indent;
       } else {
         style.left = `-${mark.offsetWidth / 2}px`;
-        style.top = `${gridLine.offsetHeight + 2}px`;
+        style.top = `${gridLine.offsetHeight + indentGridLine}px`;
         markWidthHeight += mark.offsetWidth + this.indent;
       }
 
@@ -216,7 +217,8 @@ class Grid extends Observer {
         return true;
       });
 
-      if (hideMark.length >= 2) {
+      const minMark = 2;
+      if (hideMark.length >= minMark) {
         this.oddElements.push(hideMark);
         this.evenElements.push(evenElements);
         evenElements = [];
@@ -233,7 +235,8 @@ class Grid extends Observer {
     if (this.isResized) return false;
 
     this.isResized = true;
-    new Resize(this.elementGrid, 200, () => {
+    const delayTime = 200;
+    new Resize(this.elementGrid, delayTime, () => {
       if (this.offOn && !this.vertical) {
         this.visibleMark(true);
       }
@@ -267,7 +270,7 @@ class Grid extends Observer {
 
     this.oddElements[i].forEach((element) => { // show the necessary elements only
       Grid.toggleElement(element, 'visible', '1');
-      snapNumber.push(+element.innerText);
+      snapNumber.push(Number(element.innerText));
     });
 
     this.previousElement = this.oddElements[i][this.oddElements[i].length - 1];
@@ -290,7 +293,7 @@ class Grid extends Observer {
     previousXY += this.indent;
 
     const isVisible = this.vertical ? previousXY <= lastXY : previousXY > lastXY;
-    const number = +this.previousElement.innerText;
+    const number = Number(this.previousElement.innerText);
 
     if (isVisible) {
       Grid.toggleElement(this.previousElement, 'hidden', '0.4');

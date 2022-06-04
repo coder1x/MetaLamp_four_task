@@ -126,7 +126,7 @@ class Grid {
   private handleGridRoundChange(event: Event) {
     const element = event.currentTarget as HTMLInputElement;
     this.objRangeSlider.update({
-      gridRound: +element.value,
+      gridRound: Number(element.value),
     });
   }
 
@@ -136,7 +136,7 @@ class Grid {
     const element = event.currentTarget as HTMLInputElement;
     this.objRangeSlider.update({
       gridNumber: 0,
-      gridStep: +element.value,
+      gridStep: Number(element.value),
     });
     this.interval.value = '0';
     return true;
@@ -147,7 +147,7 @@ class Grid {
     if (!this.step) return false;
     const element = event.currentTarget as HTMLInputElement;
     this.objRangeSlider.update({
-      gridNumber: +element.value,
+      gridNumber: Number(element.value),
       gridStep: 0,
     });
     this.step.value = '0';

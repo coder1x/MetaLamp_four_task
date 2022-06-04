@@ -11,7 +11,8 @@ import ModelData from './ModelData';
 
 class ModelCalc extends ModelData {
   calcOnePercent() {
-    this.valuePercent = this.getRange() / 100;
+    const hundredPercent = 100;
+    this.valuePercent = this.getRange() / hundredPercent;
     return this.valuePercent;
   }
 
@@ -70,8 +71,7 @@ class ModelCalc extends ModelData {
   @boundMethod
   calcHintSingle(tipSingle: number, dimensions: number) {
     return (
-      this.fromPercent
-      + ((this.toPercent - this.fromPercent) / 2)
+      this.fromPercent + ((this.toPercent - this.fromPercent) / 2)
       - ModelCalc.calcWidthPercent(tipSingle, dimensions)
     );
   }
@@ -121,9 +121,11 @@ class ModelCalc extends ModelData {
       position: number,
     }[] = [];
 
+    const hundredPercent = 100;
+
     const notify = (valueGrid: number, position: number) => {
       marks.push({
-        value: +valueGrid.toFixed(this.gridRound ?? 0),
+        value: Number(valueGrid.toFixed(this.gridRound ?? 0)),
         position,
       });
     };
@@ -137,7 +139,7 @@ class ModelCalc extends ModelData {
       dataGrid = this.calcGridDimensions(dataGrid.value, step);
       notify(dataGrid.value, dataGrid.position);
     }
-    notify(this.max ?? 0, 100);
+    notify(this.max ?? 0, hundredPercent);
 
     this.notifyObserver({
       key: 'CreateGrid',
@@ -163,9 +165,10 @@ class ModelCalc extends ModelData {
 
   protected calcGridDimensions(value: number, step: number) {
     const shift = value + step;
+    const hundredPercent = 100;
     return {
       value: shift,
-      position: ((shift - (this.min ?? 0)) * 100) / this.getRange(),
+      position: ((shift - (this.min ?? 0)) * hundredPercent) / this.getRange(),
     };
   }
 
@@ -303,7 +306,8 @@ class ModelCalc extends ModelData {
 
     if (!isKey) {
       if (!this.keyStepOne && this.keyStepHold) {
-        this.keyStepOne = 1;
+        const defaultKeyStep = 1;
+        this.keyStepOne = defaultKeyStep;
       }
 
       if (!this.keyStepHold && this.keyStepOne) {
@@ -327,7 +331,8 @@ class ModelCalc extends ModelData {
   }
 
   protected static calcWidthPercent(width: number, dimensions: number) {
-    return ((width * 100) / dimensions) / 2;
+    const hundredPercent = 100;
+    return ((width * hundredPercent) / dimensions) / 2;
   }
 }
 
