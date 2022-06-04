@@ -61,12 +61,13 @@ class Hints {
     let isConverted: boolean = false;
     if (this.tipFrom) { isConverted = this.convertStyle(this.tipFrom.style); }
 
-    if (this.tipTo) {
-      isConverted = this.convertStyle(this.tipTo.style);
-      if (this.tipSingle) {
-        isConverted = this.convertStyle(this.tipSingle.style);
-      }
+    if (!this.tipTo) return false;
+
+    isConverted = this.convertStyle(this.tipTo.style);
+    if (this.tipSingle) {
+      isConverted = this.convertStyle(this.tipSingle.style);
     }
+
     return isConverted;
   }
 
@@ -254,11 +255,8 @@ class Hints {
 
         isTipSingleVisible = tipFromYTop <= tipToXY;
 
-        if (this.tipTo) {
-          isTipMaxVisible = tipMaxXY >= tipToYTop || tipMaxXY >= tipFromYTop;
-        } else {
-          isTipMaxVisible = tipMaxXY >= tipFromYTop;
-        }
+        isTipMaxVisible = this.tipTo ? tipMaxXY >= tipToYTop || tipMaxXY >= tipFromYTop
+          : isTipMaxVisible = tipMaxXY >= tipFromYTop;
 
         isTipMinVisible = tipMinYTop >= tipFromXY || !this.tipFrom;
 

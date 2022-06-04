@@ -190,20 +190,20 @@ class Handle extends Observer {
     if (isToEvent && this.elementTo) {
       this.elementTo.addEventListener('pointerdown', this.handleToPointerDown);
 
-      Handle.cancellation(this.elementTo);
+      Handle.cancel(this.elementTo);
       this.isToEvent = true;
     }
 
     if (!this.isFromEvent && this.elementFrom) {
       this.elementFrom.addEventListener('pointerdown', this.handleFromPointerDown);
 
-      Handle.cancellation(this.elementFrom);
+      Handle.cancel(this.elementFrom);
       this.isFromEvent = true;
     }
     return true;
   }
 
-  private static cancellation(element: HTMLElement) {
+  private static cancel(element: HTMLElement) {
     const domElement = element;
     domElement.ondragstart = () => false;
     domElement.onselectstart = () => false;

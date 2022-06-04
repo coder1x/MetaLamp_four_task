@@ -62,10 +62,13 @@ class Resize {
   @boundMethod
   private handleWindowOptimizedResize() {
     this.currentTime = new Date();
-    if (this.timeout === false) {
-      this.timeout = true;
-      setTimeout(this.resizeEnd, this.sleep);
-    }
+
+    if (this.timeout) return true;
+
+    this.timeout = true;
+    setTimeout(this.resizeEnd, this.sleep);
+
+    return false;
   }
 
   private throttle(type: string, name: string, object = window) {

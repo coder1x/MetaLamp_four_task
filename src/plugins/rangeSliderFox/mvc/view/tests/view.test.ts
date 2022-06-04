@@ -53,23 +53,6 @@ describe('------- Test View API -------', () => {
     new Controller(model, view);
   });
 
-  // disabledRangeSlider
-  test(' Check interface changing on pluging disabling ', async () => {
-    const model = await new Model({
-      disabled: false,
-      onStart: async () => {
-        let opacity = await view.disabledRangeSlider(true);
-        const rangeSliderElement = inputElement.parentElement as HTMLElement;
-        let numberOpacity = Number(rangeSliderElement.style.opacity);
-        expect(Number(opacity)).toBeCloseTo(numberOpacity);
-        opacity = await view.disabledRangeSlider(false);
-        numberOpacity = Number(rangeSliderElement.style.opacity);
-        expect(Number(opacity)).toBeCloseTo(numberOpacity);
-      },
-    });
-    new Controller(model, view);
-  });
-
   // createDomElementBase
   test(' Create basic DOM-elements ', async () => {
     const model = await new Model({

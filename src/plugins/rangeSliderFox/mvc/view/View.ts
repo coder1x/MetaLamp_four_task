@@ -105,8 +105,11 @@ class View extends Observer {
   disabledRangeSlider(isVisible: boolean) {
     const element = this.wrapperSlider as HTMLElement;
     const style = element.style as CSSStyleDeclaration;
-    const opacity = isVisible ? style.opacity = '0.5' : style.opacity = '1';
-    return opacity;
+    if (isVisible) {
+      style.opacity = '0.5';
+    } else {
+      style.opacity = '1';
+    }
   }
 
   getWrapWidthHeight() {

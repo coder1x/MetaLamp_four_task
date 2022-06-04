@@ -32,8 +32,8 @@ class Bar extends Observer {
     this.vertical = type === 'vertical';
 
     const convertStyle = (style: CSSStyleDeclaration) => {
-      let sizeWidth = '';
-      let sizeHeight = '';
+      let axisXLength = '';
+      let axisYLength = '';
       const styleDomElement = style;
 
       const toggleBar = (
@@ -42,8 +42,8 @@ class Bar extends Observer {
       ) => {
         const value = getProperty(styleDomElement, from);
         if (value === '') return false;
-        sizeWidth = styleDomElement.width;
-        sizeHeight = styleDomElement.height;
+        axisXLength = styleDomElement.width;
+        axisYLength = styleDomElement.height;
         styleDomElement.removeProperty(String(from));
         setProperty(styleDomElement, to, value);
         return true;
@@ -53,8 +53,8 @@ class Bar extends Observer {
         if (!toggleBar('left', 'bottom')) return false;
       } else if (!toggleBar('bottom', 'left')) return false;
 
-      styleDomElement.width = sizeHeight;
-      styleDomElement.height = sizeWidth;
+      styleDomElement.width = axisYLength;
+      styleDomElement.height = axisXLength;
 
       return true;
     };
