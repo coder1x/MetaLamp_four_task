@@ -147,16 +147,14 @@ class ModelData extends Observer {
     return this.getRange();
   }
 
-  protected static getValueStep(value: number, step: number, items: number[]) {
-    for (let i = 0; i < items.length; i += 1) {
-      const item = items[i];
+  protected static getSnap(value: number, step: number, items: number[]) {
+    const index = items.findIndex((item) => value < item);
 
-      if (value < item) {
-        return (step - (item - value)) < step / 2
-          ? items[i ? i - 1 : i] : item;
-      }
-    }
-    return value;
+    if (index === -1) return value;
+    const item = items[index];
+
+    return (step - (item - value)) < step / 2
+      ? items[index ? index - 1 : index] : item;
   }
 
   protected convertToPercent(options: PositionData) {
@@ -210,28 +208,22 @@ class ModelData extends Observer {
       return { isFrom: true, isTo, isSingle };
     }
 
-    if (!(this.limitFrom > this.limitTo)) { // if double dot and FROM is less than TO
-      // depending on which dot is mooving
+    const setFromToPercent = (value: number) => {
       if (typeFrom) {
-        this.fromPercent = percent;
+        this.fromPercent = value;
         isFrom = true;
       } else {
-        this.toPercent = percent;
+        this.toPercent = value;
         isTo = true;
       }
-    } else { // if FROM is greater than TO
-      // take value of another dot (which the mooving dot is approaching closely)
-      if (typeFrom) {
-        this.fromPercent = this.toPercent;
-      } else {
-        this.toPercent = this.fromPercent;
-      }
+      return { isFrom, isTo, isSingle };
+    };
 
-      isFrom = true;
-      isTo = true;
+    if (this.limitFrom < this.limitTo) { // if double dot and FROM is less than TO
+      return setFromToPercent(percent);
     }
 
-    return { isFrom, isTo, isSingle };
+    return setFromToPercent(typeFrom ? this.toPercent : this.fromPercent);
   }
 }
 

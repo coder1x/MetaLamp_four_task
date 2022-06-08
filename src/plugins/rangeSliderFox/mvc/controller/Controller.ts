@@ -95,7 +95,6 @@ class Controller {
       this.handleDisabledData,
       this.handleBarData,
       this.handleGridCreation,
-      this.handleStep,
     ];
 
     Controller.subscribe(this.model, handlesModel);
@@ -165,18 +164,6 @@ class Controller {
       this.view.createDomElementGrid();
     }
 
-    this.model.calcStep();
-    return true;
-  }
-
-  @boundMethod
-  private handleStep(options: ObserverOptions) {
-    const { key } = options;
-    const isStep = key !== 'Step';
-
-    if (isStep || !this.model) return false;
-
-    this.model.calcStep();
     return true;
   }
 

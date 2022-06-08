@@ -89,6 +89,8 @@ class Model extends ModelCalc {
   // ---------------------------------- Handle
 
   calcFromTo(options: CalcFromToOptions) {
+    console.log(options);
+
     const typeFrom = options.type === 'From';
 
     let percent = this.convertToPercent({
@@ -121,23 +123,6 @@ class Model extends ModelCalc {
       to = this.getValueTo(accuracy); //  get TO value
     }
 
-    const applySnapForFromTo = () => {
-      if (!(this.gridSnap && !this.step)) return { from, to };
-
-      if (isFrom) {
-        from = Model.getValueStep(from ?? 0, this.stepGrid, this.snapNumber);
-      }
-      if (!isSingle && isTo) {
-        to = Model.getValueStep(to ?? 0, this.stepGrid, this.snapNumber);
-      }
-
-      return { from, to };
-    };
-
-    const dataSnap = applySnapForFromTo();
-    from = dataSnap.from;
-    to = dataSnap.to;
-
     const direction = this.defineDirection({
       from,
       to,
@@ -147,15 +132,42 @@ class Model extends ModelCalc {
 
     if (!direction) return false;
 
+    const applySnapForFromTo = () => {
+      if (!(this.gridSnap && !this.step)) return { from, to };
+
+      if (isFrom) {
+        from = Model.getSnap(from ?? 0, this.stepGrid, this.snapNumber);
+      }
+      if (!isSingle && isTo) {
+        to = Model.getSnap(to ?? 0, this.stepGrid, this.snapNumber);
+      }
+
+      return { from, to };
+    };
+
+    const dataSnap = applySnapForFromTo();
+    from = dataSnap.from;
+    to = dataSnap.to;
+
     const applyStepForFromTo = () => {
       if (!this.step) return { from, to };
 
-      if (isFrom) {
-        from = Model.getValueStep(from ?? 0, this.step, this.stepNumber);
+      const isMinFrom = from === this.min;
+      const isMaxTo = to === this.max;
+
+      if (isFrom && isMinFrom) return { from, to };
+      if (isTo && isMaxTo) return { from, to };
+
+      if (isFrom && !isSingle) {
+        from = from !== this.to ? this.getStep(from ?? 0) : from;
       }
 
-      if (!isSingle && isTo) {
-        to = Model.getValueStep(to ?? 0, this.step, this.stepNumber);
+      if (isFrom && isSingle) {
+        from = this.getStep(from ?? 0);
+      }
+
+      if (isTo && to !== this.from) {
+        to = this.getStep(to ?? 0);
       }
 
       return { from, to };
@@ -473,13 +485,6 @@ class Model extends ModelCalc {
     this.keyStepOne = this.checkIsValueInRange(Number(keyStepOne));
     this.keyStepHold = this.checkIsValueInRange(Number(keyStepHold));
 
-    this.notifyObserver({
-      key: 'Step',
-      step: this.step,
-      keyStepOne: this.keyStepOne,
-      keyStepHold: this.keyStepHold,
-    });
-
     return true;
   }
 
@@ -522,11 +527,10 @@ class Model extends ModelCalc {
 
     from = Number(checkProperty(this, from, 'from' as keyof Model));
 
-    const min = this.min ?? 0;
-    const max = this.max ?? 0;
-
     const setFrom = () => {
       if (from == null) return false;
+      const max = this.max ?? 0;
+      const min = this.min ?? 0;
       const isAboveMin = from >= min;
       const isBelowMax = from <= max;
 
@@ -545,28 +549,20 @@ class Model extends ModelCalc {
     setFrom();
 
     const setTo = () => {
-      if (from == null) return false;
+      if (from == null) return null;
+      if (type !== 'double') return null;
 
-      if (type === 'double') { // check FROM and TO
-        to = Number(checkProperty(this, to, 'to' as keyof Model));
-        if (to == null) return false;
+      to = Number(checkProperty(this, to, 'to' as keyof Model));
+      if (to == null) return false;
 
-        if (from > to) {
-          const temp = from;
-          from = to;
-          to = temp;
-        }
-
-        this.to = to <= max ? to : max;
-
-        return null;
+      if (from > to) {
+        const temp = from;
+        from = to;
+        to = temp;
       }
 
-      const minValue = 2;
-      const isValidMax = max >= minValue;
-      const isValidFrom = (this.from ?? 0) <= minValue;
-
-      this.to = isValidMax && isValidFrom ? this.to ?? minValue : this.to ?? this.from;
+      const max = this.max ?? 0;
+      this.to = to <= max ? to : max;
 
       return null;
     };
@@ -577,14 +573,14 @@ class Model extends ModelCalc {
     const isSnap = this.gridSnap && !this.step;
 
     if (isConfigurationNotExist && isSnap) {
-      this.from = Model.getValueStep(
+      this.from = Model.getSnap(
         this.from ?? 0,
         this.stepGrid,
         this.snapNumber,
       );
 
       if (type === 'double') {
-        this.to = Model.getValueStep(
+        this.to = Model.getSnap(
           this.to ?? 0,
           this.stepGrid,
           this.snapNumber,

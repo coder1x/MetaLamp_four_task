@@ -325,43 +325,6 @@ describe('------- Test Model API -------', () => {
     if (model.onHandle) { await model.onHandle(); }
   });
 
-  // calcStep
-  test(' Calculate step relating the range ', async () => {
-    let values = await [0, 2, 4, 6, 8, 10];
-
-    let model = await new Model({
-      min: 0,
-      max: 10,
-      step: 2,
-      onStart: () => {
-        expect(model.calcStep()).toEqual(values);
-      },
-    });
-
-    if (model.onHandle) { await model.onHandle(); }
-
-    values = await [
-      -1.45,
-      2,
-      5,
-      8,
-      11,
-      14,
-      15.234,
-    ];
-
-    model = await new Model({
-      min: -1.45,
-      max: 15.234,
-      step: 3,
-      onStart: () => {
-        expect(model.calcStep()).toEqual(values);
-      },
-    });
-
-    if (model.onHandle) { await model.onHandle(); }
-  });
-
   // calcPositionTip: From, To, Single
   test(' Calculate hints position relating dots ', async () => {
     const model = await new Model({

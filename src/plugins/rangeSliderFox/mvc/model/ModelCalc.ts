@@ -29,34 +29,6 @@ class ModelCalc extends ModelData {
     return this.toPercent;
   }
 
-  // ---------------------------------- STEP
-  calcStep() {
-    if (!this.step) return false;
-
-    const length = trimFraction(this.step);
-    const stepNumber: number[] = [];
-
-    const min = this.min ?? 0;
-    const max = this.max ?? 0;
-
-    let step = Number((min + this.step).toFixed(length));
-    stepNumber.push(min);
-    for (let i = min; i <= max;) {
-      i = Number((i += this.step).toFixed(length));
-      const isStep = step === i;
-      const isMax = i < max;
-
-      if (isStep && isMax) {
-        stepNumber.push(step);
-        step = Number((step += this.step).toFixed(length));
-      } else break;
-    }
-    stepNumber.push(max);
-    this.stepNumber = stepNumber;
-
-    return stepNumber;
-  }
-
   // ---------------------------------- Hints
   @boundMethod
   calcHintFrom(tipFrom: number, dimensions: number) {
@@ -95,10 +67,10 @@ class ModelCalc extends ModelData {
   toggleSnapMode() {
     if (!this.gridSnap) return false;
 
-    this.from = ModelCalc.getValueStep(this.from ?? 0, this.stepGrid, this.snapNumber);
+    this.from = ModelCalc.getSnap(this.from ?? 0, this.stepGrid, this.snapNumber);
 
     if (this.type === 'double') {
-      this.to = ModelCalc.getValueStep(this.to ?? 0, this.stepGrid, this.snapNumber);
+      this.to = ModelCalc.getSnap(this.to ?? 0, this.stepGrid, this.snapNumber);
     }
 
     this.notifyObserver({
@@ -152,12 +124,14 @@ class ModelCalc extends ModelData {
   protected calcGridNumberStep() {
     let interval = 0;
     let step = 0;
+    const gridNumber = this.gridNumber ?? 0;
 
-    if (this.gridStep && !this.gridNumber) { // if STEP is defined and interval is set by default
+    if (this.gridStep && !gridNumber) { // if STEP is defined and interval is set by default
       step = this.gridStep;
       interval = this.getRange() / step; // define new interval
     } else { // calculate in line with interval
-      interval = this.gridNumber ?? 0;
+      const maxValue = 500;
+      interval = gridNumber < maxValue ? gridNumber : maxValue;
       step = ((this.max ?? 0) - (this.min ?? 0)) / interval; // define step
     }
     return { interval, step };
@@ -183,16 +157,16 @@ class ModelCalc extends ModelData {
 
     let signDirection = '';
 
-    const formPosition = this.from ?? 0;
-    const toPosition = this.to ?? 0;
+    const fromValue = this.from ?? 0;
+    const toValue = this.to ?? 0;
 
-    const isRightFrom = formPosition < (from ?? 0) && isFrom;
-    const isRightTo = toPosition < (to ?? 0) && isTo;
+    const isRightFrom = fromValue < (from ?? 0) && isFrom;
+    const isRightTo = toValue < (to ?? 0) && isTo;
 
     if (isRightFrom || isRightTo) signDirection = 'right';
 
-    const isLeftFrom = formPosition > (from ?? 0) && isFrom;
-    const isLeftTo = toPosition > (to ?? 0) && isTo;
+    const isLeftFrom = fromValue > (from ?? 0) && isFrom;
+    const isLeftTo = toValue > (to ?? 0) && isTo;
 
     if (isLeftFrom || isLeftTo) signDirection = 'left';
 
@@ -328,6 +302,24 @@ class ModelCalc extends ModelData {
     }
 
     return { from, to };
+  }
+
+  protected getStep(newValue: number) {
+    const step = this.step ?? 0;
+    const quotient = newValue / step;
+    const isMultiple = quotient % step === 0;
+
+    const trimNumber = (result: number) => Number(result.toFixed(trimFraction(step)));
+
+    if (isMultiple) {
+      return trimNumber(newValue);
+    }
+
+    const rangeFrom = Math.trunc(quotient) * step;
+    const differenceFrom = newValue - rangeFrom;
+    const halfStep = step / 2;
+
+    return trimNumber(differenceFrom > halfStep ? rangeFrom + step : rangeFrom);
   }
 
   protected static calcWidthPercent(width: number, dimensions: number) {

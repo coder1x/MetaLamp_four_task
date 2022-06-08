@@ -112,22 +112,13 @@ class Panel {
   }
 
   private init() {
-    this.objectValues = new Values(
-      '.js-values',
-      this.getDomElement('.js-values') as Element,
-    );
+    this.objectValues = new Values('.js-values', this.getDomElement('.js-values') as Element);
 
     if (this.element) {
       this.objectInputData = new InputData(this.className, this.element);
     }
-    this.objectGrid = new Grid(
-      '.js-grid',
-      this.getDomElement('.js-grid') as Element,
-    );
-    this.objectHints = new Hints(
-      '.js-hints',
-      this.getDomElement('.js-hints') as Element,
-    );
+    this.objectGrid = new Grid('.js-grid', this.getDomElement('.js-grid') as Element);
+    this.objectHints = new Hints('.js-hints', this.getDomElement('.js-hints') as Element);
 
     if (this.element) {
       this.objectDifferent = new Different(
@@ -136,10 +127,7 @@ class Panel {
         this.element,
       );
     }
-    this.objectCopyCode = new CopyCodeButton(
-      '.js-code',
-      this.getDomElement('.js-code') as Element,
-    );
+    this.objectCopyCode = new CopyCodeButton('.js-code', this.getDomElement('.js-code') as Element);
 
     this.objectKeyboardControl = new KeyboardControl(
       '.js-keyboard-control',
