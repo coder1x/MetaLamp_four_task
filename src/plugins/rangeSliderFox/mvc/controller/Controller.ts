@@ -280,7 +280,7 @@ class Controller {
 
     await this.view.setOrientation(options.orientation ?? '');
     const modelOptions = await this.model.getOptions();
-    this.updateHints(modelOptions.type ?? '', modelOptions.from ?? 0, modelOptions.to ?? 0);
+    this.updateHints(modelOptions.type ?? 'double', modelOptions.from ?? 0, modelOptions.to ?? 0);
 
     // -------- grid
 
@@ -349,6 +349,7 @@ class Controller {
         );
       } else {
         await this.view.deleteTipTo();
+        await this.view.deleteTipSingle();
       }
 
       await this.view.updateTipPosition({

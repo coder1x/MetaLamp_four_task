@@ -172,74 +172,6 @@ describe('------- Test Model API -------', () => {
 
     model = await new Model({
       type: 'double',
-      min: -120,
-      max: 800,
-      to: 500,
-      from: 80,
-      onStart: async () => {
-        await model.calcOnePercent();
-        await model.calcPercentFrom();
-        await model.calcPercentTo();
-
-        positionData({
-          clientXY: 929.7144165039062,
-          shiftXY: 3.580322265625,
-          value: 202,
-          type: true,
-        });
-
-        positionData({
-          clientXY: 100,
-          shiftXY: 3.580322265625,
-          value: -120,
-          type: true,
-        });
-
-        let data = await model.calcFromTo({
-          type: 'From',
-          dimensions: wrapperWidthHeight,
-          position,
-          clientXY: 1400,
-          shiftXY: 3.580322265625,
-        });
-        if (data) {
-          expect(data.from).toBeCloseTo(500);
-          expect(data.to).toBeCloseTo(500);
-        }
-
-        positionData({
-          clientXY: 1500,
-          shiftXY: 0.08056640625,
-          value: 674,
-          type: false,
-        });
-
-        positionData({
-          clientXY: 2300,
-          shiftXY: 0.08056640625,
-          value: 800,
-          type: false,
-        });
-
-        data = await model.calcFromTo({
-          type: 'To',
-          dimensions: wrapperWidthHeight,
-          position,
-          clientXY: 1200,
-          shiftXY: 0.08056640625,
-        });
-
-        if (data) {
-          expect(data.from).toBeCloseTo(500);
-          expect(data.to).toBeCloseTo(500);
-        }
-      },
-    });
-
-    if (model.onHandle) { await model.onHandle(); }
-
-    model = await new Model({
-      type: 'double',
       orientation: 'vertical',
       min: -120,
       max: 800,
@@ -256,14 +188,14 @@ describe('------- Test Model API -------', () => {
         positionData({
           clientXY: 369.00006103515625,
           shiftXY: -2.5625,
-          value: 496,
+          value: 495,
           type: false,
         });
 
         positionData({
           clientXY: 521,
           shiftXY: -1.98211669921875,
-          value: 229,
+          value: 230,
           type: true,
         });
       },
@@ -537,7 +469,7 @@ describe('------- Test Model API -------', () => {
       onStart: async () => {
         await model.calcOnePercent();
         await model.calcPercentFrom();
-        const pointerBar = { from: 92, to: 100 };
+        const pointerBar = { from: 92, to: 600 };
         expect(model.calcBarCoordinates(10, 1120)).toEqual(pointerBar);
       },
     });
@@ -553,7 +485,7 @@ describe('------- Test Model API -------', () => {
       onStart: async () => {
         await model.calcOnePercent();
         await model.calcPercentFrom();
-        const pointerBar = { from: -79, to: 100 };
+        const pointerBar = { from: -79, to: 600 };
         expect(model.calcBarCoordinates(50, 1120)).toEqual(pointerBar);
       },
     });
@@ -574,6 +506,7 @@ describe('------- Test Model API -------', () => {
 
       onStart: async () => {
         let pointerGrid = { from: 150, to: 600 };
+
         expect(model.takeFromOrToOnMarkClick(150)).toEqual(pointerGrid);
 
         pointerGrid = { from: 150, to: 700 };
@@ -594,14 +527,26 @@ describe('------- Test Model API -------', () => {
       from: 100,
 
       onStart: async () => {
-        let pointerGrid = { from: 150, to: 100 };
-        expect(model.takeFromOrToOnMarkClick(150)).toEqual(pointerGrid);
+        let pointerGrid = { from: 150, to: 600 };
+        let data = model.takeFromOrToOnMarkClick(150);
+        expect({
+          from: data.from ?? 0,
+          to: data.to ?? 0,
+        }).toEqual(pointerGrid);
 
-        pointerGrid = { from: 700, to: 100 };
-        expect(model.takeFromOrToOnMarkClick(700)).toEqual(pointerGrid);
+        pointerGrid = { from: 700, to: 600 };
+        data = model.takeFromOrToOnMarkClick(700);
+        expect({
+          from: data.from ?? 0,
+          to: data.to ?? 0,
+        }).toEqual(pointerGrid);
 
-        pointerGrid = { from: 10, to: 100 };
-        expect(model.takeFromOrToOnMarkClick(10)).toEqual(pointerGrid);
+        pointerGrid = { from: 10, to: 600 };
+        data = model.takeFromOrToOnMarkClick(10);
+        expect({
+          from: data.from ?? 0,
+          to: data.to ?? 0,
+        }).toEqual(pointerGrid);
       },
     });
 

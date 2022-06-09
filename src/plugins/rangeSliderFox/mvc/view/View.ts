@@ -277,6 +277,7 @@ class View extends Observer {
     if (!this.hints.checkTipTo()) {
       isToggled = this.hints.createTipTo();
       isToggled = Boolean(this.hints.setValueTipTo(to));
+      isToggled = Boolean(this.hints.createTipSingle());
     }
     return isToggled;
   }
@@ -294,6 +295,11 @@ class View extends Observer {
   deleteTipTo() {
     if (!this.hints) return false;
     return this.hints.deleteTipTo();
+  }
+
+  deleteTipSingle() {
+    if (!this.hints) return false;
+    return this.hints.deleteTipSingle();
   }
 
   checkVisibleTip() {

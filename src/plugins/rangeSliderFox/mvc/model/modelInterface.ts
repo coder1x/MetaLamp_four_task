@@ -2,7 +2,7 @@ interface CalcFromToOptions {
   readonly type: string,
   readonly position: number,
   readonly clientXY: number,
-  readonly shiftXY: number
+  readonly shiftXY: number,
   readonly dimensions: number,
 }
 

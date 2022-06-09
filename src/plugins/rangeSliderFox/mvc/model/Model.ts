@@ -89,8 +89,6 @@ class Model extends ModelCalc {
   // ---------------------------------- Handle
 
   calcFromTo(options: CalcFromToOptions) {
-    console.log(options);
-
     const typeFrom = options.type === 'From';
 
     let percent = this.convertToPercent({
@@ -550,19 +548,24 @@ class Model extends ModelCalc {
 
     const setTo = () => {
       if (from == null) return null;
-      if (type !== 'double') return null;
-
-      to = Number(checkProperty(this, to, 'to' as keyof Model));
-      if (to == null) return false;
-
-      if (from > to) {
-        const temp = from;
-        from = to;
-        to = temp;
-      }
-
       const max = this.max ?? 0;
-      this.to = to <= max ? to : max;
+      const isConfigurationNotExist = !this.isStartedConfiguration || this.isUpdatedConfiguration;
+      const isDouble = type === 'double';
+
+      if (isDouble || isConfigurationNotExist) { // check FROM and TO
+        to = Number(checkProperty(this, to, 'to' as keyof Model));
+        if (to == null) return false;
+
+        if (from > to) {
+          const temp = from;
+          from = to;
+          to = temp;
+        }
+
+        this.to = to <= max ? to : max;
+
+        return null;
+      }
 
       return null;
     };
