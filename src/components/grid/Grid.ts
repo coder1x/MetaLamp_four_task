@@ -159,9 +159,9 @@ class Grid {
     if (!this.fieldValues) return false;
     const element = event.currentTarget as HTMLInputElement;
     const value = element.value.replace(/[^.\d]/g, '');
-    const regexp = /^\d*?[.]?\d*$/;
+    const REGEXP = /^\d*?[.]?\d*$/;
 
-    if (regexp.test(value)) {
+    if (REGEXP.test(value)) {
       this.fieldValues.set(element.name, value);
       element.value = value;
     } else {

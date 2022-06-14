@@ -10,11 +10,11 @@ mixin grid(options = {})
       isLabeled,
     } = options;
 
-    const classComponent = 'grid'
-    let className = classComponent
+    const CLASS_COMPONENT = 'grid'
+    let className = CLASS_COMPONENT
     
     if(modifier){
-      className += ` ${classComponent}_${modifier}`
+      className += ` ${CLASS_COMPONENT}_${modifier}`
     }
     if(addClass){
       className += ` ${addClass}`
@@ -23,26 +23,26 @@ mixin grid(options = {})
     const data = require('./grid.json'); 
     const textField = data.textField
 
-  fieldset(class=`${className} js-${classComponent}`)
+  fieldset(class=`${className} js-${CLASS_COMPONENT}`)
     - if(!isLabeled){
-        legend(class=`${classComponent}__label`)= label
+        legend(class=`${CLASS_COMPONENT}__label`)= label
     -}
 
-    div(class=`${classComponent}__grid-wrapper js-${classComponent}__grid-wrapper`)
+    div(class=`${CLASS_COMPONENT}__grid-wrapper js-${CLASS_COMPONENT}__grid-wrapper`)
       +toggle({
         header: 'Grid',
       })
 
-    div(class=`${classComponent}__snap-wrapper js-${classComponent}__snap-wrapper`)
+    div(class=`${CLASS_COMPONENT}__snap-wrapper js-${CLASS_COMPONENT}__snap-wrapper`)
       +toggle({
         header: 'Snap',
       })
 
-    div(class=`${classComponent}__interval-wrapper js-${classComponent}__interval-wrapper`)
+    div(class=`${CLASS_COMPONENT}__interval-wrapper js-${CLASS_COMPONENT}__interval-wrapper`)
       +text-field(textField.interval)
 
-    div(class=`${classComponent}__step-wrapper js-${classComponent}__step-wrapper`)
+    div(class=`${CLASS_COMPONENT}__step-wrapper js-${CLASS_COMPONENT}__step-wrapper`)
       +text-field(textField.step)
       
-    div(class=`${classComponent}__round-wrapper js-${classComponent}__round-wrapper`)
+    div(class=`${CLASS_COMPONENT}__round-wrapper js-${CLASS_COMPONENT}__round-wrapper`)
       +text-field(textField.round)

@@ -58,10 +58,10 @@ describe('------- Test Resize API -------', () => {
 
   // Resize
 
-  const testName = ' Should call a callback on window'
+  const TEST_NAME = ' Should call a callback on window'
     + ' resizing after the defined timeout ';
 
-  test(testName, async () => {
+  test(TEST_NAME, async () => {
     let change = false;
     const wrapperOne = await document.createElement('div');
     await mockElementDimensions(wrapperOne)({

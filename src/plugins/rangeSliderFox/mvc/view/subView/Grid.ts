@@ -184,14 +184,14 @@ class Grid extends Observer {
 
       const { style } = mark;
 
-      const indentGridLine = 2;
+      const INDENT_GRID_LINE = 2;
       if (this.vertical) {
         style.top = `-${mark.offsetHeight / 2}px`;
-        style.left = `${gridLine.offsetWidth + indentGridLine}px`;
+        style.left = `${gridLine.offsetWidth + INDENT_GRID_LINE}px`;
         markWidthHeight += mark.offsetHeight + this.indent;
       } else {
         style.left = `-${mark.offsetWidth / 2}px`;
-        style.top = `${gridLine.offsetHeight + indentGridLine}px`;
+        style.top = `${gridLine.offsetHeight + INDENT_GRID_LINE}px`;
         markWidthHeight += mark.offsetWidth + this.indent;
       }
 
@@ -217,8 +217,8 @@ class Grid extends Observer {
         return true;
       });
 
-      const minMark = 2;
-      if (hideMark.length >= minMark) {
+      const MIN_MARK = 2;
+      if (hideMark.length >= MIN_MARK) {
         this.oddElements.push(hideMark);
         this.evenElements.push(evenElements);
         evenElements = [];
@@ -235,8 +235,8 @@ class Grid extends Observer {
     if (this.isResized) return false;
 
     this.isResized = true;
-    const delayTime = 200;
-    new Resize(this.elementGrid, delayTime, () => {
+    const DELAY_TIME = 200;
+    new Resize(this.elementGrid, DELAY_TIME, () => {
       if (this.offOn && !this.vertical) {
         this.visibleMark(true);
       }

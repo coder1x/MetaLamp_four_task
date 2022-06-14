@@ -9,11 +9,11 @@ mixin text-field(options)
       addClass = '',
       isLabeled,
     } = options;
-    const classComponent = 'text-field'
-    let className = classComponent
+    const CLASS_COMPONENT = 'text-field'
+    let className = CLASS_COMPONENT
     
     if(modifier){
-      className += ` ${classComponent}_${modifier}`
+      className += ` ${CLASS_COMPONENT}_${modifier}`
     }
 
     if(addClass){
@@ -21,9 +21,9 @@ mixin text-field(options)
     }
     
   div(class=className)
-    label(class=`${classComponent}__label`)
+    label(class=`${CLASS_COMPONENT}__label`)
       - if(!isLabeled){
-          p(class=`${classComponent}__label-text`)= label
+          p(class=`${CLASS_COMPONENT}__label-text`)= label
       -}
-      input(class=`${classComponent}__input` type=typeField placeholder=placeholder value='' name=name)
+      input(class=`${CLASS_COMPONENT}__input` type=typeField placeholder=placeholder value='' name=name)
       

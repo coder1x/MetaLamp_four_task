@@ -8,11 +8,11 @@ mixin toggle(options = {})
       isLabeled,
     } = options;
 
-    const classComponent = 'toggle'
-    let className = classComponent
+    const CLASS_COMPONENT = 'toggle'
+    let className = CLASS_COMPONENT
     
     if(modifier){
-      className += ` ${classComponent}_${modifier}`
+      className += ` ${CLASS_COMPONENT}_${modifier}`
     }
     if(addClass){
       className += ` ${addClass}`
@@ -20,11 +20,11 @@ mixin toggle(options = {})
 
   div(class=className)
     - if(!isLabeled){
-        p(class=`${classComponent}__header`)= header
+        p(class=`${CLASS_COMPONENT}__header`)= header
     -}
     
-    div(class=`${classComponent}__wrapper`)
-      label(class=`${classComponent}__label`)= label
-        input(class=`${classComponent}__input` type='checkbox' name='toggle')
-        span(class=`${classComponent}__before`)
+    div(class=`${CLASS_COMPONENT}__wrapper`)
+      label(class=`${CLASS_COMPONENT}__label`)= label
+        input(class=`${CLASS_COMPONENT}__input` type='checkbox' name='toggle')
+        span(class=`${CLASS_COMPONENT}__before`)
 

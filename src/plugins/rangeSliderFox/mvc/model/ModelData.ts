@@ -174,8 +174,8 @@ class ModelData extends Observer {
     } else {
       number = dotXY - position;
     }
-    const hundredPercent = 100;
-    const percent = (number * hundredPercent) / dimensions;
+    const HUNDRED_PERCENT = 100;
+    const percent = (number * HUNDRED_PERCENT) / dimensions;
 
     if (typeFrom) {
       this.limitFrom = percent;

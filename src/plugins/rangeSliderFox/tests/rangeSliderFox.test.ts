@@ -46,10 +46,10 @@ describe('------- Range Slider Fox - JQuery Objects -------', () => {
     expect(isProperty).toBeTruthy();
   });
 
-  const testName = ' Initialize plugin on a DOM-element '
+  const TEST_NAME = ' Initialize plugin on a DOM-element '
     + 'and check the obtained object ';
   // initialization
-  test(testName, () => {
+  test(TEST_NAME, () => {
     const rangeSliderOne = $(inputElement).RangeSliderFox({}).data('RangeSliderFox');
     expect(rangeSliderOne).toBeDefined();
 

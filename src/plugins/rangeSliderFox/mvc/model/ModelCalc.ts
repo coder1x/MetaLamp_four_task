@@ -11,8 +11,8 @@ import ModelData from './ModelData';
 
 class ModelCalc extends ModelData {
   calcOnePercent() {
-    const hundredPercent = 100;
-    this.valuePercent = this.getRange() / hundredPercent;
+    const HUNDRED_PERCENT = 100;
+    this.valuePercent = this.getRange() / HUNDRED_PERCENT;
     return this.valuePercent;
   }
 
@@ -93,7 +93,7 @@ class ModelCalc extends ModelData {
       position: number,
     }[] = [];
 
-    const hundredPercent = 100;
+    const HUNDRED_PERCENT = 100;
 
     const notify = (valueGrid: number, position: number) => {
       marks.push({
@@ -111,7 +111,7 @@ class ModelCalc extends ModelData {
       dataGrid = this.calcGridDimensions(dataGrid.value, step);
       notify(dataGrid.value, dataGrid.position);
     }
-    notify(this.max ?? 0, hundredPercent);
+    notify(this.max ?? 0, HUNDRED_PERCENT);
 
     this.notifyObserver({
       key: 'CreateGrid',
@@ -130,8 +130,8 @@ class ModelCalc extends ModelData {
       step = this.gridStep;
       interval = this.getRange() / step; // define new interval
     } else { // calculate in line with interval
-      const maxValue = 500;
-      interval = gridNumber < maxValue ? gridNumber : maxValue;
+      const MAX_VALUE = 500;
+      interval = gridNumber < MAX_VALUE ? gridNumber : MAX_VALUE;
       step = ((this.max ?? 0) - (this.min ?? 0)) / interval; // define step
     }
     return { interval, step };
@@ -139,10 +139,10 @@ class ModelCalc extends ModelData {
 
   protected calcGridDimensions(value: number, step: number) {
     const shift = value + step;
-    const hundredPercent = 100;
+    const HUNDRED_PERCENT = 100;
     return {
       value: shift,
-      position: ((shift - (this.min ?? 0)) * hundredPercent) / this.getRange(),
+      position: ((shift - (this.min ?? 0)) * HUNDRED_PERCENT) / this.getRange(),
     };
   }
 
@@ -280,8 +280,8 @@ class ModelCalc extends ModelData {
 
     if (!isKey) {
       if (!this.keyStepOne && this.keyStepHold) {
-        const defaultKeyStep = 1;
-        this.keyStepOne = defaultKeyStep;
+        const DEFAULT_KEY_STEP = 1;
+        this.keyStepOne = DEFAULT_KEY_STEP;
       }
 
       if (!this.keyStepHold && this.keyStepOne) {
@@ -323,8 +323,8 @@ class ModelCalc extends ModelData {
   }
 
   protected static calcWidthPercent(width: number, dimensions: number) {
-    const hundredPercent = 100;
-    return ((width * hundredPercent) / dimensions) / 2;
+    const HUNDRED_PERCENT = 100;
+    return ((width * HUNDRED_PERCENT) / dimensions) / 2;
   }
 }
 

@@ -8,25 +8,25 @@ mixin code(options = {})
       isLabeled,
     } = options;
 
-    const classComponent = 'code';
-    let className = classComponent;
-    const codeTop = '$(\'.demo\').RangeSliderFox({';
-    const codeBottom = '})';
+    const CLASS_COMPONENT = 'code';
+    let className = CLASS_COMPONENT;
+    const CODE_TOP = '$(\'.demo\').RangeSliderFox({';
+    const CODE_BOTTOM = '})';
 
     if(modifier){
-      className += ` ${classComponent}_${modifier}`
+      className += ` ${CLASS_COMPONENT}_${modifier}`
     }
     if(addClass){
       className += ` ${addClass}`
     }
 
-  fieldset(class=`${className} js-${classComponent}`)
+  fieldset(class=`${className} js-${CLASS_COMPONENT}`)
     - if(!isLabeled){
-        legend(class=`${classComponent}__label`)= label
+        legend(class=`${CLASS_COMPONENT}__label`)= label
     -}
     
-    div(class=`${classComponent}__config`)
-      p(class=`${classComponent}__lang-js`)=codeTop
-      ul(class=`${classComponent}__options js-${classComponent}__options`)
-      p(class=`${classComponent}__lang-js`)=codeBottom
-    button(class=`${classComponent}__copy js-${classComponent}__copy`) Copy code
+    div(class=`${CLASS_COMPONENT}__config`)
+      p(class=`${CLASS_COMPONENT}__lang-js`)=CODE_TOP
+      ul(class=`${CLASS_COMPONENT}__options js-${CLASS_COMPONENT}__options`)
+      p(class=`${CLASS_COMPONENT}__lang-js`)=CODE_BOTTOM
+    button(class=`${CLASS_COMPONENT}__copy js-${CLASS_COMPONENT}__copy`) Copy code

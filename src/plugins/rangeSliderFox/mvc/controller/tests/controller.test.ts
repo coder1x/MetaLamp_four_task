@@ -44,10 +44,10 @@ describe('------- Test Controller API -------', () => {
     wrapper.appendChild(input);
   });
 
-  const testName1 = ' Check plugin events (onStart, onUpdate, onReset) '
+  const TEST_NAME1 = ' Check plugin events (onStart, onUpdate, onReset) '
     + 'and API (update, reset)';
   // onStart, onUpdate, update, onReset, reset
-  test(testName1, () => {
+  test(TEST_NAME1, () => {
     const controller = new Controller(new Model({
       onStart: (data: RangeSliderOptions) => {
         expect(data).toStrictEqual(defaultData);
@@ -169,10 +169,10 @@ describe('------- Test Controller API -------', () => {
     }), new View(input));
   });
 
-  const testName2 = ' Check if plugin is configured in '
+  const TEST_NAME2 = ' Check if plugin is configured in '
     + 'line with data-attributes on its start ';
   // Data-Attributes static
-  test(testName2, async () => {
+  test(TEST_NAME2, async () => {
     await input.setAttribute('data-from', '5');
     new Controller(new Model({
       onUpdate: (data: RangeSliderOptions) => {

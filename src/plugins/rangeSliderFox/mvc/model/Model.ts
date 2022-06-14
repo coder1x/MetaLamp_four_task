@@ -37,7 +37,7 @@ class Model extends ModelCalc {
       setProperty(this, key as keyof Model, value as this[keyof Model]);
     });
 
-    const keys = [
+    const KEYS = [
       'RangeData',
       'Step',
       'DotData',
@@ -51,7 +51,7 @@ class Model extends ModelCalc {
       'Start',
     ];
 
-    keys.forEach((key) => {
+    KEYS.forEach((key) => {
       this.notifyObserver({
         key,
         ...options,
@@ -183,11 +183,11 @@ class Model extends ModelCalc {
   @boundMethod
   calcBarCoordinates(pointXY: number, dimensions: number) {
     const vertical = this.orientation === 'vertical';
-    const hundredPercent = 100;
-    const onePercent = dimensions / hundredPercent; // one percent of the entire scale
+    const HUNDRED_PERCENT = 100;
+    const onePercent = dimensions / HUNDRED_PERCENT; // one percent of the entire scale
 
     const calcXY = (valuePercent: number) => this.takeFromOrToOnLineClick(
-      ((hundredPercent - valuePercent) * onePercent) + pointXY,
+      ((HUNDRED_PERCENT - valuePercent) * onePercent) + pointXY,
       dimensions,
     );
 
@@ -298,12 +298,12 @@ class Model extends ModelCalc {
     let isFrom = false;
     let isTo = false;
 
-    const hundredPercent = 100;
-    const onePercent = dimensions / hundredPercent; // one percent of the entire scale
+    const HUNDRED_PERCENT = 100;
+    const onePercent = dimensions / HUNDRED_PERCENT; // one percent of the entire scale
     let pointPercent = 0;
 
     if (this.orientation === 'vertical') {
-      pointPercent = hundredPercent - (pointXY / onePercent); // total percentage in the clicked area
+      pointPercent = HUNDRED_PERCENT - (pointXY / onePercent); // total percentage in the clicked area
     } else {
       pointPercent = pointXY / onePercent; // total percentage in the clicked area
     }
@@ -663,14 +663,14 @@ class Model extends ModelCalc {
     if (gridStep > (this.max ?? 0)) { gridStep = this.max; }
 
     if (!gridNumber && !gridStep) {
-      const defaultGridNumber = 4;
-      gridNumber = defaultGridNumber;
+      const DEFAULT_GRID_NUMBER = 4;
+      gridNumber = DEFAULT_GRID_NUMBER;
     }
 
-    const minGridRound = 0;
-    const maxGridRound = 100;
-    const isGridRoundBelowLimit = gridRound < minGridRound;
-    const isGridRoundAboveLimit = gridRound > maxGridRound;
+    const MIN_GRID_ROUND = 0;
+    const MAX_GRID_ROUND = 100;
+    const isGridRoundBelowLimit = gridRound < MIN_GRID_ROUND;
+    const isGridRoundAboveLimit = gridRound > MAX_GRID_ROUND;
     if (isGridRoundBelowLimit || isGridRoundAboveLimit) {
       gridRound = 0;
     }
@@ -721,9 +721,9 @@ class Model extends ModelCalc {
     if (!validateProperties(options, ['theme'])) return false;
 
     const theme = options.theme ?? ''.replace(/\s/g, '');
-    const maxLengthName = 20;
+    const MAX_LENGTH_NAME = 20;
 
-    if (theme.length <= maxLengthName) {
+    if (theme.length <= MAX_LENGTH_NAME) {
       this.theme = theme;
     } else {
       console.log('параметр theme - превышает допустимое '
@@ -738,15 +738,15 @@ class Model extends ModelCalc {
   }
 
   private setCallbacks(options: RangeSliderOptions): boolean {
-    const checkKey = [
+    const CHECK_KEY = [
       'onStart',
       'onChange',
       'onUpdate',
       'onReset',
     ];
     let isCallback = false;
-    for (let i = 0; i < checkKey.length; i += 1) {
-      if (Object.keys(options).lastIndexOf(checkKey[i]) !== -1) {
+    for (let i = 0; i < CHECK_KEY.length; i += 1) {
+      if (Object.keys(options).lastIndexOf(CHECK_KEY[i]) !== -1) {
         isCallback = true;
         break;
       }
@@ -806,17 +806,17 @@ class Model extends ModelCalc {
       tipFromTo,
     } = options;
 
-    const maxLengthString = 15;
+    const MAX_LENGTH_STRING = 15;
     const tipPostfixValue = checkProperty(this, tipPostfix, 'tipPostfix' as keyof Model);
     if (typeof tipPostfixValue === 'string') {
-      this.tipPostfix = String(tipPostfixValue).replace(/\s/g, '').substring(0, maxLengthString);
+      this.tipPostfix = String(tipPostfixValue).replace(/\s/g, '').substring(0, MAX_LENGTH_STRING);
     } else {
       this.tipPostfix = '';
     }
 
     const tipPrefixValue = checkProperty(this, tipPrefix, 'tipPrefix' as keyof Model);
     if (typeof tipPrefixValue === 'string') {
-      this.tipPrefix = String(tipPrefixValue).replace(/\s/g, '').substring(0, maxLengthString);
+      this.tipPrefix = String(tipPrefixValue).replace(/\s/g, '').substring(0, MAX_LENGTH_STRING);
     } else {
       this.tipPrefix = '';
     }

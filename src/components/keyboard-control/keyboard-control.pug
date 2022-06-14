@@ -9,11 +9,11 @@ mixin keyboard-control(options = {})
       isLabeled
     } = options;
 
-    const classComponent = 'keyboard-control'
-    let className = classComponent
+    const CLASS_COMPONENT = 'keyboard-control'
+    let className = CLASS_COMPONENT
     
     if(modifier){
-      className += ` ${classComponent}_${modifier}`
+      className += ` ${CLASS_COMPONENT}_${modifier}`
     }
     if(addClass){
       className += ` ${addClass}`
@@ -22,13 +22,13 @@ mixin keyboard-control(options = {})
     const data = require('./keyboard-control.json'); 
     const textField = data.textField
 
-  fieldset(class=`${className} js-${classComponent}`)
+  fieldset(class=`${className} js-${CLASS_COMPONENT}`)
     - if(!isLabeled){
-        legend(class=`${classComponent}__label`)= label
+        legend(class=`${CLASS_COMPONENT}__label`)= label
     -}
 
-    div(class=`${classComponent}__one-wrapper js-${classComponent}__one-wrapper`)
+    div(class=`${CLASS_COMPONENT}__one-wrapper js-${CLASS_COMPONENT}__one-wrapper`)
       +text-field(textField.one)
       
-    div(class=`${classComponent}__hold-wrapper js-${classComponent}__hold-wrapper`)
+    div(class=`${CLASS_COMPONENT}__hold-wrapper js-${CLASS_COMPONENT}__hold-wrapper`)
       +text-field(textField.hold)

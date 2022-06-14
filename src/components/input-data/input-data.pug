@@ -9,22 +9,22 @@ mixin input-data(options = {})
       isLabeled
     } = options;
 
-    const classComponent = 'input-data'
-    let className = classComponent
+    const CLASS_COMPONENT = 'input-data'
+    let className = CLASS_COMPONENT
     
     if(modifier){
-      className += ` ${classComponent}_${modifier}`
+      className += ` ${CLASS_COMPONENT}_${modifier}`
     }
     if(addClass){
       className += ` ${addClass}`
     }
 
-  fieldset(class=`${className} js-${classComponent}`)
+  fieldset(class=`${className} js-${CLASS_COMPONENT}`)
     - if(!isLabeled){
-        legend(class=`${classComponent}__label`)= label
+        legend(class=`${CLASS_COMPONENT}__label`)= label
     -}
     
-    div(class=`${classComponent}__value-wrapper`)
+    div(class=`${CLASS_COMPONENT}__value-wrapper`)
       +text-field({
         label: 'value',
         typeField: 'text',

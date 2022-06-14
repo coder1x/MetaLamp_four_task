@@ -9,11 +9,11 @@ mixin values(options = {})
       isLabeled,
     } = options;
 
-    const classComponent = 'values'
-    let className = classComponent
+    const CLASS_COMPONENT = 'values'
+    let className = CLASS_COMPONENT
     
     if(modifier){
-      className += ` ${classComponent}_${modifier}`
+      className += ` ${CLASS_COMPONENT}_${modifier}`
     }
     if(addClass){
       className += ` ${addClass}`
@@ -23,22 +23,22 @@ mixin values(options = {})
 
     const textField = data.textField
     
-  fieldset(class=`${className} js-${classComponent}`)
+  fieldset(class=`${className} js-${CLASS_COMPONENT}`)
     - if(!isLabeled){
-        legend(class=`${classComponent}__label`)= label
+        legend(class=`${CLASS_COMPONENT}__label`)= label
     -}
 
-    div(class=`${classComponent}__min-wrapper js-${classComponent}__min-wrapper`)
+    div(class=`${CLASS_COMPONENT}__min-wrapper js-${CLASS_COMPONENT}__min-wrapper`)
       +text-field(textField.min)
 
-    div(class=`${classComponent}__max-wrapper js-${classComponent}__max-wrapper`)
+    div(class=`${CLASS_COMPONENT}__max-wrapper js-${CLASS_COMPONENT}__max-wrapper`)
       +text-field(textField.max)
 
-    div(class=`${classComponent}__from-wrapper js-${classComponent}__from-wrapper`)
+    div(class=`${CLASS_COMPONENT}__from-wrapper js-${CLASS_COMPONENT}__from-wrapper`)
       +text-field(textField.from)
 
-    div(class=`${classComponent}__to-wrapper js-${classComponent}__to-wrapper`)
+    div(class=`${CLASS_COMPONENT}__to-wrapper js-${CLASS_COMPONENT}__to-wrapper`)
       +text-field(textField.to)
 
-    div(class=`${classComponent}__step-wrapper js-${classComponent}__step-wrapper`)
+    div(class=`${CLASS_COMPONENT}__step-wrapper js-${CLASS_COMPONENT}__step-wrapper`)
       +text-field(textField.step)

@@ -89,10 +89,10 @@ describe('------- Test Handle API -------', () => {
     expect(isVertical).toBeTruthy();
   });
 
-  const testName = ' Check if an event of dots'
+  const TEST_NAME = ' Check if an event of dots'
     + ' movement along the track is triggered ';
   // bindEvent
-  test(testName, async () => {
+  test(TEST_NAME, async () => {
     const wrapper: HTMLElement = document.createElement('div');
     const input: HTMLInputElement = document.createElement('input');
     wrapper.appendChild(input);

@@ -10,31 +10,31 @@ mixin select(options = {})
       addClass = '',
     } = options;
 
-    const classComponent = 'select'
-    let className = classComponent
+    const CLASS_COMPONENT = 'select'
+    let className = CLASS_COMPONENT
     
     if(modifier){
-        className += ` ${classComponent}_${modifier}`
+        className += ` ${CLASS_COMPONENT}_${modifier}`
     }
     if(addClass){
         className += ` ${addClass}`
     }
 
-  div(class=`${className} js-${classComponent}`)
+  div(class=`${className} js-${CLASS_COMPONENT}`)
     - if(!isLabeled){
-          p(class=`${classComponent}__label-text`)= label
+          p(class=`${CLASS_COMPONENT}__label-text`)= label
     -}
 
-    div(class=`${classComponent}__displayed-wrapper js-${classComponent}__displayed-wrapper`)
-      button(class=`${classComponent}__displayed js-${classComponent}__displayed`)
-      img(class=`${classComponent}__tip js-${classComponent}__tip` src=require('./img/tip.svg') alt='угалок')
+    div(class=`${CLASS_COMPONENT}__displayed-wrapper js-${CLASS_COMPONENT}__displayed-wrapper`)
+      button(class=`${CLASS_COMPONENT}__displayed js-${CLASS_COMPONENT}__displayed`)
+      img(class=`${CLASS_COMPONENT}__tip js-${CLASS_COMPONENT}__tip` src=require('./img/tip.svg') alt='угалок')
       
-    ul(class=`${classComponent}__options js-${classComponent}__options`)
+    ul(class=`${CLASS_COMPONENT}__options js-${CLASS_COMPONENT}__options`)
       -for(const item of list){
-        - let selector=`${classComponent}__item js-${classComponent}__item`;
+        - let selector=`${CLASS_COMPONENT}__item js-${CLASS_COMPONENT}__item`;
         -if(item.selected){
           -selector += ' '+item.selected;
         -}
         li(class=selector tabindex='0' data-value=item.value)=item.text
       -}
-    input(class=`${classComponent}__input js-${classComponent}__input` type='text' value='' tabindex='-2' name=name)
+    input(class=`${CLASS_COMPONENT}__input js-${CLASS_COMPONENT}__input` type='text' value='' tabindex='-2' name=name)

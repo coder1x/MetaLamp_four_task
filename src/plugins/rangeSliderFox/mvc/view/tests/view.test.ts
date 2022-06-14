@@ -45,8 +45,8 @@ describe('------- Test View API -------', () => {
       from: 30,
       to: 70,
       onStart: async () => {
-        const data = { from: 45, to: 86 };
-        expect(view.outputDataAttribute()).toEqual(data);
+        const DATA = { from: 45, to: 86 };
+        expect(view.outputDataAttribute()).toEqual(DATA);
       },
     });
 

@@ -87,9 +87,9 @@ describe('------- Test Model API -------', () => {
 
   // calcOnePercent
   test(' Check what one percent of a range is equal to ', () => {
-    const maxValue = [1200, 134.67, 800];
-    const minValue = [-120, 23.54, 0];
-    const resultValue = [13.2, 1.1113, 8];
+    const MAX_VALUE = [1200, 134.67, 800];
+    const MIN_VALUE = [-120, 23.54, 0];
+    const RESULT_VALUE = [13.2, 1.1113, 8];
 
     const test = async (min: number, max: number, result: number) => {
       const model = await new Model({
@@ -101,8 +101,8 @@ describe('------- Test Model API -------', () => {
       expect(model.calcOnePercent()).toBeCloseTo(result);
     };
 
-    for (let i = 0; i < resultValue.length; i += 1) {
-      test(minValue[i], maxValue[i], resultValue[i]);
+    for (let i = 0; i < RESULT_VALUE.length; i += 1) {
+      test(MIN_VALUE[i], MAX_VALUE[i], RESULT_VALUE[i]);
     }
   });
 
@@ -142,10 +142,10 @@ describe('------- Test Model API -------', () => {
     if (model.onHandle) { await model.onHandle(); }
   });
 
-  const testName1 = ' Check dots mooving along '
+  const TEST_NAME1 = ' Check dots mooving along '
     + 'the grid and interaction with each other ';
   //  calcFromTo
-  test(testName1, async () => {
+  test(TEST_NAME1, async () => {
     let model: Model;
     let wrapperWidthHeight = 1120;
     let position = 533.7142944335938;
@@ -285,10 +285,10 @@ describe('------- Test Model API -------', () => {
     if (model.onHandle) { await model.onHandle(); }
   });
 
-  const testName2 = ' Calculate numeral grid'
+  const TEST_NAME2 = ' Calculate numeral grid'
     + ' relating range and interval or step ';
   //  createMark
-  test(testName2, async () => {
+  test(TEST_NAME2, async () => {
     let model = await new Model({
       min: 10,
       max: 800,
@@ -296,16 +296,16 @@ describe('------- Test Model API -------', () => {
       gridStep: 0,
       gridNumber: 40,
       onStart: async () => {
-        const values = [
+        const VALUES = [
           { value: 89, position: 10 },
           { value: 662, position: 82.5 },
           { value: 780, position: 97.5 },
         ];
 
         const grid = model.calcMark();
-        expect(grid[4]).toEqual(values[0]);
-        expect(grid[33]).toEqual(values[1]);
-        expect(grid[39]).toEqual(values[2]);
+        expect(grid[4]).toEqual(VALUES[0]);
+        expect(grid[33]).toEqual(VALUES[1]);
+        expect(grid[39]).toEqual(VALUES[2]);
       },
     });
 
@@ -318,16 +318,16 @@ describe('------- Test Model API -------', () => {
       gridStep: 15,
       gridNumber: 0,
       onStart: async () => {
-        const valuesGrid = [
+        const VALUES_GRID = [
           { value: 64.4, position: 9.243966771020782 },
           { value: 514.4, position: 64.70776739714547 },
           { value: 574.4, position: 72.10294081396209 },
         ];
 
         const grid = model.calcMark();
-        expect(grid[5]).toEqual(valuesGrid[0]);
-        expect(grid[35]).toEqual(valuesGrid[1]);
-        expect(grid[39]).toEqual(valuesGrid[2]);
+        expect(grid[5]).toEqual(VALUES_GRID[0]);
+        expect(grid[35]).toEqual(VALUES_GRID[1]);
+        expect(grid[39]).toEqual(VALUES_GRID[2]);
       },
     });
 
@@ -346,8 +346,8 @@ describe('------- Test Model API -------', () => {
         await model.calcOnePercent();
         await model.calcPercentFrom();
         await model.calcPercentTo();
-        const positionBar = { barXY: 23.91304347826087, widthBar: 54.347826086956516 };
-        expect(model.calcBarDimensions()).toEqual(positionBar);
+        const POSITION_BAR = { barXY: 23.91304347826087, widthBar: 54.347826086956516 };
+        expect(model.calcBarDimensions()).toEqual(POSITION_BAR);
       },
     });
 
@@ -362,8 +362,8 @@ describe('------- Test Model API -------', () => {
       onStart: async () => {
         await model.calcOnePercent();
         await model.calcPercentFrom();
-        const positionBar = { barXY: 0, widthBar: 23.91304347826087 };
-        expect(model.calcBarDimensions()).toEqual(positionBar);
+        const POSITION_BAR = { barXY: 0, widthBar: 23.91304347826087 };
+        expect(model.calcBarDimensions()).toEqual(POSITION_BAR);
       },
     });
 
@@ -436,10 +436,10 @@ describe('------- Test Model API -------', () => {
     if (model.onHandle) { await model.onHandle(); }
   });
 
-  const testName3 = ' Check calculation of a click'
+  const TEST_NAME3 = ' Check calculation of a click'
     + ' on a progress-bar between dots ';
   // clickBar
-  test(testName3, async () => {
+  test(TEST_NAME3, async () => {
     let model = await new Model({
       type: 'double',
       min: -120,
@@ -469,8 +469,8 @@ describe('------- Test Model API -------', () => {
       onStart: async () => {
         await model.calcOnePercent();
         await model.calcPercentFrom();
-        const pointerBar = { from: 92, to: 600 };
-        expect(model.calcBarCoordinates(10, 1120)).toEqual(pointerBar);
+        const POINTER_BAR = { from: 92, to: 600 };
+        expect(model.calcBarCoordinates(10, 1120)).toEqual(POINTER_BAR);
       },
     });
 
@@ -485,18 +485,18 @@ describe('------- Test Model API -------', () => {
       onStart: async () => {
         await model.calcOnePercent();
         await model.calcPercentFrom();
-        const pointerBar = { from: -79, to: 600 };
-        expect(model.calcBarCoordinates(50, 1120)).toEqual(pointerBar);
+        const POINTER_BAR = { from: -79, to: 600 };
+        expect(model.calcBarCoordinates(50, 1120)).toEqual(POINTER_BAR);
       },
     });
 
     if (model.onHandle) { await model.onHandle(); }
   });
 
-  const testName4 = ' Check dots values changes '
+  const TEST_NAME4 = ' Check dots values changes '
     + 'on clicking on the grid element ';
   // clickMark
-  test(testName4, async () => {
+  test(TEST_NAME4, async () => {
     let model = await new Model({
       type: 'double',
       min: -120,
@@ -553,10 +553,10 @@ describe('------- Test Model API -------', () => {
     if (model.onHandle) { await model.onHandle(); }
   });
 
-  const testName5 = ' Calculate dots positions relating '
+  const TEST_NAME5 = ' Calculate dots positions relating '
     + 'grid mark and further moovement along the grid ';
   //  calcSnap & snapDot
-  test(testName5, async () => {
+  test(TEST_NAME5, async () => {
     const model = await new Model({
       type: 'double',
       min: -120,
@@ -577,19 +577,19 @@ describe('------- Test Model API -------', () => {
         snap.shift();
         snap.pop();
 
-        const data = { from: 110, to: 616 };
-        expect(model.setSnapFromTo(snap)).toEqual(data);
-        expect(model.toggleSnapMode()).toEqual(data);
+        const DATA = { from: 110, to: 616 };
+        expect(model.setSnapFromTo(snap)).toEqual(DATA);
+        expect(model.toggleSnapMode()).toEqual(DATA);
       },
     });
 
     if (model.onHandle) { await model.onHandle(); }
   });
 
-  const testName6 = ' Calculate dots movement when'
+  const TEST_NAME6 = ' Calculate dots movement when'
     + ' controlling from keyboard ';
   // calcKeyDown
-  test(testName6, async () => {
+  test(TEST_NAME6, async () => {
     let model = await new Model({
       type: 'double',
       min: -120,
