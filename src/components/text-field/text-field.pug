@@ -18,7 +18,7 @@ mixin text-field(options)
   div(class=className)
     label(class=`${BASE_CLASS}__label`)
       if !isLabeled
-        p(class=`${BASE_CLASS}__label-text`)= label
+        = label
       
       input(class=`${BASE_CLASS}__input` type=typeField placeholder=placeholder value='' name=name)
       

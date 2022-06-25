@@ -48,18 +48,10 @@ if (!env.isPlugin) {
       inject: 'body',
       hash: true,
       meta: {
-        'Content-Type': {
-          'http-equiv': 'Content-Type',
-          content: 'text/html',
-        },
         viewport: {
           name: 'viewport',
           content:
             'width=device-width, initial-scale=1',
-        },
-        compatible: {
-          'http-equiv': 'x-ua-compatible',
-          content: 'ie=edge',
         },
         description: {
           name: 'description',
@@ -156,9 +148,7 @@ plugins.push(
         'apple-touch-icon-precomposed.png',
         'apple-touch-icon.png',
       ],
-      appleStartup: [
-        'apple-touch-startup-image-640x1136.png',
-      ],
+      appleStartup: [],
       coast: true, // Create Opera Coast icon. `boolean`
       favicons: true, // Create regular favicons. `boolean`
       firefox: [
