@@ -5,28 +5,23 @@ mixin grid(options = {})
   -
     const {
       label = '',
-      modifier = '',
       addClass = '',
-      isLabeled,
+      isLabeled = false,
     } = options;
 
     const CLASS_COMPONENT = 'grid'
     let className = CLASS_COMPONENT
     
-    if(modifier){
-      className += ` ${CLASS_COMPONENT}_${modifier}`
-    }
-    if(addClass){
-      className += ` ${addClass}`
-    }
-
+  if addClass
+    - className += ` ${addClass}`
+  
+  -
     const data = require('./grid.json'); 
     const textField = data.textField
 
   fieldset(class=`${className} js-${CLASS_COMPONENT}`)
-    - if(!isLabeled){
-        legend(class=`${CLASS_COMPONENT}__label`)= label
-    -}
+    if !isLabeled
+      legend(class=`${CLASS_COMPONENT}__label`)= label
 
     div(class=`${CLASS_COMPONENT}__grid-wrapper js-${CLASS_COMPONENT}__grid-wrapper`)
       +toggle({

@@ -4,31 +4,27 @@ mixin keyboard-control(options = {})
   -
     const {
       label = '',
-      modifier = '',
       addClass = '',
-      isLabeled
+      isLabeled = false
     } = options;
 
-    const CLASS_COMPONENT = 'keyboard-control'
-    let className = CLASS_COMPONENT
+    const BASE_CLASS = 'keyboard-control'
+    let className = BASE_CLASS
     
-    if(modifier){
-      className += ` ${CLASS_COMPONENT}_${modifier}`
-    }
-    if(addClass){
-      className += ` ${addClass}`
-    }
-
+  if addClass
+    - className += ` ${addClass}`
+  
+  -
     const data = require('./keyboard-control.json'); 
     const textField = data.textField
 
-  fieldset(class=`${className} js-${CLASS_COMPONENT}`)
-    - if(!isLabeled){
-        legend(class=`${CLASS_COMPONENT}__label`)= label
-    -}
+  fieldset(class=`${className} js-${BASE_CLASS}`)
+    if !isLabeled
+      legend(class=`${BASE_CLASS}__label`)= label
+    
 
-    div(class=`${CLASS_COMPONENT}__one-wrapper js-${CLASS_COMPONENT}__one-wrapper`)
+    div(class=`${BASE_CLASS}__one-wrapper js-${BASE_CLASS}__one-wrapper`)
       +text-field(textField.one)
       
-    div(class=`${CLASS_COMPONENT}__hold-wrapper js-${CLASS_COMPONENT}__hold-wrapper`)
+    div(class=`${BASE_CLASS}__hold-wrapper js-${BASE_CLASS}__hold-wrapper`)
       +text-field(textField.hold)

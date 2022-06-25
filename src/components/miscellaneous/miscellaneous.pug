@@ -3,65 +3,61 @@ include ../select/select.pug
 
 mixin miscellaneous(options = {})
   -
-    const CLASS_COMPONENT = 'miscellaneous'
+    const BASE_CLASS = 'miscellaneous'
 
     const {
       label = '',
-      modifier = '',
       addClass = '',
-      isLabeled,
+      isLabeled = false,
     } = options;
 
-    let className = CLASS_COMPONENT
-    
-    if(modifier){
-      className += ` ${CLASS_COMPONENT}_${modifier}`
-    }
-    if(addClass){
-      className += ` ${addClass}`
-    }
+    let className = BASE_CLASS
 
+  if addClass
+    - className += ` ${addClass}`
+  
+  -
     const data = require('./miscellaneous.json'); 
     const selectData = data.select
 
-  fieldset(class=`${className} js-${CLASS_COMPONENT}`)
-    - if(!isLabeled){
-        legend(class=`${CLASS_COMPONENT}__label`)= label
-    -}
+  fieldset(class=`${className} js-${BASE_CLASS}`)
+    if !isLabeled
+      legend(class=`${BASE_CLASS}__label`)= label
+    
 
-    div(class=`${CLASS_COMPONENT}__double-wrapper js-${CLASS_COMPONENT}__double-wrapper`)
+    div(class=`${BASE_CLASS}__double-wrapper js-${BASE_CLASS}__double-wrapper`)
       +toggle({
         header: 'double',
       })
 
-    div(class=`${CLASS_COMPONENT}__disabled-wrapper js-${CLASS_COMPONENT}__disabled-wrapper`)
+    div(class=`${BASE_CLASS}__disabled-wrapper js-${BASE_CLASS}__disabled-wrapper`)
       +toggle({
         header: 'disabled',
       })
 
-    div(class=`${CLASS_COMPONENT}__vertical-wrapper js-${CLASS_COMPONENT}__vertical-wrapper`)
+    div(class=`${BASE_CLASS}__vertical-wrapper js-${BASE_CLASS}__vertical-wrapper`)
       +toggle({
         header: 'vertical',
       })
 
-    div(class=`${CLASS_COMPONENT}__bar-wrapper js-${CLASS_COMPONENT}__bar-wrapper`)
+    div(class=`${BASE_CLASS}__bar-wrapper js-${BASE_CLASS}__bar-wrapper`)
       +toggle({
         header: 'bar',
       })
 
-    div(class=`${CLASS_COMPONENT}__unsubscribtion-wrapper js-${CLASS_COMPONENT}__unsubscribtion-wrapper`)
+    div(class=`${BASE_CLASS}__unsubscribtion-wrapper js-${BASE_CLASS}__unsubscribtion-wrapper`)
       +toggle({
         header: 'unsubscribtion',
       })
 
-    div(class=`${CLASS_COMPONENT}__select-wrapper js-${CLASS_COMPONENT}__select-wrapper`)
+    div(class=`${BASE_CLASS}__select-wrapper js-${BASE_CLASS}__select-wrapper`)
       +select({
         label: 'Skin',
         list: selectData,
       })
 
-    div(class=`${CLASS_COMPONENT}__reset-wrapper`)
-      button(class=`${CLASS_COMPONENT}__reset js-${CLASS_COMPONENT}__reset`) Reset
+    div(class=`${BASE_CLASS}__reset-wrapper`)
+      button(class=`${BASE_CLASS}__reset js-${BASE_CLASS}__reset`) Reset
       
-    div(class=`${CLASS_COMPONENT}__apply-wrapper`)
-      button(class=`${CLASS_COMPONENT}__apply`) Apply
+    div(class=`${BASE_CLASS}__apply-wrapper`)
+      button(class=`${BASE_CLASS}__apply`) Apply

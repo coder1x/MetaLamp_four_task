@@ -5,41 +5,37 @@ mixin hints(options = {})
   -
     const {
       label = '',
-      modifier = '',
       addClass = '',
-      isLabeled,
+      isLabeled = false,
     } = options;
 
-    const CLASS_COMPONENT = 'hints'
-    let className = CLASS_COMPONENT
+    const BASE_CLASS = 'hints'
+    let className = BASE_CLASS
     
-    if(modifier){
-      className += ` ${CLASS_COMPONENT}_${modifier}`
-    }
-    if(addClass){
-      className += ` ${addClass}`
-    }
-
+  if addClass
+    - className += ` ${addClass}`
+  
+  -
     const data = require('./hints.json'); 
     const textField = data.textField
 
-  fieldset(class=`${className} js-${CLASS_COMPONENT}`)
-    - if(!isLabeled){
-        legend(class=`${CLASS_COMPONENT}__label`)= label
-    -}
+  fieldset(class=`${className} js-${BASE_CLASS}`)
+    if !isLabeled
+      legend(class=`${BASE_CLASS}__label`)= label
+    
 
-    div(class=`${CLASS_COMPONENT}__minmax-wrapper js-${CLASS_COMPONENT}__minmax-wrapper`)
+    div(class=`${BASE_CLASS}__minmax-wrapper js-${BASE_CLASS}__minmax-wrapper`)
       +toggle({
         header: 'min - max',
       })
 
-    div(class=`${CLASS_COMPONENT}__fromto-wrapper js-${CLASS_COMPONENT}__fromto-wrapper`)
+    div(class=`${BASE_CLASS}__fromto-wrapper js-${BASE_CLASS}__fromto-wrapper`)
       +toggle({
         header: 'from - to',
       })
 
-    div(class=`${CLASS_COMPONENT}__prefix-wrapper js-${CLASS_COMPONENT}__prefix-wrapper`)
+    div(class=`${BASE_CLASS}__prefix-wrapper js-${BASE_CLASS}__prefix-wrapper`)
       +text-field(textField.prefix)
       
-    div(class=`${CLASS_COMPONENT}__postfix-wrapper js-${CLASS_COMPONENT}__postfix-wrapper`)
+    div(class=`${BASE_CLASS}__postfix-wrapper js-${BASE_CLASS}__postfix-wrapper`)
       +text-field(textField.postfix)

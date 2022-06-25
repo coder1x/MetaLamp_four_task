@@ -3,30 +3,26 @@ mixin code(options = {})
   -
     const {
       label = '',
-      modifier = '',
       addClass = '',
-      isLabeled,
+      isLabeled = false,
     } = options;
 
-    const CLASS_COMPONENT = 'code';
-    let className = CLASS_COMPONENT;
+    const BASE_CLASS = 'code';
+    let className = BASE_CLASS;
     const CODE_TOP = '$(\'.demo\').RangeSliderFox({';
     const CODE_BOTTOM = '})';
 
-    if(modifier){
-      className += ` ${CLASS_COMPONENT}_${modifier}`
-    }
-    if(addClass){
-      className += ` ${addClass}`
-    }
+  if addClass
+    - className += ` ${addClass}`
+  
 
-  fieldset(class=`${className} js-${CLASS_COMPONENT}`)
-    - if(!isLabeled){
-        legend(class=`${CLASS_COMPONENT}__label`)= label
-    -}
+  fieldset(class=`${className} js-${BASE_CLASS}`)
+    if !isLabeled
+      legend(class=`${BASE_CLASS}__label`)= label
     
-    div(class=`${CLASS_COMPONENT}__config`)
-      p(class=`${CLASS_COMPONENT}__lang-js`)=CODE_TOP
-      ul(class=`${CLASS_COMPONENT}__options js-${CLASS_COMPONENT}__options`)
-      p(class=`${CLASS_COMPONENT}__lang-js`)=CODE_BOTTOM
-    button(class=`${CLASS_COMPONENT}__copy js-${CLASS_COMPONENT}__copy`) Copy code
+    
+    div(class=`${BASE_CLASS}__config`)
+      p(class=`${BASE_CLASS}__lang-js`)=CODE_TOP
+      ul(class=`${BASE_CLASS}__options js-${BASE_CLASS}__options`)
+      p(class=`${BASE_CLASS}__lang-js`)=CODE_BOTTOM
+    button(class=`${BASE_CLASS}__copy js-${BASE_CLASS}__copy`) Copy code

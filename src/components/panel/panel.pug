@@ -9,23 +9,19 @@ include ../keyboard-control/keyboard-control.pug
 mixin panel(options = {})
   -
     const {
-      modifier = '',
       addClass = '',
       theme = 'base',
     } = options;
 
-    const CLASS_COMPONENT = 'panel'
-    let className = CLASS_COMPONENT
-    
-    if(modifier){
-      className += ` ${CLASS_COMPONENT}_${modifier}`
-    }
-    if(addClass){
-      className += ` ${addClass}`
-    }
+    const BASE_CLASS = 'panel'
+    let className = BASE_CLASS
 
-  div(class=`${className} js-${CLASS_COMPONENT}`)
-    div(class=`${CLASS_COMPONENT}__slider-wrapper js-${CLASS_COMPONENT}__slider-wrapper`)
+  if addClass
+    - className += ` ${addClass}`
+  
+
+  div(class=`${className} js-${BASE_CLASS}`)
+    div(class=`${BASE_CLASS}__slider-wrapper js-${BASE_CLASS}__slider-wrapper`)
       input(class=`rslider__${theme} visually-hidden` 
       type='text' 
       name='DATA' 
@@ -34,23 +30,23 @@ mixin panel(options = {})
       readonly=''
       )
 
-    div(class=`${CLASS_COMPONENT}__values-wrapper`)
+    div(class=`${BASE_CLASS}__values-wrapper`)
       +values({label: 'Values',})
 
-    div(class=`${CLASS_COMPONENT}__input-data-wrapper`)
+    div(class=`${BASE_CLASS}__input-data-wrapper`)
       +input-data({label: 'Input data',})
 
-    div(class=`${CLASS_COMPONENT}__keyboard-control-wrapper`)
+    div(class=`${BASE_CLASS}__keyboard-control-wrapper`)
       +keyboard-control({label: 'keyboard control',})
 
-    div(class=`${CLASS_COMPONENT}__grid-wrapper`)
+    div(class=`${BASE_CLASS}__grid-wrapper`)
       +grid({label: 'Grid',})
 
-    div(class=`${CLASS_COMPONENT}__different-wrapper`)
+    div(class=`${BASE_CLASS}__different-wrapper`)
       +miscellaneous({label: 'Miscellaneous',})
 
-    div(class=`${CLASS_COMPONENT}__hints-wrapper`)
+    div(class=`${BASE_CLASS}__hints-wrapper`)
       +hints({label: 'Hints',})
       
-    div(class=`${CLASS_COMPONENT}__code-wrapper`)
+    div(class=`${BASE_CLASS}__code-wrapper`)
       +code({label: 'Config code',})

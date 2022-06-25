@@ -1,20 +1,14 @@
 mixin footer(options = {})
   -
     const {
-      modifier = [],
       addClass = '',
     } = options;
 
-    const CLASS_COMPONENT = 'footer'
-    let className = CLASS_COMPONENT
-    
-    if(modifier){
-      for(const item of modifier)
-        className += ` ${CLASS_COMPONENT}_${item}`
-    }
-    if(addClass){
-      className += ` ${addClass}`
-    }
+    const BASE_CLASS = 'footer'
+    let className = BASE_CLASS
+
+  if addClass
+    - className += ` ${addClass}`
     
   footer(class=className role='contentinfo')
     p Клюшин А. © 2022

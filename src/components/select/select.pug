@@ -3,38 +3,38 @@ mixin select(options = {})
   -
     const {
       label = '',
-      isLabeled,
+      isLabeled = false,
       list = [],
       name = '',
       modifier = '',
       addClass = '',
     } = options;
 
-    const CLASS_COMPONENT = 'select'
-    let className = CLASS_COMPONENT
+    const BASE_CLASS = 'select'
+    let className = BASE_CLASS
     
-    if(modifier){
-        className += ` ${CLASS_COMPONENT}_${modifier}`
-    }
-    if(addClass){
-        className += ` ${addClass}`
-    }
+  if modifier
+      - className += ` ${BASE_CLASS}_${modifier}`
 
-  div(class=`${className} js-${CLASS_COMPONENT}`)
-    - if(!isLabeled){
-          p(class=`${CLASS_COMPONENT}__label-text`)= label
-    -}
+  if addClass
+      - className += ` ${addClass}`
+  
 
-    div(class=`${CLASS_COMPONENT}__displayed-wrapper js-${CLASS_COMPONENT}__displayed-wrapper`)
-      button(class=`${CLASS_COMPONENT}__displayed js-${CLASS_COMPONENT}__displayed`)
-      img(class=`${CLASS_COMPONENT}__tip js-${CLASS_COMPONENT}__tip` src=require('./img/tip.svg') alt='угалок')
+  div(class=`${className} js-${BASE_CLASS}`)
+    if !isLabeled
+      p(class=`${BASE_CLASS}__label-text`)= label
+    
+
+    div(class=`${BASE_CLASS}__displayed-wrapper js-${BASE_CLASS}__displayed-wrapper`)
+      button(class=`${BASE_CLASS}__displayed js-${BASE_CLASS}__displayed`)
+      img(class=`${BASE_CLASS}__tip js-${BASE_CLASS}__tip` src=require('./img/tip.svg') alt='угалок')
       
-    ul(class=`${CLASS_COMPONENT}__options js-${CLASS_COMPONENT}__options`)
-      -for(const item of list){
-        - let selector=`${CLASS_COMPONENT}__item js-${CLASS_COMPONENT}__item`;
-        -if(item.selected){
+    ul(class=`${BASE_CLASS}__options js-${BASE_CLASS}__options`)
+      each item in list
+        - let selector=`${BASE_CLASS}__item js-${BASE_CLASS}__item`;
+        if item.selected
           -selector += ' '+item.selected;
-        -}
+        
         li(class=selector tabindex='0' data-value=item.value)=item.text
-      -}
-    input(class=`${CLASS_COMPONENT}__input js-${CLASS_COMPONENT}__input` type='text' value='' tabindex='-2' name=name)
+
+    input(class=`${BASE_CLASS}__input js-${BASE_CLASS}__input` type='text' value='' tabindex='-2' name=name)
