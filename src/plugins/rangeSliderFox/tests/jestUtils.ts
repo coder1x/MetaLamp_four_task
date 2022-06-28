@@ -28,6 +28,6 @@ function mockKeyboardEvent(element: Element) {
   };
 }
 
-test('', async () => { });
+test('', () => { });
 
 export { mockPointerEvent, mockKeyboardEvent };

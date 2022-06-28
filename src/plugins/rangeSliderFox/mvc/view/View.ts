@@ -50,16 +50,16 @@ class View extends Observer {
     this.init();
   }
 
-  async destroy() {
+  destroy() {
     if (!this.element || !this.wrapperSlider) return false;
 
-    const typeElem = await this.element.constructor.name;
+    const typeElem = this.element.constructor.name;
     if (typeElem === 'HTMLInputElement') {
       const input = this.element as HTMLInputElement;
       input.value = ' ';
     }
-    const element = await this.wrapperSlider.querySelector(`.js-${this.rangeSliderName}`);
-    if (element) { await element.remove(); }
+    const element = this.wrapperSlider.querySelector(`.js-${this.rangeSliderName}`);
+    if (element) { element.remove(); }
 
     this.handle = null;
     this.hints = null;
@@ -482,26 +482,26 @@ class View extends Observer {
   }
 
   private init() {
-    this.onHandle = async () => {
-      await this.createDomElementBase(); // create basic DOM elements
-      await this.bindEvent(); // add event listeners
+    this.onHandle = () => {
+      this.createDomElementBase(); // create basic DOM elements
+      this.bindEvent(); // add event listeners
 
-      this.handle = await new Handle(
+      this.handle = new Handle(
         (this.rangeSliderCenter as HTMLElement),
         this.rangeSliderName,
       );
-      this.hints = await new Hints(
+      this.hints = new Hints(
         this.rangeSliderTop as Element,
         this.rangeSliderName,
       );
-      this.bar = await new Bar(
+      this.bar = new Bar(
         this.rangeSliderCenter as HTMLElement,
         this.rangeSliderName,
       );
-      this.grid = await new Grid(this.rangeSliderBottom as Element, this.rangeSliderName);
+      this.grid = new Grid(this.rangeSliderBottom as Element, this.rangeSliderName);
 
-      await this.createListeners();
-      await this.changeAttributes();
+      this.createListeners();
+      this.changeAttributes();
     };
   }
 

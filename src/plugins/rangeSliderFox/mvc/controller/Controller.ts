@@ -24,11 +24,11 @@ class Controller {
     this.init();
   }
 
-  async reset() {
+  reset() {
     if (this.lock) return false;
-    this.isReset = await true;
+    this.isReset = true;
 
-    if (this.model) { await this.model.reset(); }
+    if (this.model) { this.model.reset(); }
     this.isReset = false;
     return true;
   }
@@ -46,26 +46,26 @@ class Controller {
     return true;
   }
 
-  async destroy() {
+  destroy() {
     this.lock = true;
     if (!this.view) return false;
-    const element = await this.view.element as Element;
+    const element = this.view.element as Element;
     if (element.constructor.name !== 'HTMLInputElement') return false;
-    await $.data(element, 'RangeSliderFox', null);
-    await this.view.destroy();
+    $.data(element, 'RangeSliderFox', null);
+    this.view.destroy();
     this.view = null;
     this.model = null;
     return true;
   }
 
-  private async init() {
-    await this.createListeners();
+  private init() {
+    this.createListeners();
 
     if (!this.view || !this.model) return false;
 
-    if (this.view.onHandle) { await this.view.onHandle(); }
+    if (this.view.onHandle) { this.view.onHandle(); }
 
-    if (this.model.onHandle) { await this.model.onHandle(); }
+    if (this.model.onHandle) { this.model.onHandle(); }
 
     return true;
   }
@@ -115,14 +115,14 @@ class Controller {
   }
 
   @boundMethod
-  private async handleStart(options: ObserverOptions) {
+  private handleStart(options: ObserverOptions) {
     const { key } = options;
     const isStarted = key !== 'Start';
 
     if (isStarted || !this.view) return false;
 
-    await this.view.outputDataAttribute();
-    await this.functionAttributes();
+    this.view.outputDataAttribute();
+    this.functionAttributes();
     this.isStarted = true;
     return true;
   }
@@ -279,7 +279,7 @@ class Controller {
     if (!this.view || !this.model) return false;
 
     await this.view.setOrientation(options.orientation ?? '');
-    const modelOptions = await this.model.getOptions();
+    const modelOptions = this.model.getOptions();
     this.updateHints(modelOptions.type ?? 'double', modelOptions.from ?? 0, modelOptions.to ?? 0);
 
     // -------- grid
@@ -322,16 +322,16 @@ class Controller {
     return true;
   }
 
-  private async updateHints(type: string, from: number, to: number) {
+  private updateHints(type: string, from: number, to: number) {
     if (!this.view || !this.model) return false;
 
-    await this.view.updateTipValue(from, to, type);
-    const sizeTip = await this.view.getWidthTip();
+    this.view.updateTipValue(from, to, type);
+    const sizeTip = this.view.getWidthTip();
 
     if (!sizeTip) return false;
 
     if (sizeTip.fromWidthHeight || sizeTip.toWidthHeight) {
-      const fromXY = await this.model.calcHintFrom(
+      const fromXY = this.model.calcHintFrom(
         sizeTip.fromWidthHeight,
         this.view.getWrapWidthHeight(),
       );
@@ -339,26 +339,26 @@ class Controller {
       let singleXY = 0;
 
       if (type === 'double') {
-        toXY = await this.model.calcHintTo(
+        toXY = this.model.calcHintTo(
           sizeTip.toWidthHeight,
           this.view.getWrapWidthHeight(),
         );
-        singleXY = await this.model.calcHintSingle(
+        singleXY = this.model.calcHintSingle(
           sizeTip.singleWidthHeight,
           this.view.getWrapWidthHeight(),
         );
       } else {
-        await this.view.deleteTipTo();
-        await this.view.deleteTipSingle();
+        this.view.deleteTipTo();
+        this.view.deleteTipSingle();
       }
 
-      await this.view.updateTipPosition({
+      this.view.updateTipPosition({
         fromXY,
         toXY,
         singleXY,
       });
     }
-    await this.view.checkVisibleTip();
+    this.view.checkVisibleTip();
 
     return true;
   }
