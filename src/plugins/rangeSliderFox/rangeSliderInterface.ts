@@ -28,7 +28,7 @@ interface RangeSliderOptions {
 
 interface RangeSliderFoxFunction {
   // eslint-disable-next-line no-use-before-define
-  (options: RangeSliderOptions | void): JQuery;
+  (options?: RangeSliderOptions): JQuery;
 }
 
 interface RangeSliderFox extends

@@ -15,6 +15,7 @@ const objectPanel = renderPanel('.js-panel');
 objectPanel[0].createRangeSlider({
   type: 'double',
   theme: 'fox',
+  // orientation: 'vertical',
   min: -120,
   max: 800,
   from: 200,

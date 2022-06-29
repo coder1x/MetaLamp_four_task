@@ -21,7 +21,7 @@ import {
 import ModelCalc from './ModelCalc';
 
 class Model extends ModelCalc {
-  constructor(options: RangeSliderOptions | void = {}) {
+  constructor(options: RangeSliderOptions = {}) {
     super();
     this.createProperties(this.setDefaultConfiguration(options));
   }
@@ -64,20 +64,20 @@ class Model extends ModelCalc {
     return true;
   }
 
-  async update(options: RangeSliderOptions) {
+  update(options: RangeSliderOptions) {
     this.isUpdatedConfiguration = true;
 
-    await this.setCallbacks(options);
-    await this.setRangeData(options);
-    await this.setStep(options);
-    await this.setFromTo(options);
-    await this.setGridData(options);
-    await this.setGridSnapData(options);
-    await this.setThemeData(options);
-    await this.setBarData(options);
-    await this.setDisabledData(options);
-    await this.setHintsData(options);
-    await this.setOrientationData(options);
+    this.setCallbacks(options);
+    this.setRangeData(options);
+    this.setStep(options);
+    this.setFromTo(options);
+    this.setGridData(options);
+    this.setGridSnapData(options);
+    this.setThemeData(options);
+    this.setBarData(options);
+    this.setDisabledData(options);
+    this.setHintsData(options);
+    this.setOrientationData(options);
 
     if (this.isStartedConfiguration && typeof this.onUpdate === 'function') {
       this.onUpdate(this.getOptions());

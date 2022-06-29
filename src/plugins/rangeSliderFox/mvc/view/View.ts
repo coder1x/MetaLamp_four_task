@@ -182,7 +182,7 @@ class View extends Observer {
     if (!this.bar || !this.grid) return false;
 
     await this.bar.setOrientation(type);
-    await this.grid.setOrientation(type);
+    this.grid.setOrientation(type);
 
     return true;
   }

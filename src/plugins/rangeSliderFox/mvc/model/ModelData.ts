@@ -112,7 +112,7 @@ class ModelData extends Observer {
     };
   }
 
-  protected setDefaultConfiguration(options: RangeSliderOptions | void) {
+  protected setDefaultConfiguration(options: RangeSliderOptions) {
     this.isStartedConfiguration = false;
     this.isUpdatedConfiguration = false;
 
