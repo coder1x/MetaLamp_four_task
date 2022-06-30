@@ -65,7 +65,7 @@ class ModelCalc extends ModelData {
 
   // ---------------------------------- Snap
   toggleSnapMode() {
-    if (!this.gridSnap) return false;
+    if (!this.gridSnap || this.step) return false;
 
     this.from = ModelCalc.getSnap(this.from ?? 0, this.stepGrid, this.snapNumber);
 
@@ -125,14 +125,18 @@ class ModelCalc extends ModelData {
     let interval = 0;
     let step = 0;
     const gridNumber = this.gridNumber ?? 0;
+    const MAX_VALUE = 500;
+    const range = (this.max ?? 0) - (this.min ?? 0);
 
-    if (this.gridStep && !gridNumber) { // if STEP is defined and interval is set by default
-      step = this.gridStep;
+    const gridStep = !this.gridStep && !gridNumber ? this.step : this.gridStep;
+
+    if (gridStep && !gridNumber) { // if STEP is defined and interval is set by default
+      const MIN_VALUE = range / MAX_VALUE;
+      step = gridStep > MIN_VALUE ? gridStep : MIN_VALUE;
       interval = this.getRange() / step; // define new interval
     } else { // calculate in line with interval
-      const MAX_VALUE = 500;
       interval = gridNumber < MAX_VALUE ? gridNumber : MAX_VALUE;
-      step = ((this.max ?? 0) - (this.min ?? 0)) / interval; // define step
+      step = range / interval; // define step
     }
     return { interval, step };
   }

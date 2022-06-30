@@ -105,7 +105,6 @@ class Model extends ModelCalc {
     const {
       isFrom,
       isTo,
-      isSingle,
     } = this.checkIsFromToValid(typeFrom, percent);
 
     let from: number | null = null;
@@ -130,48 +129,12 @@ class Model extends ModelCalc {
 
     if (!direction) return false;
 
-    const applySnapForFromTo = () => {
-      if (!(this.gridSnap && !this.step)) return { from, to };
-
-      if (isFrom) {
-        from = Model.getSnap(from ?? 0, this.stepGrid, this.snapNumber);
-      }
-      if (!isSingle && isTo) {
-        to = Model.getSnap(to ?? 0, this.stepGrid, this.snapNumber);
-      }
-
-      return { from, to };
-    };
-
-    const dataSnap = applySnapForFromTo();
-    from = dataSnap.from;
-    to = dataSnap.to;
-
-    const applyStepForFromTo = () => {
-      if (!this.step) return { from, to };
-
-      const isMinFrom = from === this.min;
-      const isMaxTo = to === this.max;
-
-      if (isFrom && isMinFrom) return { from, to };
-      if (isTo && isMaxTo) return { from, to };
-
-      if (isFrom && !isSingle) {
-        from = from !== this.to ? this.getStep(from ?? 0) : from;
-      }
-
-      if (isFrom && isSingle) {
-        from = this.getStep(from ?? 0);
-      }
-
-      if (isTo && to !== this.from) {
-        to = this.getStep(to ?? 0);
-      }
-
-      return { from, to };
-    };
-
-    const dataStep = applyStepForFromTo();
+    const dataStep = this.getStepSnap({
+      from,
+      to,
+      isTo,
+      isFrom,
+    });
 
     this.setFromTo(dataStep);
 
@@ -352,13 +315,19 @@ class Model extends ModelCalc {
       to = this.getValueTo();
     }
 
-    this.setFromTo({
-      type: this.type,
+    const dataStep = this.getStepSnap({
       from,
       to,
+      isTo,
+      isFrom,
     });
 
-    return { from, to };
+    this.setFromTo({
+      type: this.type,
+      ...dataStep,
+    });
+
+    return dataStep;
   }
 
   // ---------------------------------- Snap
@@ -369,6 +338,68 @@ class Model extends ModelCalc {
     this.stepGrid = this.snapNumber[1] - this.snapNumber[0];
 
     return this.toggleSnapMode();
+  }
+
+  private getStepSnap(options: {
+    from: number | null,
+    to: number | null,
+    isTo: boolean,
+    isFrom: boolean
+  }) {
+    let {
+      from,
+      to,
+    } = options;
+
+    const {
+      isTo,
+      isFrom,
+    } = options;
+
+    const isSingle = this.type === 'single';
+
+    const applySnapForFromTo = () => {
+      if (!(this.gridSnap && !this.step)) return { from, to };
+
+      if (isFrom) {
+        from = Model.getSnap(from ?? 0, this.stepGrid, this.snapNumber);
+      }
+      if (!isSingle && isTo) {
+        to = Model.getSnap(to ?? 0, this.stepGrid, this.snapNumber);
+      }
+
+      return { from, to };
+    };
+
+    const dataSnap = applySnapForFromTo();
+    from = dataSnap.from;
+    to = dataSnap.to;
+
+    const applyStepForFromTo = () => {
+      if (!this.step) return { from, to };
+
+      const isMinFrom = from === this.min;
+      const isMaxTo = to === this.max;
+
+      if (isFrom && isMinFrom) return { from, to };
+      if (isTo && isMaxTo) return { from, to };
+
+      if (isFrom && !isSingle) {
+        from = from !== this.to ? this.getStep(from ?? 0) : from;
+      }
+
+      if (isFrom && isSingle) {
+        from = this.getStep(from ?? 0);
+      }
+
+      if (isTo && to !== this.from) {
+        to = this.getStep(to ?? 0);
+      }
+
+      return { from, to };
+    };
+
+    return applyStepForFromTo();
   }
 
   // ---------------------------------- Start Model
@@ -483,6 +514,12 @@ class Model extends ModelCalc {
     this.keyStepOne = this.checkIsValueInRange(Number(keyStepOne));
     this.keyStepHold = this.checkIsValueInRange(Number(keyStepHold));
 
+    this.setFromTo({
+      from: this.from,
+      to: this.to,
+      type: this.type,
+    });
+
     return true;
   }
 
@@ -572,24 +609,15 @@ class Model extends ModelCalc {
 
     setTo();
 
-    const isConfigurationNotExist = !this.isStartedConfiguration && !this.isUpdatedConfiguration;
-    const isSnap = this.gridSnap && !this.step;
+    const dataStep = this.getStepSnap({
+      from: this.from,
+      to: this.to,
+      isTo: true,
+      isFrom: true,
+    });
 
-    if (isConfigurationNotExist && isSnap) {
-      this.from = Model.getSnap(
-        this.from ?? 0,
-        this.stepGrid,
-        this.snapNumber,
-      );
-
-      if (type === 'double') {
-        this.to = Model.getSnap(
-          this.to ?? 0,
-          this.stepGrid,
-          this.snapNumber,
-        );
-      }
-    }
+    this.from = dataStep.from;
+    this.to = dataStep.to;
 
     this.notifyObserver({
       key: 'DotData',
@@ -664,7 +692,7 @@ class Model extends ModelCalc {
 
     if (!gridNumber && !gridStep) {
       const DEFAULT_GRID_NUMBER = 4;
-      gridNumber = DEFAULT_GRID_NUMBER;
+      gridNumber = this.step ? 0 : DEFAULT_GRID_NUMBER;
     }
 
     const MIN_GRID_ROUND = 0;

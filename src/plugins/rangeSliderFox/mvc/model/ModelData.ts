@@ -201,11 +201,9 @@ class ModelData extends Observer {
     let isFrom = false;
     let isTo = false;
 
-    const isSingle = this.type === 'single';
-
-    if (isSingle) { // if single dot
+    if (this.type === 'single') { // if single dot
       this.fromPercent = percent;
-      return { isFrom: true, isTo, isSingle };
+      return { isFrom: true, isTo };
     }
 
     const setFromToPercent = (value: number) => {
@@ -216,7 +214,7 @@ class ModelData extends Observer {
         this.toPercent = value;
         isTo = true;
       }
-      return { isFrom, isTo, isSingle };
+      return { isFrom, isTo };
     };
 
     if (this.limitFrom < this.limitTo) { // if double dot and FROM is less than TO

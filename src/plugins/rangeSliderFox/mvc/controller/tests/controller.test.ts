@@ -84,8 +84,8 @@ describe('------- Test Controller API -------', () => {
         expect(data.type).toBe('double');
         expect(data.min).toBeCloseTo(-120);
         expect(data.max).toBeCloseTo(800);
-        expect(data.from).toBeCloseTo(150.59);
-        expect(data.to).toBeCloseTo(421.18);
+        expect(data.from).toBeCloseTo(152);
+        expect(data.to).toBeCloseTo(420);
         expect(data.orientation).toBe('vertical');
         expect(data.step).toBeCloseTo(4);
         expect(data.keyStepOne).toBeCloseTo(2);
