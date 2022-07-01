@@ -4,6 +4,8 @@ import {
   getProperty,
   setProperty,
 } from '@shared/helpers/readWriteProperties';
+import { RANGE_SLIDER_NAME } from '@shared/constants';
+
 import { Observer } from '../../../Observer';
 
 interface Pointer {
@@ -19,8 +21,6 @@ class Handle extends Observer {
 
   private elementTo: HTMLElement | null = null;
 
-  private rangeSliderName: string;
-
   private wrapperElement: HTMLElement;
 
   private isFromEvent: boolean;
@@ -35,9 +35,9 @@ class Handle extends Observer {
 
   private orientation: string = '';
 
-  constructor(rsCenter: HTMLElement, rangeSliderName: string) {
+  constructor(rsCenter: HTMLElement) {
     super();
-    this.rangeSliderName = rangeSliderName;
+
     this.wrapperElement = rsCenter;
     this.isFromEvent = false;
     this.isToEvent = false;
@@ -52,8 +52,8 @@ class Handle extends Observer {
     if (double && isFromTo) return false;
     if (!double && isFrom) return false;
 
-    const fromClassName = `${this.rangeSliderName}__from`;
-    const toClassName = `${this.rangeSliderName}__to`;
+    const fromClassName = `${RANGE_SLIDER_NAME}__from`;
+    const toClassName = `${RANGE_SLIDER_NAME}__to`;
 
     const fromElement = Handle.getElement(this.wrapperElement, `js-${fromClassName}`);
     const toElement = Handle.getElement(this.wrapperElement, `js-${toClassName}`);

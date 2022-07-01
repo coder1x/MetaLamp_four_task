@@ -1,20 +1,18 @@
+import { RANGE_SLIDER_NAME } from '@shared/constants';
+
 import { mockPointerEvent } from '../../../../tests/jestUtils';
 import { Controller, Model, View } from '../../../controller/Controller';
 import Grid from '../Grid';
 
 describe('------- Test Grid API -------', () => {
-  let rangeSliderName: string;
   let wrapper: HTMLElement;
   let grid: Grid;
-  let jsRangeSliderName: string;
 
   beforeEach(async () => {
-    rangeSliderName = 'range-slider-fox';
-    jsRangeSliderName = `js-${rangeSliderName}`;
     wrapper = document.createElement('div');
-    wrapper.classList.add(`${rangeSliderName}__bottom`);
-    wrapper.classList.add(`${jsRangeSliderName}__bottom`);
-    grid = await new Grid(wrapper, rangeSliderName);
+    wrapper.classList.add(`${RANGE_SLIDER_NAME}__bottom`);
+    wrapper.classList.add(`js-${RANGE_SLIDER_NAME}__bottom`);
+    grid = await new Grid(wrapper);
   });
 
   const getConfig = () => ({
@@ -110,7 +108,7 @@ describe('------- Test Grid API -------', () => {
         const spy = await jest.spyOn(model, 'takeFromOrToOnMarkClick');
 
         const dot = await parentElement.getElementsByClassName(
-          `${jsRangeSliderName}__grid-mark`,
+          `js-${RANGE_SLIDER_NAME}__grid-mark`,
         );
         const element = dot[0] as HTMLElement;
         const pointer = await mockPointerEvent(element);

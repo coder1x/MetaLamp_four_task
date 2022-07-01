@@ -1,3 +1,5 @@
+import { NAME_PLUGIN } from '@shared/constants';
+
 import $ from '../rangeSliderFox';
 
 // Добавление JQuery плагина - Range Slider Fox
@@ -37,7 +39,7 @@ describe('------- Range Slider Fox - JQuery Objects -------', () => {
 
     // eslint-disable-next-line no-restricted-syntax
     for (const property in $(inputElement)) {
-      if (property === 'RangeSliderFox') {
+      if (property === NAME_PLUGIN) {
         isProperty = true;
         break;
       }
@@ -50,10 +52,10 @@ describe('------- Range Slider Fox - JQuery Objects -------', () => {
     + 'and check the obtained object ';
   // initialization
   test(TEST_NAME, () => {
-    const rangeSliderOne = $(inputElement).RangeSliderFox({}).data('RangeSliderFox');
+    const rangeSliderOne = $(inputElement).RangeSliderFox({}).data(NAME_PLUGIN);
     expect(rangeSliderOne).toBeDefined();
 
-    const rangeSliderTwo = $(inputElement).RangeSliderFox({}).data('RangeSliderFox');
+    const rangeSliderTwo = $(inputElement).RangeSliderFox({}).data(NAME_PLUGIN);
     expect(rangeSliderTwo).toEqual(rangeSliderOne);
   });
 
@@ -73,17 +75,17 @@ describe('------- Range Slider Fox - JQuery Objects -------', () => {
 
   test(' destroy - plugin removal ', async () => {
     const rangeSlider = await $(inputElement).RangeSliderFox({})
-      .data('RangeSliderFox');
+      .data(NAME_PLUGIN);
 
     expect(rangeSlider).toBeDefined();
 
-    let rangeSliderData = await $.data(inputElement, 'RangeSliderFox');
+    let rangeSliderData = await $.data(inputElement, NAME_PLUGIN);
     expect(rangeSliderData).toBeDefined();
 
     await delay(100);
     await rangeSlider.destroy();
     await delay(100);
-    rangeSliderData = await $.data(inputElement, 'RangeSliderFox');
+    rangeSliderData = await $.data(inputElement, NAME_PLUGIN);
     expect(rangeSliderData).toBeNull();
   });
 });

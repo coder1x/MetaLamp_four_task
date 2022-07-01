@@ -1,6 +1,7 @@
 import { boundMethod } from 'autobind-decorator';
 
 import RangeSliderOptions from '@shared/interface/globInterface';
+import { NAME_PLUGIN } from '@shared/constants';
 
 class CopyCodeButton {
   private className: string;
@@ -70,7 +71,7 @@ class CopyCodeButton {
   private handleCopyClick() {
     if (!this.list) return false;
 
-    let text = '$(\'.demo\').RangeSliderFox({\n';
+    let text = `$('.demo').${NAME_PLUGIN}({\n`;
 
     this.list.childNodes.forEach((item) => {
       const element = item as HTMLElement;

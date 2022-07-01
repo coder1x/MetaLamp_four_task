@@ -4,6 +4,7 @@ import {
   getProperty,
   setProperty,
 } from '@shared/helpers/readWriteProperties';
+import { RANGE_SLIDER_NAME } from '@shared/constants';
 
 interface CheckTip {
   tipMaxXY: number,
@@ -16,8 +17,6 @@ interface CheckTip {
 
 class Hints {
   private rangeSliderTop: Element;
-
-  private rangeSliderName: string;
 
   private tipFrom: HTMLElement | null = null;
 
@@ -39,8 +38,7 @@ class Hints {
 
   private isVertical: boolean = false;
 
-  constructor(element: HTMLElement | Element, rangeSliderName: string) {
-    this.rangeSliderName = rangeSliderName;
+  constructor(element: HTMLElement | Element) {
     this.rangeSliderTop = element;
   }
 
@@ -75,9 +73,9 @@ class Hints {
   createTipMinMax() {
     if (this.tipMin && this.tipMax) return false;
 
-    const minName = `${this.rangeSliderName}__tip-min`;
+    const minName = `${RANGE_SLIDER_NAME}__tip-min`;
     this.tipMin = Hints.createElement('div', [minName, `js-${minName}`]);
-    const maxName = `${this.rangeSliderName}__tip-max`;
+    const maxName = `${RANGE_SLIDER_NAME}__tip-max`;
     this.tipMax = Hints.createElement('div', [maxName, `js-${maxName}`]);
     this.rangeSliderTop.appendChild(this.tipMin);
     this.rangeSliderTop.appendChild(this.tipMax);
@@ -88,7 +86,7 @@ class Hints {
   createTipFrom() {
     if (this.tipFrom) return false;
 
-    const fromName = `${this.rangeSliderName}__tip-from`;
+    const fromName = `${RANGE_SLIDER_NAME}__tip-from`;
     this.tipFrom = Hints.createElement('div', [fromName, `js-${fromName}`]);
     this.rangeSliderTop.appendChild(this.tipFrom);
 
@@ -98,7 +96,7 @@ class Hints {
   createTipTo() {
     if (this.tipTo) return false;
 
-    const toName = `${this.rangeSliderName}__tip-to`;
+    const toName = `${RANGE_SLIDER_NAME}__tip-to`;
     this.tipTo = Hints.createElement('div', [toName, `js-${toName}`]);
     this.rangeSliderTop.appendChild(this.tipTo);
 
@@ -108,7 +106,7 @@ class Hints {
   createTipSingle() {
     if (this.tipSingle) return false;
 
-    const singleName = `${this.rangeSliderName}__tip-single`;
+    const singleName = `${RANGE_SLIDER_NAME}__tip-single`;
     this.tipSingle = Hints.createElement('div', [singleName, `js-${singleName}`]);
     this.tipSingle.style.visibility = 'hidden';
     this.rangeSliderTop.appendChild(this.tipSingle);

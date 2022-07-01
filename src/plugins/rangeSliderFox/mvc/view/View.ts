@@ -1,5 +1,7 @@
 import { boundMethod } from 'autobind-decorator';
 
+import { RANGE_SLIDER_NAME } from '@shared/constants';
+
 import { Observer, ObserverOptions } from '../../Observer';
 import RangeSliderOptions from '../../globInterface';
 import Handle from './subView/Handle';
@@ -9,9 +11,7 @@ import Grid from './subView/Grid';
 import UpdateTip from './view.d';
 
 class View extends Observer {
-  private rangeSliderName: string = '';
-
-  private wrapperSlider: Element | null = null;
+  private wrapperSlider: Element | null;
 
   private rangeSlider: Element | null = null;
 
@@ -39,26 +39,25 @@ class View extends Observer {
 
   onHandle: (() => void) | null = null;
 
-  element: Element | null = null;
+  element: Element;
 
   constructor(element: Element) {
     super();
     this.element = element;
-    this.rangeSliderName = 'range-slider-fox';
     this.wrapperSlider = this.element.parentElement;
 
     this.init();
   }
 
   destroy() {
-    if (!this.element || !this.wrapperSlider) return false;
+    if (!this.wrapperSlider) return false;
 
     const typeElem = this.element.constructor.name;
     if (typeElem === 'HTMLInputElement') {
       const input = this.element as HTMLInputElement;
       input.value = ' ';
     }
-    const element = this.wrapperSlider.querySelector(`.js-${this.rangeSliderName}`);
+    const element = this.wrapperSlider.querySelector(`.js-${RANGE_SLIDER_NAME}`);
     if (element) { element.remove(); }
 
     this.handle = null;
@@ -70,8 +69,6 @@ class View extends Observer {
   }
 
   setValueInput(from: number, to: number, type: string) {
-    if (!this.element) return false;
-
     let string = '';
     if (this.element.constructor.name === 'HTMLInputElement') {
       const input = this.element as HTMLInputElement;
@@ -134,23 +131,23 @@ class View extends Observer {
   createDomElementBase() {
     this.rangeSlider = View.createElement(
       'div',
-      [this.rangeSliderName, `js-${this.rangeSliderName}`],
+      [RANGE_SLIDER_NAME, `js-${RANGE_SLIDER_NAME}`],
     );
     this.rangeSliderTop = View.createElement('div', [
-      `${this.rangeSliderName}__top`,
-      `js-${this.rangeSliderName}__top`,
+      `${RANGE_SLIDER_NAME}__top`,
+      `js-${RANGE_SLIDER_NAME}__top`,
     ]);
     this.rangeSliderCenter = View.createElement('div', [
-      `${this.rangeSliderName}__center`,
-      `js-${this.rangeSliderName}__center`,
+      `${RANGE_SLIDER_NAME}__center`,
+      `js-${RANGE_SLIDER_NAME}__center`,
     ]);
     this.rangeSliderBottom = View.createElement('div', [
-      `${this.rangeSliderName}__bottom`,
-      `js-${this.rangeSliderName}__bottom`,
+      `${RANGE_SLIDER_NAME}__bottom`,
+      `js-${RANGE_SLIDER_NAME}__bottom`,
     ]);
     this.rangeSliderLine = View.createElement('span', [
-      `${this.rangeSliderName}__line`,
-      `js-${this.rangeSliderName}__line`,
+      `${RANGE_SLIDER_NAME}__line`,
+      `js-${RANGE_SLIDER_NAME}__line`,
     ]);
 
     this.rangeSliderCenter.appendChild(this.rangeSliderLine);
@@ -164,7 +161,7 @@ class View extends Observer {
   }
 
   async setOrientation(type: string) {
-    const modifier = `${this.rangeSliderName}_vertical`;
+    const modifier = `${RANGE_SLIDER_NAME}_vertical`;
     const { classList } = this.rangeSlider as Element;
     this.vertical = type === 'vertical';
 
@@ -408,8 +405,6 @@ class View extends Observer {
     const attributes = new Map();
 
     const getDataAttribute = (item: string) => {
-      if (!this.element) return false;
-
       const attribute = `data-${item}`;
       if (this.element.hasAttribute(attribute)) {
         const value = this.element.getAttribute(attribute) ?? '';
@@ -466,7 +461,7 @@ class View extends Observer {
     });
 
     observer.observe(
-      (this.element as Element),
+      this.element,
       {
         attributeFilter: nameAttributes,
       },
@@ -486,19 +481,10 @@ class View extends Observer {
       this.createDomElementBase(); // create basic DOM elements
       this.bindEvent(); // add event listeners
 
-      this.handle = new Handle(
-        (this.rangeSliderCenter as HTMLElement),
-        this.rangeSliderName,
-      );
-      this.hints = new Hints(
-        this.rangeSliderTop as Element,
-        this.rangeSliderName,
-      );
-      this.bar = new Bar(
-        this.rangeSliderCenter as HTMLElement,
-        this.rangeSliderName,
-      );
-      this.grid = new Grid(this.rangeSliderBottom as Element, this.rangeSliderName);
+      this.handle = new Handle((this.rangeSliderCenter as HTMLElement));
+      this.hints = new Hints(this.rangeSliderTop as Element);
+      this.bar = new Bar(this.rangeSliderCenter as HTMLElement);
+      this.grid = new Grid(this.rangeSliderBottom as Element);
 
       this.createListeners();
       this.changeAttributes();

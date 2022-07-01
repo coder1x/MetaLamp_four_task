@@ -1,18 +1,16 @@
+import { RANGE_SLIDER_NAME } from '@shared/constants';
+
 import Hints from '../Hints';
 
 describe('------- Test Hints API -------', () => {
-  let rangeSliderName: string;
   let wrapper: HTMLElement;
   let hints: Hints;
-  let jsRangeSliderName: string;
 
   beforeEach(() => {
-    rangeSliderName = 'range-slider-fox';
-    jsRangeSliderName = `js-${rangeSliderName}`;
     wrapper = document.createElement('div');
-    wrapper.classList.add(`${rangeSliderName}__top`);
-    wrapper.classList.add(`${jsRangeSliderName}__top`);
-    hints = new Hints(wrapper, rangeSliderName);
+    wrapper.classList.add(`${RANGE_SLIDER_NAME}__top`);
+    wrapper.classList.add(`js-${RANGE_SLIDER_NAME}__top`);
+    hints = new Hints(wrapper);
   });
 
   function searchString(text: string, substring: string) {
@@ -22,7 +20,7 @@ describe('------- Test Hints API -------', () => {
   const checkDomElement = async (name: string) => {
     expect(searchString(
       (await wrapper.firstChild as HTMLElement).className,
-      `${jsRangeSliderName}__tip-${name}`,
+      `js-${RANGE_SLIDER_NAME}__tip-${name}`,
     )).toBeTruthy();
   };
 
@@ -49,9 +47,9 @@ describe('------- Test Hints API -------', () => {
     expect(await hints.createTipMinMax()).toBeTruthy();
     const tips = await wrapper.children;
 
-    let isValid = searchString(tips[0].className, `${jsRangeSliderName}__tip-min`);
+    let isValid = searchString(tips[0].className, `js-${RANGE_SLIDER_NAME}__tip-min`);
     expect(isValid).toBeTruthy();
-    isValid = searchString(tips[1].className, `${jsRangeSliderName}__tip-max`);
+    isValid = searchString(tips[1].className, `js-${RANGE_SLIDER_NAME}__tip-max`);
     expect(isValid).toBeTruthy();
     expect(hints.createTipMinMax()).toBeFalsy();
   });

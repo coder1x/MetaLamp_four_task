@@ -1,13 +1,13 @@
+import { RANGE_SLIDER_NAME } from '@shared/constants';
+
 import { mockPointerEvent } from '../../../../tests/jestUtils';
 import { Controller, Model, View } from '../../../controller/Controller';
 import Bar from '../Bar';
 
 // диапазон между ползунками
 describe('------- Test Bar API -------', () => {
-  let rangeSliderName: string;
   let wrapper: HTMLElement;
   let bar: Bar;
-  let jsRangeSliderName: string;
 
   const createBar = async () => {
     await bar.setVisibleBar(true);
@@ -15,12 +15,10 @@ describe('------- Test Bar API -------', () => {
   };
 
   beforeEach(() => {
-    rangeSliderName = 'range-slider-fox';
-    jsRangeSliderName = `js-${rangeSliderName}`;
     wrapper = document.createElement('div');
-    wrapper.classList.add(`${rangeSliderName}__center`);
-    wrapper.classList.add(`${jsRangeSliderName}__center`);
-    bar = new Bar(wrapper, rangeSliderName);
+    wrapper.classList.add(`${RANGE_SLIDER_NAME}__center`);
+    wrapper.classList.add(`js-${RANGE_SLIDER_NAME}__center`);
+    bar = new Bar(wrapper);
   });
 
   // setVisibleBar
@@ -89,7 +87,7 @@ describe('------- Test Bar API -------', () => {
       },
       onUpdate: async () => {
         const spy = await jest.spyOn(model, 'calcBarCoordinates');
-        const dot = await parentElement.getElementsByClassName(`${jsRangeSliderName}__bar`);
+        const dot = await parentElement.getElementsByClassName(`js-${RANGE_SLIDER_NAME}__bar`);
         const pointer = await mockPointerEvent(dot[0]);
         await pointer('click', 34, 45);
         expect(spy).toBeCalledTimes(1);

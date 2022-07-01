@@ -6,13 +6,14 @@ import Hints from '@com/hints/Hints';
 import Different from '@com/miscellaneous/Miscellaneous';
 import CopyCodeButton from '@com/code/CopyCodeButton';
 import KeyboardControl from '@com/keyboard-control/KeyboardControl';
+import { NAME_PLUGIN } from '@shared/constants';
 
 interface Actions {
   bindEvent: <T>(object: T) => boolean | void;
 }
 
 class Panel {
-  private element: Element | null = null;
+  private element: Element;
 
   private objectValues: Values | null = null;
 
@@ -26,7 +27,7 @@ class Panel {
 
   private objectCopyCode: CopyCodeButton | null = null;
 
-  private className: string = '';
+  private className: string;
 
   private objectKeyboardControl: KeyboardControl | null = null;
 
@@ -37,8 +38,6 @@ class Panel {
   }
 
   createRangeSlider(options: RangeSliderOptions) {
-    if (!this.element) return false;
-
     const element = this.element.querySelector(
       `${this.className}__slider-wrapper`,
     );
@@ -69,7 +68,7 @@ class Panel {
       onChange,
       onUpdate,
       onReset,
-    }).data('RangeSliderFox'); // will return an object for one item
+    }).data(NAME_PLUGIN); // will return an object for one item
 
     const bindEvent = <T extends Actions | null>(object: T) => {
       if (!object) return false;
@@ -114,19 +113,17 @@ class Panel {
   private init() {
     this.objectValues = new Values('.js-values', this.getDomElement('.js-values') as Element);
 
-    if (this.element) {
-      this.objectInputData = new InputData(this.className, this.element);
-    }
+    this.objectInputData = new InputData(this.className, this.element);
+
     this.objectGrid = new Grid('.js-grid', this.getDomElement('.js-grid') as Element);
     this.objectHints = new Hints('.js-hints', this.getDomElement('.js-hints') as Element);
 
-    if (this.element) {
-      this.objectDifferent = new Different(
-        '.js-miscellaneous',
-        this.getDomElement('.js-miscellaneous') as Element,
-        this.element,
-      );
-    }
+    this.objectDifferent = new Different(
+      '.js-miscellaneous',
+      this.getDomElement('.js-miscellaneous') as Element,
+      this.element,
+    );
+
     this.objectCopyCode = new CopyCodeButton('.js-code', this.getDomElement('.js-code') as Element);
 
     this.objectKeyboardControl = new KeyboardControl(
@@ -136,7 +133,6 @@ class Panel {
   }
 
   private getDomElement(nameElement: string) {
-    if (!this.element) return null;
     return this.element.querySelector(nameElement);
   }
 

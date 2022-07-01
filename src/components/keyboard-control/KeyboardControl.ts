@@ -16,7 +16,7 @@ class KeyboardControl {
 
   private keyStepHoldCache: number = 0;
 
-  private nameClass: string = '';
+  private nameClass: string;
 
   private objRangeSlider: any;
 

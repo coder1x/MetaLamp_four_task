@@ -3,7 +3,7 @@ class InputData {
 
   private input: HTMLInputElement | null = null;
 
-  private className: string = '';
+  private className: string;
 
   private element: Element;
 

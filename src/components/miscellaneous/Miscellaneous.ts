@@ -27,7 +27,7 @@ class Different {
 
   private reset: HTMLButtonElement | null = null;
 
-  private panel: Element | null = null;
+  private panel: Element;
 
   private modifier: string = '';
 
@@ -87,7 +87,7 @@ class Different {
       this.orientation.checked = orientFlag;
       this.orientationCache = orientation ?? '';
 
-      const { classList } = this.panel as Element;
+      const { classList } = this.panel;
 
       if (orientFlag) {
         classList.add(this.modifier);
@@ -177,7 +177,7 @@ class Different {
   @boundMethod
   private handleOrientationClick(event: Event) {
     const element = event.target as HTMLInputElement;
-    const { classList } = this.panel as Element;
+    const { classList } = this.panel;
 
     if (element.checked) {
       classList.add(this.modifier);
@@ -197,9 +197,7 @@ class Different {
   }
 
   private setDomElement() {
-    if (this.panel) {
-      this.modifier = `${this.panel.classList[0]}_vertical`;
-    }
+    this.modifier = `${this.panel.classList[0]}_vertical`;
 
     this.type = this.getDomElement('double');
     this.disabled = this.getDomElement('disabled');

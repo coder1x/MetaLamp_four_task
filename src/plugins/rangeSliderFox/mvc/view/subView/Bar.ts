@@ -4,12 +4,13 @@ import {
   getProperty,
   setProperty,
 } from '@shared/helpers/readWriteProperties';
+
+import { RANGE_SLIDER_NAME } from '@shared/constants';
+
 import { Observer } from '../../../Observer';
 
 class Bar extends Observer {
   private rangeSliderCenter: Element;
-
-  private rangeSliderName: string;
 
   private elementBar: HTMLElement | null = null;
 
@@ -17,9 +18,8 @@ class Bar extends Observer {
 
   private vertical: boolean = false;
 
-  constructor(element: HTMLElement | Element, rangeSliderName: string) {
+  constructor(element: HTMLElement | Element) {
     super();
-    this.rangeSliderName = rangeSliderName;
     this.rangeSliderCenter = element;
   }
 
@@ -73,7 +73,7 @@ class Bar extends Observer {
     if (this.bar && this.elementBar) return false;
     if (!this.bar && !this.elementBar) return false;
 
-    const barName = `${this.rangeSliderName}__bar`;
+    const barName = `${RANGE_SLIDER_NAME}__bar`;
     this.elementBar = Bar.createElement('span', [barName, `js-${barName}`]);
     this.rangeSliderCenter.appendChild(this.elementBar);
 

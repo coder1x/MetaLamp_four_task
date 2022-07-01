@@ -1,5 +1,7 @@
 import { boundMethod } from 'autobind-decorator';
 
+import { NAME_PLUGIN } from '@shared/constants';
+
 import RangeSliderOptions from '../../globInterface';
 import { ObserverOptions } from '../../Observer';
 import Model from '../model/Model';
@@ -51,7 +53,7 @@ class Controller {
     if (!this.view) return false;
     const element = this.view.element as Element;
     if (element.constructor.name !== 'HTMLInputElement') return false;
-    $.data(element, 'RangeSliderFox', null);
+    $.data(element, NAME_PLUGIN, null);
     this.view.destroy();
     this.view = null;
     this.model = null;

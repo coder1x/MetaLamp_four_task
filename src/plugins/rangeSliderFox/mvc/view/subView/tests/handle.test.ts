@@ -1,3 +1,5 @@
+import { RANGE_SLIDER_NAME } from '@shared/constants';
+
 import {
   mockPointerEvent,
   mockKeyboardEvent,
@@ -6,18 +8,14 @@ import { Controller, Model, View } from '../../../controller/Controller';
 import Handle from '../Handle';
 
 describe('------- Test Handle API -------', () => {
-  let rangeSliderName: string;
   let wrapperElement: HTMLElement;
   let handle: Handle;
-  let jsRangeSliderName: string;
 
   beforeEach(async () => {
-    rangeSliderName = 'range-slider-fox';
-    jsRangeSliderName = `js-${rangeSliderName}`;
     wrapperElement = document.createElement('div');
-    wrapperElement.classList.add(`${rangeSliderName}__center`);
-    wrapperElement.classList.add(`${jsRangeSliderName}__center`);
-    handle = await new Handle(wrapperElement, rangeSliderName);
+    wrapperElement.classList.add(`${RANGE_SLIDER_NAME}__center`);
+    wrapperElement.classList.add(`js-${RANGE_SLIDER_NAME}__center`);
+    handle = await new Handle(wrapperElement);
   });
 
   function searchString(text: string, substring: string) {
@@ -47,19 +45,19 @@ describe('------- Test Handle API -------', () => {
 
     if (!child) return;
 
-    searchString(child[0].className, `${jsRangeSliderName}__from`);
-    searchString(child[1].className, `${jsRangeSliderName}__to`);
+    searchString(child[0].className, `js-${RANGE_SLIDER_NAME}__from`);
+    searchString(child[1].className, `js-${RANGE_SLIDER_NAME}__to`);
 
     parentElement = await handle.createDomElementBase('double');
     expect(parentElement).toBeFalsy();
     await delElement(wrapperElement);
-    handle = await new Handle(wrapperElement, rangeSliderName);
+    handle = await new Handle(wrapperElement);
     parentElement = await handle.createDomElementBase('single');
     expect(parentElement).toBeDefined();
 
     if (typeof parentElement !== 'boolean') { child = parentElement.children; }
 
-    searchString(child[0].className, `${jsRangeSliderName}__from`);
+    searchString(child[0].className, `js-${RANGE_SLIDER_NAME}__from`);
     expect(child[1]).toBeUndefined();
     parentElement = handle.createDomElementBase('single');
     expect(parentElement).toBeFalsy();
@@ -108,7 +106,7 @@ describe('------- Test Handle API -------', () => {
 
         const eventDot = async (name: string, down: number, move: number) => {
           const dot = await wrapper.getElementsByClassName(
-            `${jsRangeSliderName}__${name}`,
+            `js-${RANGE_SLIDER_NAME}__${name}`,
           );
 
           const pointer = await mockPointerEvent(dot[0]);

@@ -1,12 +1,12 @@
 import { boundMethod } from 'autobind-decorator';
 
+import { RANGE_SLIDER_NAME } from '@shared/constants';
+
 import { Observer } from '../../../Observer';
 import Resize from '../Resize';
 
 class Grid extends Observer {
   private rangeSliderBottom: HTMLElement;
-
-  private rangeSliderName: string;
 
   private elementGrid: HTMLElement | null = null;
 
@@ -28,9 +28,8 @@ class Grid extends Observer {
 
   private isResized: boolean = false;
 
-  constructor(element: HTMLElement | Element, rangeSliderName: string) {
+  constructor(element: HTMLElement | Element) {
     super();
-    this.rangeSliderName = rangeSliderName;
     this.rangeSliderBottom = element as HTMLElement;
     this.init();
   }
@@ -53,9 +52,9 @@ class Grid extends Observer {
   }[]) {
     valueMark.forEach((item) => {
       const { value, position } = item;
-      const lineName = `${this.rangeSliderName}__grid-line`;
+      const lineName = `${RANGE_SLIDER_NAME}__grid-line`;
       const gridLine = Grid.createElement('div', [lineName, `js-${lineName}`]);
-      const markName = `${this.rangeSliderName}__grid-mark`;
+      const markName = `${RANGE_SLIDER_NAME}__grid-mark`;
       const gridMark = Grid.createElement('span', [markName, `js-${markName}`]);
 
       gridMark.innerText = String(value);
@@ -110,7 +109,7 @@ class Grid extends Observer {
   private handleMarkClick(event: Event) {
     const mark = event.target as HTMLElement;
 
-    if (Grid.searchString(mark.className, `js-${this.rangeSliderName}__grid-mark`)) {
+    if (Grid.searchString(mark.className, `js-${RANGE_SLIDER_NAME}__grid-mark`)) {
       this.notifyObserver({
         key: 'ClickMark',
         valueGrid: Number(mark.innerText),
@@ -131,7 +130,7 @@ class Grid extends Observer {
   private init() {
     this.offOn = false;
     this.indent = 4; // indent in pixels between values on the scale
-    const gridName = `${this.rangeSliderName}__grid`;
+    const gridName = `${RANGE_SLIDER_NAME}__grid`;
     this.elementGrid = Grid.createElement('div', [gridName, `js-${gridName}`]);
 
     new MutationObserver(() => {
@@ -164,11 +163,11 @@ class Grid extends Observer {
     this.previousElement = null;
 
     const gridMarks = this.elementGrid.getElementsByClassName(
-      `js-${this.rangeSliderName}__grid-mark`,
+      `js-${RANGE_SLIDER_NAME}__grid-mark`,
     );
 
     const gridLines = this.elementGrid.getElementsByClassName(
-      `js-${this.rangeSliderName}__grid-line`,
+      `js-${RANGE_SLIDER_NAME}__grid-line`,
     );
 
     const { length } = gridMarks;
