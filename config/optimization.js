@@ -10,7 +10,7 @@ module.exports = {
       },
     };
 
-    if (env.isProd) {
+    if (!env.isDev) {
       config.minimizer = [
         new TerserPlugin({
           parallel: true,

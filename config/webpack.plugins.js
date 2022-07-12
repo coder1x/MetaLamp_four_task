@@ -17,9 +17,8 @@ const paths = require('./paths');
 
 const pagesDir = path.join(paths.src, '/pages/');
 
-const pages = [];
-fs.readdirSync(pagesDir).forEach((file) => {
-  pages.push(file.split('/', 2));
+const pages = fs.readdirSync(pagesDir).map((file) => {
+  return file.split('/', 2);
 });
 
 const description = 'Узнайте, как использовать Range Slider Fox'
@@ -117,8 +116,6 @@ plugins.push(
   new FoxFavicon({
     src: path.join(paths.src, paths.assets, 'images/icon/favicon.png'),
     path: 'assets/favicons/',
-    // pathManifest: '/assets/favicons/',
-    // 'https://plugins.su/
     urlIcon: 'assets/favicons/',
     devMode: env.isPlugin ? true : env.isDev,
     appName: 'Plugin Range Slider Fox',

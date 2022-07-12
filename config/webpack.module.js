@@ -1,6 +1,4 @@
-const path = require('path');
 const cssLoaders = require('./cssLoaders');
-const paths = require('./paths');
 
 module.exports = {
 

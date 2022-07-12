@@ -1,6 +1,4 @@
-const path = require('path');
 const env = require('./isDev');
-const paths = require('./paths');
 
 module.exports = {
   filename(ext) {

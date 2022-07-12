@@ -1,7 +1,7 @@
 const paths = require('./paths');
 
 module.exports = {
-  devServer: { // локальный сервер который будет запущен на http://localhost:8080/
+  devServer: {
     watchFiles: [
       `${paths.src}/components/**/*.pug`,
       `${paths.src}/pages/**/*.pug`,

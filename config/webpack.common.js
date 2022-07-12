@@ -10,10 +10,10 @@ const devServer = require('./webpack.devServer.js');
 
 let config = null;
 
-const pluginM = ['@plugins/importPlugin.ts'];
+const plugin = ['@plugins/importPlugin.ts'];
 const points = [];
 
-if (env.isProd) {
+if (!env.isDev) {
   points.push('./index.ts');
 } else {
   points.push('webpack/hot/dev-server');
@@ -22,11 +22,11 @@ if (env.isProd) {
 
 if (env.isPlugin) {
   config = {
-    plugin: pluginM,
+    plugin,
   };
 } else {
   config = {
-    plugin: pluginM,
+    plugin,
     demo: points,
   };
 }
