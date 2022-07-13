@@ -3,28 +3,16 @@ mixin select(options = {})
   -
     const {
       label = '',
-      isLabeled = false,
       list = [],
       name = '',
-      modifier = '',
-      addClass = '',
     } = options;
 
     const BASE_CLASS = 'select'
-    let className = BASE_CLASS
-    
-  if modifier
-      - className += ` ${BASE_CLASS}_${modifier}`
 
-  if addClass
-      - className += ` ${addClass}`
-  
-
-  div(class=`${className} js-${BASE_CLASS}`)
-    if !isLabeled
+  div(class=`${BASE_CLASS} js-${BASE_CLASS}`)
+    if label
       p(class=`${BASE_CLASS}__label-text`)= label
     
-
     div(class=`${BASE_CLASS}__displayed-wrapper js-${BASE_CLASS}__displayed-wrapper`)
       button(class=`${BASE_CLASS}__displayed js-${BASE_CLASS}__displayed`)
       img(class=`${BASE_CLASS}__tip js-${BASE_CLASS}__tip` src=require('./img/tip.svg') alt='угалок')

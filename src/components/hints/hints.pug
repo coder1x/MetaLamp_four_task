@@ -1,26 +1,14 @@
 include ../toggle/toggle.pug
 include ../text-field/text-field.pug
 
-mixin hints(options = {})
+mixin hints(label = '')
   -
-    const {
-      label = '',
-      addClass = '',
-      isLabeled = false,
-    } = options;
-
     const BASE_CLASS = 'hints'
-    let className = BASE_CLASS
-    
-  if addClass
-    - className += ` ${addClass}`
-  
-  -
     const data = require('./hints.json'); 
     const textField = data.textField
 
-  fieldset(class=`${className} js-${BASE_CLASS}`)
-    if !isLabeled
+  fieldset(class=`${BASE_CLASS} js-${BASE_CLASS}`)
+    if label
       legend(class=`${BASE_CLASS}__label`)= label
     
 

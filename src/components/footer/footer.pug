@@ -1,14 +1,6 @@
-mixin footer(options = {})
+mixin footer()
   -
-    const {
-      addClass = '',
-    } = options;
-
     const BASE_CLASS = 'footer'
-    let className = BASE_CLASS
 
-  if addClass
-    - className += ` ${addClass}`
-    
-  footer(class=className)
+  footer(class=BASE_CLASS)
     p Клюшин А. © 2022

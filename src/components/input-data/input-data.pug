@@ -1,24 +1,12 @@
 include ../text-field/text-field.pug
 
-mixin input-data(options = {})
+mixin input-data(label = '')
   -
-    const {
-      label = '',
-      addClass = '',
-      isLabeled
-    } = options;
-
     const BASE_CLASS = 'input-data'
-    let className = BASE_CLASS
     
-  if addClass
-    - className += ` ${addClass}`
-  
-
-  fieldset(class=`${className} js-${BASE_CLASS}`)
-    if !isLabeled
+  fieldset(class=`${BASE_CLASS} js-${BASE_CLASS}`)
+    if label
       legend(class=`${BASE_CLASS}__label`)= label
-    
     
     div(class=`${BASE_CLASS}__value-wrapper`)
       +text-field({

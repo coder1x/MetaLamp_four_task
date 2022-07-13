@@ -1,17 +1,8 @@
-mixin header(options = {})
+mixin header()
   -
-    const {
-      addClass = '',
-    } = options;
-
     const BASE_CLASS = 'header'
-    let className = BASE_CLASS
 
-  if addClass
-    - className += ` ${addClass}`
-  
-
-  header(class=className)
+  header(class=BASE_CLASS)
     div(class=`${BASE_CLASS}__wrapper`)
       p(class=`${BASE_CLASS}__version`) version: 1.0
       

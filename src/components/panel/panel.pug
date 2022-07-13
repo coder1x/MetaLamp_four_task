@@ -6,21 +6,11 @@ include ../miscellaneous/miscellaneous.pug
 include ../code/code.pug
 include ../keyboard-control/keyboard-control.pug
 
-mixin panel(options = {})
+mixin panel(theme = 'base')
   -
-    const {
-      addClass = '',
-      theme = 'base',
-    } = options;
-
     const BASE_CLASS = 'panel'
-    let className = BASE_CLASS
 
-  if addClass
-    - className += ` ${addClass}`
-  
-
-  div(class=`${className} js-${BASE_CLASS}`)
+  div(class=`${BASE_CLASS} js-${BASE_CLASS}`)
     div(class=`${BASE_CLASS}__slider-wrapper js-${BASE_CLASS}__slider-wrapper`)
       input(class=`rslider__${theme} visually-hidden` 
       type='text' 
@@ -31,22 +21,22 @@ mixin panel(options = {})
       )
 
     div(class=`${BASE_CLASS}__values-wrapper`)
-      +values({label: 'Values',})
+      +values('Values')
 
     div(class=`${BASE_CLASS}__input-data-wrapper`)
-      +input-data({label: 'Input data',})
+      +input-data('Input data')
 
     div(class=`${BASE_CLASS}__keyboard-control-wrapper`)
-      +keyboard-control({label: 'keyboard control',})
+      +keyboard-control('keyboard control')
 
     div(class=`${BASE_CLASS}__grid-wrapper`)
-      +grid({label: 'Grid',})
+      +grid('Grid')
 
     div(class=`${BASE_CLASS}__different-wrapper`)
-      +miscellaneous({label: 'Miscellaneous',})
+      +miscellaneous('Miscellaneous')
 
     div(class=`${BASE_CLASS}__hints-wrapper`)
-      +hints({label: 'Hints',})
+      +hints('Hints')
       
     div(class=`${BASE_CLASS}__code-wrapper`)
-      +code({label: 'Config code',})
+      +code('Config code')

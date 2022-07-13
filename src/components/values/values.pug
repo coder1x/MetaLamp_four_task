@@ -1,32 +1,14 @@
 include ../text-field/text-field.pug
 
-mixin values(options = {})
+mixin values(label = '')
   -
-    const {
-      label = '',
-      modifier = '',
-      addClass = '',
-      isLabeled,
-    } = options;
-
     const BASE_CLASS = 'values'
-    let className = BASE_CLASS
-    
-    if(modifier){
-      className += ` ${BASE_CLASS}_${modifier}`
-    }
-    if(addClass){
-      className += ` ${addClass}`
-    }
-
     const data = require('./values.json');
-
     const textField = data.textField
     
-  fieldset(class=`${className} js-${BASE_CLASS}`)
-    - if(!isLabeled){
-        legend(class=`${BASE_CLASS}__label`)= label
-    -}
+  fieldset(class=`${BASE_CLASS} js-${BASE_CLASS}`)
+    if label
+      legend(class=`${BASE_CLASS}__label`)= label
 
     div(class=`${BASE_CLASS}__min-wrapper js-${BASE_CLASS}__min-wrapper`)
       +text-field(textField.min)

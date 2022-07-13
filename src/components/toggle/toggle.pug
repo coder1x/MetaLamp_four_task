@@ -3,26 +3,14 @@ mixin toggle(options = {})
     const {
       header = '',
       label = '',
-      modifier = '',
-      addClass = '',
-      isLabeled,
     } = options;
 
     const BASE_CLASS = 'toggle'
-    let className = BASE_CLASS
     
-    if(modifier){
-      className += ` ${BASE_CLASS}_${modifier}`
-    }
-    if(addClass){
-      className += ` ${addClass}`
-    }
+  div(class=BASE_CLASS)
+    if header
+      p(class=`${BASE_CLASS}__header`)= header
 
-  div(class=className)
-    - if(!isLabeled){
-        p(class=`${BASE_CLASS}__header`)= header
-    -}
-    
     div(class=`${BASE_CLASS}__wrapper`)
       label(class=`${BASE_CLASS}__label`)= label
         input(class=`${BASE_CLASS}__input` type='checkbox' name='toggle')

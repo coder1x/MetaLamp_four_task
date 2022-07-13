@@ -1,25 +1,13 @@
 
-mixin code(options = {})
+mixin code(label = '')
   -
-    const {
-      label = '',
-      addClass = '',
-      isLabeled = false,
-    } = options;
-
     const BASE_CLASS = 'code';
-    let className = BASE_CLASS;
     const CODE_TOP = '$(\'.demo\').RangeSliderFox({';
     const CODE_BOTTOM = '})';
 
-  if addClass
-    - className += ` ${addClass}`
-  
-
-  fieldset(class=`${className} js-${BASE_CLASS}`)
-    if !isLabeled
+  fieldset(class=`${BASE_CLASS} js-${BASE_CLASS}`)
+    if label
       legend(class=`${BASE_CLASS}__label`)= label
-    
     
     div(class=`${BASE_CLASS}__config`)
       p(class=`${BASE_CLASS}__lang-js`)=CODE_TOP
