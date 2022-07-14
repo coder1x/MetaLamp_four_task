@@ -13,12 +13,10 @@ let config = null;
 const plugin = ['@plugins/importPlugin.ts'];
 const points = [];
 
-if (!env.isDev) {
-  points.push('./index.ts');
-} else {
+if (env.isDev)
   points.push('webpack/hot/dev-server');
-  points.push('./index.ts');
-}
+
+points.push('./index.ts');
 
 if (env.isPlugin) {
   config = {

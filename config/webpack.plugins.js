@@ -21,8 +21,7 @@ const pages = fs.readdirSync(pagesDir).map((file) => {
   return file.split('/', 2);
 });
 
-const description = 'Узнайте, как использовать Range Slider Fox'
-  + ' на нескольких практических демонстрациях';
+const description = 'Узнайте, как использовать Range Slider Fox на нескольких практических демонстрациях';
 const keywords = 'range slider, diapason, interval, price range, price slider';
 
 const plugins = [];
