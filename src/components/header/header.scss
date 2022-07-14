@@ -33,24 +33,25 @@ $color-focus: rgb(167, 167, 167);
   &__download {
     color: #555;
     font-size: 24px;
-  }
 
-  &__download:hover,
-  &__download:focus {
-    color: rgb(107, 107, 107);
-  }
-
-  &__download:focus {
-    outline: 2px solid $color-focus;
-    outline-offset: 4px;
+    &:hover,
+    &:focus {
+      color: rgb(107, 107, 107);
+    }
+  
+    &:focus {
+      outline: 2px solid $color-focus;
+      outline-offset: 4px;
+    }
   }
 }
 
 .octicon {
   fill: #bb5525;
+  &:hover {
+    transition: 0.1s ease-in-out;
+    filter: drop-shadow(0 0 2px #bb5525);
+  }
 }
 
-.octicon:hover {
-  transition: 0.1s ease-in-out;
-  filter: drop-shadow(0 0 2px #bb5525);
-}
+

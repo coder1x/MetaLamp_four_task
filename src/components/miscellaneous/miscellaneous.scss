@@ -68,11 +68,10 @@ $color-button-active: #868686;
     background-color: $background-button;
     color: $color-button;
     cursor: pointer;
-  }
 
-  &__reset:active,
-  &__apply:active {
-    box-shadow: $shadow-button-active;
-    color: $color-button-active;
+    &:active {
+      box-shadow: $shadow-button-active;
+      color: $color-button-active;
+    }
   }
 }

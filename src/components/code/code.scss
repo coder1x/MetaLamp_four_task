@@ -42,15 +42,15 @@ $color-copy-active: #868686;
     background-color: $background-copy;
     color: $color-copy;
     cursor: pointer;
-  }
 
-  &__copy:active {
-    box-shadow: $shadow-copy-active;
-    color: $color-copy-active;
-  }
+    &:active {
+      box-shadow: $shadow-copy-active;
+      color: $color-copy-active;
+    }
 
-  &__copy:focus {
-    outline: 2px solid $color-focus;
-    outline-offset: 4px;
+    &:focus {
+      outline: 2px solid $color-focus;
+      outline-offset: 4px;
+    }
   }
 }

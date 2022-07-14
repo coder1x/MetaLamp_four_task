@@ -32,11 +32,18 @@ $before-background-checked: #b5cf9a;
     z-index: 0;
     border: 0;
     padding: 0;
+
+    &:focus {
+      outline: 2px solid $color-focus;
+      outline-offset: 12px;
+    }
   }
 
-  &__input:focus {
-    outline: 2px solid $color-focus;
-    outline-offset: 12px;
+  &__input:checked + &__before {
+    background-color: $before-background-checked;
+  }
+  &__input:checked + &__before:after {
+    left: 22px;
   }
 
   &__wrapper {
@@ -59,25 +66,18 @@ $before-background-checked: #b5cf9a;
     border-radius: 10px;
     transition: 0.2s;
     box-sizing: border-box;
-  }
 
-  &__before:after {
-    content: "";
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    width: 12px;
-    height: 12px;
-    border-radius: 10px;
-    background: $color-background;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-
-  &__input:checked + &__before {
-    background-color: $before-background-checked;
-  }
-  &__input:checked + &__before:after {
-    left: 22px;
+    &:after {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 12px;
+      height: 12px;
+      border-radius: 10px;
+      background: $color-background;
+      cursor: pointer;
+      transition: 0.2s;
+    }
   }
 }

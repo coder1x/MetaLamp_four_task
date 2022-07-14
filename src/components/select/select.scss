@@ -33,16 +33,22 @@ $background-color-item: rgb(244, 249, 255);
     box-sizing: border-box;
     cursor: pointer;
     text-align: start;
+
+    &:hover,
+    &:focus {
+      border: 1px solid $color-border-hover;
+    }
+  
+    &:focus {
+      outline: 2px solid $color-focus;
+      outline-offset: 4px;
+    }
   }
 
-  &__displayed:hover,
-  &__displayed:focus {
-    border: 1px solid $color-border-hover;
-  }
-
-  &__displayed:focus {
-    outline: 2px solid $color-focus;
-    outline-offset: 4px;
+  &_visible &__displayed {
+    border-color: $color-border-show;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
   }
 
   &__tip {
@@ -52,6 +58,10 @@ $background-color-item: rgb(244, 249, 255);
     cursor: pointer;
     transform: rotate(0deg);
     transition: transform 0.5s;
+  }
+
+  &_visible &__tip {
+    transform: rotate(180deg);
   }
 
   &__options {
@@ -66,19 +76,23 @@ $background-color-item: rgb(244, 249, 255);
     top: 43px;
   }
 
+  &_visible &__options {
+    display: block;
+  }
+
   &__item {
     padding: 5px 15px 5px 15px;
     cursor: pointer;
     font-size: 14px;
-  }
 
-  &__item:hover {
-    background-color: $background-color-item;
-  }
-
-  &__item:focus {
-    outline: 2px solid $color-focus;
-    outline-offset: 4px;
+    &:hover {
+      background-color: $background-color-item;
+    }
+  
+    &:focus {
+      outline: 2px solid $color-focus;
+      outline-offset: 4px;
+    }
   }
 
   &__input {
@@ -94,19 +108,5 @@ $background-color-item: rgb(244, 249, 255);
     clip-path: inset(100%);
     clip: rect(0 0 0 0);
     overflow: hidden;
-  }
-
-  &_visible &__options {
-    display: block;
-  }
-
-  &_visible &__tip {
-    transform: rotate(180deg);
-  }
-
-  &_visible &__displayed {
-    border-color: $color-border-show;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
   }
 }
