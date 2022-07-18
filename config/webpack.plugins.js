@@ -69,8 +69,7 @@ if (!env.isPlugin) {
         },
         'twitter-description': {
           name: 'twitter:description',
-          content: 'Узнайте, как использовать Range Slider Fox'
-            + ' на нескольких практических демонстрациях',
+          content: 'Узнайте, как использовать Range Slider Fox на нескольких практических демонстрациях',
         },
         'twitter-site': {
           name: 'twitter:site',
@@ -90,8 +89,7 @@ if (!env.isPlugin) {
         },
         'og-description': {
           property: 'og:description',
-          content: 'Узнайте, как использовать Range Slider Fox'
-            + ' на нескольких практических демонстрациях',
+          content: 'Узнайте, как использовать Range Slider Fox на нескольких практических демонстрациях',
         },
         'og-image': {
           property: 'og:image',
@@ -119,8 +117,7 @@ plugins.push(
     devMode: env.isPlugin ? true : env.isDev,
     appName: 'Plugin Range Slider Fox',
     appShortName: 'Range Slider Fox',
-    appDescription: 'Узнайте, как использовать Range Slider Fox'
-      + ' на нескольких практических демонстрациях',
+    appDescription: 'Узнайте, как использовать Range Slider Fox на нескольких практических демонстрациях',
     developerName: 'coder1',
     developerURL: 'https://github.com/coder1x/',
     icons: {
