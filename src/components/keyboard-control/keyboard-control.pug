@@ -1,7 +1,10 @@
 include ../text-field/text-field.pug
 
-mixin keyboard-control(label = '')
+mixin keyboard-control(options = {})
   -
+    const {
+      label = ''
+    } = options;
     const BASE_CLASS = 'keyboard-control'
     const data = require('./keyboard-control.json'); 
     const textField = data.textField

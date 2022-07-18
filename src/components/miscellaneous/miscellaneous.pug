@@ -1,8 +1,11 @@
 include ../toggle/toggle.pug
 include ../select/select.pug
 
-mixin miscellaneous(label = '')
+mixin miscellaneous(options = {})
   -
+    const {
+      label = ''
+    } = options;
     const BASE_CLASS = 'miscellaneous'
     const data = require('./miscellaneous.json'); 
     const selectData = data.select

@@ -1,7 +1,10 @@
 include ../text-field/text-field.pug
 
-mixin input-data(label = '')
+mixin input-data(options = {})
   -
+    const {
+      label = ''
+    } = options;
     const BASE_CLASS = 'input-data'
     
   fieldset(class=`${BASE_CLASS} js-${BASE_CLASS}`)

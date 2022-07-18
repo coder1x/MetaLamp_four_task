@@ -1,8 +1,11 @@
 include ../toggle/toggle.pug
 include ../text-field/text-field.pug
 
-mixin grid(label = '')
+mixin grid(options = {})
   -
+    const {
+      label = ''
+    } = options;
     const BASE_CLASS = 'grid'
     const data = require('./grid.json'); 
     const textField = data.textField

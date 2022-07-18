@@ -1,6 +1,9 @@
 
-mixin code(label = '')
+mixin code(options = {})
   -
+    const {
+      label = ''
+    } = options;
     const BASE_CLASS = 'code';
     const CODE_TOP = '$(\'.demo\').RangeSliderFox({';
     const CODE_BOTTOM = '})';

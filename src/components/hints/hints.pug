@@ -1,8 +1,11 @@
 include ../toggle/toggle.pug
 include ../text-field/text-field.pug
 
-mixin hints(label = '')
+mixin hints(options = {})
   -
+    const {
+      label = ''
+    } = options;
     const BASE_CLASS = 'hints'
     const data = require('./hints.json'); 
     const textField = data.textField

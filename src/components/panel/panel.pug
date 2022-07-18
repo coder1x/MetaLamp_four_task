@@ -6,8 +6,12 @@ include ../miscellaneous/miscellaneous.pug
 include ../code/code.pug
 include ../keyboard-control/keyboard-control.pug
 
-mixin panel(theme = 'base')
+mixin panel(options = {})
   -
+    const {
+      theme = 'base'
+    } = options;
+
     const BASE_CLASS = 'panel'
 
   div(class=`${BASE_CLASS} js-${BASE_CLASS}`)
@@ -21,22 +25,22 @@ mixin panel(theme = 'base')
       )
 
     div(class=`${BASE_CLASS}__values-wrapper`)
-      +values('Values')
+      +values({label:'Values'})
 
     div(class=`${BASE_CLASS}__input-data-wrapper`)
-      +input-data('Input data')
+      +input-data({label:'Input data'})
 
     div(class=`${BASE_CLASS}__keyboard-control-wrapper`)
-      +keyboard-control('keyboard control')
+      +keyboard-control({label:'keyboard control'})
 
     div(class=`${BASE_CLASS}__grid-wrapper`)
-      +grid('Grid')
+      +grid({label:'Grid'})
 
     div(class=`${BASE_CLASS}__different-wrapper`)
-      +miscellaneous('Miscellaneous')
+      +miscellaneous({label:'Miscellaneous'})
 
     div(class=`${BASE_CLASS}__hints-wrapper`)
-      +hints('Hints')
+      +hints({label:'Hints'})
       
     div(class=`${BASE_CLASS}__code-wrapper`)
-      +code('Config code')
+      +code({label:'Config code'})

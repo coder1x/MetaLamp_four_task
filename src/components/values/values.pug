@@ -1,7 +1,10 @@
 include ../text-field/text-field.pug
 
-mixin values(label = '')
+mixin values(options = {})
   -
+    const {
+      label = ''
+    } = options;
     const BASE_CLASS = 'values'
     const data = require('./values.json');
     const textField = data.textField
