@@ -12,7 +12,7 @@ import {
 } from '@shared/helpers/readWriteProperties';
 import trimFraction from '@shared/helpers/trim';
 
-import RangeSliderOptions from '../../globInterface';
+import { RangeSliderOptions, FromTo } from '../../globInterface';
 import { ObserverOptions } from '../../Observer';
 
 import {
@@ -207,41 +207,10 @@ class Model extends ModelCalc {
   }
 
   // ---------------------------------- Grid
+
   @boundMethod
   takeFromOrToOnMarkClick(value: number) {
-    let {
-      from,
-      to,
-    } = this;
-
-    const chooseAmongFromAndTo = () => {
-      if (this.type === 'single') {
-        from = value;
-        return { from, to };
-      }
-
-      if (value > (to ?? 0)) { // if the value is greater than TO
-        to = value; // set on this dot
-        return { from, to };
-      }
-
-      if (value > (from ?? 0)) { // if the value is greater than FROM
-        const To = (to ?? 0) - value; // extract Val from TO
-        const From = value - (from ?? 0); // extract FROM from VAL
-
-        if (From > To) {
-          to = value;
-        } else {
-          from = value;
-        }
-      } else { // if VAL is smaller than FROM, then move FROM
-        from = value;
-      }
-
-      return { from, to };
-    };
-
-    const data = chooseAmongFromAndTo();
+    const data = this.chooseAmongFromAndTo(value);
 
     this.setFromTo({
       type: this.type,
@@ -258,9 +227,6 @@ class Model extends ModelCalc {
       to,
     } = this;
 
-    let isFrom = false;
-    let isTo = false;
-
     const HUNDRED_PERCENT = 100;
     const onePercent = dimensions / HUNDRED_PERCENT; // one percent of the entire scale
     let pointPercent = 0;
@@ -271,41 +237,10 @@ class Model extends ModelCalc {
       pointPercent = pointXY / onePercent; // total percentage in the clicked area
     }
 
-    const chooseBetweenFromTo = () => {
-      if (this.type === 'single') {
-        this.fromPercent = pointPercent;
-        isFrom = true;
-        return { isFrom, isTo };
-      }
-
-      if (pointPercent > this.toPercent) { // if the value is greater than TO
-        this.toPercent = pointPercent; // set on this dot
-        isTo = true;
-        return { isFrom, isTo };
-      }
-
-      if (pointPercent > this.fromPercent) { // if TO is smaller then FROM is greater
-        const toPercent = this.toPercent - pointPercent; // extract VAL from TO
-        const fromPercent = pointPercent - this.fromPercent; // extract FROM from VAL
-
-        if (fromPercent > toPercent) { // that dot is closer which value is smaller
-          this.toPercent = pointPercent;
-          isTo = true;
-        } else {
-          this.fromPercent = pointPercent;
-          isFrom = true;
-        }
-      } else { //  if VAL is smaller than FROM, then move FROM
-        this.fromPercent = pointPercent;
-        isFrom = true;
-      }
-
-      return { isFrom, isTo };
-    };
-
-    const data = chooseBetweenFromTo();
-    isFrom = data.isFrom;
-    isTo = data.isTo;
+    const {
+      isFrom = false,
+      isTo = false,
+    } = this.chooseBetweenFromTo(pointPercent);
 
     if (isFrom) {
       from = this.getValueFrom();
@@ -340,12 +275,8 @@ class Model extends ModelCalc {
     return this.toggleSnapMode();
   }
 
-  private getStepSnap(options: {
-    from: number | null,
-    to: number | null,
-    isTo: boolean,
-    isFrom: boolean
-  }) {
+  private applySnapForFromTo(options: FromTo) {
+    const isSingle = this.type === 'single';
     let {
       from,
       to,
@@ -356,50 +287,61 @@ class Model extends ModelCalc {
       isFrom,
     } = options;
 
+    if (!(this.gridSnap && !this.step)) { return { from, to }; }
+
+    if (isFrom) {
+      from = Model.getSnap(from ?? 0, this.stepGrid, this.snapNumber);
+    }
+    if (!isSingle && isTo) {
+      to = Model.getSnap(to ?? 0, this.stepGrid, this.snapNumber);
+    }
+
+    return { from, to };
+  }
+
+  private applyStepForFromTo(options: FromTo) {
+    let {
+      from,
+      to,
+    } = options;
+
+    const {
+      isTo,
+      isFrom,
+    } = options;
+
+    if (!this.step) { return { from, to }; }
+
     const isSingle = this.type === 'single';
+    const isMinFrom = from === this.min;
+    const isMaxTo = to === this.max;
 
-    const applySnapForFromTo = () => {
-      if (!(this.gridSnap && !this.step)) { return { from, to }; }
+    if (isFrom && isMinFrom) { return { from, to }; }
+    if (isTo && isMaxTo) { return { from, to }; }
 
-      if (isFrom) {
-        from = Model.getSnap(from ?? 0, this.stepGrid, this.snapNumber);
-      }
-      if (!isSingle && isTo) {
-        to = Model.getSnap(to ?? 0, this.stepGrid, this.snapNumber);
-      }
+    if (isFrom && !isSingle) {
+      from = from !== this.to ? this.getStep(from ?? 0) : from;
+    }
 
-      return { from, to };
-    };
+    if (isFrom && isSingle) {
+      from = this.getStep(from ?? 0);
+    }
 
-    const dataSnap = applySnapForFromTo();
-    from = dataSnap.from;
-    to = dataSnap.to;
+    if (isTo && to !== this.from) {
+      to = this.getStep(to ?? 0);
+    }
 
-    const applyStepForFromTo = () => {
-      if (!this.step) { return { from, to }; }
+    return { from, to };
+  }
 
-      const isMinFrom = from === this.min;
-      const isMaxTo = to === this.max;
+  private getStepSnap(options: FromTo) {
+    const data = options;
 
-      if (isFrom && isMinFrom) { return { from, to }; }
-      if (isTo && isMaxTo) { return { from, to }; }
+    const dataSnap = this.applySnapForFromTo(data);
+    data.from = dataSnap.from;
+    data.to = dataSnap.to;
 
-      if (isFrom && !isSingle) {
-        from = from !== this.to ? this.getStep(from ?? 0) : from;
-      }
-
-      if (isFrom && isSingle) {
-        from = this.getStep(from ?? 0);
-      }
-
-      if (isTo && to !== this.from) {
-        to = this.getStep(to ?? 0);
-      }
-
-      return { from, to };
-    };
-
-    return applyStepForFromTo();
+    return this.applyStepForFromTo(data);
   }
 
   // ---------------------------------- Start Model
@@ -523,6 +465,63 @@ class Model extends ModelCalc {
     return true;
   }
 
+  private getType(type: string) {
+    const isSingle = type === 'single';
+    const isDouble = type === 'double';
+
+    if (isSingle || isDouble) {
+      this.type = String(type);
+      return this.type;
+    }
+
+    if (checkIsEmpty(this.type)) {
+      return this.type;
+    }
+
+    return false;
+  }
+
+  private setFrom(from: number) {
+    if (from == null) { return false; }
+    const max = this.max ?? 0;
+    const min = this.min ?? 0;
+    const isAboveMin = from >= min;
+    const isBelowMax = from <= max;
+
+    if (isAboveMin && isBelowMax) {
+      this.from = from;
+      return null;
+    }
+
+    if (from < min) { this.from = min; }
+
+    if (from > max) { this.from = max; }
+
+    return null;
+  }
+
+  private setTo(from: number, to: number | null | undefined, type: string) {
+    if (from == null) { return null; }
+    const max = this.max ?? 0;
+    const isConfigurationNotExist = !this.isStartedConfiguration || this.isUpdatedConfiguration;
+    const isDouble = type === 'double';
+
+    if (isDouble || isConfigurationNotExist) { // check FROM and TO
+      to = Number(checkProperty(this, to, 'to' as keyof Model));
+      if (to == null) { return null; }
+
+      if (from > to) {
+        to = from;
+      }
+
+      this.to = to <= max ? to : max;
+
+      return to;
+    }
+
+    return null;
+  }
+
   private setFromTo(options: RangeSliderOptions): boolean {
     if (!validateProperties(
       options,
@@ -530,84 +529,20 @@ class Model extends ModelCalc {
     )) { return false; }
 
     let {
-      type,
       from,
-      to,
     } = options;
 
     // check if all necessary data exists
     if (!checkIsEmpty(this.min)) { return false; }
     if (!checkIsEmpty(this.max)) { return false; }
 
-    const getType = () => {
-      const isSingle = type === 'single';
-      const isDouble = type === 'double';
-
-      if (isSingle || isDouble) {
-        this.type = String(type);
-        return this.type;
-      }
-
-      if (checkIsEmpty(this.type)) {
-        return this.type;
-      }
-
-      return false;
-    };
-
-    const dataType = getType();
+    const dataType = this.getType(options.type ?? '');
     if (!dataType) { return false; }
-
-    type = dataType;
 
     from = Number(checkProperty(this, from, 'from' as keyof Model));
 
-    const setFrom = () => {
-      if (from == null) { return false; }
-      const max = this.max ?? 0;
-      const min = this.min ?? 0;
-      const isAboveMin = from >= min;
-      const isBelowMax = from <= max;
-
-      if (isAboveMin && isBelowMax) {
-        this.from = from;
-        return null;
-      }
-
-      if (from < min) { this.from = min; }
-
-      if (from > max) { this.from = max; }
-
-      return null;
-    };
-
-    setFrom();
-
-    const setTo = () => {
-      if (from == null) { return null; }
-      const max = this.max ?? 0;
-      const isConfigurationNotExist = !this.isStartedConfiguration || this.isUpdatedConfiguration;
-      const isDouble = type === 'double';
-
-      if (isDouble || isConfigurationNotExist) { // check FROM and TO
-        to = Number(checkProperty(this, to, 'to' as keyof Model));
-        if (to == null) { return false; }
-
-        if (from > to) {
-          const temp = from;
-          from = to;
-          to = temp;
-        }
-
-        this.to = to <= max ? to : max;
-
-        return null;
-      }
-
-      return null;
-    };
-
-    setTo();
+    this.setFrom(from);
+    this.setTo(from, options.to, dataType);
 
     const dataStep = this.getStepSnap({
       from: this.from,
@@ -631,6 +566,73 @@ class Model extends ModelCalc {
     }
 
     return true;
+  }
+
+  private chooseAmongFromAndTo(value: number) {
+    let {
+      from,
+      to,
+    } = this;
+
+    if (this.type === 'single') {
+      from = value;
+      return { from, to };
+    }
+
+    if (value > (to ?? 0)) { // if the value is greater than TO
+      to = value; // set on this dot
+      return { from, to };
+    }
+
+    if (value > (from ?? 0)) { // if the value is greater than FROM
+      const To = (to ?? 0) - value; // extract Val from TO
+      const From = value - (from ?? 0); // extract FROM from VAL
+
+      if (From > To) {
+        to = value;
+      } else {
+        from = value;
+      }
+    } else { // if VAL is smaller than FROM, then move FROM
+      from = value;
+    }
+
+    return { from, to };
+  }
+
+  private chooseBetweenFromTo(pointPercent: number) {
+    let isFrom = false;
+    let isTo = false;
+
+    if (this.type === 'single') {
+      this.fromPercent = pointPercent;
+      isFrom = true;
+      return { isFrom, isTo };
+    }
+
+    if (pointPercent > this.toPercent) { // if the value is greater than TO
+      this.toPercent = pointPercent; // set on this dot
+      isTo = true;
+      return { isFrom, isTo };
+    }
+
+    if (pointPercent > this.fromPercent) { // if TO is smaller then FROM is greater
+      const toPercent = this.toPercent - pointPercent; // extract VAL from TO
+      const fromPercent = pointPercent - this.fromPercent; // extract FROM from VAL
+
+      if (fromPercent > toPercent) { // that dot is closer which value is smaller
+        this.toPercent = pointPercent;
+        isTo = true;
+      } else {
+        this.fromPercent = pointPercent;
+        isFrom = true;
+      }
+    } else { //  if VAL is smaller than FROM, then move FROM
+      this.fromPercent = pointPercent;
+      isFrom = true;
+    }
+
+    return { isFrom, isTo };
   }
 
   private setGridSnapData(options: RangeSliderOptions): boolean {
@@ -735,7 +737,7 @@ class Model extends ModelCalc {
 
     if (isHorizontal || isVertical) {
       this.orientation = orientation;
-    } else return false;
+    } else { return false; }
 
     this.notifyObserver({
       key: 'OrientationData',

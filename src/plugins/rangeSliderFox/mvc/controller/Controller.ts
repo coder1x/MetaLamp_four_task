@@ -2,7 +2,7 @@ import { boundMethod } from 'autobind-decorator';
 
 import { NAME_PLUGIN } from '@shared/constants';
 
-import RangeSliderOptions from '../../globInterface';
+import { RangeSliderOptions } from '../../globInterface';
 import { ObserverOptions } from '../../Observer';
 import Model from '../model/Model';
 import View from '../view/View';

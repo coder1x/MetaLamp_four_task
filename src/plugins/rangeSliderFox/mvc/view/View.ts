@@ -3,7 +3,7 @@ import { boundMethod } from 'autobind-decorator';
 import { RANGE_SLIDER_NAME } from '@shared/constants';
 
 import { Observer, ObserverOptions } from '../../Observer';
-import RangeSliderOptions from '../../globInterface';
+import { RangeSliderOptions } from '../../globInterface';
 import Handle from './subView/Handle';
 import Hints from './subView/Hints';
 import Bar from './subView/Bar';

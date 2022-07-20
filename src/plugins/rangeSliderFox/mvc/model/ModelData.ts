@@ -1,4 +1,4 @@
-import RangeSliderOptions from '../../globInterface';
+import { RangeSliderOptions } from '../../globInterface';
 import { Observer } from '../../Observer';
 
 import {

@@ -26,4 +26,11 @@ interface RangeSliderOptions {
   readonly onReset?: ((data: RangeSliderOptions) => void) | null;
 }
 
-export default RangeSliderOptions;
+interface FromTo {
+  from: number | null,
+  to: number | null,
+  isTo: boolean,
+  isFrom: boolean
+}
+
+export { RangeSliderOptions, FromTo };
