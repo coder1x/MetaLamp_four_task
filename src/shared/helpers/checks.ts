@@ -16,7 +16,7 @@ function validateProperties<T, K extends keyof T>(object: T, properties: K[]) {
     }
   }
 
-  if (!isValid) return false;
+  if (!isValid) { return false; }
   return true;
 }
 
@@ -34,7 +34,7 @@ function checkFunction<T>(data: T) {
   if (data === null) {
     return null;
   }
-  if (typeof data === 'function') return data;
+  if (typeof data === 'function') { return data; }
 
   return null;
 }

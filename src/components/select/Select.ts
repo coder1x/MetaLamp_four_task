@@ -30,7 +30,7 @@ class Select {
   }
 
   getData() {
-    if (!this.input) return '';
+    if (!this.input) { return ''; }
     return this.input.value;
   }
 
@@ -80,7 +80,7 @@ class Select {
   }
 
   private setValueSelect(element: HTMLElement) {
-    if (!this.button || !this.input) return false;
+    if (!this.button || !this.input) { return false; }
 
     this.button.innerText = element.innerText;
     const value = element.getAttribute('data-value');
@@ -111,7 +111,7 @@ class Select {
   }
 
   private toggle(isVisible = false) {
-    if (!this.options) return false;
+    if (!this.options) { return false; }
 
     this.toggleModifier(
       this.element,
@@ -202,7 +202,7 @@ class Select {
   }
 
   private bindEvent() {
-    if (!this.displayedWrapper || !this.button) return false;
+    if (!this.displayedWrapper || !this.button) { return false; }
 
     this.displayedWrapper.addEventListener('click', this.handleDisplayedWrapperClick);
     this.button.addEventListener('keydown', this.handleDisplayedKeyDown);

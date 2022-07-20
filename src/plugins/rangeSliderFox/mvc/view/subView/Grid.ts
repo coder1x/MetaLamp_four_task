@@ -74,7 +74,7 @@ class Grid extends Observer {
   }
 
   createDomElementGrid() {
-    if (!this.elementGrid) return null;
+    if (!this.elementGrid) { return null; }
 
     this.rangeSliderBottom.appendChild(this.elementGrid);
     this.offOn = true;
@@ -84,7 +84,7 @@ class Grid extends Observer {
   }
 
   deleteGrid() {
-    if (!this.elementGrid) return null;
+    if (!this.elementGrid) { return null; }
 
     if (this.elementGrid.children.length > 0) {
       this.offOn = false;
@@ -152,7 +152,7 @@ class Grid extends Observer {
   }
 
   private shapingMark() {
-    if (!this.elementGrid) return false;
+    if (!this.elementGrid) { return false; }
 
     this.sizeWidthHeight = [];
     this.oddElements = [[]];
@@ -231,7 +231,7 @@ class Grid extends Observer {
     this.evenElements.shift();
     this.visibleMark();
 
-    if (this.isResized) return false;
+    if (this.isResized) { return false; }
 
     this.isResized = true;
     const DELAY_TIME = 200;
@@ -246,7 +246,7 @@ class Grid extends Observer {
 
   // hide or show values on the scale
   private visibleMark(isResized = false) {
-    if (!this.elementGrid) return false;
+    if (!this.elementGrid) { return false; }
     // define element index: show odd values and hide honest ones
     const wrapperWidthHeight = this.vertical
       ? this.elementGrid.offsetHeight
@@ -280,7 +280,7 @@ class Grid extends Observer {
   }
 
   private visibleLastElement(snapNumber: number[], isResized = false) {
-    if (!this.lastElement || !this.previousElement) return false;
+    if (!this.lastElement || !this.previousElement) { return false; }
 
     let snap = snapNumber;
 

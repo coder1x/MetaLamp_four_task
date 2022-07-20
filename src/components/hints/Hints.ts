@@ -74,11 +74,11 @@ class Hints {
     this.objRangeSlider = rangeSlider;
 
     [this.tipPrefix, this.tipPostfix].forEach((item) => {
-      if (!item) return;
+      if (!item) { return; }
       item.addEventListener('change', this.handleInputChange);
     });
 
-    if (!this.tipMinMax || !this.tipFromTo) return false;
+    if (!this.tipMinMax || !this.tipFromTo) { return false; }
 
     this.tipMinMax.addEventListener('click', this.handleTipMinMaxClick);
     this.tipFromTo.addEventListener('click', this.handleTipFromToClick);

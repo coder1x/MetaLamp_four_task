@@ -63,7 +63,7 @@ class Resize {
   private handleWindowOptimizedResize() {
     this.currentTime = new Date();
 
-    if (this.timeout) return true;
+    if (this.timeout) { return true; }
 
     this.timeout = true;
     setTimeout(this.resizeEnd, this.sleep);

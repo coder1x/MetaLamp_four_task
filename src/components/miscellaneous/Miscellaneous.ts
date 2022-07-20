@@ -108,7 +108,7 @@ class Different {
   bindEvent(rangeSlider: any) {
     this.objRangeSlider = rangeSlider;
 
-    if (!this.reset || !this.select) return false;
+    if (!this.reset || !this.select) { return false; }
 
     this.reset.addEventListener('click', this.handleResetClick);
 
@@ -118,12 +118,12 @@ class Different {
       });
     };
 
-    if (!this.disabled || !this.bar) return false;
+    if (!this.disabled || !this.bar) { return false; }
 
     this.disabled.addEventListener('click', this.handleDisabledClick);
     this.bar.addEventListener('click', this.handleBarClick);
 
-    if (!this.unsubscribtion || !this.type) return false;
+    if (!this.unsubscribtion || !this.type) { return false; }
 
     this.unsubscribtion.addEventListener(
       'click',

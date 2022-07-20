@@ -101,12 +101,12 @@ class Grid {
       (this.gridRound && this.gridRound.value) ?? '',
     );
 
-    if (!this.gridRound || !this.step) return false;
+    if (!this.gridRound || !this.step) { return false; }
 
     this.gridRound.addEventListener('change', this.handleGridRoundChange);
     this.step.addEventListener('change', this.handleStepChange);
 
-    if (!this.interval || !this.grid) return false;
+    if (!this.interval || !this.grid) { return false; }
 
     this.interval.addEventListener('change', this.handleIntervalChange);
 
@@ -132,7 +132,7 @@ class Grid {
 
   @boundMethod
   private handleStepChange(event: Event) {
-    if (!this.interval) return false;
+    if (!this.interval) { return false; }
     const element = event.currentTarget as HTMLInputElement;
     this.objRangeSlider.update({
       gridNumber: 0,
@@ -144,7 +144,7 @@ class Grid {
 
   @boundMethod
   private handleIntervalChange(event: Event) {
-    if (!this.step) return false;
+    if (!this.step) { return false; }
     const element = event.currentTarget as HTMLInputElement;
     this.objRangeSlider.update({
       gridNumber: Number(element.value),
@@ -156,7 +156,7 @@ class Grid {
 
   @boundMethod
   private handleInputProcessing(event: Event) {
-    if (!this.fieldValues) return false;
+    if (!this.fieldValues) { return false; }
     const element = event.currentTarget as HTMLInputElement;
     const value = element.value.replace(/[^.\d]/g, '');
     const REGEXP = /^\d*?[.]?\d*$/;
@@ -182,7 +182,7 @@ class Grid {
 
   @boundMethod
   private handleSnapClick(event: Event) {
-    if (!this.grid) return false;
+    if (!this.grid) { return false; }
     const element = event.currentTarget as HTMLInputElement;
 
     if (this.grid.checked) {

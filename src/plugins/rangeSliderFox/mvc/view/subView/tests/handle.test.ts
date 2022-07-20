@@ -43,7 +43,7 @@ describe('------- Test Handle API -------', () => {
     let child: HTMLCollection | null = null;
     if (typeof parentElement !== 'boolean') { child = parentElement.children; }
 
-    if (!child) return;
+    if (!child) { return; }
 
     searchString(child[0].className, `js-${RANGE_SLIDER_NAME}__from`);
     searchString(child[1].className, `js-${RANGE_SLIDER_NAME}__to`);

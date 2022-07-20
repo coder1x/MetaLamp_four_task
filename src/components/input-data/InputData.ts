@@ -26,7 +26,7 @@ class InputData {
       const objThis = this;
       Object.defineProperty(this.input, 'value', {
         set(text) {
-          if (!text && !objThis) return;
+          if (!text && !objThis) { return; }
 
           const input = objThis.value as HTMLInputElement;
 

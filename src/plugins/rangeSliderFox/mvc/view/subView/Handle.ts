@@ -49,8 +49,8 @@ class Handle extends Observer {
     const isFromTo = this.elementFrom && this.elementTo;
     const isFrom = this.elementFrom && !this.elementTo;
 
-    if (double && isFromTo) return false;
-    if (!double && isFrom) return false;
+    if (double && isFromTo) { return false; }
+    if (!double && isFrom) { return false; }
 
     const fromClassName = `${RANGE_SLIDER_NAME}__from`;
     const toClassName = `${RANGE_SLIDER_NAME}__to`;
@@ -101,7 +101,7 @@ class Handle extends Observer {
   }
 
   setFrom(fromPosition: number) {
-    if (!this.elementFrom) return false;
+    if (!this.elementFrom) { return false; }
 
     const value = `${fromPosition}%`;
     const from = this.elementFrom.style;
@@ -116,7 +116,7 @@ class Handle extends Observer {
   }
 
   setIndexFromTo(direction: keyof CSSStyleDeclaration) {
-    if (!this.elementFrom || !this.elementTo) return false;
+    if (!this.elementFrom || !this.elementTo) { return false; }
 
     const from = getProperty(this.elementFrom.style, direction);
     const to = getProperty(this.elementTo.style, direction);
@@ -143,7 +143,7 @@ class Handle extends Observer {
   }
 
   setTo(toPosition: number) {
-    if (!this.elementTo) return false;
+    if (!this.elementTo) { return false; }
 
     const value = `${toPosition}%`;
     const { style } = this.elementTo;
@@ -165,7 +165,7 @@ class Handle extends Observer {
     const isDouble = type === 'double';
     const isSingle = type === 'single';
 
-    if (isDouble && eventFromTo) return false;
+    if (isDouble && eventFromTo) { return false; }
 
     if (isSingle && eventFromTo) {
       this.isToEvent = false;
@@ -234,7 +234,7 @@ class Handle extends Observer {
 
   @boundMethod
   private handleFromPointerDown(event: PointerEvent) {
-    if (!this.elementFrom) return false;
+    if (!this.elementFrom) { return false; }
 
     if (this.elementTo) { this.elementTo.style.zIndex = '1'; }
     this.elementFrom.style.zIndex = '2';
@@ -248,7 +248,7 @@ class Handle extends Observer {
 
   @boundMethod
   private handleToPointerDown(event: PointerEvent) {
-    if (!this.elementFrom || !this.elementTo) return false;
+    if (!this.elementFrom || !this.elementTo) { return false; }
 
     this.elementTo.style.zIndex = '2';
     this.elementFrom.style.zIndex = '1';
@@ -282,14 +282,14 @@ class Handle extends Observer {
 
   @boundMethod
   private handleFromKeyDown(event: KeyboardEvent) {
-    if (!this.directions) return false;
+    if (!this.directions) { return false; }
     this.keyDown(event, this.directions, 'from');
     return true;
   }
 
   @boundMethod
   private handleToKeyDown(event: KeyboardEvent) {
-    if (!this.directions) return false;
+    if (!this.directions) { return false; }
     this.keyDown(event, this.directions, 'to');
     return true;
   }
@@ -306,7 +306,7 @@ class Handle extends Observer {
       to: keyof CSSStyleDeclaration,
     ) {
       const data = getProperty(domElement, from);
-      if (String(data) === '') return false;
+      if (String(data) === '') { return false; }
       domElement.removeProperty(String(from));
       setProperty(
         domElement,
@@ -351,7 +351,7 @@ class Handle extends Observer {
       return false;
     }
 
-    if (!directions.get(event.key)) return false;
+    if (!directions.get(event.key)) { return false; }
     event.preventDefault();
     const { repeat } = event;
     const sign = directions.get(event.key);

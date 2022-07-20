@@ -9,7 +9,8 @@
     "watch": "cross-env NODE_ENV=development webpack --mode development --watch",
     "start": "cross-env NODE_ENV=development webpack serve --mode development",
     "test": "jest",
-    "plugin": "cross-env NODE_ENV=plugin webpack --mode production"
+    "plugin": "cross-env NODE_ENV=plugin webpack --mode production",
+    "linter": "eslint . --ext .js,.ts"
   },
   "author": "coder1 <c.o.d.e.r.1@mail.ru>",
   "license": "ISC",
