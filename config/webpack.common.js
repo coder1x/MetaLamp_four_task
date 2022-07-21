@@ -13,7 +13,9 @@ let config = null;
 const plugin = ['@plugins/importPlugin.ts'];
 const points = [];
 
-if (env.isDev) { points.push('webpack/hot/dev-server'); }
+if (env.isDev) {
+  points.push('webpack/hot/dev-server');
+}
 
 points.push('./index.ts');
 

@@ -19,7 +19,9 @@ class CopyCodeButton {
   }
 
   setData(options: RangeSliderOptions) {
-    if (!this.list) { return false; }
+    if (!this.list) {
+      return false;
+    }
 
     const key = Object.keys(options);
     const values = Object.values(options);
@@ -69,7 +71,9 @@ class CopyCodeButton {
 
   @boundMethod
   private handleCopyClick() {
-    if (!this.list) { return false; }
+    if (!this.list) {
+      return false;
+    }
 
     let text = `$('.demo').${NAME_PLUGIN}({\n`;
 

@@ -143,14 +143,18 @@ class ModelData extends Observer {
   }
 
   protected checkIsValueInRange(value: number) {
-    if (value <= this.getRange()) { return value; }
+    if (value <= this.getRange()) {
+      return value;
+    }
     return this.getRange();
   }
 
   protected static getSnap(value: number, step: number, items: number[]) {
     const index = items.findIndex((item) => value < item);
 
-    if (index === -1) { return value; }
+    if (index === -1) {
+      return value;
+    }
     const item = items[index];
 
     return (step - (item - value)) < step / 2

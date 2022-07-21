@@ -65,7 +65,9 @@ class ModelCalc extends ModelData {
 
   // ---------------------------------- Snap
   toggleSnapMode() {
-    if (!this.gridSnap || this.step) { return false; }
+    if (!this.gridSnap || this.step) {
+      return false;
+    }
 
     this.from = ModelCalc.getSnap(this.from ?? 0, this.stepGrid, this.snapNumber);
 
@@ -174,7 +176,9 @@ class ModelCalc extends ModelData {
 
     if (isLeftFrom || isLeftTo) signDirection = 'left';
 
-    if (signDirection === '') { return false; }
+    if (signDirection === '') {
+      return false;
+    }
 
     return signDirection;
   }
@@ -208,7 +212,9 @@ class ModelCalc extends ModelData {
       if ((from ?? 0) < item && isDot) {
         const isEqual = from === to;
 
-        if (isEqual && isSign && type) { return false; }
+        if (isEqual && isSign && type) {
+          return false;
+        }
         value(i);
         return false;
       }

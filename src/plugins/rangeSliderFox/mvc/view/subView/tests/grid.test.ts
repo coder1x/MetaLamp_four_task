@@ -58,7 +58,9 @@ describe('------- Test Grid API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
   });
 
   // createDomElementGrid
@@ -70,7 +72,9 @@ describe('------- Test Grid API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
   });
 
   // deleteGrid
@@ -88,7 +92,9 @@ describe('------- Test Grid API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
   });
 
   // ClickMark

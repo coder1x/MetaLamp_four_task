@@ -61,7 +61,9 @@ class KeyboardControl {
     );
 
     [this.keyStepOne, this.keyStepHold].forEach((item) => {
-      if (!item) { return; }
+      if (!item) {
+        return;
+      }
       item.addEventListener('change', this.handleDataChange);
       item.addEventListener('input', this.handleInputProcessing);
     });
@@ -69,7 +71,9 @@ class KeyboardControl {
 
   @boundMethod
   private handleDataChange(event: Event) {
-    if (!this.fieldValues) { return false; }
+    if (!this.fieldValues) {
+      return false;
+    }
     const element = event.currentTarget as HTMLInputElement;
 
     this.objRangeSlider.update({
@@ -84,7 +88,9 @@ class KeyboardControl {
     const value = element.value.replace(/[^-.\d]/g, '');
     const REGEXP = /^-?\d*?[.]?\d*$/;
 
-    if (!this.fieldValues) { return false; }
+    if (!this.fieldValues) {
+      return false;
+    }
 
     if (REGEXP.test(value)) {
       this.fieldValues.set(element.name, value);

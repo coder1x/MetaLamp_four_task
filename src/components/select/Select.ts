@@ -30,7 +30,9 @@ class Select {
   }
 
   getData() {
-    if (!this.input) { return ''; }
+    if (!this.input) {
+      return '';
+    }
     return this.input.value;
   }
 
@@ -80,7 +82,9 @@ class Select {
   }
 
   private setValueSelect(element: HTMLElement) {
-    if (!this.button || !this.input) { return false; }
+    if (!this.button || !this.input) {
+      return false;
+    }
 
     this.button.innerText = element.innerText;
     const value = element.getAttribute('data-value');
@@ -88,7 +92,9 @@ class Select {
 
     const isNotChanged = !this.isUpdated && !this.isStarted;
 
-    if (isNotChanged && this.onChange) { this.onChange(value); }
+    if (isNotChanged && this.onChange) {
+      this.onChange(value);
+    }
 
     return true;
   }
@@ -111,7 +117,9 @@ class Select {
   }
 
   private toggle(isVisible = false) {
-    if (!this.options) { return false; }
+    if (!this.options) {
+      return false;
+    }
 
     this.toggleModifier(
       this.element,
@@ -176,7 +184,9 @@ class Select {
     if (isEnter || isSpace) {
       event.preventDefault();
       isSelected = true;
-    } else if (mouse === 'click') { isSelected = true; }
+    } else if (mouse === 'click') {
+      isSelected = true;
+    }
 
     if (isSelected) {
       this.setValueSelect(event.target as HTMLElement);
@@ -198,11 +208,15 @@ class Select {
     const element = event.target as Element;
     const isLink = element.closest(`${this.className}__options`) ?? false;
     const isList = element.closest(`.${this.getModifier()}`) ?? false;
-    if (!isLink && !isList) { this.toggle(true); }
+    if (!isLink && !isList) {
+      this.toggle(true);
+    }
   }
 
   private bindEvent() {
-    if (!this.displayedWrapper || !this.button) { return false; }
+    if (!this.displayedWrapper || !this.button) {
+      return false;
+    }
 
     this.displayedWrapper.addEventListener('click', this.handleDisplayedWrapperClick);
     this.button.addEventListener('keydown', this.handleDisplayedKeyDown);

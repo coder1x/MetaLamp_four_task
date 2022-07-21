@@ -60,7 +60,9 @@ class Panel {
 
     const child = element && element.firstElementChild;
 
-    if (!child) { return false; }
+    if (!child) {
+      return false;
+    }
 
     const rangeSlider = $(child).RangeSliderFox({
       ...options,
@@ -71,7 +73,9 @@ class Panel {
     }).data(NAME_PLUGIN); // will return an object for one item
 
     const bindEvent = <T extends Actions | null>(object: T) => {
-      if (!object) { return false; }
+      if (!object) {
+        return false;
+      }
       object.bindEvent(rangeSlider);
       return true;
     };
@@ -145,7 +149,9 @@ class Panel {
       this.objectGrid,
       this.objectHints,
     ].forEach((item) => {
-      if (!item) { return; }
+      if (!item) {
+        return;
+      }
       item.setData({ ...data });
     });
   }
@@ -156,7 +162,9 @@ class Panel {
       this.objectCopyCode,
       this.objectKeyboardControl,
     ].forEach((item) => {
-      if (!item) { return; }
+      if (!item) {
+        return;
+      }
       item.setData({ ...data });
     });
   }
@@ -170,7 +178,9 @@ class Panel {
       this.objectGrid,
       this.objectHints,
     ].forEach((item) => {
-      if (!item) { return; }
+      if (!item) {
+        return;
+      }
       item.setData({ ...data });
     });
   }
@@ -184,7 +194,9 @@ class Panel {
       this.objectGrid,
       this.objectHints,
     ].forEach((item) => {
-      if (!item) { return; }
+      if (!item) {
+        return;
+      }
       item.setData({ ...data });
     });
   }

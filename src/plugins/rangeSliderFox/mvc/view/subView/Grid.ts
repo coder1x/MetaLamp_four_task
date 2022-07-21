@@ -68,13 +68,17 @@ class Grid extends Observer {
         style.left = positionLine;
       }
 
-      if (this.elementGrid) { this.elementGrid.appendChild(gridLine); }
+      if (this.elementGrid) {
+        this.elementGrid.appendChild(gridLine);
+      }
     });
     return this.elementGrid;
   }
 
   createDomElementGrid() {
-    if (!this.elementGrid) { return null; }
+    if (!this.elementGrid) {
+      return null;
+    }
 
     this.rangeSliderBottom.appendChild(this.elementGrid);
     this.offOn = true;
@@ -84,7 +88,9 @@ class Grid extends Observer {
   }
 
   deleteGrid() {
-    if (!this.elementGrid) { return null; }
+    if (!this.elementGrid) {
+      return null;
+    }
 
     if (this.elementGrid.children.length > 0) {
       this.offOn = false;
@@ -152,14 +158,18 @@ class Grid extends Observer {
   }
 
   private shapingMark() {
-    if (!this.elementGrid) { return false; }
+    if (!this.elementGrid) {
+      return false;
+    }
 
     this.sizeWidthHeight = [];
     this.oddElements = [[]];
     this.evenElements = [[]];
     let markWidthHeight = 0;
 
-    if (this.previousElement) { this.previousElement.remove(); }
+    if (this.previousElement) {
+      this.previousElement.remove();
+    }
     this.previousElement = null;
 
     const gridMarks = this.elementGrid.getElementsByClassName(
@@ -231,7 +241,9 @@ class Grid extends Observer {
     this.evenElements.shift();
     this.visibleMark();
 
-    if (this.isResized) { return false; }
+    if (this.isResized) {
+      return false;
+    }
 
     this.isResized = true;
     const DELAY_TIME = 200;
@@ -246,7 +258,9 @@ class Grid extends Observer {
 
   // hide or show values on the scale
   private visibleMark(isResized = false) {
-    if (!this.elementGrid) { return false; }
+    if (!this.elementGrid) {
+      return false;
+    }
     // define element index: show odd values and hide honest ones
     const wrapperWidthHeight = this.vertical
       ? this.elementGrid.offsetHeight
@@ -254,7 +268,9 @@ class Grid extends Observer {
 
     let i = 0;
     for (; i < this.sizeWidthHeight.length - 1; i += 1) {
-      if (this.sizeWidthHeight[i] <= wrapperWidthHeight) { break; }
+      if (this.sizeWidthHeight[i] <= wrapperWidthHeight) {
+        break;
+      }
     }
 
     for (let n = 0; n <= i; n += 1) { // hide honest elements till the necessary level
@@ -280,7 +296,9 @@ class Grid extends Observer {
   }
 
   private visibleLastElement(snapNumber: number[], isResized = false) {
-    if (!this.lastElement || !this.previousElement) { return false; }
+    if (!this.lastElement || !this.previousElement) {
+      return false;
+    }
 
     let snap = snapNumber;
 
@@ -300,7 +318,9 @@ class Grid extends Observer {
     } else {
       Grid.toggleElement(this.previousElement, 'visible', '1');
       const length = snap.length - 1;
-      if (snap[length] !== number) { snap.push(number); }
+      if (snap[length] !== number) {
+        snap.push(number);
+      }
     }
 
     this.notifyObserver({

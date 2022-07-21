@@ -40,7 +40,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { model.onHandle(); }
+    if (model.onHandle) {
+      model.onHandle();
+    }
   });
 
   // reset
@@ -61,7 +63,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { model.onHandle(); }
+    if (model.onHandle) {
+      model.onHandle();
+    }
   });
 
   // update
@@ -82,7 +86,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { model.onHandle(); }
+    if (model.onHandle) {
+      model.onHandle();
+    }
   });
 
   // calcOnePercent
@@ -97,7 +103,9 @@ describe('------- Test Model API -------', () => {
         max,
       });
 
-      if (model.onHandle) { await model.onHandle(); }
+      if (model.onHandle) {
+        await model.onHandle();
+      }
       expect(model.calcOnePercent()).toBeCloseTo(result);
     };
 
@@ -139,7 +147,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
   });
 
   const TEST_NAME1 = ' Check dots mooving along '
@@ -159,7 +169,9 @@ describe('------- Test Model API -------', () => {
         shiftXY: options.shiftXY,
       });
 
-      if (!data) { return; }
+      if (!data) {
+        return;
+      }
 
       if (options.type) {
         expect(data.from).toBeCloseTo(options.value);
@@ -201,7 +213,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
 
     model = await new Model({
       type: 'double',
@@ -229,7 +243,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
 
     model = await new Model({
       type: 'single',
@@ -254,7 +270,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
   });
 
   // calcPositionTip: From, To, Single
@@ -282,7 +300,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
   });
 
   const TEST_NAME2 = ' Calculate numeral grid'
@@ -309,7 +329,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
 
     model = await new Model({
       min: -10.56,
@@ -331,7 +353,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
   });
 
   // calcPositionBar
@@ -351,7 +375,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
 
     model = await new Model({
       type: 'single',
@@ -367,7 +393,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
   });
 
   // clickLine
@@ -395,7 +423,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
 
     model = await new Model({
       type: 'single',
@@ -412,7 +442,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
 
     model = await new Model({
       type: 'double',
@@ -433,7 +465,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
   });
 
   const TEST_NAME3 = ' Check calculation of a click'
@@ -457,7 +491,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
 
     model = await new Model({
       orientation: 'vertical',
@@ -474,7 +510,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
 
     model = await new Model({
       type: 'single',
@@ -490,7 +528,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
   });
 
   const TEST_NAME4 = ' Check dots values changes '
@@ -517,7 +557,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
 
     model = await new Model({
       type: 'single',
@@ -550,7 +592,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
   });
 
   const TEST_NAME5 = ' Calculate dots positions relating '
@@ -583,7 +627,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
   });
 
   const TEST_NAME6 = ' Calculate dots movement when'
@@ -618,7 +664,9 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
 
     model = await new Model({
       type: 'double',
@@ -654,6 +702,8 @@ describe('------- Test Model API -------', () => {
       },
     });
 
-    if (model.onHandle) { await model.onHandle(); }
+    if (model.onHandle) {
+      await model.onHandle();
+    }
   });
 });

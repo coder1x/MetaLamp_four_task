@@ -108,7 +108,9 @@ class Values {
     const value = element.value.replace(/[^-.\d]/g, '');
     const REGEXP = /^-?\d*?[.]?\d*$/;
 
-    if (!this.fieldValues) { return false; }
+    if (!this.fieldValues) {
+      return false;
+    }
 
     if (REGEXP.test(value)) {
       this.fieldValues.set(element.name, value);
@@ -122,7 +124,9 @@ class Values {
 
   @boundMethod
   private handleInputChange(event: Event) {
-    if (!this.fieldValues) { return false; }
+    if (!this.fieldValues) {
+      return false;
+    }
     const element = event.currentTarget as HTMLInputElement;
     this.objRangeSlider.update({
       [element.name]: Number(this.fieldValues.get(element.name)),

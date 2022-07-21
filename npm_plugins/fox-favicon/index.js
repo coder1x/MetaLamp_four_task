@@ -5,7 +5,9 @@ class FoxFavicon {
   constructor(options) {
     this.options = this.getConfig(options);
 
-    if (!this.options.devMode) { this.createFavicons(); }
+    if (!this.options.devMode) {
+      this.createFavicons();
+    }
   }
 
   getConfig(options) {

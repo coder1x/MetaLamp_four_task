@@ -68,7 +68,9 @@ describe('------- Range Slider Fox - JQuery Objects -------', () => {
 
     const sibling = element.nextElementSibling;
     let rangeSliderFox = '';
-    if (sibling) { rangeSliderFox = sibling.className; }
+    if (sibling) {
+      rangeSliderFox = sibling.className;
+    }
 
     expect(rangeSliderFox).toBe('range-slider-fox js-range-slider-fox rs-base');
   });

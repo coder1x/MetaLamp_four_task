@@ -41,7 +41,9 @@ class Bar extends Observer {
         to: keyof CSSStyleDeclaration,
       ) => {
         const value = getProperty(styleDomElement, from);
-        if (value === '') { return false; }
+        if (value === '') {
+          return false;
+        }
         axisXLength = styleDomElement.width;
         axisYLength = styleDomElement.height;
         styleDomElement.removeProperty(String(from));
@@ -50,8 +52,12 @@ class Bar extends Observer {
       };
 
       if (this.vertical) {
-        if (!toggleBar('left', 'bottom')) { return false; }
-      } else if (!toggleBar('bottom', 'left')) { return false; }
+        if (!toggleBar('left', 'bottom')) {
+          return false;
+        }
+      } else if (!toggleBar('bottom', 'left')) {
+        return false;
+      }
 
       styleDomElement.width = axisYLength;
       styleDomElement.height = axisXLength;
@@ -59,7 +65,9 @@ class Bar extends Observer {
       return true;
     };
 
-    if (this.elementBar) { return convertStyle(this.elementBar.style); }
+    if (this.elementBar) {
+      return convertStyle(this.elementBar.style);
+    }
 
     return false;
   }
@@ -70,8 +78,12 @@ class Bar extends Observer {
       this.elementBar = null;
       return false;
     }
-    if (this.bar && this.elementBar) { return false; }
-    if (!this.bar && !this.elementBar) { return false; }
+    if (this.bar && this.elementBar) {
+      return false;
+    }
+    if (!this.bar && !this.elementBar) {
+      return false;
+    }
 
     const barName = `${RANGE_SLIDER_NAME}__bar`;
     this.elementBar = Bar.createElement('span', [barName, `js-${barName}`]);
@@ -82,7 +94,9 @@ class Bar extends Observer {
   }
 
   setSizeWidthHeight(size: number) {
-    if (!this.elementBar) { return false; }
+    if (!this.elementBar) {
+      return false;
+    }
 
     const pixels = `${size}px`;
     const { style } = this.elementBar;
@@ -97,7 +111,9 @@ class Bar extends Observer {
   }
 
   setBar(barXY: number, widthBar: number) {
-    if (!this.elementBar) { return false; }
+    if (!this.elementBar) {
+      return false;
+    }
 
     const { style } = this.elementBar;
 
@@ -112,7 +128,9 @@ class Bar extends Observer {
   }
 
   private bindEvent() {
-    if (!this.elementBar) { return false; }
+    if (!this.elementBar) {
+      return false;
+    }
 
     this.elementBar.addEventListener('click', this.handleBarClick);
 

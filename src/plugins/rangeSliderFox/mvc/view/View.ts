@@ -50,7 +50,9 @@ class View extends Observer {
   }
 
   destroy() {
-    if (!this.wrapperSlider) { return false; }
+    if (!this.wrapperSlider) {
+      return false;
+    }
 
     const typeElem = this.element.constructor.name;
     if (typeElem === 'HTMLInputElement') {
@@ -58,7 +60,9 @@ class View extends Observer {
       input.value = ' ';
     }
     const element = this.wrapperSlider.querySelector(`.js-${RANGE_SLIDER_NAME}`);
-    if (element) { element.remove(); }
+    if (element) {
+      element.remove();
+    }
 
     this.handle = null;
     this.hints = null;
@@ -110,7 +114,9 @@ class View extends Observer {
   }
 
   getWrapWidthHeight() {
-    if (!this.rangeSliderCenter) { return 0; }
+    if (!this.rangeSliderCenter) {
+      return 0;
+    }
 
     const size = (this.vertical
       ? this.rangeSliderCenter.offsetHeight
@@ -155,7 +161,9 @@ class View extends Observer {
     this.rangeSlider.appendChild(this.rangeSliderCenter);
     this.rangeSlider.appendChild(this.rangeSliderBottom);
 
-    if (!this.wrapperSlider) { return null; }
+    if (!this.wrapperSlider) {
+      return null;
+    }
 
     return this.wrapperSlider.appendChild(this.rangeSlider);
   }
@@ -171,12 +179,16 @@ class View extends Observer {
       classList.remove(modifier);
     }
 
-    if (!this.handle || !this.hints) { return false; }
+    if (!this.handle || !this.hints) {
+      return false;
+    }
 
     await this.handle.setOrientation(type);
     await this.hints.setOrientation(type);
 
-    if (!this.bar || !this.grid) { return false; }
+    if (!this.bar || !this.grid) {
+      return false;
+    }
 
     await this.bar.setOrientation(type);
     this.grid.setOrientation(type);
@@ -191,7 +203,9 @@ class View extends Observer {
   }
 
   setTheme(theme: string) {
-    if (!this.rangeSlider) { return false; }
+    if (!this.rangeSlider) {
+      return false;
+    }
 
     if (this.prevTheme) {
       this.rangeSlider.classList.remove(this.prevTheme);
@@ -205,29 +219,39 @@ class View extends Observer {
 
   // --------------------------------- handle
   createDotElement(type: string) {
-    if (!this.handle) { return null; }
+    if (!this.handle) {
+      return null;
+    }
     return this.handle.createDomElementBase(type);
   }
 
   setDotFrom(fromPercent: number) {
-    if (!this.handle) { return null; }
+    if (!this.handle) {
+      return null;
+    }
     return this.handle.setFrom(fromPercent);
   }
 
   setDotTo(toPercent: number) {
-    if (!this.handle) { return null; }
+    if (!this.handle) {
+      return null;
+    }
     return this.handle.setTo(toPercent);
   }
 
   setDotActions(type: string) {
-    if (!this.handle) { return null; }
+    if (!this.handle) {
+      return null;
+    }
     return this.handle.bindEvent(type);
   }
 
   // --------------------------------- hints
 
   setHintsData(options: ObserverOptions) {
-    if (!this.hints) { return []; }
+    if (!this.hints) {
+      return [];
+    }
 
     const areHintsExist: boolean[] = [];
     this.hints.setAdditionalText(
@@ -268,7 +292,9 @@ class View extends Observer {
   }
 
   toggleTipTo(to: number) {
-    if (!this.hints) { return false; }
+    if (!this.hints) {
+      return false;
+    }
 
     let isToggled = false;
     if (!this.hints.checkTipTo()) {
@@ -280,32 +306,44 @@ class View extends Observer {
   }
 
   updateTipMinMax(min: number, max: number) {
-    if (!this.hints) { return null; }
+    if (!this.hints) {
+      return null;
+    }
     return this.hints.setValueTipMinMax(min, max);
   }
 
   getWidthTip() {
-    if (!this.hints) { return null; }
+    if (!this.hints) {
+      return null;
+    }
     return this.hints.getWidthTip();
   }
 
   deleteTipTo() {
-    if (!this.hints) { return false; }
+    if (!this.hints) {
+      return false;
+    }
     return this.hints.deleteTipTo();
   }
 
   deleteTipSingle() {
-    if (!this.hints) { return false; }
+    if (!this.hints) {
+      return false;
+    }
     return this.hints.deleteTipSingle();
   }
 
   checkVisibleTip() {
-    if (!this.hints) { return false; }
+    if (!this.hints) {
+      return false;
+    }
     return this.hints.checkTipIsVisible();
   }
 
   updateTipValue(from: number, to: number, type: string) {
-    if (!this.hints) { return []; }
+    if (!this.hints) {
+      return [];
+    }
     const isUpdated: boolean[] = [];
     isUpdated.push(Boolean(this.hints.setValueTipFrom(from)));
     if (type === 'double') {
@@ -316,7 +354,9 @@ class View extends Observer {
   }
 
   updateTipPosition(coordinates: UpdateTip) {
-    if (!this.hints) { return []; }
+    if (!this.hints) {
+      return [];
+    }
     const isUpdated: boolean[] = [];
 
     isUpdated.push(Boolean(this.hints.setPositionFrom(coordinates.fromXY ?? 0)));
@@ -330,7 +370,9 @@ class View extends Observer {
   // --------------------------------- bar
 
   setVisibleBar(bar: boolean) {
-    if (!this.bar || !this.rangeSliderLine) { return []; }
+    if (!this.bar || !this.rangeSliderLine) {
+      return [];
+    }
     const isVisible: boolean[] = [];
 
     isVisible.push(this.bar.setVisibleBar(bar));
@@ -345,19 +387,25 @@ class View extends Observer {
   }
 
   setBar(barXY: number, widthBar: number) {
-    if (!this.bar) { return false; }
+    if (!this.bar) {
+      return false;
+    }
     return this.bar.setBar(barXY, widthBar);
   }
 
   // --------------------------------- Grid
 
   deleteGrid() {
-    if (!this.grid) { return false; }
+    if (!this.grid) {
+      return false;
+    }
     return this.grid.deleteGrid();
   }
 
   createDomElementGrid() {
-    if (!this.grid) { return null; }
+    if (!this.grid) {
+      return null;
+    }
     return this.grid.createDomElementGrid();
   }
 
@@ -365,7 +413,9 @@ class View extends Observer {
     value: number,
     position: number,
   }[]) {
-    if (!this.grid) { return null; }
+    if (!this.grid) {
+      return null;
+    }
     return this.grid.createMark(valueMark);
   }
 
@@ -492,12 +542,16 @@ class View extends Observer {
   }
 
   private createListeners() {
-    if (!this.handle || !this.bar) { return false; }
+    if (!this.handle || !this.bar) {
+      return false;
+    }
 
     this.handle.subscribeObserver(this.handleForwarding);
     this.bar.subscribeObserver(this.handleForwarding);
 
-    if (this.grid) { this.grid.subscribeObserver(this.handleForwarding); }
+    if (this.grid) {
+      this.grid.subscribeObserver(this.handleForwarding);
+    }
 
     return true;
   }

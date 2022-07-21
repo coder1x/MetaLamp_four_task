@@ -63,7 +63,9 @@ class Resize {
   private handleWindowOptimizedResize() {
     this.currentTime = new Date();
 
-    if (this.timeout) { return true; }
+    if (this.timeout) {
+      return true;
+    }
 
     this.timeout = true;
     setTimeout(this.resizeEnd, this.sleep);
@@ -80,7 +82,9 @@ class Resize {
 
   @boundMethod
   private handleWindowThrottle() {
-    if (this.running) { return false; }
+    if (this.running) {
+      return false;
+    }
     this.running = true;
     requestAnimationFrame(() => {
       this.objectResize.dispatchEvent(new CustomEvent(this.eventName));

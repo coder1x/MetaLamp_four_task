@@ -28,7 +28,9 @@ class Model extends ModelCalc {
 
   reset() {
     const options = this.defaultData ?? {};
-    if (!this.defaultData) { return false; }
+    if (!this.defaultData) {
+      return false;
+    }
 
     Object.keys(options).forEach((key) => {
       // использую type assertions так как не нашёл возможности передавать нужный тип
@@ -127,7 +129,9 @@ class Model extends ModelCalc {
       isTo,
     });
 
-    if (!direction) { return false; }
+    if (!direction) {
+      return false;
+    }
 
     const dataStep = this.getStepSnap({
       from,
@@ -155,12 +159,16 @@ class Model extends ModelCalc {
     );
 
     if (this.type === 'single') {
-      if (vertical) { return calcXY(this.fromPercent); }
+      if (vertical) {
+        return calcXY(this.fromPercent);
+      }
 
       return this.takeFromOrToOnLineClick(pointXY, dimensions);
     }
 
-    if (vertical) { return calcXY(this.toPercent); }
+    if (vertical) {
+      return calcXY(this.toPercent);
+    }
 
     return this.takeFromOrToOnLineClick(
       this.fromPercent * onePercent + pointXY,
@@ -287,7 +295,9 @@ class Model extends ModelCalc {
       isFrom,
     } = options;
 
-    if (!(this.gridSnap && !this.step)) { return { from, to }; }
+    if (!(this.gridSnap && !this.step)) {
+      return { from, to };
+    }
 
     if (isFrom) {
       from = Model.getSnap(from ?? 0, this.stepGrid, this.snapNumber);
@@ -310,14 +320,20 @@ class Model extends ModelCalc {
       isFrom,
     } = options;
 
-    if (!this.step) { return { from, to }; }
+    if (!this.step) {
+      return { from, to };
+    }
 
     const isSingle = this.type === 'single';
     const isMinFrom = from === this.min;
     const isMaxTo = to === this.max;
 
-    if (isFrom && isMinFrom) { return { from, to }; }
-    if (isTo && isMaxTo) { return { from, to }; }
+    if (isFrom && isMinFrom) {
+      return { from, to };
+    }
+    if (isTo && isMaxTo) {
+      return { from, to };
+    }
 
     if (isFrom && !isSingle) {
       from = from !== this.to ? this.getStep(from ?? 0) : from;
@@ -367,7 +383,9 @@ class Model extends ModelCalc {
   }
 
   private setRangeData(options: RangeSliderOptions): boolean {
-    if (!validateProperties(options, ['min', 'max'])) { return false; }
+    if (!validateProperties(options, ['min', 'max'])) {
+      return false;
+    }
 
     let {
       min,
@@ -375,15 +393,21 @@ class Model extends ModelCalc {
     } = options;
 
     min = Number(checkProperty(this, min, 'min' as keyof Model));
-    if (min == null) { return false; }
+    if (min == null) {
+      return false;
+    }
 
     max = Number(checkProperty(this, max, 'max' as keyof Model));
-    if (max == null) { return false; }
+    if (max == null) {
+      return false;
+    }
 
     const isMin = min < this.minValue;
     const isMax = max > this.maxValue;
 
-    if (isMin || isMax) { return false; }
+    if (isMin || isMax) {
+      return false;
+    }
 
     if (min > max) {
       const temp = min;
@@ -401,13 +425,21 @@ class Model extends ModelCalc {
       const to = this.to ?? 0;
       const from = this.from ?? 0;
 
-      if (this.max < to) { this.to = this.max; }
+      if (this.max < to) {
+        this.to = this.max;
+      }
 
-      if (this.max < from) { this.from = this.max; }
+      if (this.max < from) {
+        this.from = this.max;
+      }
 
-      if (this.min > to) { this.to = this.min; }
+      if (this.min > to) {
+        this.to = this.min;
+      }
 
-      if (this.min > from) { this.from = this.min; }
+      if (this.min > from) {
+        this.from = this.min;
+      }
 
       this.notifyObserver({
         key: 'RangeData',
@@ -435,7 +467,9 @@ class Model extends ModelCalc {
         'keyStepOne',
         'keyStepHold',
       ],
-    )) { return false; }
+    )) {
+      return false;
+    }
 
     let {
       step,
@@ -444,13 +478,19 @@ class Model extends ModelCalc {
     } = options;
 
     step = Number(checkProperty(this, step, 'step' as keyof Model));
-    if (step == null) { step = 0; }
+    if (step == null) {
+      step = 0;
+    }
 
     keyStepOne = Number(checkProperty(this, keyStepOne, 'keyStepOne' as keyof Model));
-    if (keyStepOne == null) { keyStepOne = 0; }
+    if (keyStepOne == null) {
+      keyStepOne = 0;
+    }
 
     keyStepHold = Number(checkProperty(this, keyStepHold, 'keyStepHold' as keyof Model));
-    if (keyStepHold == null) { keyStepHold = 0; }
+    if (keyStepHold == null) {
+      keyStepHold = 0;
+    }
 
     this.step = this.checkIsValueInRange(Number(step));
     this.keyStepOne = this.checkIsValueInRange(Number(keyStepOne));
@@ -482,7 +522,9 @@ class Model extends ModelCalc {
   }
 
   private setFrom(from: number) {
-    if (from == null) { return false; }
+    if (from == null) {
+      return false;
+    }
     const max = this.max ?? 0;
     const min = this.min ?? 0;
     const isAboveMin = from >= min;
@@ -493,22 +535,30 @@ class Model extends ModelCalc {
       return null;
     }
 
-    if (from < min) { this.from = min; }
+    if (from < min) {
+      this.from = min;
+    }
 
-    if (from > max) { this.from = max; }
+    if (from > max) {
+      this.from = max;
+    }
 
     return null;
   }
 
   private setTo(from: number, to: number | null | undefined, type: string) {
-    if (from == null) { return null; }
+    if (from == null) {
+      return null;
+    }
     const max = this.max ?? 0;
     const isConfigurationNotExist = !this.isStartedConfiguration || this.isUpdatedConfiguration;
     const isDouble = type === 'double';
 
     if (isDouble || isConfigurationNotExist) { // check FROM and TO
       to = Number(checkProperty(this, to, 'to' as keyof Model));
-      if (to == null) { return null; }
+      if (to == null) {
+        return null;
+      }
 
       if (from > to) {
         to = from;
@@ -526,18 +576,26 @@ class Model extends ModelCalc {
     if (!validateProperties(
       options,
       ['type', 'from', 'to'],
-    )) { return false; }
+    )) {
+      return false;
+    }
 
     let {
       from,
     } = options;
 
     // check if all necessary data exists
-    if (!checkIsEmpty(this.min)) { return false; }
-    if (!checkIsEmpty(this.max)) { return false; }
+    if (!checkIsEmpty(this.min)) {
+      return false;
+    }
+    if (!checkIsEmpty(this.max)) {
+      return false;
+    }
 
     const dataType = this.getType(options.type ?? '');
-    if (!dataType) { return false; }
+    if (!dataType) {
+      return false;
+    }
 
     from = Number(checkProperty(this, from, 'from' as keyof Model));
 
@@ -637,7 +695,9 @@ class Model extends ModelCalc {
 
   private setGridSnapData(options: RangeSliderOptions): boolean {
     if (!validateProperties(options, ['gridSnap'])) {
-      if (this.gridSnap === undefined) { this.gridSnap = false; }
+      if (this.gridSnap === undefined) {
+        this.gridSnap = false;
+      }
       return false;
     }
 
@@ -663,7 +723,9 @@ class Model extends ModelCalc {
         'gridStep',
         'gridRound',
       ],
-    )) { return false; }
+    )) {
+      return false;
+    }
 
     let {
       grid,
@@ -678,7 +740,9 @@ class Model extends ModelCalc {
     grid = Boolean(checkProperty(this, grid, 'grid' as keyof Model) ?? false);
     this.grid = Boolean(grid);
 
-    if (!checkIsEmpty(this.min) || !checkIsEmpty(this.max)) { return false; }
+    if (!checkIsEmpty(this.min) || !checkIsEmpty(this.max)) {
+      return false;
+    }
 
     gridNumber = Number(checkProperty(this, gridNumber, 'gridNumber' as keyof Model) ?? 0);
     gridStep = Number(checkProperty(this, gridStep, 'gridStep' as keyof Model) ?? 0);
@@ -690,7 +754,9 @@ class Model extends ModelCalc {
       gridStep = long;
     }
 
-    if (gridStep > (this.max ?? 0)) { gridStep = this.max; }
+    if (gridStep > (this.max ?? 0)) {
+      gridStep = this.max;
+    }
 
     if (!gridNumber && !gridStep) {
       const DEFAULT_GRID_NUMBER = 4;
@@ -729,7 +795,9 @@ class Model extends ModelCalc {
   }
 
   private setOrientationData(options: RangeSliderOptions): boolean {
-    if (!validateProperties(options, ['orientation'])) { return false; }
+    if (!validateProperties(options, ['orientation'])) {
+      return false;
+    }
 
     const orientation = options.orientation ?? ''.replace(/\s/g, '');
     const isHorizontal = orientation === 'horizontal';
@@ -748,7 +816,9 @@ class Model extends ModelCalc {
   }
 
   private setThemeData(options: RangeSliderOptions): boolean {
-    if (!validateProperties(options, ['theme'])) { return false; }
+    if (!validateProperties(options, ['theme'])) {
+      return false;
+    }
 
     const theme = options.theme ?? ''.replace(/\s/g, '');
     const MAX_LENGTH_NAME = 20;
@@ -781,7 +851,9 @@ class Model extends ModelCalc {
         break;
       }
     }
-    if (!isCallback) { return false; }
+    if (!isCallback) {
+      return false;
+    }
 
     const isChange = options.onChange !== undefined;
     let isEqual = options.onChange !== this.onChange;
@@ -827,7 +899,9 @@ class Model extends ModelCalc {
 
     const isAttributes = options.key !== 'DataAttributes';
 
-    if (isParameters && isAttributes) { return false; }
+    if (isParameters && isAttributes) {
+      return false;
+    }
 
     const {
       tipPrefix,
@@ -882,7 +956,9 @@ class Model extends ModelCalc {
 
   private setDisabledData(options: RangeSliderOptions): boolean {
     if (!validateProperties(options, ['disabled'])) {
-      if (this.disabled === undefined) { this.disabled = false; }
+      if (this.disabled === undefined) {
+        this.disabled = false;
+      }
       return false;
     }
 
@@ -898,7 +974,9 @@ class Model extends ModelCalc {
 
   private setBarData(options: RangeSliderOptions): boolean {
     if (!validateProperties(options, ['bar'])) {
-      if (this.bar === undefined) { this.bar = false; }
+      if (this.bar === undefined) {
+        this.bar = false;
+      }
       return false;
     }
 

@@ -41,9 +41,13 @@ describe('------- Test Handle API -------', () => {
     expect(parentElement).toBeDefined();
 
     let child: HTMLCollection | null = null;
-    if (typeof parentElement !== 'boolean') { child = parentElement.children; }
+    if (typeof parentElement !== 'boolean') {
+      child = parentElement.children;
+    }
 
-    if (!child) { return; }
+    if (!child) {
+      return;
+    }
 
     searchString(child[0].className, `js-${RANGE_SLIDER_NAME}__from`);
     searchString(child[1].className, `js-${RANGE_SLIDER_NAME}__to`);
@@ -55,7 +59,9 @@ describe('------- Test Handle API -------', () => {
     parentElement = await handle.createDomElementBase('single');
     expect(parentElement).toBeDefined();
 
-    if (typeof parentElement !== 'boolean') { child = parentElement.children; }
+    if (typeof parentElement !== 'boolean') {
+      child = parentElement.children;
+    }
 
     searchString(child[0].className, `js-${RANGE_SLIDER_NAME}__from`);
     expect(child[1]).toBeUndefined();
@@ -68,11 +74,15 @@ describe('------- Test Handle API -------', () => {
     const { from, to } = await createFromTo();
     let leftFrom: string = '';
 
-    if (typeof from !== 'boolean') { leftFrom = from.left; }
+    if (typeof from !== 'boolean') {
+      leftFrom = from.left;
+    }
 
     let leftTo: string = '';
 
-    if (typeof to !== 'boolean') { leftTo = to.left; }
+    if (typeof to !== 'boolean') {
+      leftTo = to.left;
+    }
 
     expect(leftFrom).toBe('34%');
     expect(leftTo).toBe('56%');
