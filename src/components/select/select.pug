@@ -21,7 +21,7 @@ mixin select(options = {})
       each item in list
         - let selector=`${BASE_CLASS}__item js-${BASE_CLASS}__item`;
         if item.selected
-          -selector += ' '+item.selected;
+          -selector +=` ${item.selected}`;
         
         li(class=selector tabindex='0' data-value=item.value)=item.text
 
