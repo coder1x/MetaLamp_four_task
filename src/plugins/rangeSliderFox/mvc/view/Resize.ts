@@ -33,7 +33,7 @@ class Resize {
 
   @boundMethod
   private resizeEnd() {
-    const timeInterval = Number(new Date()) - Number(this.currentTime);
+    const timeInterval = new Date().getTime() - this.currentTime.getTime();
 
     if (timeInterval < this.sleep) {
       setTimeout(this.resizeEnd, this.sleep);
