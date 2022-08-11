@@ -7,7 +7,7 @@ class Resize {
 
   onChange: () => void;
 
-  private currentTime: Date = new Date();
+  private currentTime: number = Date.now();
 
   private timeout: boolean = false;
 
@@ -33,7 +33,7 @@ class Resize {
 
   @boundMethod
   private resizeEnd() {
-    const timeInterval = new Date().getTime() - this.currentTime.getTime();
+    const timeInterval = Date.now() - this.currentTime;
 
     if (timeInterval < this.sleep) {
       setTimeout(this.resizeEnd, this.sleep);
@@ -61,7 +61,7 @@ class Resize {
 
   @boundMethod
   private handleWindowOptimizedResize() {
-    this.currentTime = new Date();
+    this.currentTime = Date.now();
 
     if (this.timeout) {
       return true;
