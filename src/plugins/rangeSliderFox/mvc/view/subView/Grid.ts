@@ -2,10 +2,17 @@ import { boundMethod } from 'autobind-decorator';
 
 import { RANGE_SLIDER_NAME } from '@shared/constants';
 
-import { Observer } from '../../../Observer';
+import Observer from '../../../Observer';
 import Resize from '../Resize';
 
-class Grid extends Observer {
+interface ObserverOptions {
+  readonly key?: string,
+  readonly valueGrid?: number,
+  readonly snapNumber?: number[],
+  readonly isResized?: boolean,
+}
+
+class Grid extends Observer<ObserverOptions> {
   private rangeSliderBottom: HTMLElement;
 
   private elementGrid: HTMLElement | null = null;

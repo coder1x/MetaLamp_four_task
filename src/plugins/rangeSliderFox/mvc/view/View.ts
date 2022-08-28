@@ -2,7 +2,7 @@ import { boundMethod } from 'autobind-decorator';
 
 import { RANGE_SLIDER_NAME } from '@shared/constants';
 
-import { Observer, ObserverOptions } from '../../Observer';
+import Observer from '../../Observer';
 import { RangeSliderOptions } from '../../globInterface';
 import Handle from './subView/Handle';
 import Hints from './subView/Hints';
@@ -10,7 +10,17 @@ import Bar from './subView/Bar';
 import Grid from './subView/Grid';
 import UpdateTip from './view.d';
 
-class View extends Observer {
+interface insideOptions extends RangeSliderOptions {
+  readonly snapNumber?: number[],
+  readonly isResized?: boolean,
+  readonly clientXY?: number,
+}
+
+interface ObserverOptions extends insideOptions {
+  readonly key?: string,
+}
+
+class View extends Observer<ObserverOptions> {
   private wrapperSlider: Element | null;
 
   private rangeSlider: Element | null = null;

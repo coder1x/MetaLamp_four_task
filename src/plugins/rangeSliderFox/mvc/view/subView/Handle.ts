@@ -6,7 +6,7 @@ import {
 } from '@shared/helpers/readWriteProperties';
 import { RANGE_SLIDER_NAME } from '@shared/constants';
 
-import { Observer } from '../../../Observer';
+import Observer from '../../../Observer';
 
 interface Pointer {
   event: PointerEvent,
@@ -16,7 +16,19 @@ interface Pointer {
 
 type mapKey = Map<string, string>;
 
-class Handle extends Observer {
+interface ObserverOptions {
+  readonly key?: string,
+  readonly type?: string | null | undefined,
+  readonly dimensions?: number,
+  readonly position?: number,
+  readonly clientXY?: number,
+  readonly shiftXY?: number,
+  readonly keyRepeat?: boolean,
+  readonly keySign?: string,
+  readonly dot?: string,
+}
+
+class Handle extends Observer<ObserverOptions> {
   private elementFrom: HTMLElement | null = null;
 
   private elementTo: HTMLElement | null = null;

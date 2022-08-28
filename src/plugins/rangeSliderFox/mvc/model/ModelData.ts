@@ -1,11 +1,22 @@
 import { RangeSliderOptions } from '../../globInterface';
-import { Observer } from '../../Observer';
+import Observer from '../../Observer';
 
 import {
   PositionData,
 } from './modelInterface';
 
-class ModelData extends Observer {
+interface insideOptions extends RangeSliderOptions {
+  readonly valueMark?: {
+    value: number,
+    position: number,
+  }[],
+}
+
+interface ObserverOptions extends insideOptions {
+  readonly key?: string,
+}
+
+class ModelData extends Observer<ObserverOptions> {
   // --- data config
   protected type: string | null = null;
 

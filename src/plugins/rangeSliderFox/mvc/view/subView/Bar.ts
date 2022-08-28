@@ -7,9 +7,14 @@ import {
 
 import { RANGE_SLIDER_NAME } from '@shared/constants';
 
-import { Observer } from '../../../Observer';
+import Observer from '../../../Observer';
 
-class Bar extends Observer {
+interface ObserverOptions {
+  readonly key?: string,
+  readonly clientXY?: number,
+}
+
+class Bar extends Observer<ObserverOptions> {
   private rangeSliderCenter: Element;
 
   private elementBar: HTMLElement | null = null;

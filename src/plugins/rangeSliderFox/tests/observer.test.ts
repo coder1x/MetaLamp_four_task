@@ -1,6 +1,36 @@
-import { Observer, ObserverOptions } from '../Observer';
+import { RangeSliderOptions } from '../globInterface';
+import Observer from '../Observer';
 
-class TestObserver extends Observer {
+interface insideOptions extends RangeSliderOptions {
+  readonly fromX?: number,
+  readonly toX?: number,
+  readonly valuePercent?: number,
+  readonly fromPercent?: number,
+  readonly toPercent?: number,
+  readonly limitFrom?: number,
+  readonly limitTo?: number,
+  readonly fromTo?: number,
+  readonly valueGrid?: number,
+  readonly valueMark?: {
+    value: number,
+    position: number,
+  }[],
+  readonly snapNumber?: number[],
+  readonly isResized?: boolean,
+  readonly dimensions?: number,
+  readonly position?: number,
+  readonly clientXY?: number,
+  readonly shiftXY?: number,
+  readonly keyRepeat?: boolean,
+  readonly keySign?: string,
+  readonly dot?: string,
+}
+
+interface ObserverOptions extends insideOptions {
+  key?: string,
+}
+
+class TestObserver extends Observer<ObserverOptions> {
   notifyTest(options: ObserverOptions) {
     this.notifyObserver(options);
   }
