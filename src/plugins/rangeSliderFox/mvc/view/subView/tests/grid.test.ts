@@ -8,11 +8,11 @@ describe('------- Test Grid API -------', () => {
   let wrapper: HTMLElement;
   let grid: Grid;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     wrapper = document.createElement('div');
     wrapper.classList.add(`${RANGE_SLIDER_NAME}__bottom`);
     wrapper.classList.add(`js-${RANGE_SLIDER_NAME}__bottom`);
-    grid = await new Grid(wrapper);
+    grid = new Grid(wrapper);
   });
 
   const getConfig = () => ({
@@ -24,9 +24,9 @@ describe('------- Test Grid API -------', () => {
     gridNumber: 40,
   });
 
-  const getLengthMark = async (model: Model) => {
-    const gridMark = await model.calcMark();
-    const elements = await grid.createMark(gridMark) as HTMLElement;
+  const getLengthMark = (model: Model) => {
+    const gridMark = model.calcMark();
+    const elements = grid.createMark(gridMark) as HTMLElement;
     const { length } = elements.childNodes;
     expect(length).toBe(gridMark.length);
     return length;
@@ -39,19 +39,19 @@ describe('------- Test Grid API -------', () => {
   };
 
   // setOrientation
-  test(' Change orientation ', async () => {
+  test(' Change orientation ', () => {
     expect(grid.setOrientation('vertical')).toBeTruthy();
     expect(grid.setOrientation('horizontal')).toBeFalsy();
   });
 
   // getOrientation
-  test(' Get information about orientation change ', async () => {
+  test(' Get information about orientation change ', () => {
     expect(grid.getOrientation()).toBeTruthy();
   });
 
   // createMark
-  test(' Create grid DOM-elements ', async () => {
-    const model = await new Model({
+  test(' Create grid DOM-elements ', () => {
+    const model = new Model({
       ...getConfig(),
       onStart: () => {
         getLengthMark(model);
@@ -59,46 +59,46 @@ describe('------- Test Grid API -------', () => {
     });
 
     if (model.onHandle) {
-      await model.onHandle();
+      model.onHandle();
     }
   });
 
   // createDomElementGrid
-  test(' Add grid to the plugin interface ', async () => {
-    const model = await new Model({
+  test(' Add grid to the plugin interface ', () => {
+    const model = new Model({
       ...getConfig(),
-      onStart: async () => {
-        expect(await getLengthMark(model)).toBe(await getLengthDom());
+      onStart: () => {
+        expect(getLengthMark(model)).toBe(getLengthDom());
       },
     });
 
     if (model.onHandle) {
-      await model.onHandle();
+      model.onHandle();
     }
   });
 
   // deleteGrid
-  test(' Delete grid ', async () => {
-    const model = await new Model({
+  test(' Delete grid ', () => {
+    const model = new Model({
       ...getConfig(),
-      onStart: async () => {
-        const lengthMark = await getLengthMark(model);
-        let lengthDom = await getLengthDom();
+      onStart: () => {
+        const lengthMark = getLengthMark(model);
+        let lengthDom = getLengthDom();
         expect(lengthMark).toBe(lengthDom);
         const isDeleted = grid.deleteGrid();
         expect(isDeleted).toBeTruthy();
-        lengthDom = await getLengthDom();
+        lengthDom = getLengthDom();
         expect(lengthDom).toBe(0);
       },
     });
 
     if (model.onHandle) {
-      await model.onHandle();
+      model.onHandle();
     }
   });
 
   // ClickMark
-  test(' Check if click event on the grid mark is triggered ', async () => {
+  test(' Check if click event on the grid mark is triggered ', () => {
     const parentElement = document.createElement('div');
     const input = document.createElement('input');
     parentElement.appendChild(input);
@@ -107,26 +107,26 @@ describe('------- Test Grid API -------', () => {
     const model = new Model({
       type: 'double',
       ...getConfig(),
-      onStart: async () => {
+      onStart: () => {
         controller.update({ bar: false });
       },
-      onUpdate: async () => {
-        const spy = await jest.spyOn(model, 'takeFromOrToOnMarkClick');
+      onUpdate: () => {
+        const spy = jest.spyOn(model, 'takeFromOrToOnMarkClick');
 
-        const dot = await parentElement.getElementsByClassName(
+        const dot = parentElement.getElementsByClassName(
           `js-${RANGE_SLIDER_NAME}__grid-mark`,
         );
         const element = dot[0] as HTMLElement;
-        const pointer = await mockPointerEvent(element);
-        await pointer('click', 0, 0);
+        const pointer = mockPointerEvent(element);
+        pointer('click', 0, 0);
 
         expect(spy).toBeCalledTimes(1);
         expect(spy).toBeCalledWith(Number(element.innerText));
 
-        await spy.mockClear();
+        spy.mockClear();
       },
     });
-    const view = await new View(input);
-    controller = await new Controller(model, view);
+    const view = new View(input);
+    controller = new Controller(model, view);
   });
 });

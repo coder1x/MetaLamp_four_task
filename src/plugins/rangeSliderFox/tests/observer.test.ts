@@ -27,7 +27,7 @@ interface insideOptions extends RangeSliderOptions {
 }
 
 interface ObserverOptions extends insideOptions {
-  key?: string,
+  key: 'KEY',
 }
 
 class TestObserver extends Observer<ObserverOptions> {
@@ -81,7 +81,11 @@ describe('------- Observer - subscribe, unsubscribe, notify -------', () => {
       to: 500,
     };
 
-    observer.notifyTest({ ...data });
+    observer.notifyTest({
+      key: 'KEY',
+      from: 200,
+      to: 500,
+    });
 
     expect(oneFunction.mock.calls).toHaveLength(1);
     expect(twoFunction.mock.calls).toHaveLength(1);

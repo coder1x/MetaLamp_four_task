@@ -57,14 +57,10 @@ describe('------- Test Resize API -------', () => {
   }
 
   // Resize
-
-  const TEST_NAME = ' Should call a callback on window'
-    + ' resizing after the defined timeout ';
-
-  test(TEST_NAME, async () => {
+  test(' Should call a callback on window resizing after the defined timeout ', () => {
     let change = false;
-    const wrapperOne = await document.createElement('div');
-    await mockElementDimensions(wrapperOne)({
+    const wrapperOne = document.createElement('div');
+    mockElementDimensions(wrapperOne)({
       width: 300,
       height: 100,
     });
@@ -72,20 +68,20 @@ describe('------- Test Resize API -------', () => {
     jest.useFakeTimers();
     jest.spyOn(global, 'setTimeout');
 
-    const resize = await new Resize(wrapperOne, 100, () => {
+    const resize = new Resize(wrapperOne, 100, () => {
       change = true;
     });
 
-    const wrapperTwo = await document.createElement('div');
-    await mockElementDimensions(wrapperTwo)({
+    const wrapperTwo = document.createElement('div');
+    mockElementDimensions(wrapperTwo)({
       width: 250,
       height: 100,
     });
-    resize.wrapper = await wrapperTwo;
+    resize.wrapper = wrapperTwo;
 
-    await mockCustomEvent(window, { eventType: 'resize' });
-    await jest.runOnlyPendingTimers();
-    await jest.runOnlyPendingTimers();
+    mockCustomEvent(window, { eventType: 'resize' });
+    jest.runOnlyPendingTimers();
+    jest.runOnlyPendingTimers();
 
     expect(change).toBeTruthy();
     expect(setTimeout).toHaveBeenCalledTimes(1);

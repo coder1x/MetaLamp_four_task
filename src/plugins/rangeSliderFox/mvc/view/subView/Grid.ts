@@ -6,7 +6,7 @@ import Observer from '../../../Observer';
 import Resize from '../Resize';
 
 interface ObserverOptions {
-  readonly key?: string,
+  readonly key: 'ClickMark' | 'SnapNumber',
   readonly valueGrid?: number,
   readonly snapNumber?: number[],
   readonly isResized?: boolean,

@@ -19,7 +19,7 @@ import {
 } from './modelInterface';
 import ModelCalc from './ModelCalc';
 
-interface insideOptions extends RangeSliderOptions {
+interface InsideOptions extends RangeSliderOptions {
   readonly fromX?: number,
   readonly toX?: number,
   readonly valuePercent?: number,
@@ -44,7 +44,7 @@ interface insideOptions extends RangeSliderOptions {
   readonly dot?: string,
 }
 
-interface ObserverOptions extends insideOptions {
+interface ObserverOptions extends InsideOptions {
   key?: string,
 }
 

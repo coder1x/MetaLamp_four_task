@@ -35,16 +35,16 @@ describe('------- Test View API -------', () => {
   });
 
   // outputDataAttribute
-  test(' Check if all necessary data-attributes are got ', async () => {
-    await inputElement.setAttribute('data-from', '45');
-    await inputElement.setAttribute('data-to', '86');
+  test(' Check if all necessary data-attributes are got ', () => {
+    inputElement.setAttribute('data-from', '45');
+    inputElement.setAttribute('data-to', '86');
 
-    const model = await new Model({
+    const model = new Model({
       min: 0,
       max: 100,
       from: 30,
       to: 70,
-      onStart: async () => {
+      onStart: () => {
         const DATA = { from: 45, to: 86 };
         expect(view.outputDataAttribute()).toEqual(DATA);
       },
@@ -54,10 +54,10 @@ describe('------- Test View API -------', () => {
   });
 
   // createDomElementBase
-  test(' Create basic DOM-elements ', async () => {
-    const model = await new Model({
+  test(' Create basic DOM-elements ', () => {
+    const model = new Model({
       disabled: false,
-      onStart: async () => {
+      onStart: () => {
         const domElement = view.createDomElementBase() as Element;
         const nodes = domElement.childNodes;
         const names: string[] = [];
@@ -87,9 +87,9 @@ describe('------- Test View API -------', () => {
   });
 
   // setOrientation
-  test(' Change plugin orientation - horizontal / vertical ', async () => {
-    const model = await new Model({
-      onStart: async () => {
+  test(' Change plugin orientation - horizontal / vertical ', () => {
+    const model = new Model({
+      onStart: () => {
         view.setOrientation('vertical');
         const element = wrapper.getElementsByClassName(`${rangeSliderName}_vertical`);
         expect(element[0]).toBeDefined();
@@ -99,7 +99,7 @@ describe('------- Test View API -------', () => {
   });
 
   // bindEvent
-  test(' Check if click event on the grid range is triggered ', async () => {
+  test(' Check if click event on the grid range is triggered ', () => {
     const parentElement: HTMLElement = document.createElement('div');
     const input: HTMLInputElement = document.createElement('input');
     parentElement.appendChild(input);
@@ -113,26 +113,26 @@ describe('------- Test View API -------', () => {
       from: 20,
       to: 80,
       bar: false,
-      onStart: async () => {
+      onStart: () => {
         controller.update({ tipMinMax: false });
       },
-      onUpdate: async () => {
-        const spy = await jest.spyOn(model, 'takeFromOrToOnLineClick');
-        const dot = await parentElement.getElementsByClassName(`${jsRangeSliderName}__line`);
-        const pointer = await mockPointerEvent(dot[0]);
-        await pointer('click', 34, 45);
+      onUpdate: () => {
+        const spy = jest.spyOn(model, 'takeFromOrToOnLineClick');
+        const dot = parentElement.getElementsByClassName(`${jsRangeSliderName}__line`);
+        const pointer = mockPointerEvent(dot[0]);
+        pointer('click', 34, 45);
         expect(spy).toBeCalledTimes(1);
-        await spy.mockClear();
+        spy.mockClear();
       },
     });
-    const objView = await new View(input);
-    controller = await new Controller(model, objView);
+    const objView = new View(input);
+    controller = new Controller(model, objView);
   });
 
   // setTheme
-  test(' Check interface theme changing ', async () => {
-    const model = await new Model({
-      onStart: async () => {
+  test(' Check interface theme changing ', () => {
+    const model = new Model({
+      onStart: () => {
         view.setTheme('dark');
         let element = wrapper.getElementsByClassName('rs-dark');
         expect(element[0]).toBeDefined();
@@ -146,9 +146,9 @@ describe('------- Test View API -------', () => {
     new Controller(model, view);
   });
 
-  test(' handle - interface  ', async () => {
-    const model = await new Model({
-      onStart: async () => {
+  test(' handle - interface  ', () => {
+    const model = new Model({
+      onStart: () => {
         const element = view.createDotElement('double') as HTMLElement;
         expect(element.constructor.name).toBe('HTMLDivElement');
 
@@ -162,9 +162,9 @@ describe('------- Test View API -------', () => {
     new Controller(model, view);
   });
 
-  test(' hints - interface  ', async () => {
-    const model = await new Model({
-      onStart: async () => {
+  test(' hints - interface  ', () => {
+    const model = new Model({
+      onStart: () => {
         let areHintsExist = view.setHintsData({
           tipPrefix: '',
           tipPostfix: '',
@@ -202,9 +202,9 @@ describe('------- Test View API -------', () => {
     new Controller(model, view);
   });
 
-  test(' Bar - interface  ', async () => {
-    const model = await new Model({
-      onStart: async () => {
+  test(' Bar - interface  ', () => {
+    const model = new Model({
+      onStart: () => {
         expect(view.setVisibleBar(true)).not.toContain(false);
         expect(view.setBar(25, 100)).toBeTruthy();
       },
@@ -212,12 +212,12 @@ describe('------- Test View API -------', () => {
     new Controller(model, view);
   });
 
-  test(' Grid - interface  ', async () => {
-    const model = await new Model({
-      onStart: async () => {
-        let element = await view.createDomElementGrid() as HTMLElement;
+  test(' Grid - interface  ', () => {
+    const model = new Model({
+      onStart: () => {
+        let element = view.createDomElementGrid() as HTMLElement;
         expect(element.constructor.name).toBe('HTMLDivElement');
-        element = await view.createMark([
+        element = view.createMark([
           {
             value: 1,
             position: 1,
@@ -237,7 +237,7 @@ describe('------- Test View API -------', () => {
         ]) as HTMLElement;
 
         expect(element.constructor.name).toBe('HTMLDivElement');
-        expect(await view.deleteGrid()).toBeTruthy();
+        expect(view.deleteGrid()).toBeTruthy();
       },
     });
     new Controller(model, view);

@@ -11,11 +11,11 @@ describe('------- Test Handle API -------', () => {
   let wrapperElement: HTMLElement;
   let handle: Handle;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     wrapperElement = document.createElement('div');
     wrapperElement.classList.add(`${RANGE_SLIDER_NAME}__center`);
     wrapperElement.classList.add(`js-${RANGE_SLIDER_NAME}__center`);
-    handle = await new Handle(wrapperElement);
+    handle = new Handle(wrapperElement);
   });
 
   function searchString(text: string, substring: string) {
@@ -28,15 +28,15 @@ describe('------- Test Handle API -------', () => {
     }
   };
 
-  const createFromTo = async () => {
-    expect(await handle.createDomElementBase('double')).toBeDefined();
-    const from = await handle.setFrom(34);
-    const to = await handle.setTo(56);
+  const createFromTo = () => {
+    expect(handle.createDomElementBase('double')).toBeDefined();
+    const from = handle.setFrom(34);
+    const to = handle.setTo(56);
     return { from, to };
   };
 
   // createDomElementBase
-  test(' Create basic DOM-elements ', async () => {
+  test(' Create basic DOM-elements ', () => {
     let parentElement = handle.createDomElementBase('double');
     expect(parentElement).toBeDefined();
 
@@ -52,11 +52,11 @@ describe('------- Test Handle API -------', () => {
     searchString(child[0].className, `js-${RANGE_SLIDER_NAME}__from`);
     searchString(child[1].className, `js-${RANGE_SLIDER_NAME}__to`);
 
-    parentElement = await handle.createDomElementBase('double');
+    parentElement = handle.createDomElementBase('double');
     expect(parentElement).toBeFalsy();
-    await delElement(wrapperElement);
-    handle = await new Handle(wrapperElement);
-    parentElement = await handle.createDomElementBase('single');
+    delElement(wrapperElement);
+    handle = new Handle(wrapperElement);
+    parentElement = handle.createDomElementBase('single');
     expect(parentElement).toBeDefined();
 
     if (typeof parentElement !== 'boolean') {
@@ -70,8 +70,8 @@ describe('------- Test Handle API -------', () => {
   });
 
   // setFrom & setTo
-  test(' Check if dots got their positioning proprties ', async () => {
-    const { from, to } = await createFromTo();
+  test(' Check if dots got their positioning proprties ', () => {
+    const { from, to } = createFromTo();
     let leftFrom: string = '';
 
     if (typeof from !== 'boolean') {
@@ -89,43 +89,41 @@ describe('------- Test Handle API -------', () => {
   });
 
   // setOrientation
-  test(' Check if orientation is changed ', async () => {
-    await createFromTo();
+  test(' Check if orientation is changed ', () => {
+    createFromTo();
     let isVertical = handle.setOrientation('vertical');
     expect(isVertical).toBeTruthy();
     isVertical = handle.setOrientation('horizontal');
     expect(isVertical).toBeTruthy();
   });
 
-  const TEST_NAME = ' Check if an event of dots'
-    + ' movement along the track is triggered ';
   // bindEvent
-  test(TEST_NAME, async () => {
+  test(' Check if an event of dots movement along the track is triggered ', () => {
     const wrapper: HTMLElement = document.createElement('div');
     const input: HTMLInputElement = document.createElement('input');
     wrapper.appendChild(input);
 
-    await createFromTo();
+    createFromTo();
     handle.setOrientation('horizontal');
     expect(handle.bindEvent('double')).toBeTruthy();
 
     const model = new Model({
       type: 'double',
-      onStart: async () => {
-        const spy = await jest.spyOn(model, 'calcFromTo');
+      onStart: () => {
+        const spy = jest.spyOn(model, 'calcFromTo');
 
-        const eventDot = async (name: string, down: number, move: number) => {
-          const dot = await wrapper.getElementsByClassName(
+        const eventDot = (name: string, down: number, move: number) => {
+          const dot = wrapper.getElementsByClassName(
             `js-${RANGE_SLIDER_NAME}__${name}`,
           );
 
-          const pointer = await mockPointerEvent(dot[0]);
-          const keyboard = await mockKeyboardEvent(dot[0]);
-          await pointer('pointerdown', down, 0);
-          await pointer('pointermove', move, 0);
-          await pointer('pointerup', 0, 0);
-          await keyboard('ArrowRight');
-          await keyboard('ArrowLeft');
+          const pointer = mockPointerEvent(dot[0]);
+          const keyboard = mockKeyboardEvent(dot[0]);
+          pointer('pointerdown', down, 0);
+          pointer('pointermove', move, 0);
+          pointer('pointerup', 0, 0);
+          keyboard('ArrowRight');
+          keyboard('ArrowLeft');
 
           expect(spy).toBeCalledWith(
             {
@@ -137,14 +135,14 @@ describe('------- Test Handle API -------', () => {
             },
           );
           expect(spy).toBeCalledTimes(1);
-          await spy.mockClear();
+          spy.mockClear();
         };
 
-        await eventDot('from', 85, 82);
-        await eventDot('to', 87, 83);
+        eventDot('from', 85, 82);
+        eventDot('to', 87, 83);
       },
     });
-    const view = await new View(input);
-    await new Controller(model, view);
+    const view = new View(input);
+    new Controller(model, view);
   });
 });

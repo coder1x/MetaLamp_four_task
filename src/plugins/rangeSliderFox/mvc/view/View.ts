@@ -17,7 +17,7 @@ interface insideOptions extends RangeSliderOptions {
 }
 
 interface ObserverOptions extends insideOptions {
-  readonly key?: string,
+  readonly key?: string
 }
 
 class View extends Observer<ObserverOptions> {

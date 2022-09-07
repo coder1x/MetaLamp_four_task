@@ -44,10 +44,8 @@ describe('------- Test Controller API -------', () => {
     wrapper.appendChild(input);
   });
 
-  const TEST_NAME1 = ' Check plugin events (onStart, onUpdate, onReset) '
-    + 'and API (update, reset)';
   // onStart, onUpdate, update, onReset, reset
-  test(TEST_NAME1, () => {
+  test(' Check plugin events (onStart, onUpdate, onReset) and API (update, reset)', () => {
     const controller = new Controller(new Model({
       onStart: (data: RangeSliderOptions) => {
         expect(data).toStrictEqual(defaultData);
@@ -169,11 +167,9 @@ describe('------- Test Controller API -------', () => {
     }), new View(input));
   });
 
-  const TEST_NAME2 = ' Check if plugin is configured in '
-    + 'line with data-attributes on its start ';
   // Data-Attributes static
-  test(TEST_NAME2, async () => {
-    await input.setAttribute('data-from', '5');
+  test(' Check if plugin is configured in line with data-attributes on its start ', () => {
+    input.setAttribute('data-from', '5');
     new Controller(new Model({
       onUpdate: (data: RangeSliderOptions) => {
         expect(data.from).toBe(5);
@@ -185,18 +181,18 @@ describe('------- Test Controller API -------', () => {
     const functionTest = jest.fn(() => {
     });
 
-    const controller = await new Controller(new Model({
+    const controller = new Controller(new Model({
       onUpdate: functionTest,
     }), new View(input));
 
-    await controller.update({
+    controller.update({
       from: 4,
     });
     await delay(100);
-    await controller.destroy();
+    controller.destroy();
 
     await delay(100);
-    await controller.update({
+    controller.update({
       from: 8,
     });
 

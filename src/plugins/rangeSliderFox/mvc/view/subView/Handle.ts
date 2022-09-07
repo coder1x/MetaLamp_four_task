@@ -17,7 +17,7 @@ interface Pointer {
 type mapKey = Map<string, string>;
 
 interface ObserverOptions {
-  readonly key?: string,
+  readonly key: 'DotMove' | 'DotKeyDown',
   readonly type?: string | null | undefined,
   readonly dimensions?: number,
   readonly position?: number,

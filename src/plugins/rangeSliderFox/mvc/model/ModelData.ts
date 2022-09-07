@@ -13,7 +13,7 @@ interface insideOptions extends RangeSliderOptions {
 }
 
 interface ObserverOptions extends insideOptions {
-  readonly key?: string,
+  readonly key: string,
 }
 
 class ModelData extends Observer<ObserverOptions> {

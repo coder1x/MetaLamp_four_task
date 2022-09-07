@@ -97,14 +97,14 @@ describe('------- Test Model API -------', () => {
     const MIN_VALUE = [-120, 23.54, 0];
     const RESULT_VALUE = [13.2, 1.1113, 8];
 
-    const test = async (min: number, max: number, result: number) => {
-      const model = await new Model({
+    const test = (min: number, max: number, result: number) => {
+      const model = new Model({
         min,
         max,
       });
 
       if (model.onHandle) {
-        await model.onHandle();
+        model.onHandle();
       }
       expect(model.calcOnePercent()).toBeCloseTo(result);
     };
@@ -115,25 +115,25 @@ describe('------- Test Model API -------', () => {
   });
 
   //  calcPositionDot: From & To ( in percents )
-  test(' Calculate From & To position ( in percents ) ', async () => {
+  test(' Calculate From & To position ( in percents ) ', () => {
     let model: Model;
 
-    const position = async (from: number, to: number) => {
-      await model.calcOnePercent();
-      const fromPosition = await model.calcPercentFrom();
-      const toPosition = await model.calcPercentTo();
+    const position = (from: number, to: number) => {
+      model.calcOnePercent();
+      const fromPosition = model.calcPercentFrom();
+      const toPosition = model.calcPercentTo();
       expect(Number(fromPosition.toFixed(2))).toBeCloseTo(from);
       expect(Number(toPosition.toFixed(2))).toBeCloseTo(to);
     };
 
-    model = await new Model({
+    model = new Model({
       type: 'double',
       from: 30,
       to: 120,
       min: -10,
       max: 300,
-      onStart: async () => {
-        await position(12.9, 41.94);
+      onStart: () => {
+        position(12.9, 41.94);
 
         model.update({
           min: 0.5,
@@ -142,26 +142,24 @@ describe('------- Test Model API -------', () => {
           to: 80.23,
         });
       },
-      onUpdate: async () => {
-        await position(40.34, 79.84);
+      onUpdate: () => {
+        position(40.34, 79.84);
       },
     });
 
     if (model.onHandle) {
-      await model.onHandle();
+      model.onHandle();
     }
   });
 
-  const TEST_NAME1 = ' Check dots mooving along '
-    + 'the grid and interaction with each other ';
   //  calcFromTo
-  test(TEST_NAME1, async () => {
+  test(' Check dots mooving along the grid and interaction with each other ', async () => {
     let model: Model;
     let wrapperWidthHeight = 1120;
     let position = 533.7142944335938;
 
-    const positionData = async (options: PositionData) => {
-      const data = await model.calcFromTo({
+    const positionData = (options: PositionData) => {
+      const data = model.calcFromTo({
         type: options.type ? 'From' : 'To',
         dimensions: wrapperWidthHeight,
         position,
@@ -182,7 +180,7 @@ describe('------- Test Model API -------', () => {
       }
     };
 
-    model = await new Model({
+    model = new Model({
       type: 'double',
       orientation: 'vertical',
       min: -120,
@@ -190,10 +188,10 @@ describe('------- Test Model API -------', () => {
       to: 500,
       from: 80,
       step: 5,
-      onStart: async () => {
-        await model.calcOnePercent();
-        await model.calcPercentFrom();
-        await model.calcPercentTo();
+      onStart: () => {
+        model.calcOnePercent();
+        model.calcPercentFrom();
+        model.calcPercentTo();
         wrapperWidthHeight = 522;
         position = 721.1786041259766;
 
@@ -217,7 +215,7 @@ describe('------- Test Model API -------', () => {
       await model.onHandle();
     }
 
-    model = await new Model({
+    model = new Model({
       type: 'double',
       orientation: 'vertical',
       min: -120,
@@ -227,10 +225,10 @@ describe('------- Test Model API -------', () => {
       grid: true,
       gridSnap: true,
       gridNumber: 40,
-      onStart: async () => {
-        await model.calcOnePercent();
-        await model.calcPercentFrom();
-        await model.calcPercentTo();
+      onStart: () => {
+        model.calcOnePercent();
+        model.calcPercentFrom();
+        model.calcPercentTo();
         wrapperWidthHeight = 522;
         position = 721.1786041259766;
 
@@ -247,17 +245,17 @@ describe('------- Test Model API -------', () => {
       await model.onHandle();
     }
 
-    model = await new Model({
+    model = new Model({
       type: 'single',
       orientation: 'vertical',
       min: -120,
       max: 800,
       to: 500,
       from: 80,
-      onStart: async () => {
-        await model.calcOnePercent();
-        await model.calcPercentFrom();
-        await model.calcPercentTo();
+      onStart: () => {
+        model.calcOnePercent();
+        model.calcPercentFrom();
+        model.calcPercentTo();
         wrapperWidthHeight = 522;
         position = 721.1786041259766;
 
@@ -271,51 +269,49 @@ describe('------- Test Model API -------', () => {
     });
 
     if (model.onHandle) {
-      await model.onHandle();
+      model.onHandle();
     }
   });
 
   // calcPositionTip: From, To, Single
-  test(' Calculate hints position relating dots ', async () => {
-    const model = await new Model({
+  test(' Calculate hints position relating dots ', () => {
+    const model = new Model({
       type: 'double',
       min: -120,
       max: 800,
       to: 500,
       from: 200,
 
-      onStart: async () => {
-        await model.calcOnePercent();
-        await model.calcPercentFrom();
-        await model.calcPercentTo();
+      onStart: () => {
+        model.calcOnePercent();
+        model.calcPercentFrom();
+        model.calcPercentTo();
 
-        const from = await model.calcHintFrom(32.03, 1120);
+        const from = model.calcHintFrom(32.03, 1120);
         expect(Number(from.toFixed(2))).toBeCloseTo(33.53);
 
-        const to = await model.calcHintTo(32.03, 1120);
+        const to = model.calcHintTo(32.03, 1120);
         expect(Number(to.toFixed(2))).toBeCloseTo(66.14);
 
-        const single = await model.calcHintSingle(72.87, 1120);
+        const single = model.calcHintSingle(72.87, 1120);
         expect(Number(single.toFixed(2))).toBeCloseTo(47.83);
       },
     });
 
     if (model.onHandle) {
-      await model.onHandle();
+      model.onHandle();
     }
   });
 
-  const TEST_NAME2 = ' Calculate numeral grid'
-    + ' relating range and interval or step ';
   //  createMark
-  test(TEST_NAME2, async () => {
-    let model = await new Model({
+  test(' Calculate numeral grid relating range and interval or step ', async () => {
+    let model = new Model({
       min: 10,
       max: 800,
       gridRound: 0,
       gridStep: 0,
       gridNumber: 40,
-      onStart: async () => {
+      onStart: () => {
         const VALUES = [
           { value: 89, position: 10 },
           { value: 662, position: 82.5 },
@@ -333,13 +329,13 @@ describe('------- Test Model API -------', () => {
       await model.onHandle();
     }
 
-    model = await new Model({
+    model = new Model({
       min: -10.56,
       max: 800.78,
       gridRound: 1,
       gridStep: 15,
       gridNumber: 0,
-      onStart: async () => {
+      onStart: () => {
         const VALUES_GRID = [
           { value: 64.4, position: 9.243966771020782 },
           { value: 514.4, position: 64.70776739714547 },
@@ -354,22 +350,22 @@ describe('------- Test Model API -------', () => {
     });
 
     if (model.onHandle) {
-      await model.onHandle();
+      model.onHandle();
     }
   });
 
   // calcPositionBar
   test(' Calculate progress-bar position between dots', async () => {
-    let model = await new Model({
+    let model = new Model({
       type: 'double',
       min: -120,
       max: 800,
       to: 600,
       from: 100,
-      onStart: async () => {
-        await model.calcOnePercent();
-        await model.calcPercentFrom();
-        await model.calcPercentTo();
+      onStart: () => {
+        model.calcOnePercent();
+        model.calcPercentFrom();
+        model.calcPercentTo();
         const POSITION_BAR = { barXY: 23.91304347826087, widthBar: 54.347826086956516 };
         expect(model.calcBarDimensions()).toEqual(POSITION_BAR);
       },
@@ -379,38 +375,38 @@ describe('------- Test Model API -------', () => {
       await model.onHandle();
     }
 
-    model = await new Model({
+    model = new Model({
       type: 'single',
       min: -120,
       max: 800,
       to: 600,
       from: 100,
-      onStart: async () => {
-        await model.calcOnePercent();
-        await model.calcPercentFrom();
+      onStart: () => {
+        model.calcOnePercent();
+        model.calcPercentFrom();
         const POSITION_BAR = { barXY: 0, widthBar: 23.91304347826087 };
         expect(model.calcBarDimensions()).toEqual(POSITION_BAR);
       },
     });
 
     if (model.onHandle) {
-      await model.onHandle();
+      model.onHandle();
     }
   });
 
   // clickLine
   test(' Check calculation of a click on a grid ', async () => {
-    let model = await new Model({
+    let model = new Model({
       type: 'double',
       min: -120,
       max: 800,
       to: 600,
       from: 100,
 
-      onStart: async () => {
-        await model.calcOnePercent();
-        await model.calcPercentFrom();
-        await model.calcPercentTo();
+      onStart: () => {
+        model.calcOnePercent();
+        model.calcPercentFrom();
+        model.calcPercentTo();
 
         let pointerLine = { from: 126, to: 600 };
         expect(model.takeFromOrToOnLineClick(300, 1120)).toEqual(pointerLine);
@@ -427,16 +423,16 @@ describe('------- Test Model API -------', () => {
       await model.onHandle();
     }
 
-    model = await new Model({
+    model = new Model({
       type: 'single',
       orientation: 'vertical',
       min: -120,
       max: 800,
       from: 100,
 
-      onStart: async () => {
-        await model.calcOnePercent();
-        await model.calcPercentFrom();
+      onStart: () => {
+        model.calcOnePercent();
+        model.calcPercentFrom();
 
         expect(model.takeFromOrToOnLineClick(300, 1120).from).toBeCloseTo(554);
       },
@@ -446,17 +442,17 @@ describe('------- Test Model API -------', () => {
       await model.onHandle();
     }
 
-    model = await new Model({
+    model = new Model({
       type: 'double',
       min: -120,
       max: 500,
       from: 200,
       to: 300,
 
-      onStart: async () => {
-        await model.calcOnePercent();
-        await model.calcPercentFrom();
-        await model.calcPercentTo();
+      onStart: () => {
+        model.calcOnePercent();
+        model.calcPercentFrom();
+        model.calcPercentTo();
 
         const { to } = model.takeFromOrToOnLineClick(601, 600);
         expect(to).toBeCloseTo(501);
@@ -466,24 +462,22 @@ describe('------- Test Model API -------', () => {
     });
 
     if (model.onHandle) {
-      await model.onHandle();
+      model.onHandle();
     }
   });
 
-  const TEST_NAME3 = ' Check calculation of a click'
-    + ' on a progress-bar between dots ';
   // clickBar
-  test(TEST_NAME3, async () => {
-    let model = await new Model({
+  test(' Check calculation of a click on a progress-bar between dots ', async () => {
+    let model = new Model({
       type: 'double',
       min: -120,
       max: 800,
       to: 600,
       from: 100,
-      onStart: async () => {
-        await model.calcOnePercent();
-        await model.calcPercentFrom();
-        await model.calcPercentTo();
+      onStart: () => {
+        model.calcOnePercent();
+        model.calcPercentFrom();
+        model.calcPercentTo();
         let pointerBar = { from: 344, to: 600 };
         expect(model.calcBarCoordinates(297, 1120)).toEqual(pointerBar);
         pointerBar = { from: 344, to: 582 };
@@ -495,16 +489,16 @@ describe('------- Test Model API -------', () => {
       await model.onHandle();
     }
 
-    model = await new Model({
+    model = new Model({
       orientation: 'vertical',
       type: 'single',
       min: -120,
       max: 800,
       to: 600,
       from: 100,
-      onStart: async () => {
-        await model.calcOnePercent();
-        await model.calcPercentFrom();
+      onStart: () => {
+        model.calcOnePercent();
+        model.calcPercentFrom();
         const POINTER_BAR = { from: 92, to: 600 };
         expect(model.calcBarCoordinates(10, 1120)).toEqual(POINTER_BAR);
       },
@@ -514,37 +508,35 @@ describe('------- Test Model API -------', () => {
       await model.onHandle();
     }
 
-    model = await new Model({
+    model = new Model({
       type: 'single',
       min: -120,
       max: 800,
       to: 600,
       from: 100,
-      onStart: async () => {
-        await model.calcOnePercent();
-        await model.calcPercentFrom();
+      onStart: () => {
+        model.calcOnePercent();
+        model.calcPercentFrom();
         const POINTER_BAR = { from: -79, to: 600 };
         expect(model.calcBarCoordinates(50, 1120)).toEqual(POINTER_BAR);
       },
     });
 
     if (model.onHandle) {
-      await model.onHandle();
+      model.onHandle();
     }
   });
 
-  const TEST_NAME4 = ' Check dots values changes '
-    + 'on clicking on the grid element ';
   // clickMark
-  test(TEST_NAME4, async () => {
-    let model = await new Model({
+  test(' Check dots values changes on clicking on the grid element ', async () => {
+    let model = new Model({
       type: 'double',
       min: -120,
       max: 800,
       to: 600,
       from: 100,
 
-      onStart: async () => {
+      onStart: () => {
         let pointerGrid = { from: 150, to: 600 };
 
         expect(model.takeFromOrToOnMarkClick(150)).toEqual(pointerGrid);
@@ -561,14 +553,14 @@ describe('------- Test Model API -------', () => {
       await model.onHandle();
     }
 
-    model = await new Model({
+    model = new Model({
       type: 'single',
       min: -120,
       max: 800,
       to: 600,
       from: 100,
 
-      onStart: async () => {
+      onStart: () => {
         let pointerGrid = { from: 150, to: 600 };
         let data = model.takeFromOrToOnMarkClick(150);
         expect({
@@ -593,15 +585,13 @@ describe('------- Test Model API -------', () => {
     });
 
     if (model.onHandle) {
-      await model.onHandle();
+      model.onHandle();
     }
   });
 
-  const TEST_NAME5 = ' Calculate dots positions relating '
-    + 'grid mark and further moovement along the grid ';
   //  calcSnap & snapDot
-  test(TEST_NAME5, async () => {
-    const model = await new Model({
+  test(' Calculate dots positions relating grid mark and further moovement along the grid ', () => {
+    const model = new Model({
       type: 'double',
       min: -120,
       max: 800,
@@ -611,7 +601,7 @@ describe('------- Test Model API -------', () => {
       gridSnap: true,
       gridNumber: 20,
 
-      onStart: async () => {
+      onStart: () => {
         const snap: number[] = [];
 
         model.calcMark().forEach((item) => {
@@ -628,15 +618,13 @@ describe('------- Test Model API -------', () => {
     });
 
     if (model.onHandle) {
-      await model.onHandle();
+      model.onHandle();
     }
   });
 
-  const TEST_NAME6 = ' Calculate dots movement when'
-    + ' controlling from keyboard ';
   // calcKeyDown
-  test(TEST_NAME6, async () => {
-    let model = await new Model({
+  test(' Calculate dots movement when controlling from keyboard ', async () => {
+    let model = new Model({
       type: 'double',
       min: -120,
       max: 800,
@@ -644,7 +632,7 @@ describe('------- Test Model API -------', () => {
       from: 100,
       keyStepOne: 5,
       keyStepHold: 10,
-      onStart: async () => {
+      onStart: () => {
         let data = { from: 105, to: 600 };
         expect(model.calcFromToOnKeyDown(false, '+', 'from')).toEqual(data);
         data = { from: 100, to: 600 };
@@ -668,7 +656,7 @@ describe('------- Test Model API -------', () => {
       await model.onHandle();
     }
 
-    model = await new Model({
+    model = new Model({
       type: 'double',
       min: -120,
       max: 800,
@@ -679,7 +667,7 @@ describe('------- Test Model API -------', () => {
       gridNumber: 40,
       keyStepOne: 0,
       keyStepHold: 0,
-      onStart: async () => {
+      onStart: () => {
         const snap: number[] = [];
 
         model.calcMark().forEach((item) => {
@@ -703,7 +691,7 @@ describe('------- Test Model API -------', () => {
     });
 
     if (model.onHandle) {
-      await model.onHandle();
+      model.onHandle();
     }
   });
 });
