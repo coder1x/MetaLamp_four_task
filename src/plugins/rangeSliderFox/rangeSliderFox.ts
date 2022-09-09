@@ -3,15 +3,15 @@ import { NAME_PLUGIN } from '@shared/constants';
 import { Controller, Model, View } from './mvc/controller/Controller';
 
 $.fn.RangeSliderFox = function plugin(options = {}) {
-  return this.each((i: number, element: Element) => {
+  this.each((i: number, element: Element) => {
     if (!$.data(element, NAME_PLUGIN)) {
-      $.data(
-        element,
+      $(element).data(
         NAME_PLUGIN,
         new Controller(new Model(options), new View(element)),
       );
     }
   });
+  return this;
 };
 
 const handleDocumentDOMContentLoaded = (event: Event) => {
