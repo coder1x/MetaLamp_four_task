@@ -31,7 +31,7 @@ class Grid extends Observer<ObserverOptions> {
 
   private offOn: boolean = false;
 
-  private vertical: boolean = false;
+  vertical: boolean = false;
 
   private isResized: boolean = false;
 
@@ -43,13 +43,7 @@ class Grid extends Observer<ObserverOptions> {
 
   setOrientation(orientation: string) {
     this.vertical = orientation === 'vertical';
-    return this.vertical;
-  }
-
-  getOrientation() {
-    const width = this.rangeSliderBottom.offsetWidth;
-    const height = this.rangeSliderBottom.offsetHeight;
-    return !(width > height);
+    return this;
   }
 
   @boundMethod
@@ -84,7 +78,7 @@ class Grid extends Observer<ObserverOptions> {
 
   createDomElementGrid() {
     if (!this.elementGrid) {
-      return null;
+      return false;
     }
 
     this.rangeSliderBottom.appendChild(this.elementGrid);
@@ -96,7 +90,7 @@ class Grid extends Observer<ObserverOptions> {
 
   deleteGrid() {
     if (!this.elementGrid) {
-      return null;
+      return false;
     }
 
     if (this.elementGrid.children.length > 0) {

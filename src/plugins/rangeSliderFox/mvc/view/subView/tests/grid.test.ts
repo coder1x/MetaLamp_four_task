@@ -40,13 +40,8 @@ describe('------- Test Grid API -------', () => {
 
   // setOrientation
   test(' Change orientation ', () => {
-    expect(grid.setOrientation('vertical')).toBeTruthy();
-    expect(grid.setOrientation('horizontal')).toBeFalsy();
-  });
-
-  // getOrientation
-  test(' Get information about orientation change ', () => {
-    expect(grid.getOrientation()).toBeTruthy();
+    expect(grid.setOrientation('vertical').vertical).toBeTruthy();
+    expect(grid.setOrientation('horizontal').vertical).toBeFalsy();
   });
 
   // createMark

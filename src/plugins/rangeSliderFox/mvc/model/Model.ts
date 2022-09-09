@@ -560,7 +560,7 @@ class Model extends ModelCalc {
 
     if (isAboveMin && isBelowMax) {
       this.from = from;
-      return null;
+      return this;
     }
 
     if (from < min) {
@@ -571,12 +571,12 @@ class Model extends ModelCalc {
       this.from = max;
     }
 
-    return null;
+    return this;
   }
 
   private setTo(from: number, to: number | null | undefined, type: string) {
     if (from == null) {
-      return null;
+      return false;
     }
     const max = this.max ?? 0;
     const isConfigurationNotExist = !this.isStartedConfiguration || this.isUpdatedConfiguration;
@@ -585,7 +585,7 @@ class Model extends ModelCalc {
     if (isDouble || isConfigurationNotExist) { // check FROM and TO
       to = Number(checkProperty(this, to, 'to' as keyof Model));
       if (to == null) {
-        return null;
+        return this;
       }
 
       if (from > to) {
@@ -597,7 +597,7 @@ class Model extends ModelCalc {
       return to;
     }
 
-    return null;
+    return this;
   }
 
   private setFromTo(options: RangeSliderOptions): boolean {
