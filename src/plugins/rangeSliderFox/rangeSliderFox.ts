@@ -16,13 +16,9 @@ $.fn.RangeSliderFox = function plugin(options = {}) {
 
 const handleDocumentDOMContentLoaded = (event: Event) => {
   const documentLoaded = event.target as Document;
-  let elements = documentLoaded.querySelectorAll("[data-plugin = 'rangeSliderFox']");
-
-  if (!elements.length) {
-    elements = documentLoaded.querySelectorAll('.rangeSliderFox');
-  }
-
-  elements.forEach((element) => {
+  documentLoaded.querySelectorAll(
+    "[data-plugin = 'rangeSliderFox'], .rangeSliderFox",
+  ).forEach((element) => {
     $(element).RangeSliderFox();
   });
 };

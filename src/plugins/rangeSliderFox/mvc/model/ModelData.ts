@@ -24,39 +24,39 @@ class ModelData extends Observer<ObserverOptions> {
 
   protected theme: string | null = null;
 
-  protected min: number | null = null;
+  min: number | null = null;
 
-  protected max: number | null = null;
+  max: number | null = null;
 
-  protected from: number | null = null;
+  from: number | null = null;
 
-  protected to: number | null = null;
+  to: number | null = null;
 
-  protected step: number | null = null;
+  step: number | null = null;
 
-  protected keyStepOne: number | null = null;
+  keyStepOne: number | null = null;
 
-  protected keyStepHold: number | null = null;
+  keyStepHold: number | null = null;
 
   protected bar: boolean | null = null;
 
-  protected tipPrefix: string | null = null;
+  tipPrefix: string | null = null;
 
-  protected tipPostfix: string | null = null;
+  tipPostfix: string | null = null;
 
-  protected tipMinMax: boolean | null = null;
+  tipMinMax: boolean | null = null;
 
-  protected tipFromTo: boolean | null = null;
+  tipFromTo: boolean | null = null;
 
   protected gridSnap: boolean | null = null;
 
-  protected gridNumber: number | null = null;
+  gridNumber: number | null = null;
 
-  protected gridStep: number | null = null;
+  gridStep: number | null = null;
 
-  protected gridRound: number | null = null;
+  gridRound: number | null = null;
 
-  protected grid: boolean | null = null;
+  grid: boolean | null = null;
 
   protected disabled: boolean | null = null;
 

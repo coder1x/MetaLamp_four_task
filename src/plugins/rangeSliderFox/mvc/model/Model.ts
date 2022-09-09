@@ -420,12 +420,12 @@ class Model extends ModelCalc {
       max,
     } = options;
 
-    min = Number(checkProperty(this, min, 'min' as keyof Model));
+    min = Number(checkProperty(this, min, 'min'));
     if (min == null) {
       return false;
     }
 
-    max = Number(checkProperty(this, max, 'max' as keyof Model));
+    max = Number(checkProperty(this, max, 'max'));
     if (max == null) {
       return false;
     }
@@ -505,17 +505,17 @@ class Model extends ModelCalc {
       keyStepHold,
     } = options;
 
-    step = Number(checkProperty(this, step, 'step' as keyof Model));
+    step = Number(checkProperty(this, step, 'step'));
     if (step == null) {
       step = 0;
     }
 
-    keyStepOne = Number(checkProperty(this, keyStepOne, 'keyStepOne' as keyof Model));
+    keyStepOne = Number(checkProperty(this, keyStepOne, 'keyStepOne'));
     if (keyStepOne == null) {
       keyStepOne = 0;
     }
 
-    keyStepHold = Number(checkProperty(this, keyStepHold, 'keyStepHold' as keyof Model));
+    keyStepHold = Number(checkProperty(this, keyStepHold, 'keyStepHold'));
     if (keyStepHold == null) {
       keyStepHold = 0;
     }
@@ -583,7 +583,7 @@ class Model extends ModelCalc {
     const isDouble = type === 'double';
 
     if (isDouble || isConfigurationNotExist) { // check FROM and TO
-      to = Number(checkProperty(this, to, 'to' as keyof Model));
+      to = Number(checkProperty(this, to, 'to'));
       if (to == null) {
         return this;
       }
@@ -625,7 +625,7 @@ class Model extends ModelCalc {
       return false;
     }
 
-    from = Number(checkProperty(this, from, 'from' as keyof Model));
+    from = Number(checkProperty(this, from, 'from'));
 
     this.setFrom(from);
     this.setTo(from, options.to, dataType);
@@ -755,8 +755,11 @@ class Model extends ModelCalc {
       return false;
     }
 
-    let {
+    const {
       grid,
+    } = options;
+
+    let {
       gridNumber,
       gridStep,
     } = options;
@@ -765,16 +768,15 @@ class Model extends ModelCalc {
 
     if (Number.isNaN(gridRound)) gridRound = null;
 
-    grid = Boolean(checkProperty(this, grid, 'grid' as keyof Model) ?? false);
-    this.grid = Boolean(grid);
+    this.grid = Boolean(checkProperty(this, grid, 'grid') ?? false);
 
     if (!checkIsEmpty(this.min) || !checkIsEmpty(this.max)) {
       return false;
     }
 
-    gridNumber = Number(checkProperty(this, gridNumber, 'gridNumber' as keyof Model) ?? 0);
-    gridStep = Number(checkProperty(this, gridStep, 'gridStep' as keyof Model) ?? 0);
-    gridRound = Number(checkProperty(this, gridRound, 'gridRound' as keyof Model) ?? 0);
+    gridNumber = Number(checkProperty(this, gridNumber, 'gridNumber') ?? 0);
+    gridStep = Number(checkProperty(this, gridStep, 'gridStep') ?? 0);
+    gridRound = Number(checkProperty(this, gridRound, 'gridRound') ?? 0);
 
     const long = (this.max ?? 0) - (this.min ?? 0);
 
@@ -939,28 +941,28 @@ class Model extends ModelCalc {
     } = options;
 
     const MAX_LENGTH_STRING = 15;
-    const tipPostfixValue = checkProperty(this, tipPostfix, 'tipPostfix' as keyof Model);
+    const tipPostfixValue = checkProperty(this, tipPostfix, 'tipPostfix');
     if (typeof tipPostfixValue === 'string') {
       this.tipPostfix = String(tipPostfixValue).replace(/\s/g, '').substring(0, MAX_LENGTH_STRING);
     } else {
       this.tipPostfix = '';
     }
 
-    const tipPrefixValue = checkProperty(this, tipPrefix, 'tipPrefix' as keyof Model);
+    const tipPrefixValue = checkProperty(this, tipPrefix, 'tipPrefix');
     if (typeof tipPrefixValue === 'string') {
       this.tipPrefix = String(tipPrefixValue).replace(/\s/g, '').substring(0, MAX_LENGTH_STRING);
     } else {
       this.tipPrefix = '';
     }
 
-    const tipMinMaxValue = checkProperty(this, tipMinMax, 'tipMinMax' as keyof Model);
+    const tipMinMaxValue = checkProperty(this, tipMinMax, 'tipMinMax');
     if (typeof tipMinMaxValue === 'boolean') {
       this.tipMinMax = tipMinMaxValue;
     } else {
       this.tipMinMax = true;
     }
 
-    const tipFromToValue = checkProperty(this, tipFromTo, 'tipFromTo' as keyof Model);
+    const tipFromToValue = checkProperty(this, tipFromTo, 'tipFromTo');
     if (typeof tipFromToValue === 'boolean') {
       this.tipFromTo = tipFromToValue;
     } else {
