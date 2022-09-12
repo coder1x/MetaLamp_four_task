@@ -20,33 +20,47 @@ import {
 import ModelCalc from './ModelCalc';
 
 interface InsideOptions extends RangeSliderOptions {
-  readonly fromX?: number,
-  readonly toX?: number,
-  readonly valuePercent?: number,
-  readonly fromPercent?: number,
-  readonly toPercent?: number,
-  readonly limitFrom?: number,
-  readonly limitTo?: number,
-  readonly fromTo?: number,
-  readonly valueGrid?: number,
+  readonly fromX?: number;
+  readonly toX?: number;
+  readonly valuePercent?: number;
+  readonly fromPercent?: number;
+  readonly toPercent?: number;
+  readonly limitFrom?: number;
+  readonly limitTo?: number;
+  readonly fromTo?: number;
+  readonly valueGrid?: number;
   readonly valueMark?: {
-    value: number,
-    position: number,
+    value: number;
+    position: number;
   }[],
-  readonly snapNumber?: number[],
-  readonly isResized?: boolean,
-  readonly dimensions?: number,
-  readonly position?: number,
-  readonly clientXY?: number,
-  readonly shiftXY?: number,
-  readonly keyRepeat?: boolean,
-  readonly keySign?: string,
-  readonly dot?: string,
+  readonly snapNumber?: number[];
+  readonly isResized?: boolean;
+  readonly dimensions?: number;
+  readonly position?: number;
+  readonly clientXY?: number;
+  readonly shiftXY?: number;
+  readonly keyRepeat?: boolean;
+  readonly keySign?: string;
+  readonly dot?: string;
 }
 
 interface ObserverOptions extends InsideOptions {
-  key?: string,
+  readonly key?: 'DataAttributes';
 }
+
+type ArrayKeys = [
+  'RangeData',
+  'Step',
+  'DotData',
+  'GridSnapData',
+  'GridData',
+  'ThemeData',
+  'HintsData',
+  'DisabledData',
+  'BarData',
+  'OrientationData',
+  'Start',
+];
 
 class Model extends ModelCalc {
   constructor(options: RangeSliderOptions = {}) {
@@ -67,7 +81,7 @@ class Model extends ModelCalc {
       setProperty(this, key as keyof Model, value as this[keyof Model]);
     });
 
-    const KEYS = [
+    const KEYS: ArrayKeys = [
       'RangeData',
       'Step',
       'DotData',

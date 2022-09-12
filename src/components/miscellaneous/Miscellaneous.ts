@@ -2,13 +2,13 @@ import { boundMethod } from 'autobind-decorator';
 
 import Select from '@com/select/Select';
 
-interface Options {
+type Options = {
   type?: string | null;
   disabled?: boolean | null;
   bar?: boolean | null;
   orientation?: string | null;
   theme?: string | null;
-}
+};
 
 class Different {
   private element: Element;

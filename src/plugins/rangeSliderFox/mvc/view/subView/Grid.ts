@@ -5,12 +5,12 @@ import { RANGE_SLIDER_NAME } from '@shared/constants';
 import Observer from '../../../Observer';
 import Resize from '../Resize';
 
-interface ObserverOptions {
-  readonly key: 'ClickMark' | 'SnapNumber',
-  readonly valueGrid?: number,
-  readonly snapNumber?: number[],
-  readonly isResized?: boolean,
-}
+type ObserverOptions = {
+  readonly key: 'ClickMark' | 'SnapNumber';
+  readonly valueGrid?: number;
+  readonly snapNumber?: number[];
+  readonly isResized?: boolean;
+};
 
 class Grid extends Observer<ObserverOptions> {
   private rangeSliderBottom: HTMLElement;

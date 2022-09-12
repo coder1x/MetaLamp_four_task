@@ -1,11 +1,11 @@
 import Model from '../Model';
 
-interface PositionData {
-  clientXY: number,
-  shiftXY: number,
-  value: number,
-  type: boolean
-}
+type PositionData = {
+  clientXY: number;
+  shiftXY: number;
+  value: number;
+  type: boolean;
+};
 
 describe('------- Test Model API -------', () => {
   const defaultData = {

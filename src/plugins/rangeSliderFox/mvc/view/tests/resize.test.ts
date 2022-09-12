@@ -1,12 +1,12 @@
 import Resize from '../Resize';
 
-interface Options {
-  width: number,
-  height: number,
-  padding?: number,
-  x?: number,
-  y?: number,
-}
+type Options = {
+  width: number;
+  height: number;
+  padding?: number;
+  x?: number;
+  y?: number;
+};
 
 describe('------- Test Resize API -------', () => {
   function mockElementDimensions(element: HTMLElement) {

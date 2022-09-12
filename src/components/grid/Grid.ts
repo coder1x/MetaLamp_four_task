@@ -1,12 +1,12 @@
 import { boundMethod } from 'autobind-decorator';
 
-interface Options {
+type Options = {
   grid?: boolean | null;
   gridSnap?: boolean | null;
   gridNumber?: number | null;
   gridStep?: number | null;
   gridRound?: number | null;
-}
+};
 
 class Grid {
   private element: Element;

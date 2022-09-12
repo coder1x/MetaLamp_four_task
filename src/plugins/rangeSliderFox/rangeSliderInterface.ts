@@ -1,4 +1,4 @@
-interface RangeSliderOptions {
+type RangeSliderOptions = {
   readonly type?: string | null;
   readonly orientation?: string | null;
   readonly theme?: string | null;
@@ -24,12 +24,12 @@ interface RangeSliderOptions {
   readonly onChange?: ((data: RangeSliderOptions) => void) | null;
   readonly onUpdate?: ((data: RangeSliderOptions) => void) | null;
   readonly onReset?: ((data: RangeSliderOptions) => void) | null;
-}
+};
 
-interface RangeSliderFoxFunction {
+type RangeSliderFoxFunction = {
   // eslint-disable-next-line no-use-before-define
   (options?: RangeSliderOptions): JQuery;
-}
+};
 
 interface RangeSliderFox extends
   RangeSliderFoxFunction { }

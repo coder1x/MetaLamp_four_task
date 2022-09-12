@@ -7,32 +7,50 @@ import Model from '../model/Model';
 import View from '../view/View';
 
 interface insideOptions extends RangeSliderOptions {
-  readonly fromX?: number,
-  readonly toX?: number,
-  readonly valuePercent?: number,
-  readonly fromPercent?: number,
-  readonly toPercent?: number,
-  readonly limitFrom?: number,
-  readonly limitTo?: number,
-  readonly fromTo?: number,
-  readonly valueGrid?: number,
+  readonly fromX?: number;
+  readonly toX?: number;
+  readonly valuePercent?: number;
+  readonly fromPercent?: number;
+  readonly toPercent?: number;
+  readonly limitFrom?: number;
+  readonly limitTo?: number;
+  readonly fromTo?: number;
+  readonly valueGrid?: number;
   readonly valueMark?: {
-    value: number,
-    position: number,
-  }[],
-  readonly snapNumber?: number[],
-  readonly isResized?: boolean,
-  readonly dimensions?: number,
-  readonly position?: number,
-  readonly clientXY?: number,
-  readonly shiftXY?: number,
-  readonly keyRepeat?: boolean,
-  readonly keySign?: string,
-  readonly dot?: string,
+    value: number;
+    position: number;
+  }[];
+  readonly snapNumber?: number[];
+  readonly isResized?: boolean;
+  readonly dimensions?: number;
+  readonly position?: number;
+  readonly clientXY?: number;
+  readonly shiftXY?: number;
+  readonly keyRepeat?: boolean;
+  readonly keySign?: string;
+  readonly dot?: string;
 }
 
 interface ObserverOptions extends insideOptions {
-  key?: string,
+  readonly key?: 'Start' |
+  'Step' |
+  'DataAttributes' |
+  'RangeData' |
+  'DotKeyDown' |
+  'DotData' |
+  'DotMove' |
+  'GridSnapData' |
+  'GridData' |
+  'OrientationData' |
+  'ThemeData' |
+  'HintsData' |
+  'DisabledData' |
+  'ClickLine' |
+  'BarData' |
+  'ClickBar' |
+  'CreateGrid' |
+  'ClickMark' |
+  'SnapNumber';
 }
 
 class Controller {

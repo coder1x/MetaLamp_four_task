@@ -6,14 +6,14 @@ import {
 } from '@shared/helpers/readWriteProperties';
 import { RANGE_SLIDER_NAME } from '@shared/constants';
 
-interface CheckTip {
-  tipMaxXY: number,
-  visibilityTipSingle: boolean,
-  visibilityTipMax: boolean,
-  visibilityTipMin: boolean,
-  tipMinYTop: number,
-  tipMinXRight: number,
-}
+type CheckTip = {
+  tipMaxXY: number;
+  visibilityTipSingle: boolean;
+  visibilityTipMax: boolean;
+  visibilityTipMin: boolean;
+  tipMinYTop: number;
+  tipMinXRight: number;
+};
 
 class Hints {
   private rangeSliderTop: Element;

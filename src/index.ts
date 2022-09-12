@@ -5,13 +5,13 @@ import 'focus-visible/dist/focus-visible.min.js';
 
 import '@styles/styles';
 
-interface RequireContext {
+type RequireContext = {
   keys(): string[];
   (id: string): any;
   <T>(id: string): T;
   resolve(id: string): string;
   id: string;
-}
+};
 
 function requireAll(requireContext: RequireContext) {
   return requireContext.keys().map(requireContext);

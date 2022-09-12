@@ -8,25 +8,25 @@ import { RANGE_SLIDER_NAME } from '@shared/constants';
 
 import Observer from '../../../Observer';
 
-interface Pointer {
-  event: PointerEvent,
-  type: string,
-  shiftXY: number,
-}
+type Pointer = {
+  event: PointerEvent;
+  type: string;
+  shiftXY: number;
+};
 
 type mapKey = Map<string, string>;
 
-interface ObserverOptions {
-  readonly key: 'DotMove' | 'DotKeyDown',
-  readonly type?: string | null | undefined,
-  readonly dimensions?: number,
-  readonly position?: number,
-  readonly clientXY?: number,
-  readonly shiftXY?: number,
-  readonly keyRepeat?: boolean,
-  readonly keySign?: string,
-  readonly dot?: string,
-}
+type ObserverOptions = {
+  readonly key: 'DotMove' | 'DotKeyDown';
+  readonly type?: string | null | undefined;
+  readonly dimensions?: number;
+  readonly position?: number;
+  readonly clientXY?: number;
+  readonly shiftXY?: number;
+  readonly keyRepeat?: boolean;
+  readonly keySign?: string;
+  readonly dot?: string;
+};
 
 class Handle extends Observer<ObserverOptions> {
   private elementFrom: HTMLElement | null = null;

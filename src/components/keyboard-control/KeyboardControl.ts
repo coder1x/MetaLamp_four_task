@@ -1,9 +1,9 @@
 import { boundMethod } from 'autobind-decorator';
 
-interface Options {
+type Options = {
   keyStepOne?: number | null;
   keyStepHold?: number | null;
-}
+};
 
 class KeyboardControl {
   private element: Element;

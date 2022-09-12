@@ -1,11 +1,11 @@
 import { boundMethod } from 'autobind-decorator';
 
-interface Options {
+type Options = {
   tipMinMax?: boolean | null;
   tipFromTo?: boolean | null;
   tipPrefix?: string | null;
   tipPostfix?: string | null;
-}
+};
 
 class Hints {
   private element: Element;

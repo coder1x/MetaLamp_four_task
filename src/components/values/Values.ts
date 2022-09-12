@@ -1,12 +1,12 @@
 import { boundMethod } from 'autobind-decorator';
 
-interface Options {
+type Options = {
   min?: number | null;
   max?: number | null;
   from?: number | null;
   to?: number | null;
   step?: number | null;
-}
+};
 
 class Values {
   private element: Element;

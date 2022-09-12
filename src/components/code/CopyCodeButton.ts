@@ -33,7 +33,7 @@ class CopyCodeButton {
       if (typeof values[i] === 'string') {
         value = `'${values[i]}'`;
       } else {
-        value = values[i];
+        value = String(values[i]);
       }
       const text = `${key[i]}: ${value},`;
 

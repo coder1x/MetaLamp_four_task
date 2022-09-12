@@ -8,9 +8,9 @@ import CopyCodeButton from '@com/code/CopyCodeButton';
 import KeyboardControl from '@com/keyboard-control/KeyboardControl';
 import { NAME_PLUGIN } from '@shared/constants';
 
-interface Actions {
+type Actions = {
   bindEvent: <T>(object: T) => boolean | void;
-}
+};
 
 class Panel {
   private element: Element;

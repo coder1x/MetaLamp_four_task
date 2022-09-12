@@ -7,13 +7,24 @@ import {
 
 interface insideOptions extends RangeSliderOptions {
   readonly valueMark?: {
-    value: number,
-    position: number,
-  }[],
+    value: number;
+    position: number;
+  }[];
 }
 
 interface ObserverOptions extends insideOptions {
-  readonly key: string,
+  readonly key: 'DotData' |
+  'CreateGrid' |
+  'Start' |
+  'Step' |
+  'RangeData' |
+  'GridSnapData' |
+  'GridData' |
+  'OrientationData' |
+  'ThemeData' |
+  'HintsData' |
+  'DisabledData' |
+  'BarData';
 }
 
 class ModelData extends Observer<ObserverOptions> {

@@ -11,13 +11,31 @@ import Grid from './subView/Grid';
 import UpdateTip from './view.d';
 
 interface insideOptions extends RangeSliderOptions {
-  readonly snapNumber?: number[],
-  readonly isResized?: boolean,
-  readonly clientXY?: number,
+  readonly snapNumber?: number[];
+  readonly isResized?: boolean;
+  readonly clientXY?: number;
 }
 
 interface ObserverOptions extends insideOptions {
-  readonly key?: string
+  readonly key?: 'DataAttributes' |
+  'ClickLine' |
+  'DotMove' |
+  'DotKeyDown' |
+  'ClickBar' |
+  'SnapNumber' |
+  'Start' |
+  'RangeData' |
+  'DotData' |
+  'GridSnapData' |
+  'GridData' |
+  'OrientationData' |
+  'ThemeData' |
+  'HintsData' |
+  'DisabledData' |
+  'BarData' |
+  'CreateGrid' |
+  'Step' |
+  'ClickMark';
 }
 
 class View extends Observer<ObserverOptions> {

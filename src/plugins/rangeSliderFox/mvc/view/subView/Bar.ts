@@ -9,10 +9,10 @@ import { RANGE_SLIDER_NAME } from '@shared/constants';
 
 import Observer from '../../../Observer';
 
-interface ObserverOptions {
-  readonly key: 'ClickBar',
-  readonly clientXY?: number,
-}
+type ObserverOptions = {
+  readonly key: 'ClickBar';
+  readonly clientXY?: number;
+};
 
 class Bar extends Observer<ObserverOptions> {
   private rangeSliderCenter: Element;

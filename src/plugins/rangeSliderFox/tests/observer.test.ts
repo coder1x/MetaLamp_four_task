@@ -2,32 +2,32 @@ import { RangeSliderOptions } from '../globInterface';
 import Observer from '../Observer';
 
 interface insideOptions extends RangeSliderOptions {
-  readonly fromX?: number,
-  readonly toX?: number,
-  readonly valuePercent?: number,
-  readonly fromPercent?: number,
-  readonly toPercent?: number,
-  readonly limitFrom?: number,
-  readonly limitTo?: number,
-  readonly fromTo?: number,
-  readonly valueGrid?: number,
+  readonly fromX?: number;
+  readonly toX?: number;
+  readonly valuePercent?: number;
+  readonly fromPercent?: number;
+  readonly toPercent?: number;
+  readonly limitFrom?: number;
+  readonly limitTo?: number;
+  readonly fromTo?: number;
+  readonly valueGrid?: number;
   readonly valueMark?: {
-    value: number,
-    position: number,
-  }[],
-  readonly snapNumber?: number[],
-  readonly isResized?: boolean,
-  readonly dimensions?: number,
-  readonly position?: number,
-  readonly clientXY?: number,
-  readonly shiftXY?: number,
-  readonly keyRepeat?: boolean,
-  readonly keySign?: string,
-  readonly dot?: string,
+    value: number;
+    position: number;
+  }[];
+  readonly snapNumber?: number[];
+  readonly isResized?: boolean;
+  readonly dimensions?: number;
+  readonly position?: number;
+  readonly clientXY?: number;
+  readonly shiftXY?: number;
+  readonly keyRepeat?: boolean;
+  readonly keySign?: string;
+  readonly dot?: string;
 }
 
 interface ObserverOptions extends insideOptions {
-  key: 'KEY',
+  key: 'KEY';
 }
 
 class TestObserver extends Observer<ObserverOptions> {
