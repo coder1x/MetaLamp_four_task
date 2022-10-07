@@ -53,6 +53,19 @@ interface ObserverOptions extends insideOptions {
   'SnapNumber';
 }
 
+type HintsProps = {
+  key: 'HintsData';
+  type: string | null;
+  from: number | null;
+  to: number | null;
+  tipPrefix: string | null;
+  tipPostfix: string | null;
+  tipFromTo: boolean | null;
+  tipMinMax: boolean | null;
+  min: number | null;
+  max: number | null;
+};
+
 class Controller {
   private isStarted = false;
 
@@ -137,7 +150,7 @@ class Controller {
   private static subscribe(
     talking: Model | View,
 
-    items: ((options: ObserverOptions) => boolean | Promise<boolean>)[],
+    items: ((options: ObserverOptions | HintsProps) => boolean | Promise<boolean>)[],
   ) {
     return items.forEach((item) => {
       talking.subscribeObserver(item);
@@ -408,7 +421,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleHintsData(options: ObserverOptions) {
+  private handleHintsData(options: HintsProps) {
     const { key } = options;
     if (key !== 'HintsData') {
       return false;

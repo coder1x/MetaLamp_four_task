@@ -13,12 +13,10 @@ import UpdateTip from './view.d';
 interface insideOptions extends RangeSliderOptions {
   readonly snapNumber?: number[];
   readonly isResized?: boolean;
-  readonly clientXY?: number;
 }
 
-interface ObserverOptions extends insideOptions {
+interface ObserverOptionsT extends insideOptions {
   readonly key?: 'DataAttributes' |
-  'ClickLine' |
   'DotMove' |
   'DotKeyDown' |
   'ClickBar' |
@@ -37,6 +35,13 @@ interface ObserverOptions extends insideOptions {
   'Step' |
   'ClickMark';
 }
+
+type ClickLine = {
+  key: 'ClickLine';
+  readonly clientXY: number;
+}
+
+type ObserverOptions = ClickLine | ObserverOptionsT;
 
 class View extends Observer<ObserverOptions> {
   private wrapperSlider: Element | null;
@@ -63,7 +68,7 @@ class View extends Observer<ObserverOptions> {
 
   private grid: Grid | null = null;
 
-  private dataAttributes: ObserverOptions | null = null;
+  private dataAttributes: ObserverOptionsT | null = null;
 
   onHandle: (() => void) | null = null;
 
@@ -276,7 +281,7 @@ class View extends Observer<ObserverOptions> {
 
   // --------------------------------- hints
 
-  setHintsData(options: ObserverOptions) {
+  setHintsData(options: ObserverOptionsT) {
     if (!this.hints) {
       return [];
     }
@@ -585,7 +590,7 @@ class View extends Observer<ObserverOptions> {
   }
 
   @boundMethod
-  private handleForwarding(options: ObserverOptions) {
+  private handleForwarding(options: ObserverOptionsT) {
     this.notifyObserver({ ...options });
     return true;
   }
