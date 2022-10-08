@@ -19,38 +19,16 @@ import {
 } from './modelInterface';
 import ModelCalc from './ModelCalc';
 
-interface InsideOptions extends RangeSliderOptions {
-  readonly fromX?: number;
-  readonly toX?: number;
-  readonly valuePercent?: number;
-  readonly fromPercent?: number;
-  readonly toPercent?: number;
-  readonly limitFrom?: number;
-  readonly limitTo?: number;
-  readonly fromTo?: number;
-  readonly valueGrid?: number;
-  readonly valueMark?: {
-    value: number;
-    position: number;
-  }[],
-  readonly snapNumber?: number[];
-  readonly isResized?: boolean;
-  readonly dimensions?: number;
-  readonly position?: number;
-  readonly clientXY?: number;
-  readonly shiftXY?: number;
-  readonly keyRepeat?: boolean;
-  readonly keySign?: string;
-  readonly dot?: string;
-}
-
-interface ObserverOptions extends InsideOptions {
-  readonly key?: 'DataAttributes';
-}
+type DataAttributesProps = {
+  key?: 'DataAttributes';
+  tipPrefix?: string | null;
+  tipPostfix?: string | null;
+  tipMinMax?: boolean | null;
+  tipFromTo?: boolean | null;
+};
 
 type ArrayKeys = [
   'RangeData',
-  'Step',
   'DotData',
   'GridSnapData',
   'GridData',
@@ -83,7 +61,6 @@ class Model extends ModelCalc {
 
     const KEYS: ArrayKeys = [
       'RangeData',
-      'Step',
       'DotData',
       'GridSnapData',
       'GridData',
@@ -930,7 +907,7 @@ class Model extends ModelCalc {
     return true;
   }
 
-  private setHintsData(options: ObserverOptions): boolean {
+  private setHintsData(options: DataAttributesProps): boolean {
     const isParameters = !validateProperties(
       options,
       [

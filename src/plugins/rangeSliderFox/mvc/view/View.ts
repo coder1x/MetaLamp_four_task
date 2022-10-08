@@ -10,40 +10,133 @@ import Bar from './subView/Bar';
 import Grid from './subView/Grid';
 import UpdateTip from './view.d';
 
-interface insideOptions extends RangeSliderOptions {
-  readonly snapNumber?: number[];
-  readonly isResized?: boolean;
+interface DataAttributesProps extends RangeSliderOptions {
+  key: 'DataAttributes';
 }
 
-interface ObserverOptionsT extends insideOptions {
-  readonly key?: 'DataAttributes' |
-  'DotMove' |
-  'DotKeyDown' |
-  'ClickBar' |
-  'SnapNumber' |
-  'Start' |
-  'RangeData' |
-  'DotData' |
-  'GridSnapData' |
-  'GridData' |
-  'OrientationData' |
-  'ThemeData' |
-  'HintsData' |
-  'DisabledData' |
-  'BarData' |
-  'CreateGrid' |
-  'Step' |
-  'ClickMark';
+type SnapNumberProps = {
+  key: 'SnapNumber'
+  isResized: boolean;
+  snapNumber: number[];
 }
 
-type ClickLine = {
+type ClickMarkProps = {
+  key: 'ClickMark';
+  valueGrid: number;
+};
+
+type CreateGridProps = {
+  key: 'CreateGrid'
+  valueMark: {
+    value: number;
+    position: number;
+  }[];
+};
+
+type ClickBarProps = {
+  key: 'ClickBar';
+  clientXY: number;
+};
+
+type BarDataProps = {
+  key: 'BarData';
+  bar: boolean | null;
+};
+
+type ClickLineProps = {
   key: 'ClickLine';
-  readonly clientXY: number;
+  clientXY: number;
+};
+
+type DisabledDataProps = {
+  key: 'DisabledData';
+  disabled: boolean | null;
+};
+
+type ThemeDataProps = {
+  key: 'ThemeData';
+  theme: string | null;
+};
+
+type OrientationDataProps = {
+  key: 'OrientationData';
+  orientation: string | null;
+};
+
+type GridDataProps = {
+  key: 'GridData';
+  grid: boolean | null;
+};
+
+type GridSnapDataProps = {
+  key: 'GridSnapData';
 }
 
-type ObserverOptions = ClickLine | ObserverOptionsT;
+type DotMoveProps = {
+  key: 'DotMove';
+  type: string | null;
+  position: number;
+  clientXY: number;
+  shiftXY: number;
+};
 
-class View extends Observer<ObserverOptions> {
+type DotDataProps = {
+  key: 'DotData';
+  type: string | null;
+  to: number | null;
+  from: number | null;
+};
+
+type DotKeyDownProps = {
+  key?: 'DotKeyDown'
+  keyRepeat?: boolean;
+  keySign?: string;
+  dot?: string;
+};
+
+type RangeDataProps = {
+  key?: 'RangeData';
+  min?: number;
+  max?: number;
+};
+
+type StartProps = {
+  key?: 'Start';
+};
+
+type HintsProps = {
+  key?: 'HintsData';
+  type?: string | null;
+  from?: number | null;
+  to?: number | null;
+  tipPrefix?: string | null;
+  tipPostfix?: string | null;
+  tipFromTo?: boolean | null;
+  tipMinMax?: boolean | null;
+  min?: number | null;
+  max?: number | null;
+};
+
+type EventProps = HintsProps |
+  StartProps |
+  DotDataProps |
+  DotKeyDownProps |
+  RangeDataProps |
+  DotMoveProps |
+  GridSnapDataProps |
+  GridDataProps |
+  OrientationDataProps |
+  ThemeDataProps |
+  DisabledDataProps |
+  ClickLineProps |
+  BarDataProps |
+  ClickBarProps |
+  CreateGridProps |
+  ClickMarkProps |
+  DataAttributesProps |
+  SnapNumberProps;
+
+class View extends Observer<EventProps> {
   private wrapperSlider: Element | null;
 
   private rangeSlider: Element | null = null;
@@ -68,7 +161,7 @@ class View extends Observer<ObserverOptions> {
 
   private grid: Grid | null = null;
 
-  private dataAttributes: ObserverOptionsT | null = null;
+  private dataAttributes: DataAttributesProps | null = null;
 
   onHandle: (() => void) | null = null;
 
@@ -281,7 +374,7 @@ class View extends Observer<ObserverOptions> {
 
   // --------------------------------- hints
 
-  setHintsData(options: ObserverOptionsT) {
+  setHintsData(options: HintsProps) {
     if (!this.hints) {
       return [];
     }
@@ -590,7 +683,7 @@ class View extends Observer<ObserverOptions> {
   }
 
   @boundMethod
-  private handleForwarding(options: ObserverOptionsT) {
+  private handleForwarding(options: EventProps) {
     this.notifyObserver({ ...options });
     return true;
   }

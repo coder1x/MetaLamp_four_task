@@ -6,65 +6,130 @@ import { RangeSliderOptions } from '../../globInterface';
 import Model from '../model/Model';
 import View from '../view/View';
 
-interface insideOptions extends RangeSliderOptions {
-  readonly fromX?: number;
-  readonly toX?: number;
-  readonly valuePercent?: number;
-  readonly fromPercent?: number;
-  readonly toPercent?: number;
-  readonly limitFrom?: number;
-  readonly limitTo?: number;
-  readonly fromTo?: number;
-  readonly valueGrid?: number;
-  readonly valueMark?: {
+interface DataAttributesProps extends RangeSliderOptions {
+  key: 'DataAttributes';
+}
+
+type SnapNumberProps = {
+  key: 'SnapNumber';
+  isResized: boolean;
+  snapNumber: number[];
+}
+
+type ClickMarkProps = {
+  key: 'ClickMark';
+  valueGrid: number;
+};
+
+type CreateGridProps = {
+  key: 'CreateGrid';
+  valueMark: {
     value: number;
     position: number;
   }[];
-  readonly snapNumber?: number[];
-  readonly isResized?: boolean;
-  readonly dimensions?: number;
-  readonly position?: number;
-  readonly clientXY?: number;
-  readonly shiftXY?: number;
-  readonly keyRepeat?: boolean;
-  readonly keySign?: string;
-  readonly dot?: string;
+};
+
+type ClickBarProps = {
+  key: 'ClickBar';
+  clientXY: number;
+};
+
+type BarDataProps = {
+  key: 'BarData';
+  bar: boolean | null;
+};
+
+type ClickLineProps = {
+  key: 'ClickLine';
+  clientXY: number;
+};
+
+type DisabledDataProps = {
+  key: 'DisabledData';
+  disabled: boolean | null;
+};
+
+type ThemeDataProps = {
+  key: 'ThemeData';
+  theme: string | null;
+};
+
+type OrientationDataProps = {
+  key: 'OrientationData';
+  orientation: string | null;
+};
+
+type GridDataProps = {
+  key: 'GridData';
+  grid: boolean | null;
+};
+
+type GridSnapDataProps = {
+  key: 'GridSnapData';
 }
 
-interface ObserverOptions extends insideOptions {
-  readonly key?: 'Start' |
-  'Step' |
-  'DataAttributes' |
-  'RangeData' |
-  'DotKeyDown' |
-  'DotData' |
-  'DotMove' |
-  'GridSnapData' |
-  'GridData' |
-  'OrientationData' |
-  'ThemeData' |
-  'HintsData' |
-  'DisabledData' |
-  'ClickLine' |
-  'BarData' |
-  'ClickBar' |
-  'CreateGrid' |
-  'ClickMark' |
-  'SnapNumber';
-}
+type DotMoveProps = {
+  key: 'DotMove';
+  type: string | null;
+  position: number;
+  clientXY: number;
+  shiftXY: number;
+};
+
+type DotDataProps = {
+  key: 'DotData';
+  type: string | null;
+  to: number | null;
+  from: number | null;
+};
+
+type DotKeyDownProps = {
+  key: 'DotKeyDown';
+  keyRepeat: boolean;
+  keySign: string;
+  dot: string;
+};
+
+type RangeDataProps = {
+  key: 'RangeData';
+  min: number;
+  max: number;
+};
+
+type StartProps = {
+  key: 'Start';
+};
 
 type HintsProps = {
-  key: 'HintsData';
-  type: string | null;
-  from: number | null;
-  to: number | null;
-  tipPrefix: string | null;
-  tipPostfix: string | null;
-  tipFromTo: boolean | null;
-  tipMinMax: boolean | null;
-  min: number | null;
-  max: number | null;
+  key?: 'HintsData';
+  type?: string | null;
+  from?: number | null;
+  to?: number | null;
+  tipPrefix?: string | null;
+  tipPostfix?: string | null;
+  tipFromTo?: boolean | null;
+  tipMinMax?: boolean | null;
+  min?: number | null;
+  max?: number | null;
 };
+
+type EventProps = HintsProps |
+  StartProps |
+  DotDataProps |
+  DotKeyDownProps |
+  RangeDataProps |
+  DotMoveProps |
+  GridSnapDataProps |
+  GridDataProps |
+  OrientationDataProps |
+  ThemeDataProps |
+  DisabledDataProps |
+  ClickLineProps |
+  BarDataProps |
+  ClickBarProps |
+  CreateGridProps |
+  ClickMarkProps |
+  SnapNumberProps;
 
 class Controller {
   private isStarted = false;
@@ -149,8 +214,7 @@ class Controller {
 
   private static subscribe(
     talking: Model | View,
-
-    items: ((options: ObserverOptions | HintsProps) => boolean | Promise<boolean>)[],
+    items: ((options: EventProps) => boolean | Promise<boolean>)[],
   ) {
     return items.forEach((item) => {
       talking.subscribeObserver(item);
@@ -194,7 +258,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleStart(options: ObserverOptions) {
+  private handleStart(options: StartProps) {
     const { key } = options;
     const isStarted = key !== 'Start';
 
@@ -209,7 +273,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleDataAttributes(options: ObserverOptions) {
+  private handleDataAttributes(options: DataAttributesProps) {
     const { key } = options;
     if (key !== 'DataAttributes') {
       return false;
@@ -227,7 +291,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleRangeData(options: ObserverOptions) {
+  private handleRangeData(options: RangeDataProps) {
     const { key } = options;
     if (key !== 'RangeData') {
       return false;
@@ -257,7 +321,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleDotKeyDown(options: ObserverOptions) {
+  private handleDotKeyDown(options: DotKeyDownProps) {
     const { key } = options;
     const isDotKeyDown = key !== 'DotKeyDown';
 
@@ -277,7 +341,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleDotData(options: ObserverOptions) {
+  private handleDotData(options: DotDataProps) {
     const { key } = options;
     if (key !== 'DotData') {
       return false;
@@ -323,7 +387,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleDotMove(options: ObserverOptions) {
+  private handleDotMove(options: DotMoveProps) {
     const { key } = options;
     const isDotMove = key !== 'DotMove';
 
@@ -345,7 +409,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleGridSnapData(options: ObserverOptions) {
+  private handleGridSnapData(options: GridSnapDataProps) {
     const { key } = options;
     const isGridSnapData = key !== 'GridSnapData';
 
@@ -358,7 +422,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleGridData(options: ObserverOptions) {
+  private handleGridData(options: GridDataProps) {
     const { key } = options;
 
     if (key !== 'GridData') {
@@ -383,7 +447,7 @@ class Controller {
   }
 
   @boundMethod
-  private async handleOrientationData(options: ObserverOptions) {
+  private async handleOrientationData(options: OrientationDataProps) {
     const { key } = options;
     if (key !== 'OrientationData') {
       return false;
@@ -408,7 +472,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleThemeData(options: ObserverOptions) {
+  private handleThemeData(options: ThemeDataProps) {
     const { key } = options;
     const isThemeData = key !== 'ThemeData';
 
@@ -489,7 +553,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleDisabledData(options: ObserverOptions) {
+  private handleDisabledData(options: DisabledDataProps) {
     const { key } = options;
     const isDisabledData = key !== 'DisabledData';
 
@@ -504,7 +568,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleLineClick(options: ObserverOptions) {
+  private handleLineClick(options: ClickLineProps) {
     const { key } = options;
     const isClickLine = key !== 'ClickLine';
 
@@ -523,7 +587,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleBarData(options: ObserverOptions) {
+  private handleBarData(options: BarDataProps) {
     const { key } = options;
     if (key !== 'BarData') {
       return false;
@@ -540,7 +604,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleBarClick(options: ObserverOptions) {
+  private handleBarClick(options: ClickBarProps) {
     const { key } = options;
     const isClickBar = key !== 'ClickBar';
 
@@ -560,7 +624,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleGridCreation(options: ObserverOptions) {
+  private handleGridCreation(options: CreateGridProps) {
     const { key } = options;
     const isCreateGrid = key !== 'CreateGrid';
 
@@ -573,7 +637,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleMarkClick(options: ObserverOptions) {
+  private handleMarkClick(options: ClickMarkProps) {
     const { key } = options;
     const isClickMark = key !== 'ClickMark';
 
@@ -589,7 +653,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleSnapNumber(options: ObserverOptions) {
+  private handleSnapNumber(options: SnapNumberProps) {
     const { key } = options;
     const isSnapNumber = key !== 'SnapNumber';
 

@@ -9,12 +9,12 @@ import { RANGE_SLIDER_NAME } from '@shared/constants';
 
 import Observer from '../../../Observer';
 
-type ObserverOptions = {
-  readonly key: 'ClickBar';
-  readonly clientXY?: number;
+type ClickBarProps = {
+  key: 'ClickBar';
+  clientXY: number;
 };
 
-class Bar extends Observer<ObserverOptions> {
+class Bar extends Observer<ClickBarProps> {
   private rangeSliderCenter: Element;
 
   private elementBar: HTMLElement | null = null;

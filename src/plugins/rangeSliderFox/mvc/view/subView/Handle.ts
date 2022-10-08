@@ -16,19 +16,25 @@ type Pointer = {
 
 type mapKey = Map<string, string>;
 
-type ObserverOptions = {
-  readonly key: 'DotMove' | 'DotKeyDown';
-  readonly type?: string | null | undefined;
-  readonly dimensions?: number;
-  readonly position?: number;
-  readonly clientXY?: number;
-  readonly shiftXY?: number;
-  readonly keyRepeat?: boolean;
-  readonly keySign?: string;
-  readonly dot?: string;
+type DotMoveProps = {
+  key: 'DotMove';
+  type: string | null;
+  dimensions: number;
+  position: number;
+  clientXY: number;
+  shiftXY: number;
 };
 
-class Handle extends Observer<ObserverOptions> {
+type DotKeyDownProps = {
+  key: 'DotKeyDown';
+  keyRepeat: boolean;
+  keySign: string;
+  dot: string;
+};
+
+type EventProps = DotMoveProps | DotKeyDownProps;
+
+class Handle extends Observer<EventProps> {
   private elementFrom: HTMLElement | null = null;
 
   private elementTo: HTMLElement | null = null;

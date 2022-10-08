@@ -5,29 +5,132 @@ import {
   PositionData,
 } from './modelInterface';
 
-interface insideOptions extends RangeSliderOptions {
-  readonly valueMark?: {
+type SnapNumberProps = {
+  key: 'SnapNumber'
+  isResized: boolean;
+  snapNumber: number[];
+}
+
+type ClickMarkProps = {
+  key: 'ClickMark';
+  valueGrid: number;
+};
+
+type CreateGridProps = {
+  key: 'CreateGrid'
+  valueMark: {
     value: number;
     position: number;
   }[];
+};
+
+type ClickBarProps = {
+  key: 'ClickBar';
+  clientXY: number;
+};
+
+type BarDataProps = {
+  key: 'BarData';
+  bar: boolean | null;
+};
+
+type ClickLineProps = {
+  key: 'ClickLine';
+  clientXY: number;
+};
+
+type DisabledDataProps = {
+  key: 'DisabledData';
+  disabled: boolean | null;
+};
+
+type ThemeDataProps = {
+  key: 'ThemeData';
+  theme: string | null;
+};
+
+type OrientationDataProps = {
+  key: 'OrientationData';
+  orientation: string | null;
+};
+
+type GridDataProps = {
+  key: 'GridData';
+  grid: boolean | null;
+  gridNumber: number;
+  gridStep: number;
+  gridRound: number;
+};
+
+type GridSnapDataProps = {
+  key: 'GridSnapData';
+  gridSnap: boolean;
 }
 
-interface ObserverOptions extends insideOptions {
-  readonly key: 'DotData' |
-  'CreateGrid' |
-  'Start' |
-  'Step' |
-  'RangeData' |
-  'GridSnapData' |
-  'GridData' |
-  'OrientationData' |
-  'ThemeData' |
-  'HintsData' |
-  'DisabledData' |
-  'BarData';
-}
+type DotMoveProps = {
+  key: 'DotMove';
+  type: string | null;
+  position: number;
+  clientXY: number;
+  shiftXY: number;
+};
 
-class ModelData extends Observer<ObserverOptions> {
+type DotDataProps = {
+  key: 'DotData';
+  type: string | null;
+  to: number | null;
+  from: number | null;
+};
+
+type DotKeyDownProps = {
+  key?: 'DotKeyDown'
+  keyRepeat?: boolean;
+  keySign?: string;
+  dot?: string;
+};
+
+type RangeDataProps = {
+  key?: 'RangeData';
+  min?: number;
+  max?: number;
+};
+
+type StartProps = {
+  key?: 'Start';
+};
+
+type HintsProps = {
+  key?: 'HintsData';
+  type?: string | null;
+  from?: number | null;
+  to?: number | null;
+  tipPrefix?: string | null;
+  tipPostfix?: string | null;
+  tipFromTo?: boolean | null;
+  tipMinMax?: boolean | null;
+  min?: number | null;
+  max?: number | null;
+};
+
+type EventProps = HintsProps |
+  StartProps |
+  DotDataProps |
+  DotKeyDownProps |
+  RangeDataProps |
+  DotMoveProps |
+  GridSnapDataProps |
+  GridDataProps |
+  OrientationDataProps |
+  ThemeDataProps |
+  DisabledDataProps |
+  ClickLineProps |
+  BarDataProps |
+  ClickBarProps |
+  CreateGridProps |
+  ClickMarkProps |
+  SnapNumberProps;
+
+class ModelData extends Observer<EventProps | RangeSliderOptions> {
   // --- data config
   protected type: string | null = null;
 
