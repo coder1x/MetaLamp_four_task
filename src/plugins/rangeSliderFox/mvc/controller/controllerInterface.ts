@@ -1,48 +1,14 @@
-type CalcFromToOptions = {
-  readonly type: string;
-  readonly position: number;
-  readonly clientXY: number;
-  readonly shiftXY: number;
-  readonly dimensions: number;
-};
+import { RangeSliderOptions } from '../../globInterface';
 
-type PositionData = {
-  readonly typeFrom: boolean;
-  readonly clientXY: number;
-  readonly shiftXY: number;
-  readonly position: number;
-  readonly dimensions: number;
-};
-
-type DirectionData = {
-  from: number | null;
-  to: number | null;
-  isFrom: boolean;
-  isTo: boolean;
-};
-
-type KeyDownSnap = {
-  type: boolean;
-  isSign: boolean;
-  isDot: boolean;
-  from: number | null;
-  to: number | null;
-};
-
-type KeyDownStep = {
-  isDot: boolean;
-  isSign: boolean;
-  isKey: boolean;
-  from: number | null;
-  to: number | null;
-  repeat: boolean;
-};
+interface DataAttributesProps extends RangeSliderOptions {
+  key: 'DataAttributes';
+}
 
 type SnapNumberProps = {
-  key: 'SnapNumber'
+  key: 'SnapNumber';
   isResized: boolean;
   snapNumber: number[];
-}
+};
 
 type ClickMarkProps = {
   key: 'ClickMark';
@@ -50,7 +16,7 @@ type ClickMarkProps = {
 };
 
 type CreateGridProps = {
-  key: 'CreateGrid'
+  key: 'CreateGrid';
   valueMark: {
     value: number;
     position: number;
@@ -90,15 +56,11 @@ type OrientationDataProps = {
 type GridDataProps = {
   key: 'GridData';
   grid: boolean | null;
-  gridNumber: number;
-  gridStep: number;
-  gridRound: number;
 };
 
 type GridSnapDataProps = {
   key: 'GridSnapData';
-  gridSnap: boolean;
-}
+};
 
 type DotMoveProps = {
   key: 'DotMove';
@@ -116,7 +78,7 @@ type DotDataProps = {
 };
 
 type DotKeyDownProps = {
-  key: 'DotKeyDown'
+  key: 'DotKeyDown';
   keyRepeat: boolean;
   keySign: string;
   dot: string;
@@ -145,7 +107,7 @@ type HintsProps = {
   max: number | null;
 };
 
-type ModelEventProps = HintsProps |
+type ControllerEventProps = HintsProps |
   StartProps |
   DotDataProps |
   DotKeyDownProps |
@@ -163,36 +125,9 @@ type ModelEventProps = HintsProps |
   ClickMarkProps |
   SnapNumberProps;
 
-type DataAttributesProps = {
-  key?: 'DataAttributes';
-  tipPrefix?: string | null;
-  tipPostfix?: string | null;
-  tipMinMax?: boolean | null;
-  tipFromTo?: boolean | null;
-};
-
-type ArrayKeys = [
-  'RangeData',
-  'DotData',
-  'GridSnapData',
-  'GridData',
-  'ThemeData',
-  'HintsData',
-  'DisabledData',
-  'BarData',
-  'OrientationData',
-  'Start',
-];
-
 export {
+  ControllerEventProps,
   DataAttributesProps,
-  ArrayKeys,
-  CalcFromToOptions,
-  PositionData,
-  DirectionData,
-  KeyDownSnap,
-  KeyDownStep,
-  ModelEventProps,
   HintsProps,
   StartProps,
   DotDataProps,

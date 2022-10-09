@@ -3,133 +3,17 @@ import { boundMethod } from 'autobind-decorator';
 import { NAME_PLUGIN } from '@shared/constants';
 
 import { RangeSliderOptions } from '../../globInterface';
+import {
+  ControllerEventProps,
+  DataAttributesProps,
+} from './controllerInterface';
+
+import {
+  ViewEventProps,
+} from '../view/viewInterface';
+
 import Model from '../model/Model';
 import View from '../view/View';
-
-interface DataAttributesProps extends RangeSliderOptions {
-  key: 'DataAttributes';
-}
-
-type SnapNumberProps = {
-  key: 'SnapNumber';
-  isResized: boolean;
-  snapNumber: number[];
-}
-
-type ClickMarkProps = {
-  key: 'ClickMark';
-  valueGrid: number;
-};
-
-type CreateGridProps = {
-  key: 'CreateGrid';
-  valueMark: {
-    value: number;
-    position: number;
-  }[];
-};
-
-type ClickBarProps = {
-  key: 'ClickBar';
-  clientXY: number;
-};
-
-type BarDataProps = {
-  key: 'BarData';
-  bar: boolean | null;
-};
-
-type ClickLineProps = {
-  key: 'ClickLine';
-  clientXY: number;
-};
-
-type DisabledDataProps = {
-  key: 'DisabledData';
-  disabled: boolean | null;
-};
-
-type ThemeDataProps = {
-  key: 'ThemeData';
-  theme: string | null;
-};
-
-type OrientationDataProps = {
-  key: 'OrientationData';
-  orientation: string | null;
-};
-
-type GridDataProps = {
-  key: 'GridData';
-  grid: boolean | null;
-};
-
-type GridSnapDataProps = {
-  key: 'GridSnapData';
-}
-
-type DotMoveProps = {
-  key: 'DotMove';
-  type: string | null;
-  position: number;
-  clientXY: number;
-  shiftXY: number;
-};
-
-type DotDataProps = {
-  key: 'DotData';
-  type: string | null;
-  to: number | null;
-  from: number | null;
-};
-
-type DotKeyDownProps = {
-  key: 'DotKeyDown';
-  keyRepeat: boolean;
-  keySign: string;
-  dot: string;
-};
-
-type RangeDataProps = {
-  key: 'RangeData';
-  min: number;
-  max: number;
-};
-
-type StartProps = {
-  key: 'Start';
-};
-
-type HintsProps = {
-  key?: 'HintsData';
-  type?: string | null;
-  from?: number | null;
-  to?: number | null;
-  tipPrefix?: string | null;
-  tipPostfix?: string | null;
-  tipFromTo?: boolean | null;
-  tipMinMax?: boolean | null;
-  min?: number | null;
-  max?: number | null;
-};
-
-type EventProps = HintsProps |
-  StartProps |
-  DotDataProps |
-  DotKeyDownProps |
-  RangeDataProps |
-  DotMoveProps |
-  GridSnapDataProps |
-  GridDataProps |
-  OrientationDataProps |
-  ThemeDataProps |
-  DisabledDataProps |
-  ClickLineProps |
-  BarDataProps |
-  ClickBarProps |
-  CreateGridProps |
-  ClickMarkProps |
-  SnapNumberProps;
 
 class Controller {
   private isStarted = false;
@@ -212,9 +96,18 @@ class Controller {
     return true;
   }
 
-  private static subscribe(
-    talking: Model | View,
-    items: ((options: EventProps) => boolean | Promise<boolean>)[],
+  private static subscribeModel(
+    talking: Model,
+    items: ((options: ControllerEventProps) => boolean | Promise<boolean>)[],
+  ) {
+    return items.forEach((item: any) => {
+      talking.subscribeObserver(item);
+    });
+  }
+
+  private static subscribeView(
+    talking: View,
+    items: ((options: ViewEventProps) => boolean)[],
   ) {
     return items.forEach((item) => {
       talking.subscribeObserver(item);
@@ -240,7 +133,7 @@ class Controller {
       this.handleGridCreation,
     ];
 
-    Controller.subscribe(this.model, handlesModel);
+    Controller.subscribeModel(this.model, handlesModel);
 
     const handlesView = [
       this.handleDotMove,
@@ -252,13 +145,13 @@ class Controller {
       this.handleDataAttributes,
     ];
 
-    Controller.subscribe(this.view, handlesView);
+    Controller.subscribeView(this.view, handlesView);
 
     return true;
   }
 
   @boundMethod
-  private handleStart(options: StartProps) {
+  private handleStart(options: ControllerEventProps) {
     const { key } = options;
     const isStarted = key !== 'Start';
 
@@ -291,7 +184,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleRangeData(options: RangeDataProps) {
+  private handleRangeData(options: ControllerEventProps) {
     const { key } = options;
     if (key !== 'RangeData') {
       return false;
@@ -321,7 +214,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleDotKeyDown(options: DotKeyDownProps) {
+  private handleDotKeyDown(options: ViewEventProps) {
     const { key } = options;
     const isDotKeyDown = key !== 'DotKeyDown';
 
@@ -341,7 +234,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleDotData(options: DotDataProps) {
+  private handleDotData(options: ControllerEventProps) {
     const { key } = options;
     if (key !== 'DotData') {
       return false;
@@ -387,7 +280,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleDotMove(options: DotMoveProps) {
+  private handleDotMove(options: ViewEventProps) {
     const { key } = options;
     const isDotMove = key !== 'DotMove';
 
@@ -409,7 +302,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleGridSnapData(options: GridSnapDataProps) {
+  private handleGridSnapData(options: ControllerEventProps) {
     const { key } = options;
     const isGridSnapData = key !== 'GridSnapData';
 
@@ -422,7 +315,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleGridData(options: GridDataProps) {
+  private handleGridData(options: ControllerEventProps) {
     const { key } = options;
 
     if (key !== 'GridData') {
@@ -447,7 +340,7 @@ class Controller {
   }
 
   @boundMethod
-  private async handleOrientationData(options: OrientationDataProps) {
+  private async handleOrientationData(options: ControllerEventProps) {
     const { key } = options;
     if (key !== 'OrientationData') {
       return false;
@@ -472,7 +365,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleThemeData(options: ThemeDataProps) {
+  private handleThemeData(options: ControllerEventProps) {
     const { key } = options;
     const isThemeData = key !== 'ThemeData';
 
@@ -485,7 +378,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleHintsData(options: HintsProps) {
+  private handleHintsData(options: ControllerEventProps) {
     const { key } = options;
     if (key !== 'HintsData') {
       return false;
@@ -553,7 +446,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleDisabledData(options: DisabledDataProps) {
+  private handleDisabledData(options: ControllerEventProps) {
     const { key } = options;
     const isDisabledData = key !== 'DisabledData';
 
@@ -568,7 +461,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleLineClick(options: ClickLineProps) {
+  private handleLineClick(options: ViewEventProps) {
     const { key } = options;
     const isClickLine = key !== 'ClickLine';
 
@@ -587,7 +480,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleBarData(options: BarDataProps) {
+  private handleBarData(options: ControllerEventProps) {
     const { key } = options;
     if (key !== 'BarData') {
       return false;
@@ -604,7 +497,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleBarClick(options: ClickBarProps) {
+  private handleBarClick(options: ViewEventProps) {
     const { key } = options;
     const isClickBar = key !== 'ClickBar';
 
@@ -624,7 +517,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleGridCreation(options: CreateGridProps) {
+  private handleGridCreation(options: ControllerEventProps) {
     const { key } = options;
     const isCreateGrid = key !== 'CreateGrid';
 
@@ -637,7 +530,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleMarkClick(options: ClickMarkProps) {
+  private handleMarkClick(options: ViewEventProps) {
     const { key } = options;
     const isClickMark = key !== 'ClickMark';
 
@@ -653,7 +546,7 @@ class Controller {
   }
 
   @boundMethod
-  private handleSnapNumber(options: SnapNumberProps) {
+  private handleSnapNumber(options: ViewEventProps) {
     const { key } = options;
     const isSnapNumber = key !== 'SnapNumber';
 

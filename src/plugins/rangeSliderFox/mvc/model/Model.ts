@@ -16,29 +16,10 @@ import { RangeSliderOptions, FromTo } from '../../globInterface';
 
 import {
   CalcFromToOptions,
+  DataAttributesProps,
+  ArrayKeys,
 } from './modelInterface';
 import ModelCalc from './ModelCalc';
-
-type DataAttributesProps = {
-  key?: 'DataAttributes';
-  tipPrefix?: string | null;
-  tipPostfix?: string | null;
-  tipMinMax?: boolean | null;
-  tipFromTo?: boolean | null;
-};
-
-type ArrayKeys = [
-  'RangeData',
-  'DotData',
-  'GridSnapData',
-  'GridData',
-  'ThemeData',
-  'HintsData',
-  'DisabledData',
-  'BarData',
-  'OrientationData',
-  'Start',
-];
 
 class Model extends ModelCalc {
   constructor(options: RangeSliderOptions = {}) {
