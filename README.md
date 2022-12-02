@@ -6,8 +6,8 @@ Range Slider Fox is an easy and simple range slider  written in TypeScript as JQ
 ***
 
 * Version: 1.0
-* <a href="https://plugins.su/">Demo page</a>
-* <a href="https://plugins.su/RangeSliderFox.zip">Download ZIP</a>
+* <a href="https://frontendx.ru/public/range_slider_fox/">Demo page</a>
+* <a href="https://frontendx.ru/public/range_slider_fox/RangeSliderFox.zip">Download ZIP</a>
 
 You can configure range slider as you need in the demonstration Panel and copy the configuration code from the column "Config code" by clicking "Copy code" button.
 Just don't forget to change the value inside еру parenthesis $(...).
@@ -215,5 +215,5 @@ object.destroy()
 
 * UML class diagram:
 ![readme](src/shared/uml/uml.png)
-* <a href="https://plugins.su/UML.png">UML full-size image view </a>
+* <a href="https://frontendx.ru/public/range_slider_fox/UML.png">UML full-size image view </a>
 * <a href="https://github.com/coder1x/MetaLamp_four_task/tree/master/src/shared/uml/uml.drawio">UML class diagram (drawio)</a>
