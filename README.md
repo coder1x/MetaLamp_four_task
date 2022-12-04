@@ -9,6 +9,14 @@ Range Slider Fox is an easy and simple range slider  written in TypeScript as JQ
 * <a href="https://frontendx.ru/public/range_slider_fox/">Demo page</a>
 * <a href="https://frontendx.ru/public/range_slider_fox/RangeSliderFox.zip">Download ZIP</a>
 
+* NPM:
+  ```
+  npm i range-slider-fox
+  ```
+  ```
+  import 'range-slider-fox';
+  ```
+
 You can configure range slider as you need in the demonstration Panel and copy the configuration code from the column "Config code" by clicking "Copy code" button.
 Just don't forget to change the value inside еру parenthesis $(...).
 
@@ -207,7 +215,6 @@ object.destroy()
   ```
   npm run test
   ```
-
 
 ## Plugin Architecture:
 
