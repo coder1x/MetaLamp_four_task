@@ -8,20 +8,18 @@ block content
     h1.demo-slider__header Range Slider Fox
 
     section.slider
+        h2(class = 'slider__header') Horizontal view
         .slider__panel-wrapper 
           +panel({theme:'fox'})
 
     section.slider
+        h2(class = 'slider__header') Vertical view
         .slider__panel-wrapper 
           +panel({theme:'dark'})
-          
-    section.slider
-        .slider__panel-wrapper 
-          +panel({theme:'base'})
 
     section.slider
         .initialization-plugin
-          h2(class = 'initialization-plugin__header') Инициализация плагина с помощью data attribute
+          h2(class = 'initialization-plugin__header') Plugin initialization with data attribute
           
           div(
             class = 'initialization-plugin__rangeSliderFox' 

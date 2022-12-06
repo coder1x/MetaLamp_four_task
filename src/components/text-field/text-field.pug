@@ -13,5 +13,5 @@ mixin text-field(options = {})
       if label
         = label
       
-      input(class=`${BASE_CLASS}__input` type=typeField placeholder=placeholder value='' name=name)
+      input(class=`${BASE_CLASS}__input` type=typeField placeholder=placeholder value='' name=name aria-label=name)
       

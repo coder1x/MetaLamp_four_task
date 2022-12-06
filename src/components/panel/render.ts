@@ -36,14 +36,3 @@ objectPanel[1].createRangeSlider({
   grid: true,
   gridStep: 33,
 });
-
-objectPanel[2].createRangeSlider({
-  type: 'double',
-  min: -120,
-  max: 800,
-  from: 200,
-  to: 500,
-  grid: true,
-  bar: true,
-  gridStep: 30,
-});

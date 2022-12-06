@@ -13,6 +13,6 @@ mixin toggle(options = {})
 
     div(class=`${BASE_CLASS}__wrapper`)
       label(class=`${BASE_CLASS}__label`)= label
-        input(class=`${BASE_CLASS}__input` type='checkbox' name='toggle')
+        input(class=`${BASE_CLASS}__input` type='checkbox' name='toggle' aria-label=header)
         span(class=`${BASE_CLASS}__before`)
 
